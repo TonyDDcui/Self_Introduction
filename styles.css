@@ -13,44 +13,12 @@ header {
     text-align: center;
 }
 
-.slider{
-	width: 100% ;
-	overflow: hidden ;
-	position: relative ;
-}
-
-.slide {
-    width: 100%;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: transform 0.5s ease;
-}
-
-.slide img {
-    width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-}
-
-.slide.active {
-    display: flex;
-    transform: translateX(0);
-}
-
-.slide.prev {
-    transform: translateX(-100%);
-}
-
-.slide.next {
-    transform: translateX(100%);
-}
-
-.slide img.zoomed {
-    transform: scale(1.5);
+.show_picture{
+	width: device-width/4 ;
+	height: device-height /4;
+	margin: 10px 10px ;
+	background-color: #ffffff ;
+	border: 1px solid #FFFFFF ;
 }
 
 main {
