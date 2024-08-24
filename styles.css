@@ -18,10 +18,9 @@ main {
 }
 
 .transbox{
-/*	width: 1050px ;
-	height: 420px ;
-	margin: 90px 90px ;
-*/
+	width: device-width ;
+	height: device-height ;
+	margin: 10px 10px ;
 	background-color: #ffffff ;
 	border: 1px solid #FFFFFF ;
 	opacity: 0.8 ;
