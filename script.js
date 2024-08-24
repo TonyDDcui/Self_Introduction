@@ -1,31 +1,43 @@
-document.getElementById('uploadButton').addEventListener('click', function() {
-    const fileInput = document.getElementById('fileInput');
-    const fileList = document.getElementById('fileList');
-    const files = fileInput.files;
+const slides = document.querySelectorAll('.slide');
+const prevBtn = document.querySelector('.prev-btn');
+const nextBtn = document.querySelector('.next-btn');
+let currentIndex = 0;
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        if (i === index) {
+            slide.classList.add('active');
+            slide.classList.remove('prev', 'next');
+        } else if (i < index) {
+            slide.classList.remove('active', 'next');
+            slide.classList.add('prev');
+        } else if (i > index) {
+            slide.classList.remove('active', 'prev');
+            slide.classList.add('next');
+        }
+    });
+}
 
-        reader.onload = function(event) {
-            const fileType = file.type.split('/')[0];
-            const fileContainer = document.createElement('div');
-            fileContainer.classList.add('file-container');
+function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+}
 
-            if (fileType === 'image') {
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                fileContainer.appendChild(img);
-            } else if (fileType === 'video') {
-                const video = document.createElement('video');
-                video.src = event.target.result;
-                video.controls = true;
-                fileContainer.appendChild(video);
-            }
+function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+}
 
-            fileList.appendChild(fileContainer);
-        };
+prevBtn.addEventListener('click', prevSlide);
+nextBtn.addEventListener('click', nextSlide);
 
-        reader.readAsDataURL(file);
-    }
+// 初始显示第一个幻灯片
+showSlide(currentIndex);
+
+// 添加点击事件来控制图片的放大和缩小
+slides.forEach(slide => {
+    const img = slide.querySelector('img');
+    img.addEventListener('click', () => {
+        img.classList.toggle('zoomed');
+    });
 });
