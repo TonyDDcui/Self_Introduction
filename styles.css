@@ -14,10 +14,16 @@ header {
 }
 
 .show_picture{
-	width: device-width/4 ;
-	height: device-height /4;
+	width: 25vw;
+	height: 25vh;
 	margin: 10px 10px ;
 	background-color: #ffffff ;
+}
+
+.picture{
+    width: 25vw; 
+    height: 25vh; 
+    object-fit: cover;
 }
 
 main {
