@@ -21,7 +21,7 @@ main {
 	width: device-width ;
 	height: device-height ;
 	margin: 10px 10px ;
-	background-color: #ffffff ;
+	/*background-color: #ffffff ;*/
 	border: 1px solid #FFFFFF ;
 	opacity: 0.8 ;
 }
