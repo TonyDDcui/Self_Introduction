@@ -19,12 +19,40 @@ header {
     object-fit: cover;
 }
 
-.picture3{
-display: flex;
-    justify-content: center; /* 水平居中 */
-    max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
-    max-height: 30%;
-    object-fit: cover;
+.picture1{
+	display: flex;
+   	 justify-content: center; /* 水平居中 */
+    	max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 30%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture2{
+	display: flex;
+   	 justify-content: center; /* 水平居中 */
+	transform: rotate(90deg); /* 将图片旋转90度 */
+    	max-width: 25%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 25%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture2_2{
+	display: flex ;
+	transform: rotate(90deg); /* 将图片旋转90度 */
+    	max-width: 25%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 25%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture2_3{
+	display: flex;
+   	justify-content: center; /* 水平居中 */
+    	max-width: 35%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 35%;
+    	object-fit: cover;
 	margin: auto;
 }
 
@@ -32,15 +60,6 @@ display: flex;
     display: flex;
     justify-content: space-between; /* 子元素在容器中均匀分布 */
     width: 100%;
-}
-
-.picture2{
-	display: flex ;
-	transform: rotate(90deg); /* 将图片旋转90度 */
-    	max-width: 15%; /* 每个图片的最大宽度为容器宽度的50% */
-    	max-height: 15%;
-    	object-fit: cover;
-	margin: auto;
 }
 
 main {
