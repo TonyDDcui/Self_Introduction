@@ -2,7 +2,7 @@ body{
     background-image: url('background.jpg'); 
     background-size: 100%; 
     background-position: center; 
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-attachment: scroll; 
 }
 
@@ -14,9 +14,33 @@ header {
 }
 
 .picture{
-    width: 25px; 
-    height: 25px; 
+    max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    max-height: 30%;
     object-fit: cover;
+}
+
+.picture3{
+display: flex;
+    justify-content: center; /* 水平居中 */
+    max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    max-height: 30%;
+    object-fit: cover;
+	margin: auto;
+}
+
+.space_container{
+    display: flex;
+    justify-content: space-between; /* 子元素在容器中均匀分布 */
+    width: 100%;
+}
+
+.picture2{
+	display: flex ;
+	transform: rotate(90deg); /* 将图片旋转90度 */
+    	max-width: 15%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 15%;
+    	object-fit: cover;
+	margin: auto;
 }
 
 main {
@@ -24,21 +48,19 @@ main {
 }
 
 .transbox{
-	width:35 px;
-	height: 35px;
-	margin: 5px 5px ;
+    width: 95%;
+    height: 100%;
+    padding: 20px;
 	background-color: #ffffff ;
-	border: 4px solid #FFFFFF ;
-	opacity: 0.8 ;
+	border: 1px solid #FFFFFF ;
+	opacity: 0.95 ;
 }
 
-section {
-    margin-bottom: 20px;
-}
-
-input[type="file"] {
-    display: block;
-    margin-bottom: 10px;
+.word_board{
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 100%;
 }
 
 button {
@@ -49,27 +71,13 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #555;
-}
-
 footer {
     text-align: center; /* 使文本居中 */
     padding: 20px; /* 添加一些内边距 */
-    /*background-color: #f0f0f0; 设置背景颜色 */
+    background-color: #f0f0f0; 设置背景颜色 
 }
 
 .designed-by {
     font-size: 14px; /* 设置字体大小 */
     color: #666; /* 设置字体颜色 */
-}
-
-#fileList {
-    margin-top: 10px;
-}
-
-#fileList img,
-#fileList video {
-    max-width: 100%;
-    margin-top: 10px;
 }
