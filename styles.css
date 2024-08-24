@@ -13,13 +13,6 @@ header {
     text-align: center;
 }
 
-.show_picture{
-	width: 25vw;
-	height: 25vh;
-	margin: 10px 10px ;
-	background-color: #ffffff ;
-}
-
 .picture{
     width: 25vw; 
     height: 25vh; 
@@ -34,7 +27,7 @@ main {
 	width: device-width ;
 	height: device-height ;
 	margin: 5px 5px ;
-	/*background-color: #ffffff ;*/
+	background-color: #ffffff ;
 	border: 1px solid #FFFFFF ;
 	opacity: 0.8 ;
 }
