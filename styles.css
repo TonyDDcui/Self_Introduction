@@ -1,0 +1,60 @@
+body {
+    background-image: url('background.jpg'); 
+    background-size: 50%; 
+    background-position: center; 
+    background-repeat: repeat;
+    background-attachment: scroll; 
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    display: block;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+footer {
+    text-align: center; /* 使文本居中 */
+    padding: 20px; /* 添加一些内边距 */
+    background-color: #f0f0f0; /* 设置背景颜色 */
+}
+
+.designed-by {
+    font-size: 14px; /* 设置字体大小 */
+    color: #666; /* 设置字体颜色 */
+}
+
+#fileList {
+    margin-top: 10px;
+}
+
+#fileList img,
+#fileList video {
+    max-width: 100%;
+    margin-top: 10px;
+}
