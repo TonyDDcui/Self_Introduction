@@ -24,11 +24,11 @@ main {
 }
 
 .transbox{
-	width: device-width ;
-	height: device-height ;
+	width: 75vw ;
+	height: 75vh;
 	margin: 5px 5px ;
 	background-color: #ffffff ;
-	border: 1px solid #FFFFFF ;
+	border: 4px solid #FFFFFF ;
 	opacity: 0.8 ;
 }
 
