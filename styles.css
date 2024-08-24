@@ -41,7 +41,7 @@ button:hover {
 footer {
     text-align: center; /* 使文本居中 */
     padding: 20px; /* 添加一些内边距 */
-    background-color: #f0f0f0; /* 设置背景颜色 */
+    /*background-color: #f0f0f0; 设置背景颜色 */
 }
 
 .designed-by {
