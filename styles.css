@@ -14,8 +14,8 @@ header {
 }
 
 .picture{
-    width: 25vw; 
-    height: 25vh; 
+    width: 25px; 
+    height: 25px; 
     object-fit: cover;
 }
 
@@ -24,8 +24,8 @@ main {
 }
 
 .transbox{
-	width: 75vw ;
-	height: 75vh;
+	width:35 px;
+	height: 35px;
 	margin: 5px 5px ;
 	background-color: #ffffff ;
 	border: 4px solid #FFFFFF ;
