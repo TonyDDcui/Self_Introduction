@@ -22,7 +22,7 @@ header {
 h4 {
             margin: 0; /* 去除默认的上下外边距 */
             text-align: justify; /* 两端对齐 */
-		padding-left:5%;
+		padding-left:10%;
 		letter-spacing:2%;
 		line-height:200%;
             text-justify: inter-word; /* 单词间对齐 */
@@ -38,11 +38,13 @@ h4 {
 }
 
 .picture2{
+	display: flex;
+   	justify-content: center; /* 水平居中 */
 	transform: rotate(90deg); /* 将图片旋转90度 */
-    	max-width: 35%; /* 每个图片的最大宽度为容器宽度的50% */
-    	max-height: 35%;
+    	max-width: 18%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 18%;
     	object-fit: cover;
-	margin-left: 1%;
+	margin: auto;
 }
 
 .picture2_2{
@@ -80,7 +82,7 @@ h4 {
     display: flex;
     justify-content: space-between; /* 子元素在容器中均匀分布 */
     width: 100%;
-	margin-top: 2%; /* 与文字的间距 */
+margin-top: 2%; /* 与文字的间距 */
 }
 
 main {
