@@ -39,10 +39,11 @@ header {
 }
 
 .picture2_2{
-	display: flex ;
+	display: flex;
+   	justify-content: center; /* 水平居中 */
 	transform: rotate(90deg); /* 将图片旋转90度 */
-    	max-width: 25%; /* 每个图片的最大宽度为容器宽度的50% */
-    	max-height: 25%;
+    	max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 30%;
     	object-fit: cover;
 	margin: auto;
 }
@@ -53,6 +54,18 @@ header {
     	max-width: 35%; /* 每个图片的最大宽度为容器宽度的50% */
     	max-height: 35%;
     	object-fit: cover;
+	margin: auto;
+}
+
+.picture_show{
+	display: flex ;
+	justify-content: center; /* 水平居中 */
+    	width: 95%;
+    	height: 100%;
+    	padding: 20px;
+	background-color: #CAE1FF ;
+	border: 1px solid #CAE1FF ;
+	opacity: 0.95 ;
 	margin: auto;
 }
 
@@ -82,6 +95,20 @@ main {
     height: 100%;
 }
 
+.picture-type{
+	text-align: center; /* 水平居中 */
+	display: block;
+	margin: auto;
+        width: 100%; /* 占满整行 */
+}
+
+.title-type{
+	text-align: center; /* 水平居中 */
+	display: block;
+	margin: auto;
+        width: 100%; /* 占满整行 */
+}
+
 button {
     padding: 10px 20px;
     background-color: #333;
@@ -97,6 +124,6 @@ footer {
 }
 
 .designed-by {
-    font-size: 14px; /* 设置字体大小 */
+    font-size: 20px; /* 设置字体大小 */
     color: #666; /* 设置字体颜色 */
 }
