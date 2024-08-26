@@ -50,7 +50,7 @@ function viewcert(imageURL) {
 }
 
 function showMail(){
-    alert("This is the email: <someometony@outlook.com>");
+    alert("This is my email: <someometony@outlook.com>");
 }
 
 var tc = document.getElementsByClassName('tc');
