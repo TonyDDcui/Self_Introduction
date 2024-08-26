@@ -168,7 +168,7 @@ body {
 }
 
 
-.czx-left {
+.left {
     overflow-y: scroll;
     width: 230px;
     height: 100vh;
@@ -637,7 +637,7 @@ footer {
 }
 
 @media (max-width: 800px) {
-    .zyyo-left {
+    .left {
         display: none;
     }
 
