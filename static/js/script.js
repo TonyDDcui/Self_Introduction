@@ -40,7 +40,7 @@ function pop(imageURL) {
     toggleClass(".tc", "active");
 }
 
-function view(imageURL) {
+function viewcert(imageURL) {
     var tcMainElement = document.querySelector(".tc-img");
     if (imageURL) {
         tcMainElement.src = imageURL;
