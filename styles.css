@@ -1,0 +1,153 @@
+body{
+    background-image: url('background.jpg'); 
+    background-size: 100%; 
+    background-position: center; 
+    background-repeat: repeat;
+    background-attachment: scroll; 
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.picture{
+    max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    max-height: 30%;
+    object-fit: cover;
+}
+
+h4 {
+            margin: 0; /* 去除默认的上下外边距 */
+            text-align: justify; /* 两端对齐 */
+		padding-left:10%;
+		letter-spacing:2%;
+		line-height:200%;
+            text-justify: inter-word; /* 单词间对齐 */
+}
+
+.picture1{
+	display: flex;
+   	 justify-content: center; /* 水平居中 */
+    	max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 30%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture2{
+	display: flex;
+   	justify-content: center; /* 水平居中 */
+	transform: rotate(90deg); /* 将图片旋转90度 */
+    	max-width: 18%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 18%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture2_2{
+	display: flex;
+   	justify-content: center; /* 水平居中 */
+	transform: rotate(90deg); /* 将图片旋转90度 */
+    	max-width: 30%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 30%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture2_3{
+	display: flex;
+   	justify-content: center; /* 水平居中 */
+    	max-width: 35%; /* 每个图片的最大宽度为容器宽度的50% */
+    	max-height: 35%;
+    	object-fit: cover;
+	margin: auto;
+}
+
+.picture_show{
+	display: flex ;
+	justify-content: center; /* 水平居中 */
+    	width: 95%;
+    	height: 100%;
+	background-color: #CAE1FF ;
+	border: 1px solid #CAE1FF ;
+	opacity: 0.95 ;
+	margin: auto;
+	margin-top:5%;
+}
+
+.space_container{
+    display: flex;
+    justify-content: space-between; /* 子元素在容器中均匀分布 */
+    width: 100%;
+margin-top: 2%; /* 与文字的间距 */
+}
+
+main {
+    padding: 20px;
+}
+
+.transbox{
+    width: 95%;
+    height: 100%;
+    padding: 20px;
+	background-color: #ffffff ;
+	border: 1px solid #FFFFFF ;
+	opacity: 0.95 ;
+}
+
+.word_board{
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 100%;
+}
+
+.picture-type{
+	text-align: center; /* 水平居中 */
+	display: block;
+	margin: auto;
+        width: 100%; /* 占满整行 */
+}
+
+.picture-type1{
+            display: flex; /* 使用Flexbox布局 */
+            flex-direction: column; /* 垂直排列 */
+            align-items: center; /* 水平居中对齐 */
+margin: auto;
+}
+
+.title-type{
+	text-align: center; /* 水平居中 */
+	display: block;
+	margin: auto;
+        width: 100%; /* 占满整行 */
+}
+
+.title-type1{
+	text-align: center; /* 水平居中 */
+	display: block;
+	margin: auto;
+        width:100%; /* 占满整行 */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center; /* 使文本居中 */
+    padding: 20px; /* 添加一些内边距 */
+    background-color: #f0f0f0; 设置背景颜色 
+}
+
+.designed-by {
+    font-size: 20px; /* 设置字体大小 */
+    color: #666; /* 设置字体颜色 */
+}
