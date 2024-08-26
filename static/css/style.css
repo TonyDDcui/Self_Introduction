@@ -182,7 +182,7 @@ body {
 }
 
 
-.czx-left::-webkit-scrollbar {
+.left::-webkit-scrollbar {
     display: none;
 }
 
