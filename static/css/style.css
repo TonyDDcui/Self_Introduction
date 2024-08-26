@@ -41,7 +41,7 @@ a:focus {
 }
 
 
-/* 设置滚动条样式 */
+/* 设置滚动条样弄1�7 */
 ::-webkit-scrollbar {
     width: 0px;
 }
@@ -526,7 +526,7 @@ body {
 
 .projectItem.pressed {
     transform: scale(0.9);
-    /* 缩小到原来的0.9倍 */
+    /* 缩小到原来的0.9倄1�7 */
     background-color: var(--item_hover_color);
 }
 
