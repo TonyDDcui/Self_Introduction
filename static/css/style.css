@@ -41,7 +41,7 @@ a:focus {
 }
 
 
-/* 设置滚动条样弄1�7 */
+/* 设置滚动条样式 */
 ::-webkit-scrollbar {
     width: 0px;
 }
@@ -61,10 +61,10 @@ a:focus {
 html[data-theme="Dark"] {
     
     --main_text_color: #fff;
-    --gradient:linear-gradient(120deg, rgb(244, 27, 27), #fca234 20%,#b925f3 40%,#f76cc6 60%,#f63fc8 80%,rgb(255, 255, 255) 100%);
+    --gradient:linear-gradient(120deg, rgb(133, 62, 255), #f76cc6 30%, rgb(255, 255, 255) 60%);
     --purple_text_color: #747bff;
     --text_bg_color: rgb(26, 4, 48);
-    --item_bg_color: #000000;
+    --item_bg_color: rgb(19, 20, 24);
     --item_hover_color: rgb(19, 23, 27);
     --item_left_title_color: rgb(255, 255, 255);
     --item_left_text_color: rgb(142, 142, 142);
@@ -97,7 +97,56 @@ body {
 
 }
 
-.filter {
+#zyyo-loading {
+    background: radial-gradient(white, #d8eaff);
+    background-size: 100%;
+    background-position: center;
+
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 999999;
+    margin-top: 0px;
+    top: 0px;
+    pointer-events: none;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#zyyo-loading-center {
+    height: 150px;
+    width: 150px;
+    position: relative;
+    border-radius: 50%;
+    background: #472eff;
+
+    animation: zoom 1s linear infinite;
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+
+
+
+.zyyo-filter {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -105,9 +154,10 @@ body {
     backdrop-filter:  blur(var(--back_filter));
     -webkit-backdrop-filter: blur(var(--back_filter));
     z-index: -99999999;
+   
 }
 
-.main {
+.zyyo-main {
     width: 100%;
     margin: 0 auto;
     transition: transform 0.5s ease;
@@ -118,7 +168,7 @@ body {
 }
 
 
-.left {
+.zyyo-left {
     overflow-y: scroll;
     width: 230px;
     height: 100vh;
@@ -147,10 +197,12 @@ body {
     border-radius: 50%;
 }
 
+
+
 .left-div {
     flex-shrink: 0;
     width: 100%;
-    border-radius: 24px;
+    border-radius: 13px;
     margin-top: 15px;
     padding: 20px;
     backdrop-filter: blur(var(--card_filter));
@@ -212,7 +264,7 @@ body {
     list-style: none;
     position: relative;
     padding: 15px 0px 0px 15px;
-    border-left: 2px solid #3d3d3d;
+    border-left: 2px solid #d5d5d5;
     border-radius: 0;
     scroll-snap-align: end;
     color: var(--main_text_color);
@@ -241,11 +293,12 @@ body {
 }
 
 
-.right {
+
+.zyyo-right {
     width: calc(100% - 230px);
     display: flex;
     padding: 20px;
-    position: relative;
+  position: relative;
     padding-bottom: 50px;
     flex-direction: column;
 }
@@ -276,6 +329,7 @@ body {
 
 
 .gradientText {
+
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-size: 200%;
@@ -472,7 +526,7 @@ body {
 
 .projectItem.pressed {
     transform: scale(0.9);
-    /* 缩小到原来的0.9倄1�7 */
+    /* 缩小到原来的0.9倍 */
     background-color: var(--item_hover_color);
 }
 
