@@ -168,7 +168,7 @@ body {
 }
 
 
-.zyyo-left {
+.left {
     overflow-y: scroll;
     width: 230px;
     height: 100vh;
@@ -182,7 +182,7 @@ body {
 }
 
 
-.zyyo-left::-webkit-scrollbar {
+.left::-webkit-scrollbar {
     display: none;
 }
 
