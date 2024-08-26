@@ -40,6 +40,15 @@ function pop(imageURL) {
     toggleClass(".tc", "active");
 }
 
+function view(imageURL) {
+    var tcMainElement = document.querySelector(".tc-img");
+    if (imageURL) {
+        tcMainElement.src = imageURL;
+    }
+    toggleClass(".tc-main", "active");
+    toggleClass(".tc", "active");
+}
+
 function showMail(){
     alert("This is the email: <someometony@outlook.com>");
 }
