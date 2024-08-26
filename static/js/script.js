@@ -40,6 +40,10 @@ function pop(imageURL) {
     toggleClass(".tc", "active");
 }
 
+function showMail(){
+    alert("This is the email: <someometony@outlook.com>");
+}
+
 var tc = document.getElementsByClassName('tc');
 var tc_main = document.getElementsByClassName('tc-main');
 tc[0].addEventListener('click', function (event) {
