@@ -86,6 +86,28 @@ html {
      --fill:#000000;
 }
 
+html {
+    /*蓝色渐变+黑色svg**/
+
+    --name: 主题3;
+    --main_bg_color: linear-gradient(50deg, #a2d1ff, #ffffff);
+    --main_text_color: #000000;
+    --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
+    --purple_text_color: #747bff;
+    --text_bg_color: rgb(196 217 251);
+    --item_bg_color: rgba(249, 250, 251, 0.5);
+    --item_hover_color: rgba(244, 245, 246, 0.8);
+    --item_left_title_color: #000000;
+    --item_left_text_color: #494949;
+    --footer_text_color: #222222;
+    --left_tag_item: linear-gradient(50deg, #a2d1ff, #ffffff);
+    --card_filter: 0px;
+    --back_filter: 0px;
+    --back_filter_color: #00000000;
+     --fill:#000000;
+}
+
+
 
 html {
     /*白色简约+黑色svg**/
@@ -125,25 +147,4 @@ html {
     --back_filter: 19px;
     --back_filter_color: #00000030;
     --fill:#ffffff;
-}
-
-html {
-    /*蓝色渐变+黑色svg**/
-
-    --name: 主题3;
-    --main_bg_color: linear-gradient(50deg, #a2d1ff, #ffffff);
-    --main_text_color: #000000;
-    --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
-    --purple_text_color: #747bff;
-    --text_bg_color: rgb(196 217 251);
-    --item_bg_color: rgba(249, 250, 251, 0.5);
-    --item_hover_color: rgba(244, 245, 246, 0.8);
-    --item_left_title_color: #000000;
-    --item_left_text_color: #494949;
-    --footer_text_color: #222222;
-    --left_tag_item: linear-gradient(50deg, #a2d1ff, #ffffff);
-    --card_filter: 0px;
-    --back_filter: 0px;
-    --back_filter_color: #00000000;
-     --fill:#000000;
 }

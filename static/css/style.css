@@ -61,7 +61,7 @@ a:focus {
 html[data-theme="Dark"] {
     
     --main_text_color: #fff;
-    --gradient:linear-gradient(120deg, rgb(250, 32, 3), #f3d00d 20%, #e75cde 40%,#ec1140 60%, #d43441 80%, rgb(255, 255, 255) 100%);
+    --gradient:linear-gradient(120deg, rgb(133, 62, 255), #f76cc6 30%, rgb(255, 255, 255) 60%);
     --purple_text_color: #747bff;
     --text_bg_color: rgb(26, 4, 48);
     --item_bg_color: rgb(19, 20, 24);
