@@ -96,6 +96,56 @@ body {
     color: var(--main_text_color);
 
 }
+
+#loading {
+    background: radial-gradient(white, #d8eaff);
+    background-size: 100%;
+    background-position: center;
+
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 999999;
+    margin-top: 0px;
+    top: 0px;
+    pointer-events: none;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#loading-center {
+    height: 150px;
+    width: 150px;
+    position: relative;
+    border-radius: 50%;
+    background: #472eff;
+
+    animation: zoom 1s linear infinite;
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+
+
+
 .filter {
     position: fixed;
     width: 100%;
@@ -107,7 +157,7 @@ body {
    
 }
 
-.main {
+.zyyo-main {
     width: 100%;
     margin: 0 auto;
     transition: transform 0.5s ease;
@@ -118,7 +168,7 @@ body {
 }
 
 
-.left {
+.zyyo-left {
     overflow-y: scroll;
     width: 230px;
     height: 100vh;
@@ -132,7 +182,7 @@ body {
 }
 
 
-.left::-webkit-scrollbar {
+.zyyo-left::-webkit-scrollbar {
     display: none;
 }
 
