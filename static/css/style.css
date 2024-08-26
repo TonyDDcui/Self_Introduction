@@ -97,7 +97,7 @@ body {
 
 }
 
-#czx-loading {
+#1loading {
     background: radial-gradient(white, #d8eaff);
     background-size: 100%;
     background-position: center;
@@ -117,7 +117,7 @@ body {
 
 
 
-#czx-loading-center {
+#1loading-center {
     height: 150px;
     width: 150px;
     position: relative;
