@@ -363,23 +363,23 @@ body {
     }
 
     60% {
-        background-position: 100%;
+        background-position: 120%;
     }
 
     70% {
-        background-position: 60%;
+        background-position: 140%;
     }
 
     80% {
-        background-position: 40%;
+        background-position: 160%;
     }
 
     90% {
-        background-position: 20%;
+        background-position: 180%;
     }   
 
     100% {
-        background-position: 0%;
+        background-position: 200%;
     }
 
 }
