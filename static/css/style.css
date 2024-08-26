@@ -146,7 +146,7 @@ body {
 
 
 
-.filter {
+.zyyo-filter {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -157,7 +157,7 @@ body {
    
 }
 
-.main {
+.zyyo-main {
     width: 100%;
     margin: 0 auto;
     transition: transform 0.5s ease;
@@ -168,7 +168,7 @@ body {
 }
 
 
-.left {
+.zyyo-left {
     overflow-y: scroll;
     width: 230px;
     height: 100vh;
@@ -182,7 +182,7 @@ body {
 }
 
 
-.left::-webkit-scrollbar {
+.zyyo-left::-webkit-scrollbar {
     display: none;
 }
 
