@@ -1010,7 +1010,7 @@ footer {
 .life-tc-main {
     z-index: 100000;
     width:100%;
-    max-width: 640px;
+    max-width: 810px;
     min-height: 200px;
     max-height:1000px;
     background-color: #ffffff;
@@ -1159,7 +1159,7 @@ footer {
 
 .text-canvas{
     padding: 0;
-    height: 2000px;
+    height: 100;
     overflow-x: hidden; 
 }
 
@@ -1264,8 +1264,12 @@ p:not(:first-of-type) {
 }
 
 article {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
     width: 80%;
-    margin: 0 auto 4rem;
+    margin:auto;
+    margin-bottom: 4rem;
 }
 
 article img {
