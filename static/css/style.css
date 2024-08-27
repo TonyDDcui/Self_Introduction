@@ -1010,7 +1010,7 @@ footer {
 .life-tc-main {
     z-index: 100000;
     width:100%;
-    max-width: 720px;
+    max-width: 810px;
     min-height: 200px;
     max-height:1000px;
     background-color: #ffffff;
@@ -1185,7 +1185,7 @@ footer {
     height: 100%;
     position: relative;
     overflow: hidden;
-    background-size:100%,100%;
+    background-size:cover;
     transform: scale(1);
     transition: transform 0.5s ease;
 }
