@@ -395,7 +395,7 @@ body {
     50% {			stop-color: rgba(211, 165, 16, 0.519);		}
     100% {			stop-color: #d3a5102e;		}	}
 @keyframes partciles {
-    0%,		100% {			translate: 0px 16px;		}
+    0%,		100% {			translate: 0px 26px;		}
     50% {			translate: 0px 6px;		}	}
 #particles {		animation: partciles 4s ease-in-out infinite;	}
 #animatedStop {		animation: umbral 4s infinite;	}
@@ -899,19 +899,6 @@ footer {
     .skill #skillPc {
         display: none;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -920,7 +907,6 @@ footer {
 
 .tc {
     position: fixed;
-   
     display: flex;
     visibility: hidden;
     width: 100vw;
@@ -935,9 +921,36 @@ footer {
     flex-direction: column;
 }
 
+.o-tc {
+    position: fixed; 
+    display: flex;
+    visibility: hidden;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(20, 20, 20, 0.5);
+    z-index: 99999;
+    align-items: center;
+    top: 0;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.new_canvas{
+    width:100vw;
+    height:100vh;
+    margin:0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color:rgba(255, 255, 255, 0);
+}
+
 .tc-main {
     z-index: 100000;
-    
     width: 80%;
     max-width: 300px;
     min-height: 200px;
@@ -950,15 +963,50 @@ footer {
     justify-content: center;
     overflow: hidden;
     transform: translateY(30%) scale(0.5);
+}
 
+.space-container{
+    display: flex;
+    justify-content: space-between; /* 子元素在容器中均匀分布 */
+    width: 100%;
+    margin-top: 2%; /* 与文字的间距 */
+    flex-direction: column;
+    overflow: auto;
+}
+
+.o-tc-main {
+    z-index: 100000;
+    width:100%;
+    max-width: 700px;
+    min-height: 200px;
+    background-color: #ffffff;
+    border-radius: 15px;
+
+    display: flex;
+    transition: transform 0.2s linear;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transform: translateY(30%) scale(0.5);
 }
 
 .tc-img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+}
+
+.o-tc-img {
+    width: 100%;
+    height: 100%;
+    overflow-y: scro
 }
 
 .tc.active {
+    visibility: visible;
+}
+
+.o-tc.active {
     visibility: visible;
 }
 
@@ -968,6 +1016,11 @@ footer {
 
 }
 
+.o-tc-main.active {
+
+    transform: translateY(0) scale(1);
+
+}
 
 .designed-type{
     font-size: 20px; /* 设置字体大小 */

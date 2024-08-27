@@ -31,27 +31,18 @@ function toggleClass(selector, className) {
     });
 }
 
-let popped = false;
-let viewcerted = false;
-
 function pop(imageURL) {
     var tcMainElement = document.querySelector(".tc-img");
     if (imageURL) {
         tcMainElement.src = imageURL;
-        popped = true;
     }
     toggleClass(".tc-main", "active");
     toggleClass(".tc", "active");
 }
 
-function viewcert(imageURL) {
-    var tcMainElement = document.querySelector(".tc-img");
-    if (imageURL) {
-        tcMainElement.src = imageURL;
-        viewcerted = true;
-    }
-    toggleClass(".tc-main", "active");
-    toggleClass(".tc", "active");
+function viewcert() {
+    toggleClass(".o-tc-main", "active");
+    toggleClass(".o-tc", "active");
 }
 
 function showMail(){
@@ -59,21 +50,24 @@ function showMail(){
 }
 
 var tc = document.getElementsByClassName('tc');
+var o_tc = document.getElementsByClassName('o-tc');
 var tc_main = document.getElementsByClassName('tc-main');
+var o_tc_main = document.getElementsByClassName('o-tc-main');
+
 tc[0].addEventListener('click', function (event) {
-    if(popped) 
-    {
-        pop();
-        popped = false;
-    }
-    else if(viewcerted)
-    {
-        viewcert();
-        viewcerted = false;
-    }
+    pop();
 });
+
+o_tc[0].addEventListener('click', function (event) {
+    viewcert();
+});
+
 tc_main[0].addEventListener('click', function (event) {
-    if(!popped || !viewcerted) {event.stopPropagation();}
+    event.stopPropagation();
+});
+
+o_tc_main[0].addEventListener('click', function (event) {
+    event.stopPropagation()
 });
 
 function setCookie(name, value, days) {
