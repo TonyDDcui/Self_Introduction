@@ -89,6 +89,10 @@ life_tc_main[0].addEventListener('click', function (event) {
     event.stopPropagation()
 });
 
+
+
+
+
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
@@ -255,95 +259,30 @@ window.addEventListener('load', function() {
 
 
 
-window.onload = function () {
-    miaovSlide('miaovSlide');
-};
 
-function miaovSlide(o) {
-    //获取操作对象容器
-    var obj = document.getElementById(o);
-    if (!obj) return;
-    //获取对象下面所有的div
-    var aDiv = obj.getElementsByTagName('div');
-    //获取向上箭头
-    var oUp = getClass('up');
-    //获取向下箭头
-    var oDown = getClass('down');
-    //获取图片容器
-    var oWrap = getClass('wrap');
-    //获取图片列表
-    var oUl = oWrap.getElementsByTagName('ul')[0];
-    //获取图片列表项
-    var oLi = oUl.getElementsByTagName('li');
 
-    var oTime = null;
-    var iMs = 30;
-    var i = 0;
-    var iNum = 5;
-    var toggle = -1;
-
-    oUl.innerHTML += oUl.innerHTML;
-
-    // 点击向上时，向上走
-    oUp.onclick = function () {
-
-        toggle = -1;
-
-        autoPlay(toggle);
-    };
-
-    // 点击向下时，向走走
-    oDown.onclick = function () {
-        toggle = 1;
-        autoPlay(toggle);
-    };
-
-    // 向上与向下箭头鼠标移入时，修改其透明度为1
-    oUp.onmouseover = oDown.onmouseover = function () {
-        this.style.filter = 'alpha(opacity:100)';
-        this.style.opacity = 1;
-    };
-
-    // 向上与向下箭头鼠标移入时，修改其透明度为0.6
-    oUp.onmouseout = oDown.onmouseout = function () {
-        this.style.filter = 'alpha(opacity:60)';
-        this.style.opacity = 0.6;
-    };
-
-    // 图片运动方法,toggle代表向下或是向上的值
-    function autoPlay(toggle) {
-        // 清除原有定时器
-        if (oTime) {
-            clearInterval(oTime);
-        }
-        // 重新开启定时器
-        oTime = setInterval(function () {
-            // 第次增量
-            iNum += 2 * toggle;
-            // UL向下走,当top值大于0时
-            if (iNum > 0) {
-                // 设定top值为负的UL高度的一半(向上拉)
-                iNum = -oLi.length * oLi[0].offsetHeight / 2;
-            }
-            // UL向上走，当top值的绝对值大于UL自身宽度的一半时
-            if (Math.abs(iNum) > oLi.length * oLi[0].offsetHeight / 2) {
-                // 设定top的值为0(向下拉)
-                iNum = 0;
-            }
-            // 赋值给top值
-            oUl.style.top = iNum + 'px';
-
-        }, iMs);
-    };
-
-    autoPlay(toggle);
-
-    // 获取拥有当前样式的元素
-    function getClass(sName) {
-        for (i = 0; i < aDiv.length; i++) {
-            if (aDiv[i].className == sName) {
-                return aDiv[i];
-            }
-        }
+const header = document.querySelector('.life-header');
+const img = document.querySelector('.img');
+let scrollDistance = 0;
+let requestId = null;
+function updateHeaderClipPath() {
+    const clipPathValue = `polygon(0 0, 100% 0%, 100% ${(scrollDistance <= 1000) ? 100 - ((scrollDistance / 1000) * 50) : 80}%, 0 100%)`;
+    header.style.clipPath = clipPathValue;
+    const scaleValue = 1 + ((scrollDistance / 600) * 1);
+    img.style.transform = `scale(${scaleValue})` ;
+    const opacityValue = (scrollDistance / 600);
+}
+function scrollHandler(event) {
+    if (event.deltaY < 0) {
+        scrollDistance = Math.max(0, scrollDistance + event.deltaY);
+    } else {
+        scrollDistance = Math.min(600, scrollDistance + event.deltaY);
+    }
+    if (!requestId) {
+        requestId = window.requestAnimationFrame(() => {
+            updateHeaderClipPath();
+            requestId = null;
+        });
     }
 }
+window.addEventListener('wheel', scrollHandler);
