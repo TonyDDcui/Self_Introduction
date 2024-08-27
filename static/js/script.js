@@ -45,14 +45,23 @@ function viewcert() {
     toggleClass(".o-tc", "active");
 }
 
+function viewlife() {
+    toggleClass(".life-tc-main", "active");
+    toggleClass(".life-tc", "active");
+}
+
 function showMail(){
     alert("This is my email: <someometony@outlook.com>");
 }
 
 var tc = document.getElementsByClassName('tc');
 var o_tc = document.getElementsByClassName('o-tc');
+var life_tc = document.getElementsByClassName('life-tc');
+
+
 var tc_main = document.getElementsByClassName('tc-main');
 var o_tc_main = document.getElementsByClassName('o-tc-main');
+var life_tc_main = document.getElementsByClassName('life-tc-main');
 
 tc[0].addEventListener('click', function (event) {
     pop();
@@ -62,11 +71,21 @@ o_tc[0].addEventListener('click', function (event) {
     viewcert();
 });
 
+life_tc[0].addEventListener('click', function (event) {
+    viewlife();
+});
+
+
+
 tc_main[0].addEventListener('click', function (event) {
     event.stopPropagation();
 });
 
 o_tc_main[0].addEventListener('click', function (event) {
+    event.stopPropagation()
+});
+
+life_tc_main[0].addEventListener('click', function (event) {
     event.stopPropagation()
 });
 
