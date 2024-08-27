@@ -63,6 +63,7 @@ html[data-theme="Dark"] {
     --main_text_color: #fff;
     --gradient:linear-gradient(120deg, rgb(246, 5, 5), #ff5733 20%, #ffcc33 40%,  #f76cc6 60%,#ff0080 80%);
     --purple_text_color: #747bff;
+    --red_text_color: #ff5733;
     --text_bg_color: rgb(26, 4, 48);
     --item_bg_color: rgb(19, 20, 24);
     --item_hover_color: rgb(19, 23, 27);
@@ -412,6 +413,12 @@ body {
     color: var(--purple_text_color);
     font-weight: 800;
 }
+
+.RedText {
+    color: var(--red_text_color);
+    font-weight: 800;
+}
+
 
 .textBackground {
     font-weight: 800;
