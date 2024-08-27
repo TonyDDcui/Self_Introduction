@@ -951,7 +951,7 @@ footer {
     height: 100vh;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(54, 53, 53, 0.5);
     z-index: 99999;
     align-items: center;
     top: 0;
@@ -1174,9 +1174,8 @@ footer {
     justify-content: center;
     margin: auto;
     width: 50vw;
-    height: 70vh;
+    height: 20vh;
     overflow: hidden;
-    transition: clip-path 0.5s ease;
     position: relative;
 }
 
