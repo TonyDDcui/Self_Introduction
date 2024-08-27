@@ -1173,10 +1173,9 @@ footer {
     display :flex;
     justify-content: center;
     margin: auto;
-    width: 80%;
-    height: 700px;
+    width: 50vw;
+    height: 70vh;
     overflow: hidden;
-    clip-path: polygon(0 0, 100% 0%, 100% 75%, 0 95%);
     transition: clip-path 0.5s ease;
     position: relative;
 }
