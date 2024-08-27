@@ -927,9 +927,9 @@ footer {
     visibility: hidden;
     width: 100vw;
     height: 100vh;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    background: rgba(20, 20, 20, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.5);
     z-index: 99999;
     align-items: center;
     top: 0;
@@ -939,11 +939,13 @@ footer {
 
 .new_canvas{
     width:100vw;
-    height:100vh;
-    margin:0;
-    padding: 0;
+    height:95vh;
     display: flex;
     align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+    flex-shrink: 0;
+    scroll-snap-type: y proximity;
     background-color:rgba(255, 255, 255, 0);
 }
 
@@ -959,20 +961,8 @@ footer {
     transition: transform 0.2s linear;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: auto;
     transform: translateY(30%) scale(0.5);
-}
-
-.space-container{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-height: 200px;
-    flex-direction: column;
-    overflow-y: scroll;
-    margin: auto;
-    margin-top: 20px;
-    flex-shrink: 0;
 }
 
 .o-tc-main {
@@ -980,8 +970,11 @@ footer {
     width:100%;
     max-width: 700px;
     min-height: 200px;
+    max-height:1000px;
     background-color: #ffffff;
-    border-radius: 15px;
+    border-radius: 20px;
+
+    flex-shrink: 0;
 
     display: flex;
     transition: transform 0.2s linear;
@@ -990,12 +983,12 @@ footer {
     overflow: hidden;
     transform: translateY(30%) scale(0.5);
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .tc-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 .tc.active {
