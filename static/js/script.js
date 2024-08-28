@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const src = img.getAttribute("data-src");
                     img.setAttribute("src", src);
                     img.classList.add("loaded");
-                    observer.disconnect();
+                    observer.unobserve(img); // 停止观察已加载的图片
                 }
             });
         });
@@ -165,7 +165,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     lazyImages.forEach(lazyLoad);
 });
-
 
 
 
