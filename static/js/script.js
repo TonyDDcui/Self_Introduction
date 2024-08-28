@@ -50,18 +50,36 @@ function viewlife() {
     toggleClass(".life-tc", "active");
 }
 
+function viewreal(){
+    toggleClass(".real-tc-main", "active");
+    toggleClass(".real-tc", "active");
+}
+
 function showMail(){
     alert("This is my email: <someometony@outlook.com>");
 }
 
+let isClicked;
+document.addEventListener('DOMContentLoaded', function() {
+    const myDiv = document.getElementById('video-container');
+    myDiv.addEventListener('click', function(event) {
+        isClicked = true;
+    });
+    setInterval(function() {
+        isClicked = false;
+    }, 2000);
+});
+
 var tc = document.getElementsByClassName('tc');
 var o_tc = document.getElementsByClassName('o-tc');
 var life_tc = document.getElementsByClassName('life-tc');
+var real_tc = document.getElementsByClassName('real-tc');
 
 
 var tc_main = document.getElementsByClassName('tc-main');
 var o_tc_main = document.getElementsByClassName('o-tc-main');
 var life_tc_main = document.getElementsByClassName('life-tc-main');
+var real_tc_main = document.getElementsByClassName('real-tc-main');
 
 tc[0].addEventListener('click', function (event) {
     pop();
@@ -73,6 +91,13 @@ o_tc[0].addEventListener('click', function (event) {
 
 life_tc[0].addEventListener('click', function (event) {
     viewlife();
+});
+
+
+
+real_tc[0].addEventListener('click', function (event) {
+    if(isClicked){event.stopPropagation()}
+    else{viewreal();}
 });
 
 
@@ -89,9 +114,9 @@ life_tc_main[0].addEventListener('click', function (event) {
     event.stopPropagation()
 });
 
-
-
-
+real_tc_main[0].addEventListener('click', function (event) {
+    event.stopPropagation()
+});
 
 function setCookie(name, value, days) {
     var expires = "";
@@ -246,9 +271,6 @@ document.addEventListener('DOMContentLoaded', function () {
     
    */ 
 });
-
-
-
 
 var pageLoading = document.querySelector("#loading");
 window.addEventListener('load', function() {

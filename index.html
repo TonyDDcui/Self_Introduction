@@ -193,7 +193,7 @@
 						</div>
 					</a>
 
-					<a class="projectItem a" onclick="viewcert()" href="javascript:void(0)">
+					<a class="projectItem a" onclick="viewreal()" href="javascript:void(0)">
 						<div class="projectItemLeft">
 							<h1>项目回录</h1>
 							<p>存储项目珍贵录像带</p>
@@ -359,7 +359,7 @@
 									但我多希望这是一场梦，一场有了剧透能预知未来梦，一场睡醒坐起来，身边放的就是军训服，
 									被舍友喊起来要去集合的梦。
 									所以，现在，做梦ing，先放几张美景应付一下。
-</p>
+								</p>
 							</div>
 							<div onclick="" class="life-tc-main">	
 								<img src="./life_img/img3.jpg" alt="">			
@@ -391,7 +391,7 @@
 								<img src="./life_img/img8.jpg" alt="">			
 							</div>
 							<div onclick="" class="life-tc-main">	
-								<img src="./life_img/img10.jpg" alt="">			
+								<img class = "tc-img" src="./life_img/img10.jpg" alt="">			
 							</div>
 							<div class="multicol">
 								<p>
@@ -399,6 +399,90 @@
 								</p>
 							</div>
 						</article>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class = "real-tc">
+		<div class = "text-canvas">
+			<div class="shell">
+				<div class="life-main">
+					<article>
+						<div class="multicol">
+							<h1>项目回忆录</h1>
+							<h2>单片机展示</h2>
+							<p>If you shed tears when you miss the sun,you also miss the stars
+								如果你因失去了太阳而流泪，你也将失去群星
+							</p>
+						</div>
+						<div onclick="" class = "real-tc-main">
+							<img class = "tc-img" src = "real_img/img1.jpg" alt="">
+						</div>
+						<div class="multicol">
+							<p>
+								1. 	使用普中51单片机最小系统板完成全国大学生蓝桥杯设计竞赛,智能家居系统设计,三电机调速系统设计。
+							</p>
+							<p>
+								2.	 正点原子STM32主控板完成设计全国大学生教育机器人竞赛和程序设计,全国大学生工程能力和创新设计物流搬运车设计。
+							</p>
+							<p>
+								3. 	NUCLEO-H563ZI学习M33内核和内核安全加密等技术,并运用于全国大学生嵌入式竞赛远程人机交互物流车。
+							</p>
+							<p>
+								4. 	运用树莓派4B学习完成T265传感器,激光雷达等多传感器数据获取和数据处理,并完成于STM芯片通信,为无人机完成定位功能。
+							</p>
+							<p>
+								5. 	运用树莓派4B学习完成T265传感器,激光雷达等多传感器数据获取和数据处理,并完成于STM芯片通信,为无人机完成定位功能。
+							</p>
+							<p>
+								6. 	运用OpenmvH7Plus运行卷积神经网络模型,完成图形识别和目标图像识别。
+							</p>
+							<p>	
+								7.	 运用恩智浦的S32K344/RT1064完成智能车的车底盘控制逻辑编写,定时器,卡尔曼滤波,1024带方向编码器完成直流有刷电机的实时监测。
+							</p>
+							<p>
+								8. 	运用STM32F407作为主控,配合imu完成无人机的飞行控制,路径优化编程,保证无人机在规划路线下稳定飞行,完成无人机的社区巡逻任务，并通过上位机实时显示无人机位置。
+							</p>	
+							<p>
+								9. 	运用机载电脑(jeston nano)运行T265深度摄像头,激光雷达的ROS节点,航点飞行代码,配合PX4飞控完成立体货架巡查任务。
+							</p>
+							<p>
+								10. 运用STM32控制42步进电机实现物流搬运车的精准运行,运用esp8266实现上位机远程操控物流车路径设计,通过学习控制策略完成	对上位机发布的路径和运行任务进行学习，并智能运行，运用单目摄像头(OpenMV)扫描二维码,esp8266将出/入库货物信息上传阿里云端，实现对货物实时监测。
+							</p>
+						</div>
+						<h2>路径学习智能运行物流搬运车</h2>
+						<div class="multicol">							
+							<div class = "real-tc-main">
+								<img class = "tc-img" src = "real_img/img2.jpg" alt="">
+							</div>		
+							<p>
+								电路设计:根据MCU数据手册相关的引脚输出电压设计三极管驱动电路,并通过Multisim完成电路仿真验证,设计电源12V->5V的LDO线性降压电路和供电线路走线设计,信号线路设计,电机驱动接口设计,三极管开关控制设计,通过洞洞板完成元器件和电路的焊接,运用示波器完成信号分析和测试,运用万用表工具完成电路测试和电路维护。
+							</p>		
+							<div class = "real-tc-main">
+								<img class = "tc-img" src = "real_img/img3.jpg" alt="">
+							</div>									
+						</div>
+						<div class="multicol">	
+							<h2>物流搬运车功能演示</h2>
+							<p>
+								1. 	物流搬运车上位机:通过上位机远程遥控实现物流搬运车的路径规,机械臂动作设定。</p>
+							<p>
+								2.	物流车机械臂:机械臂前端夹具可以根据目标物需求进行更换,实现对于货物的稳定抓取。</p>
+							<p>
+								3.	物流搬运车上位机摄像头:实现货物定位,通过货物二维码识别，将货物信息上传至阿里云端仓库，实现货物监测,货物管理。</p>
+							<p>
+								4.	物流搬运车学习功能:通过学习上位机的路径和机械臂的动作，在无人操作时能够自主运行程序，完成目标作业。
+							</p>
+							<div id = "video-container">
+								<div class = "real-tc-main">
+									<video class = "tc-img" src="./real_img/video1.mp4" controls="controls" loop="loop" muted="muted"></video>
+								</div>
+							</div>	
+						</div>
+					
+	
+					</article>
 				</div>
 			</div>
 		</div>
