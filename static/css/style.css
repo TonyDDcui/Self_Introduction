@@ -1250,12 +1250,12 @@ footer {
     transition: transform 0.5s ease;
 }
 
-img{
+img,video{
     opacity: 0;
     transition: opacity 0.5s;
 }
 
-img.loaded {
+img.loaded ,video.loaded {
     opacity: 1;
 }
 
