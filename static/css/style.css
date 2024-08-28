@@ -1250,15 +1250,6 @@ footer {
     transition: transform 0.5s ease;
 }
 
-img,video{
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-img.loaded ,video.loaded {
-    opacity: 1;
-}
-
 .life-main {
     width: 100%;
     height: 100%;

@@ -143,43 +143,6 @@ function getCookie(name) {
     return null;
 }
 
-
-document.addEventListener("DOMContentLoaded", function() {
-    const lazyElements = document.querySelectorAll("img.lazy, video.lazy");
-
-    const lazyLoad = (target) => {
-        const io = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const element = entry.target;
-                    const src = element.getAttribute("data-src");
-                    if (element.tagName === "IMG") {
-                        element.setAttribute("src", src);
-                    } else if (element.tagName === "VIDEO") {
-                        element.setAttribute("src", src);
-                        element.load();
-                    }
-                    element.onload = () => {
-                        element.classList.add("loaded");
-                        observer.unobserve(element); // 停止观察已加载的元素
-                    };
-                }
-            });
-        }, {
-            rootMargin: "0px 0px 200px 0px" // 提前 200px 触发加载
-        });
-
-        io.observe(target);
-    };
-
-    lazyElements.forEach(lazyLoad);
-});
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
 
 
