@@ -144,12 +144,6 @@ function getCookie(name) {
 }
 
 
-
-
-
-
-
-// lazyload.js
 document.addEventListener("DOMContentLoaded", function() {
     const lazyImages = document.querySelectorAll('.lazy-image');
 
