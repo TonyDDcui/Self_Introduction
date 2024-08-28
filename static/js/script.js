@@ -154,10 +154,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     const img = entry.target;
                     const src = img.getAttribute("data-src");
                     img.setAttribute("src", src);
-                    img.classList.add("loaded");
-                    observer.unobserve(img); // 停止观察已加载的图片
+                    img.onload = () => {
+                        img.classList.add("loaded");
+                        observer.unobserve(img); // 停止观察已加载的图片
+                    };
                 }
             });
+        }, {
+            rootMargin: "0px 0px 200px 0px" // 提前 200px 触发加载
         });
 
         io.observe(target);
