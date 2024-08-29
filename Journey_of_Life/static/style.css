@@ -106,12 +106,11 @@ p:not(:first-of-type) {
 }
 
 article {
-    width: 80%;
+    width: 100%;
     margin:  0 auto 4rem;
 }
 
 article img {
-    z-index: 100000;
     max-width: 640px;
     max-height: 320px;
     background-color: #ffffff;
