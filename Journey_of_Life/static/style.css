@@ -132,6 +132,21 @@ article {
 
 article img {
     width: 100%;
+    z-index: 100000;
+    max-width: 640px;
+    min-height: 200px;
+    max-height:1000px;
+    background-color: #ffffff;
+    border-radius: 56px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    transition: transform 0.2s linear;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transform:scale(0.98);
 }
 
 article header {
