@@ -133,8 +133,8 @@ article {
 
 article img {
     z-index: 100000;
-    max-width: 72%;
-    height: 32%;
+    max-width: 72vw;
+    min-height: 32vh;
     background-color: #ffffff;
     border-radius: 36px;
 
@@ -144,7 +144,7 @@ article img {
     justify-content: center;
     overflow: auto;
     transform:scale(0.95);
-    flex-shrink: 0; /*这个作为限定不会发生出现为了合并而缩氄1�7*/
+    flex-shrink: 0;
 }
 
 .img-container{

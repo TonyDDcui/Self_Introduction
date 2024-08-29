@@ -23,3 +23,10 @@ function scrollHandler(event) {
     }
 }
 window.addEventListener('wheel', scrollHandler);
+
+var pageLoading = document.querySelector("#loading");
+window.addEventListener('load', function() {
+    setTimeout(function () {
+        pageLoading.style.opacity = '0';
+    }, 100);
+});
