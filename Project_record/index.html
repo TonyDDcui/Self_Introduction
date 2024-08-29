@@ -1,118 +1,426 @@
 <!DOCTYPE html>
-<html>
+<html class="cuizhexiao.com">
+<head class = "cuizhexiao.com">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project_record</title>
-  <link rel="icon" href="/static/img/logo.ico">
-  <link rel="stylesheet" href="./static/style.css">
-  <link rel="stylesheet" href="/static/css/root.css">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>
+		CZX's Home </title>
+	<link rel="icon" href="./static/img/logo.ico">
+	<meta name="description" content="生活不止眼前的苟且,还有诗和远方^_^">
+	<meta name="keywords" content="cuizhexiao,czx,崔喆箫,崔喆箫主页,崔喆箫个人网站,CZX">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="./static/css/style.css">
+	<link rel="stylesheet" href="./static/css/root.css">
+
 </head>
 
-<body>
-    <div id="main">
-        <div id="click-section" class = "left">
-            <div id="drawerboxes">
-                <div class="drawerbox active">
-                    <button class="drawer-btn active" onclick="slideTo(1)">
-                        2022年证书整合
-                            <span class="drawer-head">
-                                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/blog.png" alt="">
-                            </span>
-                    </button>
-                </div>
-                <div class="drawerbox">
-                    <button class="drawer-btn" onclick="slideTo(2)">
-                        2023年证书整合
-                        <span class="drawer-head">
-                            2
-                        </span>
-                    </button>
-                </div>
-                <div class="drawerbox">
-                    <button class="drawer-btn" onclick="slideTo(3)">
-                        Title Here
-                        <span class="drawer-head">
-                            3
-                        </span>
-                    </button>
-                </div>
-                <div class="drawerbox">
-                    <button class="drawer-btn" onclick="slideTo(4)">
-                        Title Here
-                        <span class="drawer-head">
-                            4   
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    <div id="slide-section">
-        <div id="slide-bar">
-            <div id="bar">
 
-            </div>
-        </div>
-        <div id="card-section">
-            <div id="card1" class="card">
-                <div class="card-small-title">
-                    CuiZheXiao's  Project
-                </div>
-                <div class="card-title">
-                    Certificates in 2022 
-                </div>
-                <div class="card-content">
-                    aa
-                </div>
-                <div class="card-img">
-                    <img src="" alt="">
-                </div>
-            </div>
-            <div id="card2" class="card">
-                <div class="card-small-title">
-                    CuiZheXiao's  Project
-                </div>
-                <div class="card-title">
-                    Certificates in 2023
-                </div>
-                <div class="card-content">
-                    Quote: "The wind is calling, to fly freely."
-                </div>
-                <div class="card-img">
-                    <img src="" alt="">
-                </div>
-            </div>
-            <div id="card3" class="card">
-                <div class="card-small-title">
-                    CuiZheXiao's  Project
-                </div>
-                <div class="card-title">
-                    Castle in the Sky
-                </div>
-                <div class="card-content">
-                    Quote: "At the end of the sky, there is another world." 
-                </div>
-                <div class="card-img">  
-                    <img src="" alt="">
-                </div>
-            </div>  
-            <div id="card4" class="card">
-                <div class="card-small-title">
-                    Miyazaki Hayao
-                </div>
-                <div class="card-title">
-                    Spirited Away
-                </div>
-                <div class="card-content">
-                    Quote: "Don't stop, don't be afraid, just keep going, and you will find the answer."             
-                </div>
-                <div class="card-img">
-                    <img src="" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
+
+<body>
+	<div id="loading">
+		<div id="loading-center">
+		</div>
+	</div>
+	<div class="filter"></div>
+
+	<div class="main">
+		<div class="left">
+			<div class="logo" style="background-image: url(./static/img/logo.jpg);">
+			</div>
+			<div class="left-div left-des">
+				<div class="left-des-item"><svg t="1705773709627" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1478"><path d="M512 249.976471c-99.388235 0-180.705882 81.317647-180.705882 180.705882s81.317647 180.705882 180.705882 180.705882 180.705882-81.317647 180.705882-180.705882-81.317647-180.705882-180.705882-180.705882z m0 301.17647c-66.258824 0-120.470588-54.211765-120.470588-120.470588s54.211765-120.470588 120.470588-120.470588 120.470588 54.211765 120.470588 120.470588-54.211765 120.470588-120.470588 120.470588z" p-id="1479"></path><path d="M512 39.152941c-216.847059 0-391.529412 174.682353-391.529412 391.529412 0 349.364706 391.529412 572.235294 391.529412 572.235294s391.529412-222.870588 391.529412-572.235294c0-216.847059-174.682353-391.529412-391.529412-391.529412z m0 891.482353C424.658824 873.411765 180.705882 686.682353 180.705882 430.682353c0-183.717647 147.576471-331.294118 331.294118-331.294118s331.294118 147.576471 331.294118 331.294118c0 256-243.952941 442.729412-331.294118 499.952941z" p-id="1480"></path></svg>China-ShangHai
+				</div>
+				<div class="left-des-item"><svg t="1705773906032" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2474"><path d="M729.6 234.666667H294.4V157.866667a51.2 51.2 0 0 1 51.2-51.2h332.8a51.2 51.2 0 0 1 51.2 51.2v76.8z m179.2 51.2a51.2 51.2 0 0 1 51.2 51.2v512a51.2 51.2 0 0 1-51.2 51.2H115.2a51.2 51.2 0 0 1-51.2-51.2v-512a51.2 51.2 0 0 1 51.2-51.2h793.557333z m-768 172.032c0 16.384 13.312 29.696 29.696 29.696h683.008a29.696 29.696 0 1 0 0-59.392H170.410667a29.696 29.696 0 0 0-29.696 29.696z m252.416 118.784c0 16.384 13.312 29.696 29.696 29.696h178.176a29.696 29.696 0 1 0 0-59.392H422.912a29.738667 29.738667 0 0 0-29.696 29.696z" p-id="2475"></path></svg>Student</div>
+			</div>
+			<div class="left-div left-tag">
+				<div class="left-tag-item">电子发烧友
+				</div>
+				<div class="left-tag-item">大学生
+				</div>
+				<div class="left-tag-item">嵌入式驱动
+				</div>
+				<div class="left-tag-item">linux
+				</div>
+				<div class="left-tag-item">单片机硬件开发
+				</div>
+				<div class="left-tag-item">骑行</div>
+			</div>
+			<div class="left-div">
+				<ul id="line">
+					<li>
+						<div class="focus"></div>
+						<div>更新维护
+						</div>
+						<div>2024.1</div>
+					</li>
+					<li>
+						<div class="focus"></div>
+						<div>...
+						</div>
+						<div>...</div>
+					</li>
+					<li>
+						<div class="focus"></div>
+						<div>搭建第一个网页
+						<div>2024.8</div>
+					</li>
+					<li>
+						<div class="focus"></div>
+						<div>搭建第一个网页
+						<div>2024.8</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="right">
+			<header>
+				<div class="index-logo" style="background-image: url(./static/img/logo.jpg);">
+				</div>
+				<div class="welcome">
+					Hello I' m <span class="gradientText">
+						CuiZheXiao </span>
+				</div>
+				<div class="description"> 
+					<span class="RedText">不要慌，不要慌，太阳下山，有月光</span>
+				</div>
+				<div class="description"> 
+				<span class="RedText">不要慌，不要慌，月落西山，有朝阳</span>
+				</div>
+				<div class="iconContainer">
+					<a class="iconItem" onclick="" href="https://github.com/TonyDDcui">
+						<svg t="1704870335945" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2487">
+                            <path d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"  p-id="2488"></path>
+                        </svg>
+						<div class="iconTip">Github</div>
+					</a><a class="iconItem" onclick="showMail()" href="javascript:void(0)">
+						<svg t="1704870588438" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3174" >
+                            <path d="M926.47619 355.644952V780.190476a73.142857 73.142857 0 0 1-73.142857 73.142857H170.666667a73.142857 73.142857 0 0 1-73.142857-73.142857V355.644952l304.103619 257.828572a170.666667 170.666667 0 0 0 220.745142 0L926.47619 355.644952zM853.333333 170.666667a74.044952 74.044952 0 0 1 26.087619 4.778666 72.704 72.704 0 0 1 30.622477 22.186667 73.508571 73.508571 0 0 1 10.678857 17.67619c3.169524 7.509333 5.12 15.652571 5.607619 24.210286L926.47619 243.809524v24.380952L559.469714 581.241905a73.142857 73.142857 0 0 1-91.306666 2.901333l-3.632762-2.925714L97.52381 268.190476v-24.380952a72.899048 72.899048 0 0 1 40.155428-65.292191A72.97219 72.97219 0 0 1 170.666667 170.666667h682.666666z"  p-id="3175"></path>
+                        </svg>
+						<div class="iconTip">Mail</div>
+					</a>
+					<a class="iconItem" onclick="pop('./static/img/wechat.jpg')" href="javascript:void(0)">
+						<svg t="1704870588438" class="icon"  viewBox="0 0 320 320" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3174" >
+                            <path d="M200.803 111.88c-24.213 1.265-45.268 8.605-62.362 25.188-17.271 16.754-25.155 37.284-23 62.734-9.464-1.172-18.084-2.462-26.753-3.192-2.994-.252-6.547.106-9.083 1.537-8.418 4.75-16.488 10.113-26.053 16.092 1.755-7.938 2.891-14.889 4.902-21.575 1.479-4.914.794-7.649-3.733-10.849-29.066-20.521-41.318-51.232-32.149-82.85 8.483-29.25 29.315-46.989 57.621-56.236 38.635-12.62 82.054.253 105.547 30.927 8.485 11.08 13.688 23.516 15.063 38.224zm-111.437-9.852c.223-5.783-4.788-10.993-10.74-11.167-6.094-.179-11.106 4.478-11.284 10.483-.18 6.086 4.475 10.963 10.613 11.119 6.085.154 11.186-4.509 11.411-10.435zm58.141-11.171c-5.974.11-11.022 5.198-10.916 11.004.109 6.018 5.061 10.726 11.204 10.652 6.159-.074 10.83-4.832 10.772-10.977-.051-6.032-4.981-10.79-11.06-10.679z"  p-id="1862"></path>
+							<path d="M255.201 262.83c-7.667-3.414-14.7-8.536-22.188-9.318-7.459-.779-15.3 3.524-23.104 4.322-23.771 2.432-45.067-4.193-62.627-20.432-33.397-30.89-28.625-78.254 10.014-103.568 34.341-22.498 84.704-14.998 108.916 16.219 21.129 27.24 18.646 63.4-7.148 86.284-7.464 6.623-10.15 12.073-5.361 20.804.884 1.612.985 3.653 1.498 5.689zm-87.274-84.499c4.881.005 8.9-3.815 9.085-8.636.195-5.104-3.91-9.385-9.021-9.406-5.06-.023-9.299 4.318-9.123 9.346.166 4.804 4.213 8.69 9.059 8.696zm56.261-18.022c-4.736-.033-8.76 3.844-8.953 8.629-.205 5.117 3.772 9.319 8.836 9.332 4.898.016 8.768-3.688 8.946-8.562.19-5.129-3.789-9.364-8.829-9.399z"p-id="1862"></path>
+                        </svg>
+						<div class="iconTip">WeChat</div>
+					</a>  <a class="switch" href="javascript:void(0)">
+						<div class="onoffswitch">
+							<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
+								checked>
+							<label class="onoffswitch-label" for="myonoffswitch">
+								<span class="onoffswitch-inner"></span>
+								<span class="onoffswitch-switch"></span>
+							</label>
+						</div>
+					</a>
+				</div>
+
+				<div class="tanChiShe">
+					<img id="tanChiShe" src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/svg/snake-Light.svg" alt="">
+				</div>
+			</header>
+
+
+
+
+
+
+			<content>
+				<div class="title"><svg t="1705257422086" class="icon" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1891" >
+                        	<svg xmlns="http://www.w3.org/2000/svg" height="500" width="500">		
+								<g style="order: -1;">			
+									<polygon transform="rotate(45 100 100)" stroke-width="1" stroke="#d3a410" fill="none" points="70,70 148,50 130,130 50,150" id="bounce">
+									</polygon>			
+									<polygon transform="rotate(45 100 100)" stroke-width="1" stroke="#d3a410" fill="none" points="70,70 148,50 130,130 50,150" id="bounce2">
+									</polygon>			<polygon transform="rotate(45 100 100)" stroke-width="2" stroke="" fill="#414750"				points="70,70 150,50 130,130 50,150"></polygon>			
+									<polygon stroke-width="2" stroke="" fill="url(#gradiente)" points="100,70 150,100 100,130 50,100"></polygon>			
+									<defs>				
+										<linearGradient y2="100%" x2="10%" y1="0%" x1="0%" id="gradiente">					
+											<stop style="stop-color: #1e2026;stop-opacity:1" offset="20%"></stop>					
+											<stop style="stop-color:#414750;stop-opacity:1" offset="60%"></stop>				
+										</linearGradient>			
+									</defs>			
+									<polygon transform="translate(20, 31)" stroke-width="2" stroke="" fill="#b7870f" points="80,50 80,75 80,99 40,75">			
+									</polygon>			
+									<polygon transform="translate(20, 31)" stroke-width="2" stroke="" fill="url(#gradiente2)" points="40,-40 80,-40 80,99 40,75">
+									</polygon>			
+									<defs>				
+										<linearGradient y2="100%" x2="0%" y1="-17%" x1="10%" id="gradiente2">					
+											<stop style="stop-color: #d3a51000;stop-opacity:1" offset="20%"></stop>					
+											<stop style="stop-color:#d3a51054;stop-opacity:1" offset="100%" id="animatedStop"></stop>				
+										</linearGradient>			</defs>			<polygon transform="rotate(180 100 100) translate(20, 20)" stroke-width="2" stroke="" fill="#d3a410" points="80,50 80,75 80,99 40,75"></polygon>			
+										<polygon transform="rotate(0 100 100) translate(60, 20)" stroke-width="2" stroke="" fill="url(#gradiente3)"	points="40,-40 80,-40 80,85 40,110.2"></polygon>			
+										<defs>				
+											<linearGradient y2="100%" x2="10%" y1="0%" x1="0%" id="gradiente3">					
+												<stop style="stop-color: #d3a51000;stop-opacity:1" offset="20%"></stop>					
+												<stop style="stop-color:#d3a51054;stop-opacity:1" offset="100%" id="animatedStop"></stop>				
+											</linearGradient>			
+										</defs>			
+										<polygon transform="rotate(45 100 100) translate(80, 95)" stroke-width="2" stroke="" fill="#ffe4a1"	points="5,0 5,5 0,5 0,0" id="particles"></polygon>			
+										<polygon transform="rotate(45 100 100) translate(80, 55)" stroke-width="2" stroke="" fill="#ccb069"	points="6,0 6,6 0,6 0,0" id="particles"></polygon>			
+										<polygon transform="rotate(45 100 100) translate(70, 80)" stroke-width="2" stroke="" fill="#fff" points="2,0 2,2 0,2 0,0" id="particles"></polygon>			
+										<polygon stroke-width="2" stroke="" fill="#292d34" points="29.5,99.8 100,142 100,172 29.5,130"></polygon>			
+										<polygon transform="translate(50, 92)" stroke-width="2" stroke="" fill="#1f2127" points="50,50 120.5,8 120.5,35 50,80"></polygon>		
+									</g>	
+								</svg>
+                    </svg>project </div>
+				<div class="projectList">
+					<a class="projectItem a" target="_blank" href="https://blog.csdn.net/DDTony03">
+						<div class="projectItemLeft">
+							<h1>博客</h1>
+							<p>记录项目难题,源码在github上哦</p>
+						</div>
+						<div class="projectItemRight">
+							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/blog.png" alt="">
+						</div>
+					</a>
+
+					<a class="projectItem a" target="_blank" href="/Project_record/index.html">
+						<div class="projectItemLeft">
+							<h1>证书</h1>
+							<p>存储个人证书</p>
+						</div>
+						<div class="projectItemRight">
+							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/cert.png" alt="">
+						</div>
+					</a>
+
+					<a class="projectItem a" onclick="viewreal()" href="javascript:void(0)">
+						<div class="projectItemLeft">
+							<h1>项目回录</h1>
+							<p>存储项目珍贵录像</p>
+						</div>
+						<div class="projectItemRight">
+							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/real.png" alt="">
+						</div>
+					</a>
+				</div>
+				<div class="title"><svg t="1705257422086" class="icon" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1891" >
+					<svg class="pl" viewBox="0 0 160 160" width="160px" height="160px" xmlns="http://www.w3.org/2000/svg"> 
+						<defs> 
+							<linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="0%" stop-color="#000"></stop> 
+								<stop offset="100%" stop-color="#fff"></stop> 
+							</linearGradient> 
+							<mask id="mask1">
+								<rect x="0" y="0" width="160" height="160" fill="url(#grad)"></rect>
+							</mask>
+							<mask id="mask2">
+								<rect x="28" y="28" width="104" height="104" fill="url(#grad)"></rect>
+							</mask>
+						</defs>
+						<g> 
+							<g class="pl__ring-rotate"> 
+								<circle class="pl__ring-stroke" cx="80" cy="80" r="72" fill="none" stroke="hsl(223,90%,55%)" stroke-width="16" stroke-dasharray="452.39 452.39" stroke-dashoffset="452" stroke-linecap="round" transform="rotate(-45,80,80)"></circle>
+							</g>
+						</g>
+					<g mask="url(#mask1)">
+						<g class="pl__ring-rotate">
+							<circle class="pl__ring-stroke" cx="80" cy="80" r="72" fill="none" stroke="hsl(193,90%,55%)" stroke-width="16" stroke-dasharray="452.39 452.39" stroke-dashoffset="452" stroke-linecap="round" transform="rotate(-45,80,80)"></circle> 
+						</g> 
+					</g>
+					<g>
+						<g stroke-width="4" stroke-dasharray="12 12" stroke-dashoffset="12" stroke-linecap="round" transform="translate(80,80)"> <polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(-135,0,0) translate(0,40)"></polyline> <polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(-90,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(-45,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(0,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(45,0,0) translate(0,40)"></polyline>
+							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(90,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(135,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(180,0,0) translate(0,40)"></polyline> 
+						</g>
+					</g>
+					<g mask="url(#mask1)">
+						<g stroke-width="4" stroke-dasharray="12 12" stroke-dashoffset="12" stroke-linecap="round" transform="translate(80,80)">
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(-135,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(-90,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(-45,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(0,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(45,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(90,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(135,0,0) translate(0,40)"></polyline> 
+							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(180,0,0) translate(0,40)"></polyline> 
+						</g> 
+					</g>
+						
+					<g> 
+						<g transform="translate(64,28)"> 
+							<g class="pl__arrows" transform="rotate(45,16,52)"> 
+								<path fill="hsl(3,90%,55%)" d="M17.998,1.506l13.892,43.594c.455,1.426-.56,2.899-1.998,2.899H2.108c-1.437,0-2.452-1.473-1.998-2.899L14.002,1.506c.64-2.008,3.356-2.008,3.996,0Z"> </path> 
+								<path fill="hsl(223,10%,90%)" d="M14.009,102.499L.109,58.889c-.453-1.421,.559-2.889,1.991-2.889H29.899c1.433,0,2.444,1.468,1.991,2.889l-13.899,43.61c-.638,2.001-3.345,2.001-3.983,0Z"> </path>
+							</g>
+						</g>
+					</g> 
+					<g mask="url(#mask2)">
+						<g transform="translate(64,28)"> 
+							<g class="pl__arrows" transform="rotate(45,16,52)"> 
+								<path fill="hsl(333,90%,55%)" d="M17.998,1.506l13.892,43.594c.455,1.426-.56,2.899-1.998,2.899H2.108c-1.437,0-2.452-1.473-1.998-2.899L14.002,1.506c.64-2.008,3.356-2.008,3.996,0Z"> </path>
+								<path fill="hsl(223,90%,80%)" d="M14.009,102.499L.109,58.889c-.453-1.421,.559-2.889,1.991-2.889H29.899c1.433,0,2.444,1.468,1.991,2.889l-13.899,43.61c-.638,2.001-3.345,2.001-3.983,0Z"> </path>
+							</g>
+						</g> 
+					</g> 
+				</svg>
+                    </svg>daily_life </div>
+				<div class="projectList">
+					<a class="projectItem b" target="_blank"  href="./Journey_of_Life/index.html">
+						<div class="projectItemLeft">
+							<h1>旅行的意义</h1>
+							<p>走过一座城市,到达一座港湾</p>
+						</div>
+						<div class="projectItemRight">
+							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/life.jpg" alt="">
+						</div>
+
+					</a><a class="projectItem b"  target="_blank"  href="./Journey_of_Life/index.html">
+						<div class="projectItemLeft">
+							<h1>人生旅行</h1>
+							<p>人生是一场旅行,沿途都是风景</p>
+						</div>
+						<div class="projectItemRight">
+							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/travel.jpg" alt="">
+						</div>
+					</a>
+				</div>
+			</content>
+		</div>
+	</div>
+	<footer>
+		<p class = "designed-type" >Designed By CuiZheXiao</p>
+	</footer>
+
+	<div class="tc">
+		<div onclick="" class="tc-main">
+			<img class="tc-img" src="" alt="" srcset="">
+		</div>
+	</div>
+
+	<div class = "o-tc">
+		<div class = "new_canvas">
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img1.jpg" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img"  src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img2.jpg" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img3.png" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img4.jpg" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img5.jpg" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img"src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img6.png" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img7.jpg" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img8.png" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img9.png" alt = "">			
+			</div>
+			<div onclick="" class="o-tc-main">
+				<img class = "tc-img" src = "https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/cert_img/img10.png" alt = "">			
+			</div>
+		</div>
+	</div>
+
+	<div class = "real-tc">
+		<div class = "text-canvas">
+			<div class="shell">
+				<div class="life-main">
+					<article>
+						<div class="multicol">
+							<h1>项目回忆照</h1>
+							<h2>单片机展示</h2>
+							<p>If you shed tears when you miss the sun,you also miss the stars
+								如果你因失去了太阳而流泪,你也将失去群星
+							</p>
+						</div>
+						<div onclick="" class = "real-tc-main">
+							<img class = "tc-img"  src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/real_img/img1.jpg" alt="">
+						</div>
+						<div class="multicol">
+							<p>
+								1. 	使用普中51单片机最小系统板完成全国大学生蓝桥杯设计竞赛,智能家居系统设计,三电机调速系统设计
+							</p>
+
+							<p>
+								2.	 正点原子STM32主控板完成设计全国大学生教育机器人竞赛和程序设计,全国大学生工程能力和创新设计物流搬运车设计
+							</p>
+
+							<p>
+								3. 	NUCLEO-H563ZI学习M33内核和内核安全加密等,并运用于全国大学生嵌入式竞赛远程人机交互物流车
+							</p>
+
+							<p>
+								4. 	运用树莓派4B学习完成T265传感器,激光雷达等多传感器数据获取和数据处理,并完成于STM芯片通信,为无人机完成定位功能。
+							</p>
+
+							<p>
+								5. 	运用OpenmvH7Plus运行卷积神经网络模型,完成图形识别和目标图像识别
+							</p>
+
+							<p>	
+								6.	 运用恩智浦的S32K344/RT1064完成智能车的车底盘控制辑编写,定时器,卡尔曼滤滤波,1024带方向编码器完成直流有刷电机的实时监测
+							</p>
+
+							<p>
+								7. 	运用STM32F407作为主控,配合imu完成无人机的飞行控制,路径优化编程,保证无人机在规划路线下稳定飞衄,完成无人机的社区巡任务,并通过上位机实时显示无人机位置
+							</p>	
+
+							<p>
+								8. 	运用机载电脑(jeston nano)运行T265深度摄像头,激光雷达的ROS节点,航点飞行代码,配合PX4飞控完成立体货架巡查任务
+							</p>
+
+							<p>
+								9. 运用STM32控制42步进电机实现物流搬运车的精准运行,运用esp8266实现上位机远程操控物流车路径设计,通过学习控制策略完成对上位机发布的路径和运行任务进行学习,并智能运行,运用单目摄像头(OpenMV)扫描二维码,esp8266将出/入库货物信息上传阿里云端,实现对货物实时监测
+							</p>
+						</div>
+						<h2>路径学习智能运行物流搬运车</h2>
+						<div class="multicol">							
+							<div class = "real-tc-main">
+								<img  class = "tc-img"  src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/real_img/img2.jpg" alt="">
+							</div>		
+							<p>
+								电路设计:根据MCU数据手册相关的引脚输出电压设计三极管驱动电路,并通过Multisim完成电路仿真验证,设计电源12V->5V的LDO线性降压电路和供电线路走线设计,信号线路设计,电机驱动接口设计,三极管开关控制设计,通过洞洞板完成元器件和电路的焊接,运用示波器完成信号分析和测试,运用万用表工具完成电路测试和电路维护
+							</p>		
+							<div class = "real-tc-main">
+								<img class = "tc-img"  src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/real_img/img3.jpg" alt="">
+							</div>									
+						</div>
+						<div class="multicol">	
+							<h2>物流搬运车功能演示</h2>
+							<p>
+								1. 	物流搬运车上位机:通过上位机远程遥控实现物流搬运车的路径规,机械臂动作设定</p>
+							<p>
+								2.	物流车机械臂:机械臂前端夹具可以根据目标物进行更换,实现对于货物的稳定抓取</p>
+							<p>
+								3.	物流搬运车上位机摄像头:实现货物定位,通过货物二维码识别,将货物信息上传至阿里云端仓库,实现货物监测,货物管理</p>
+							<p>
+								4.	物流搬运车学习功能:通过学习上位机的路径和机械臂的动作,在无人操作时能够自主运行程序,完成目标作业
+							</p>
+							<div id = "video-container">
+								<div class = "real-tc-main">
+									<video class = "tc-img"  src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/real_img/video1.mp4" controls="controls" >
+								</div>
+							</div>	
+						</div>
+					
+	
+					</article>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </body>
-<script src="./static/script.js"></script>
+
+<script src="/static/js/script.js"> </script>
+
 </html>
