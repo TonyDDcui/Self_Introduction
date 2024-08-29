@@ -35,6 +35,10 @@
     position: relative;
   }
 
+  #click-section::-webkit-scrollbar {
+    display: none;
+}
+
   #drawerboxes {
     margin-left: 10%;
     width: 100%;
@@ -175,3 +179,6 @@
   .card-img img {
     width: 100%;
   }
+
+
+  
