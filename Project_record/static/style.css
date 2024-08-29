@@ -41,19 +41,6 @@
     }
   }
 
-  @media (max-width: 480px) {
-    #click-section {
-      display: none;
-    }
-  }
-  
-  /* 对于中等大小的手机和平板电脑 */
-  @media (max-width: 768px) {
-    #click-section {
-      display: none;
-    }
-  }
-
   #drawerboxes {
     margin-left: 10%;
     width: 100%;
@@ -194,6 +181,71 @@
   .card-img img {
     width: 100%;
   }
+  
 
+
+
+  /* 设置滚动条样弄1�71ￄ1�77 */
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--main_text_color, #000000);
+    border-radius: 8px;
+    height: 20%;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--main_bg_color, linear-gradient(50deg, #a2d0ff, #ffffff));
+}
+
+#loading {
+    background: radial-gradient(white, #d8eaff);
+    background-size: 100%;
+    background-position: center;
+
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 999999;
+    margin-top: 0px;
+    top: 0px;
+    pointer-events: none;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#loading-center {
+    height: 150px;
+    width: 150px;
+    position: relative;
+    border-radius: 50%;
+    background: #472eff;
+
+    animation: zoom 1s linear infinite;
+}
+
+.left {
+    overflow-y: scroll;
+    width: 230px;
+    height: 100vh;
+    display: flex;
+    padding: 0 15px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.left::-webkit-scrollbar {
+    display: none;
+}
 
   

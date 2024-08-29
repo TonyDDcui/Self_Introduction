@@ -66,3 +66,62 @@
    }
 
 
+   document.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+});
+
+function handlePress(event) {
+    this.classList.add('pressed');
+}
+
+function handleRelease(event) {
+    this.classList.remove('pressed');
+}
+
+function handleCancel(event) {
+    this.classList.remove('pressed');
+}
+
+var buttons = document.querySelectorAll('.projectItem');
+buttons.forEach(function (button) {
+    button.addEventListener('mousedown', handlePress);
+    button.addEventListener('mouseup', handleRelease);
+    button.addEventListener('mouseleave', handleCancel);
+    button.addEventListener('touchstart', handlePress);
+    button.addEventListener('touchend', handleRelease);
+    button.addEventListener('touchcancel', handleCancel);
+});
+
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        while (cookie.charAt(0) == ' ') {
+            cookie = cookie.substring(1, cookie.length);
+        }
+        if (cookie.indexOf(nameEQ) == 0) {
+            return cookie.substring(nameEQ.length, cookie.length);
+        }
+    }
+    return null;
+}
+
+var pageLoading = document.querySelector("#loading");
+window.addEventListener('load', function() {
+    setTimeout(function () {
+        pageLoading.style.opacity = '0';
+    }, 100);
+});
+
+
