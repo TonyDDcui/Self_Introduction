@@ -182,6 +182,11 @@ body {
 }
 
 
+.left::-webkit-scrollbar {
+    display: none;
+}
+
+
 .logo {
     flex-shrink: 0;
     width: 90%;
