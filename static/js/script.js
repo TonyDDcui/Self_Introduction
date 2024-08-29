@@ -45,11 +45,6 @@ function viewcert() {
     toggleClass(".o-tc", "active");
 }
 
-function viewlife() {
-    toggleClass(".life-tc-main", "active");
-    toggleClass(".life-tc", "active");
-}
-
 function viewreal(){
     toggleClass(".real-tc-main", "active");
     toggleClass(".real-tc", "active");
@@ -72,13 +67,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 var tc = document.getElementsByClassName('tc');
 var o_tc = document.getElementsByClassName('o-tc');
-var life_tc = document.getElementsByClassName('life-tc');
 var real_tc = document.getElementsByClassName('real-tc');
 
 
 var tc_main = document.getElementsByClassName('tc-main');
 var o_tc_main = document.getElementsByClassName('o-tc-main');
-var life_tc_main = document.getElementsByClassName('life-tc-main');
 var real_tc_main = document.getElementsByClassName('real-tc-main');
 
 tc[0].addEventListener('click', function (event) {
@@ -88,12 +81,6 @@ tc[0].addEventListener('click', function (event) {
 o_tc[0].addEventListener('click', function (event) {
     viewcert();
 });
-
-life_tc[0].addEventListener('click', function (event) {
-    viewlife();
-});
-
-
 
 real_tc[0].addEventListener('click', function (event) {
     if(isClicked){event.stopPropagation()}
@@ -107,10 +94,6 @@ tc_main[0].addEventListener('click', function (event) {
 });
 
 o_tc_main[0].addEventListener('click', function (event) {
-    event.stopPropagation()
-});
-
-life_tc_main[0].addEventListener('click', function (event) {
     event.stopPropagation()
 });
 
@@ -190,72 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     changeTheme(themeState);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-/*
-    var fpsElement = document.createElement('div');
-    fpsElement.id = 'fps';
-    fpsElement.style.zIndex = '10000';
-    fpsElement.style.position = 'fixed';
-    fpsElement.style.left = '0';
-    document.body.insertBefore(fpsElement, document.body.firstChild);
-
-    var showFPS = (function () {
-        var requestAnimationFrame = window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1000 / 60);
-            };
-
-        var fps = 0,
-            last = Date.now(),
-            offset, step, appendFps;
-
-        step = function () {
-            offset = Date.now() - last;
-            fps += 1;
-
-            if (offset >= 1000) {
-                last += offset;
-                appendFps(fps);
-                fps = 0;
-            }
-
-            requestAnimationFrame(step);
-        };
-
-        appendFps = function (fpsValue) {
-            fpsElement.textContent = 'FPS: ' + fpsValue;
-        };
-
-        step();
-    })();
-    
-    
-    
-    //pop('./static/img/tz.jpg')
-    
-    
-   */ 
 });
 
 var pageLoading = document.querySelector("#loading");

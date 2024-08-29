@@ -41,7 +41,7 @@ a:focus {
 }
 
 
-/* 设置滚动条样弄1�71ￄ1�77 */
+/* 设置滚动条样弄1�71ￄ1�77 */
 ::-webkit-scrollbar {
     width: 0px;
 }
@@ -155,7 +155,6 @@ body {
     backdrop-filter:  blur(var(--back_filter));
     -webkit-backdrop-filter: blur(var(--back_filter));
     z-index: -99999999;
-   
 }
 
 .main {
@@ -721,7 +720,7 @@ body {
 
 .projectItem.pressed {
     transform: scale(0.9);
-    /* 缩小到原来的0.9倄1�71ￄ1�77 */
+    /* 缩小到原来的0.9倄1�71ￄ1�77 */
     background-color: var(--item_hover_color);
 }
 
@@ -950,22 +949,6 @@ footer {
     flex-direction: column;
 }
 
-.life-tc {
-    position: fixed; 
-    display: flex;
-    visibility: hidden;
-    width: 100vw;
-    height: 100vh;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    background: rgba(54, 53, 53, 0.5);
-    z-index: 99999;
-    align-items: center;
-    top: 0;
-    justify-content: center;
-    flex-direction: column;
-}
-
 .real-tc {
     position: fixed; 
     display: flex;
@@ -1030,26 +1013,6 @@ footer {
     margin-bottom: 40px;
 }
 
-.life-tc-main {
-    z-index: 100000;
-    width:100%;
-    max-width: 810px;
-    min-height: 200px;
-    max-height:1000px;
-    background-color: #ffffff;
-    border-radius: 20px;
-
-    flex-shrink: 0; /*这个作为限定不会发生出现为了合并而缩氄1�7*/
-
-    display: flex;
-    transition: transform 0.2s linear;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transform: translateY(30%) scale(0.5);
-    margin-bottom: 40px;
-}
-
 .real-tc-main {
     z-index: 100000;
     width:100%;
@@ -1059,7 +1022,7 @@ footer {
     background-color: #ffffff;
     border-radius: 20px;
 
-    flex-shrink: 0; /*这个作为限定不会发生出现为了合并而缩氄1�7*/
+    flex-shrink: 0; /*这个作为限定不会发生出现为了合并而缩氄1�7*/
 
     display: flex;
     transition: transform 0.2s linear;
@@ -1083,10 +1046,6 @@ footer {
     visibility: visible;
 }
 
-.life-tc.active {
-    visibility: visible;
-}
-
 .real-tc.active {
     visibility: visible;
 }
@@ -1100,12 +1059,6 @@ footer {
 }
 
 .o-tc-main.active {
-
-    transform: translateY(0) scale(1);
-
-}
-
-.life-tc-main.active {
 
     transform: translateY(0) scale(1);
 
