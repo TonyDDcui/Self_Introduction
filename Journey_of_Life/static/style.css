@@ -149,6 +149,16 @@ article img {
     transform:scale(0.98);
 }
 
+.img-container{
+    
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    
+    align-items: center;
+    flex-direction: column;
+}
+
 article header {
     margin-bottom: 2.5rem;
     padding-bottom: 4rem;
