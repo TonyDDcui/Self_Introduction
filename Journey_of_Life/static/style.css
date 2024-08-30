@@ -5,6 +5,7 @@
 
 body {
     height: 100%;
+    width:100vw;
     min-height: 100vh;
     overflow-x: hidden;
     background: var(--main_bg_color);
