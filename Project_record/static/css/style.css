@@ -77,11 +77,6 @@ html[data-theme="Dark"] {
     --fill:#ffffff;
 }
 
-
-
-
-
-
 body {
     height: 100%;
     min-height: 100vh;
@@ -210,6 +205,18 @@ body {
     background: var(--item_bg_color);
 }
 
+.project-div{
+    flex-shrink: 0;
+    width: 100%;
+    border-radius: 13px;
+    margin-top: 0;
+    padding: 20px;
+    transform:translateY(-3%);
+    backdrop-filter: blur(var(--card_filter));
+    -webkit-backdrop-filter: blur(var(--card_filter));
+    background: var(--item_bg_color);
+}
+
 .left-des {
     display: flex;
     flex-direction: column;
@@ -269,37 +276,9 @@ body {
     overflow-y: scroll;
 }
 
-#line li {
-    list-style: none;
-    position: relative;
-    padding: 15px 0px 0px 15px;
-    border-left: 2px solid #d5d5d5;
-    border-radius: 0;
-    scroll-snap-align: end;
-    color: var(--main_text_color);
+.red_txt{
+    color: var(--red_text_color);
 }
-
-.focus {
-    width: 8px;
-    height: 8px;
-    border-radius: 22px;
-    background-color: rgb(255 255 255);
-    border: 2px solid #fff;
-    position: absolute;
-    left: -5px;
-    top: 50%;
-}
-
-#line li:first-child .focus:first-child {
-    background-color: #aaffcd;
-    animation: focus 1.8s ease infinite;
-}
-
-#line::-webkit-scrollbar {
-    display: none;
-}
-
-
 
 .right {
     width: calc(100% - 230px);
@@ -322,7 +301,7 @@ body {
     justify-content: center;
     flex-direction: row;
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 1%;
 }
 
 .btn-container{
@@ -417,31 +396,8 @@ body {
 
 }
 
-.container {		background-color: #414141;	}
-@keyframes bounce {
-    0%,		100% {			translate: 0px 36px;		}
-    50% {			translate: 0px 46px;		}	}
-@keyframes bounce2 {
-    0%,		100% {			translate: 0px 46px;		}
-    50% {			translate: 0px 56px;		}	}
-@keyframes umbral {		0% {			stop-color: #d3a5102e;		}
-    50% {			stop-color: rgba(211, 165, 16, 0.519);		}
-    100% {			stop-color: #d3a5102e;		}	}
-@keyframes partciles {
-    0%,		100% {			translate: 0px 26px;		}
-    50% {			translate: 0px 6px;		}	}
-#particles {		animation: partciles 4s ease-in-out infinite;	}
-#animatedStop {		animation: umbral 4s infinite;	}
-#bounce {		animation: bounce 4s ease-in-out infinite;		translate: 0px 36px;	}
-#bounce2 {		animation: bounce2 4s ease-in-out infinite;		translate: 0px 46px;		animation-delay: 0.5s;	}
-
 .purpleText {
     color: var(--purple_text_color);
-    font-weight: 800;
-}
-
-.RedText {
-    color: var(--red_text_color);
     font-weight: 800;
 }
 
@@ -530,10 +486,6 @@ body {
     background: var(--item_hover_color);
 }
 
-.tanChiShe {
-    width: 85%;
-}
-
 .wechat-pos{
     display: flex;
     justify-content: center;
@@ -547,143 +499,6 @@ body {
     width: 45%;
     height: 45%;
     position: relative;
-}
-
-.pl { 
-    display: block; 
-    width: 9.375em; 
-    height: 9.375em;
-}
-.pl { 
-    display: block; 
-    width: 9.375em; 
-    height: 9.375em;
-}
-
-.pl__arrows,
-.pl__ring-rotate,
-.pl__ring-stroke,
-.pl__tick 
-{ 
-    animation-duration: 2s; 
-    animation-timing-function: linear; 
-    animation-iteration-count: infinite;
-}
-
-.pl__arrows { 
-    animation-name: arrows42; 
-    transform: rotate(45deg); 
-    transform-origin: 16px 52px;
-}
-
-.pl__ring-rotate,.pl__ring-stroke { 
-    transform-origin: 80px 80px;
-}
-.pl__ring-rotate 
-{ 
-    animation-name: ringRotate42;
-}
-
-.pl__ring-stroke 
-{ 
-    animation-name: ringStroke42; 
-    transform: rotate(-45deg);
-}
-
-.pl__tick {
-     animation-name: tick42;
-    }
-
-.pl__tick:nth-child(2) 
-{ 
-    animation-delay: -1.75s;
-}
-.pl__tick:nth-child(3) 
-{ 
-    animation-delay: -1.5s;
-}
-
-.pl__tick:nth-child(4) 
-{ 
-    animation-delay: -1.25s;
-}
-
-.pl__tick:nth-child(5) 
-{ 
-    animation-delay: -1s;
-}
-
-.pl__tick:nth-child(6) 
-{ 
-    animation-delay: -0.75s;
-}
-
-.pl__tick:nth-child(7) 
-{ 
-    animation-delay: -0.5s;
-}
-
-.pl__tick:nth-child(8) 
-{ 
-    animation-delay: -0.25s;
-}
-
-@keyframes arrows42 
-{ 
-    from { 
-        transform: rotate(45deg); 
-    }
- 
-    to { 
-        transform: rotate(405deg); 
-    }
-}
-
-@keyframes ringRotate42 
-{ 
-    from 
-    { 
-        transform: rotate(0); 
-    }
- 
-    to { 
-        transform: rotate(720deg); 
-    }
-}
-
-@keyframes ringStroke42 
-{ 
-    from,	
-    to 
-    { stroke-dashoffset: 452; 
-        transform: rotate(-45deg); 
-    }
- 
-    50% 
-    { 
-        stroke-dashoffset: 169.5; 
-        transform: rotate(-180deg); 
-    }
-}
-
-@keyframes tick42 
-{ 
-    from,3%,47%,	
-    to 
-    { 
-        stroke-dashoffset: -12; 
-    }
- 
-    14%,36% 
-    {
-        stroke-dashoffset: 0; 
-    }
-}
-
-.tanChiShe img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 .title {
@@ -702,122 +517,6 @@ body {
 }
 .title:hover {
     transform: translateY(-5px);
-}
-
-.projectList {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.projectItem {
-    margin: 7px;
-    display: flex;
-    background-color: var(--item_bg_color);
-    border-radius: 8px;
-    padding: 15px;
-    height: 95px;
-    width: calc(25% - 15px);
-    backdrop-filter: blur(var(--card_filter));-webkit-backdrop-filter: blur(var(--card_filter));
-    -webkit-backdrop-filter: blur(var(--card_filter));-webkit-backdrop-filter: blur(var(--card_filter));
-    transition: opacity 0.3s ease, background-color 0.3s ease, border 0.3s ease, transform 0.2s ease;
-
-
-}
-
-.projectItem {
-    display: flex;
-    background-color: var(--item_bg_color);
-    border-radius: 8px;
-    padding: 15px;
-    height: 100px;
-    width: calc(25% - 15px);
-    backdrop-filter: blur(var(--card_filter));-webkit-backdrop-filter: blur(var(--card_filter));
-    transition: opacity 0.5s ease, background-color 0.2s ease, border 0.2s ease, transform 0.3s ease;
-
-}
-
-
-.projectItem:hover {
-    box-shadow: 0 8px 16px -4px #2c2d300c;
-    transform: translateY(-2px);
-
-}
-
-.projectItem.pressed {
-    transform: scale(0.9);
-    /* 缩小到原来的0.9倄1�71ￄ1�77 */
-    background-color: var(--item_hover_color);
-}
-
-.projectItem:hover .projectItemLeft {
-    width: 100%;
-}
-
-.projectItem:hover .projectItemRight {
-    width: 0%;
-}
-
-.projectItem:hover .projectItemRight img {
-    transform: rotate(40deg);
-}
-
-.projectItem:hover h1 {
-    font-size: 18px;
-}
-
-.projectItemLeft p {
-    font-size: 12px;
-    margin-top: 15px;
-    color: var(--item_left_text_color);
-}
-
-
-.projectItemLeft h1 {
-    font-weight: normal;
-    font-size: 16px;
-    margin: 0px;
-
-    transition: font-size 0.4s ease;
-    color: var(--item_left_title_color);
-}
-
-.projectItemLeft {
-    transition: width 0.4s ease;
-    height: 100%;
-    width: 80%;
-}
-
-
-.projectItemRight {
-    overflow: hidden;
-    transition: width 0.4s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 20%;
-    height: 100%;
-}
-
-.projectItemRight img {
-
-    height: 39px;
-    width: 39px;
-
-}
-
-.skill {
-    padding: 25px;
-    width: 100%;
-}
-
-.skill img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.skill #skillWap {
-    display: none;
 }
 
 footer {
@@ -860,40 +559,7 @@ footer {
         display: none;
     }
 
-    .a .projectItemRight {
-        display: none;
-
-    }
-
-    .a .projectItemRight img {
-        display: none;
-
-    }
-
-    .a .projectItemLeft {
-        width: 100%;
-    }
-
-    .a {
-
-        width: calc(50% - 18px);
-  margin: 9px;
-
-    }
-
-    .b {
-        height: 110px;
-        margin: 8px 15px;
-        width: calc(100% - 30px);
-    }
-
-
-
     .right {
-        width: 100%;
-    }
-
-    .tanChiShe {
         width: 100%;
     }
 
@@ -909,38 +575,9 @@ footer {
     .iconContainer {
   
      margin-top: 4vw;
+    }
 
 }
-.projectItem{
-    padding: 10px;
-}
-    .projectItemLeft p {
-        font-size: 13px;
-    }
-
-    .projectItemLeft h1 {
-
-        font-size: 18px;
-    }
-
-    .projectItem:hover h1 {
-
-        font-size: 20px;
-
-    }
-
-    .skill #skillWap {
-        display: block;
-    }
-
-    .skill #skillPc {
-        display: none;
-    }
-}
-
-
-
-
 
 .tc {
     display: flex;
@@ -958,6 +595,7 @@ footer {
     width: 100%;
     max-width: 420px;
     min-height: 200px;
+    max-height:95%;
     background-color: #ffffff;
     border-radius: 15px;
 
@@ -968,7 +606,7 @@ footer {
     align-items: center;
     justify-content: center;
     overflow: auto;
-    margin-bottom: 5%;
+    margin-bottom: 4%;
 }
 
 .tc-img {

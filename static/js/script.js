@@ -40,16 +40,6 @@ function pop(imageURL) {
     toggleClass(".tc", "active");
 }
 
-function viewcert() {
-    toggleClass(".o-tc-main", "active");
-    toggleClass(".o-tc", "active");
-}
-
-function viewreal(){
-    toggleClass(".real-tc-main", "active");
-    toggleClass(".real-tc", "active");
-}
-
 function showMail(){
     alert("This is my email: <someometony@outlook.com>");
 }
@@ -66,39 +56,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 var tc = document.getElementsByClassName('tc');
-var o_tc = document.getElementsByClassName('o-tc');
-var real_tc = document.getElementsByClassName('real-tc');
-
 
 var tc_main = document.getElementsByClassName('tc-main');
-var o_tc_main = document.getElementsByClassName('o-tc-main');
-var real_tc_main = document.getElementsByClassName('real-tc-main');
 
 tc[0].addEventListener('click', function (event) {
     pop();
 });
 
-o_tc[0].addEventListener('click', function (event) {
-    viewcert();
-});
-
-real_tc[0].addEventListener('click', function (event) {
-    if(isClicked){event.stopPropagation()}
-    else{viewreal();}
-});
-
-
 
 tc_main[0].addEventListener('click', function (event) {
     event.stopPropagation();
-});
-
-o_tc_main[0].addEventListener('click', function (event) {
-    event.stopPropagation()
-});
-
-real_tc_main[0].addEventListener('click', function (event) {
-    event.stopPropagation()
 });
 
 function setCookie(name, value, days) {
