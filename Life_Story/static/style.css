@@ -102,7 +102,6 @@ p:not(:first-of-type) {
     margin-bottom: 3%;
     column-count: 4;
     column-gap: 2rem;
-
 }
 
 .multicol+img {
