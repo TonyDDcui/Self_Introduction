@@ -16,6 +16,11 @@ body {
     color: var(--main_text_color);
 }
 
+.tc-img {
+    width: 100%;
+    height: 100%;
+}
+
 .filter {
     position: fixed;
     width: 100%;
