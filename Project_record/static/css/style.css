@@ -320,19 +320,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     flex-direction: row;
     font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .btn-container{
     width: 100%;
-    height: 560px;
+    height: 30%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    margin-bottom:20px;
 }
 
 .life-welcome {
@@ -962,6 +961,8 @@ footer {
     background-color: #ffffff;
     border-radius: 15px;
 
+    flex-shrink: 0;
+
     display: flex;
     transition: transform 0.2s linear;
     align-items: center;
@@ -973,6 +974,8 @@ footer {
 .tc-img {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-shrink: 0;
 }
 
 .designed-type{
