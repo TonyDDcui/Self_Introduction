@@ -1,12 +1,3 @@
-console.log('%cCopyright © 2024 zyyo.net',
-    'background-color: #ff00ff; color: white; font-size: 24px; font-weight: bold; padding: 10px;'
-);
-console.log('%c   /\\_/\\', 'color: #8B4513; font-size: 20px;');
-console.log('%c  ( o.o )', 'color: #8B4513; font-size: 20px;');
-console.log(' %c  > ^ <', 'color: #8B4513; font-size: 20px;');
-console.log('  %c /  ~ \\', 'color: #8B4513; font-size: 20px;');
-console.log('  %c/______\\', 'color: #8B4513; font-size: 20px;');
-
 document.addEventListener('contextmenu', function (event) {
     event.preventDefault();
 });
@@ -49,6 +40,35 @@ function pop(imageURL) {
     toggleClass(".tc", "active");
 }
 
+function showMail(){
+    alert("This is my email: <someometony@outlook.com>");
+}
+
+let isClicked;
+document.addEventListener('DOMContentLoaded', function() {
+    const myDiv = document.getElementById('video-container');
+    myDiv.addEventListener('click', function(event) {
+        isClicked = true;
+    });
+    setInterval(function() {
+        isClicked = false;
+    }, 2000);
+});
+
+var tc = document.getElementsByClassName('tc');
+
+
+var tc_main = document.getElementsByClassName('tc-main');
+
+tc[0].addEventListener('click', function (event) {
+    pop();
+});
+
+
+tc_main[0].addEventListener('click', function (event) {
+    event.stopPropagation();
+});
+
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
@@ -73,20 +93,6 @@ function getCookie(name) {
     }
     return null;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -135,81 +141,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     changeTheme(themeState);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-    var fpsElement = document.createElement('div');
-    fpsElement.id = 'fps';
-    fpsElement.style.zIndex = '10000';
-    fpsElement.style.position = 'fixed';
-    fpsElement.style.left = '0';
-    document.body.insertBefore(fpsElement, document.body.firstChild);
-
-    var showFPS = (function () {
-        var requestAnimationFrame = window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1000 / 60);
-            };
-
-        var fps = 0,
-            last = Date.now(),
-            offset, step, appendFps;
-
-        step = function () {
-            offset = Date.now() - last;
-            fps += 1;
-
-            if (offset >= 1000) {
-                last += offset;
-                appendFps(fps);
-                fps = 0;
-            }
-
-            requestAnimationFrame(step);
-        };
-
-        appendFps = function (fpsValue) {
-            fpsElement.textContent = 'FPS: ' + fpsValue;
-        };
-
-        step();
-    })();
-    
-    
-    
-    //pop('./static/img/tz.jpg')
-    
-    
-    
 });
 
-
-
-
-var pageLoading = document.querySelector("#zyyo-loading");
+var pageLoading = document.querySelector("#loading");
 window.addEventListener('load', function() {
     setTimeout(function () {
         pageLoading.style.opacity = '0';
     }, 100);
 });
-
