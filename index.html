@@ -1,289 +1,917 @@
 <!DOCTYPE html>
-<html class="cuizhexiao.com">
-<head class = "cuizhexiao.com">
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>崔喆箫 | 嵌入式开发爱好者</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0066cc;
+            --accent-light: #e8f4fd;
+            --border: rgba(0,0,0,0.08);
+            --card-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --card-hover: 0 8px 40px rgba(0,0,0,0.1);
+        }
 
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>
-		CZX's Home </title>
-	<link rel="icon" href="./static/img/logo.ico">
-	<meta name="description" content="生活不止眼前的苟且,还有诗和远方^_^">
-	<meta name="keywords" content="cuizhexiao,czx,崔喆箫,崔喆箫主页,崔喆箫个人网站,CZX">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" href="./static/css/style.css">
-	<link rel="stylesheet" href="./static/css/root.css">
+        [data-theme="dark"] {
+            --bg: #000000;
+            --bg-secondary: #1c1c1e;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --accent: #0a84ff;
+            --accent-light: #1a2a3a;
+            --border: rgba(255,255,255,0.1);
+            --card-shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --card-hover: 0 8px 40px rgba(0,0,0,0.5);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .navbar {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 400;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        .theme-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* Hero 区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 40px 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--accent-light);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease 0.1s forwards;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent), #5856d6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease 0.2s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease 0.3s forwards;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text);
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 技能标签 */
+        .skills-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 48px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.4s forwards;
+        }
+
+        .skill-tag {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            cursor: default;
+        }
+
+        .skill-tag:hover {
+            background: var(--text);
+            color: var(--bg);
+            transform: translateY(-2px);
+        }
+
+        /* 通用容器 */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        /* 关于我 */
+        .about {
+            background: var(--bg-secondary);
+            border-radius: 40px;
+            margin: 40px;
+            padding: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            font-size: 0.8125rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #e0e5ec, #d0d5dc);
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .about-image {
+            background: linear-gradient(135deg, #2a2a2e, #1a1a1e);
+        }
+
+        .about-image-inner {
+            position: absolute;
+            inset: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent), #5856d6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 1.0625rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* 项目展示 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: var(--bg);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-hover);
+        }
+
+        .project-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image-bg {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .project-card:nth-child(1) .project-image-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .project-card:nth-child(2) .project-image-bg {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .project-content {
+            padding: 28px;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .project-tag {
+            padding: 4px 12px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 0 0 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            text-align: right;
+            margin-right: 50%;
+            margin-left: 0;
+            padding-right: 40px;
+            padding-left: 0;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 50%;
+            padding-left: 40px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 4px solid var(--bg);
+            box-shadow: 0 0 0 2px var(--accent);
+            z-index: 1;
+        }
+
+        .timeline-content {
+            background: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: var(--card-shadow);
+        }
+
+        .timeline-year {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .timeline-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* 联系我 */
+        .contact {
+            text-align: center;
+            padding: 120px 40px;
+        }
+
+        .contact-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .contact-desc {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 28px;
+            background: var(--bg-secondary);
+            border-radius: 100px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .contact-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow);
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* 滚动动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .nav {
+                padding: 0 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .about {
+                margin: 20px;
+                padding: 40px 24px;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .about-image {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            .timeline::before {
+                left: 20px;
+            }
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+            .timeline-item:nth-child(even) .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content {
+                text-align: left;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+            .timeline-dot {
+                left: 20px;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 60px 0;
+            }
+        }
+    </style>
 </head>
-
-
-
 <body>
-	<div id="loading">
-		<div id="loading-center">
-		</div>
-	</div>
-	<div class="filter"></div>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="#" class="nav-logo">CZX</a>
+        <ul class="nav-links">
+            <li><a href="#about">关于</a></li>
+            <li><a href="#projects">项目</a></li>
+            <li><a href="#timeline">历程</a></li>
+            <li><a href="#contact">联系</a></li>
+        </ul>
+        <button class="theme-btn" onclick="toggleTheme()" title="切换主题">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </button>
+    </nav>
 
-	<div class="main">
-		<div class="left">
-			<div class="logo" style="background-image: url(./static/img/logo.jpg);">
-			</div>
-			<div class="left-div left-des">
-				<div class="left-des-item"><svg t="1705773709627" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1478"><path d="M512 249.976471c-99.388235 0-180.705882 81.317647-180.705882 180.705882s81.317647 180.705882 180.705882 180.705882 180.705882-81.317647 180.705882-180.705882-81.317647-180.705882-180.705882-180.705882z m0 301.17647c-66.258824 0-120.470588-54.211765-120.470588-120.470588s54.211765-120.470588 120.470588-120.470588 120.470588 54.211765 120.470588 120.470588-54.211765 120.470588-120.470588 120.470588z" p-id="1479"></path><path d="M512 39.152941c-216.847059 0-391.529412 174.682353-391.529412 391.529412 0 349.364706 391.529412 572.235294 391.529412 572.235294s391.529412-222.870588 391.529412-572.235294c0-216.847059-174.682353-391.529412-391.529412-391.529412z m0 891.482353C424.658824 873.411765 180.705882 686.682353 180.705882 430.682353c0-183.717647 147.576471-331.294118 331.294118-331.294118s331.294118 147.576471 331.294118 331.294118c0 256-243.952941 442.729412-331.294118 499.952941z" p-id="1480"></path></svg>China-ShangHai
-				</div>
-				<div class="left-des-item"><svg t="1705773906032" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2474"><path d="M729.6 234.666667H294.4V157.866667a51.2 51.2 0 0 1 51.2-51.2h332.8a51.2 51.2 0 0 1 51.2 51.2v76.8z m179.2 51.2a51.2 51.2 0 0 1 51.2 51.2v512a51.2 51.2 0 0 1-51.2 51.2H115.2a51.2 51.2 0 0 1-51.2-51.2v-512a51.2 51.2 0 0 1 51.2-51.2h793.557333z m-768 172.032c0 16.384 13.312 29.696 29.696 29.696h683.008a29.696 29.696 0 1 0 0-59.392H170.410667a29.696 29.696 0 0 0-29.696 29.696z m252.416 118.784c0 16.384 13.312 29.696 29.696 29.696h178.176a29.696 29.696 0 1 0 0-59.392H422.912a29.738667 29.738667 0 0 0-29.696 29.696z" p-id="2475"></path></svg>Student</div>
-			</div>
-			<div class="left-div left-tag">
-				<div class="left-tag-item">电子发烧友
-				</div>
-				<div class="left-tag-item">大学生
-				</div>
-				<div class="left-tag-item">嵌入式驱动
-				</div>
-				<div class="left-tag-item">linux
-				</div>
-				<div class="left-tag-item">单片机硬件开发
-				</div>
-				<div class="left-tag-item">骑行</div>
-			</div>
-			<div class="left-div">
-				<ul id="line">
-					<li>
-						<div class="focus"></div>
-						<div>更新维护
-						</div>
-						<div>2024.1</div>
-					</li>
-					<li>
-						<div class="focus"></div>
-						<div>...
-						</div>
-						<div>...</div>
-					</li>
-					<li>
-						<div class="focus"></div>
-						<div>搭建第一个网页
-						<div>2024.8</div>
-					</li>
-					<li>
-						<div class="focus"></div>
-						<div>搭建第一个网页
-						<div>2024.8</div>
-					</li>
-				</ul>
-			</div>
-		</div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                西安工业大学 · 嵌入式方向
+            </div>
+            <h1>你好，我是<span>崔喆箫</span></h1>
+            <p class="hero-description">
+                一名热爱技术的学生，专注于嵌入式开发与单片机应用。喜欢把代码变成真实可触的硬件作品，在动手实践中不断成长。
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">查看项目</a>
+                <a href="#contact" class="btn btn-secondary">联系我</a>
+            </div>
+            <div class="skills-bar">
+                <span class="skill-tag">C语言</span>
+                <span class="skill-tag">STM32</span>
+                <span class="skill-tag">单片机</span>
+                <span class="skill-tag">嵌入式开发</span>
+                <span class="skill-tag">电路设计</span>
+            </div>
+        </div>
+    </section>
 
-		<div class="right">
-			<header>
-				<div class="index-logo" style="background-image: url(./static/img/logo.jpg);">
-				</div>
-				<div class="welcome">
-					Hello I' m <span class="gradientText">
-						CuiZheXiao </span>
-				</div>
-				<div class="description"> 
-					<span class="RedText">不要慌，不要慌，太阳下山，有月光</span>
-				</div>
-				<div class="description"> 
-				<span class="RedText">不要慌，不要慌，月落西山，有朝阳</span>
-				</div>
-				<div class="iconContainer">
-					<a class="iconItem" onclick="" href="https://github.com/TonycuiDDcui?tab=repositories">
-						<svg t="1704870335945" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2487">
-                            <path d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"  p-id="2488"></path>
-                        </svg>
-						<div class="iconTip">Github</div>
-					</a><a class="iconItem" onclick="showMail()" href="javascript:void(0)">
-						<svg t="1704870588438" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3174" >
-                            <path d="M926.47619 355.644952V780.190476a73.142857 73.142857 0 0 1-73.142857 73.142857H170.666667a73.142857 73.142857 0 0 1-73.142857-73.142857V355.644952l304.103619 257.828572a170.666667 170.666667 0 0 0 220.745142 0L926.47619 355.644952zM853.333333 170.666667a74.044952 74.044952 0 0 1 26.087619 4.778666 72.704 72.704 0 0 1 30.622477 22.186667 73.508571 73.508571 0 0 1 10.678857 17.67619c3.169524 7.509333 5.12 15.652571 5.607619 24.210286L926.47619 243.809524v24.380952L559.469714 581.241905a73.142857 73.142857 0 0 1-91.306666 2.901333l-3.632762-2.925714L97.52381 268.190476v-24.380952a72.899048 72.899048 0 0 1 40.155428-65.292191A72.97219 72.97219 0 0 1 170.666667 170.666667h682.666666z"  p-id="3175"></path>
-                        </svg>
-						<div class="iconTip">Mail</div>
-					</a>
-					<a class="iconItem" onclick="pop('./static/img/wechat.jpg')" href="javascript:void(0)">
-						<svg t="1704870588438" class="icon"  viewBox="0 0 320 320" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3174" >
-                            <path d="M200.803 111.88c-24.213 1.265-45.268 8.605-62.362 25.188-17.271 16.754-25.155 37.284-23 62.734-9.464-1.172-18.084-2.462-26.753-3.192-2.994-.252-6.547.106-9.083 1.537-8.418 4.75-16.488 10.113-26.053 16.092 1.755-7.938 2.891-14.889 4.902-21.575 1.479-4.914.794-7.649-3.733-10.849-29.066-20.521-41.318-51.232-32.149-82.85 8.483-29.25 29.315-46.989 57.621-56.236 38.635-12.62 82.054.253 105.547 30.927 8.485 11.08 13.688 23.516 15.063 38.224zm-111.437-9.852c.223-5.783-4.788-10.993-10.74-11.167-6.094-.179-11.106 4.478-11.284 10.483-.18 6.086 4.475 10.963 10.613 11.119 6.085.154 11.186-4.509 11.411-10.435zm58.141-11.171c-5.974.11-11.022 5.198-10.916 11.004.109 6.018 5.061 10.726 11.204 10.652 6.159-.074 10.83-4.832 10.772-10.977-.051-6.032-4.981-10.79-11.06-10.679z"  p-id="1862"></path>
-							<path d="M255.201 262.83c-7.667-3.414-14.7-8.536-22.188-9.318-7.459-.779-15.3 3.524-23.104 4.322-23.771 2.432-45.067-4.193-62.627-20.432-33.397-30.89-28.625-78.254 10.014-103.568 34.341-22.498 84.704-14.998 108.916 16.219 21.129 27.24 18.646 63.4-7.148 86.284-7.464 6.623-10.15 12.073-5.361 20.804.884 1.612.985 3.653 1.498 5.689zm-87.274-84.499c4.881.005 8.9-3.815 9.085-8.636.195-5.104-3.91-9.385-9.021-9.406-5.06-.023-9.299 4.318-9.123 9.346.166 4.804 4.213 8.69 9.059 8.696zm56.261-18.022c-4.736-.033-8.76 3.844-8.953 8.629-.205 5.117 3.772 9.319 8.836 9.332 4.898.016 8.768-3.688 8.946-8.562.19-5.129-3.789-9.364-8.829-9.399z"p-id="1862"></path>
-                        </svg>
-						<div class="iconTip">WeChat</div>
-					</a>  <a class="switch" href="javascript:void(0)">
-						<div class="onoffswitch">
-							<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
-								checked>
-							<label class="onoffswitch-label" for="myonoffswitch">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
-						</div>
-					</a>
-				</div>
+    <!-- 关于 -->
+    <section class="about" id="about">
+        <div class="section-header fade-in">
+            <div class="section-label">About Me</div>
+            <h2 class="section-title">关于我</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-image fade-in">
+                <div class="about-image-inner">C</div>
+            </div>
+            <div class="about-text fade-in">
+                <h3>探索技术与创意的交汇点</h3>
+                <p>
+                    我是西安工业大学的一名学生，对嵌入式系统和单片机开发充满热情。从课堂上的理论知识到实际项目中的动手实践，我始终在探索如何让代码真正"跑起来"。
+                </p>
+                <p>
+                    参与过智能车竞赛，完成了物流车和消防车的设计与开发。这些经历让我深刻理解了一个产品从概念到落地的全过程，也让我更加热爱这个领域。
+                </p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <div class="stat-number">2+</div>
+                        <div class="stat-label">竞赛项目</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">GitHub仓库</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">学习热情</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-				<div class="tanChiShe">
-					<img id="tanChiShe" src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/svg/snake-Light.svg" alt="">
-				</div>
-			</header>
+    <!-- 项目 -->
+    <section class="container" id="projects">
+        <div class="section-header fade-in">
+            <div class="section-label">Projects</div>
+            <h2 class="section-title">项目作品</h2>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card fade-in">
+                <div class="project-image">
+                    <div class="project-image-bg">🚚</div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="project-tag">嵌入式</span>
+                        <span class="project-tag">C语言</span>
+                    </div>
+                    <h3 class="project-title">物流车项目</h3>
+                    <p class="project-desc">
+                        一款低成本物流运输车辆设计，总预算控制在1200元以内。完成了从电路设计到程序编写的全流程开发。
+                    </p>
+                </div>
+            </div>
+            <div class="project-card fade-in">
+                <div class="project-image">
+                    <div class="project-image-bg">🚒</div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="project-tag">STM32</span>
+                        <span class="project-tag">传感器</span>
+                    </div>
+                    <h3 class="project-title">消防车项目</h3>
+                    <p class="project-desc">
+                        ERCC竞赛参赛作品，设计了一款紧急救援消防车，集成了多种传感器和控制系统，实现智能路径规划与灭火功能。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-			<content>
-				<div class="title"><svg t="1705257422086" class="icon" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1891" >
-                        	<svg xmlns="http://www.w3.org/2000/svg" height="500" width="500">		
-								<g style="order: -1;">			
-									<polygon transform="rotate(45 100 100)" stroke-width="1" stroke="#d3a410" fill="none" points="70,70 148,50 130,130 50,150" id="bounce">
-									</polygon>			
-									<polygon transform="rotate(45 100 100)" stroke-width="1" stroke="#d3a410" fill="none" points="70,70 148,50 130,130 50,150" id="bounce2">
-									</polygon>			<polygon transform="rotate(45 100 100)" stroke-width="2" stroke="" fill="#414750"				points="70,70 150,50 130,130 50,150"></polygon>			
-									<polygon stroke-width="2" stroke="" fill="url(#gradiente)" points="100,70 150,100 100,130 50,100"></polygon>			
-									<defs>				
-										<linearGradient y2="100%" x2="10%" y1="0%" x1="0%" id="gradiente">					
-											<stop style="stop-color: #1e2026;stop-opacity:1" offset="20%"></stop>					
-											<stop style="stop-color:#414750;stop-opacity:1" offset="60%"></stop>				
-										</linearGradient>			
-									</defs>			
-									<polygon transform="translate(20, 31)" stroke-width="2" stroke="" fill="#b7870f" points="80,50 80,75 80,99 40,75">			
-									</polygon>			
-									<polygon transform="translate(20, 31)" stroke-width="2" stroke="" fill="url(#gradiente2)" points="40,-40 80,-40 80,99 40,75">
-									</polygon>			
-									<defs>				
-										<linearGradient y2="100%" x2="0%" y1="-17%" x1="10%" id="gradiente2">					
-											<stop style="stop-color: #d3a51000;stop-opacity:1" offset="20%"></stop>					
-											<stop style="stop-color:#d3a51054;stop-opacity:1" offset="100%" id="animatedStop"></stop>				
-										</linearGradient>			</defs>			<polygon transform="rotate(180 100 100) translate(20, 20)" stroke-width="2" stroke="" fill="#d3a410" points="80,50 80,75 80,99 40,75"></polygon>			
-										<polygon transform="rotate(0 100 100) translate(60, 20)" stroke-width="2" stroke="" fill="url(#gradiente3)"	points="40,-40 80,-40 80,85 40,110.2"></polygon>			
-										<defs>				
-											<linearGradient y2="100%" x2="10%" y1="0%" x1="0%" id="gradiente3">					
-												<stop style="stop-color: #d3a51000;stop-opacity:1" offset="20%"></stop>					
-												<stop style="stop-color:#d3a51054;stop-opacity:1" offset="100%" id="animatedStop"></stop>				
-											</linearGradient>			
-										</defs>			
-										<polygon transform="rotate(45 100 100) translate(80, 95)" stroke-width="2" stroke="" fill="#ffe4a1"	points="5,0 5,5 0,5 0,0" id="particles"></polygon>			
-										<polygon transform="rotate(45 100 100) translate(80, 55)" stroke-width="2" stroke="" fill="#ccb069"	points="6,0 6,6 0,6 0,0" id="particles"></polygon>			
-										<polygon transform="rotate(45 100 100) translate(70, 80)" stroke-width="2" stroke="" fill="#fff" points="2,0 2,2 0,2 0,0" id="particles"></polygon>			
-										<polygon stroke-width="2" stroke="" fill="#292d34" points="29.5,99.8 100,142 100,172 29.5,130"></polygon>			
-										<polygon transform="translate(50, 92)" stroke-width="2" stroke="" fill="#1f2127" points="50,50 120.5,8 120.5,35 50,80"></polygon>		
-									</g>	
-								</svg>
-                    </svg>project </div>
-				<div class="projectList">
-					<a class="projectItem a" target="_blank" href="https://blog.csdn.net/DDTony03">
-						<div class="projectItemLeft">
-							<h1>博客</h1>
-							<p>记录项目难题,源码在github上哦</p>
-						</div>
-						<div class="projectItemRight">
-							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/blog.png" alt="">
-						</div>
-					</a>
+    <!-- 时间线 -->
+    <section class="container" id="timeline">
+        <div class="section-header fade-in">
+            <div class="section-label">Timeline</div>
+            <h2 class="section-title">学习历程</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item fade-in">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2024</span>
+                    <h3 class="timeline-title">嵌入式开发入门</h3>
+                    <p class="timeline-desc">
+                        开始系统学习C语言和单片机开发，理解嵌入式系统基本原理，参与学校电子设计竞赛。
+                    </p>
+                </div>
+            </div>
+            <div class="timeline-item fade-in">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2024</span>
+                    <h3 class="timeline-title">智能车竞赛</h3>
+                    <p class="timeline-desc">
+                        加入智能车队，参与物流车和消防车的研发工作，负责软件控制和传感器融合。
+                    </p>
+                </div>
+            </div>
+            <div class="timeline-item fade-in">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-year">2024-2025</span>
+                    <h3 class="timeline-title">持续学习与成长</h3>
+                    <p class="timeline-desc">
+                        深入学习STM32开发板，探索物联网和自动化控制领域，持续完善个人技术栈。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-					<a class="projectItem a" target="_blank" href="/Project_record/index.html">
-						<div class="projectItemLeft">
-							<h1>证书和项目</h1>
-							<p>存储个人证书和部分项目记录</p>
-						</div>
-						<div class="projectItemRight">
-							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/cert.png" alt="">
-						</div>
-					</a>
-				</div>
-				<div class="title"><svg t="1705257422086" class="icon" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1891" >
-					<svg class="pl" viewBox="0 0 160 160" width="160px" height="160px" xmlns="http://www.w3.org/2000/svg"> 
-						<defs> 
-							<linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-								<stop offset="0%" stop-color="#000"></stop> 
-								<stop offset="100%" stop-color="#fff"></stop> 
-							</linearGradient> 
-							<mask id="mask1">
-								<rect x="0" y="0" width="160" height="160" fill="url(#grad)"></rect>
-							</mask>
-							<mask id="mask2">
-								<rect x="28" y="28" width="104" height="104" fill="url(#grad)"></rect>
-							</mask>
-						</defs>
-						<g> 
-							<g class="pl__ring-rotate"> 
-								<circle class="pl__ring-stroke" cx="80" cy="80" r="72" fill="none" stroke="hsl(223,90%,55%)" stroke-width="16" stroke-dasharray="452.39 452.39" stroke-dashoffset="452" stroke-linecap="round" transform="rotate(-45,80,80)"></circle>
-							</g>
-						</g>
-					<g mask="url(#mask1)">
-						<g class="pl__ring-rotate">
-							<circle class="pl__ring-stroke" cx="80" cy="80" r="72" fill="none" stroke="hsl(193,90%,55%)" stroke-width="16" stroke-dasharray="452.39 452.39" stroke-dashoffset="452" stroke-linecap="round" transform="rotate(-45,80,80)"></circle> 
-						</g> 
-					</g>
-					<g>
-						<g stroke-width="4" stroke-dasharray="12 12" stroke-dashoffset="12" stroke-linecap="round" transform="translate(80,80)"> <polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(-135,0,0) translate(0,40)"></polyline> <polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(-90,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(-45,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(0,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(45,0,0) translate(0,40)"></polyline>
-							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(90,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(135,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,10%,90%)" points="0,2 0,14" transform="rotate(180,0,0) translate(0,40)"></polyline> 
-						</g>
-					</g>
-					<g mask="url(#mask1)">
-						<g stroke-width="4" stroke-dasharray="12 12" stroke-dashoffset="12" stroke-linecap="round" transform="translate(80,80)">
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(-135,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(-90,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(-45,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(0,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(45,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(90,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(135,0,0) translate(0,40)"></polyline> 
-							<polyline class="pl__tick" stroke="hsl(223,90%,80%)" points="0,2 0,14" transform="rotate(180,0,0) translate(0,40)"></polyline> 
-						</g> 
-					</g>
-						
-					<g> 
-						<g transform="translate(64,28)"> 
-							<g class="pl__arrows" transform="rotate(45,16,52)"> 
-								<path fill="hsl(3,90%,55%)" d="M17.998,1.506l13.892,43.594c.455,1.426-.56,2.899-1.998,2.899H2.108c-1.437,0-2.452-1.473-1.998-2.899L14.002,1.506c.64-2.008,3.356-2.008,3.996,0Z"> </path> 
-								<path fill="hsl(223,10%,90%)" d="M14.009,102.499L.109,58.889c-.453-1.421,.559-2.889,1.991-2.889H29.899c1.433,0,2.444,1.468,1.991,2.889l-13.899,43.61c-.638,2.001-3.345,2.001-3.983,0Z"> </path>
-							</g>
-						</g>
-					</g> 
-					<g mask="url(#mask2)">
-						<g transform="translate(64,28)"> 
-							<g class="pl__arrows" transform="rotate(45,16,52)"> 
-								<path fill="hsl(333,90%,55%)" d="M17.998,1.506l13.892,43.594c.455,1.426-.56,2.899-1.998,2.899H2.108c-1.437,0-2.452-1.473-1.998-2.899L14.002,1.506c.64-2.008,3.356-2.008,3.996,0Z"> </path>
-								<path fill="hsl(223,90%,80%)" d="M14.009,102.499L.109,58.889c-.453-1.421,.559-2.889,1.991-2.889H29.899c1.433,0,2.444,1.468,1.991,2.889l-13.899,43.61c-.638,2.001-3.345,2.001-3.983,0Z"> </path>
-							</g>
-						</g> 
-					</g> 
-				</svg>
-                    </svg>daily_life </div>
-				<div class="projectList">
-					<a class="projectItem b" target=""  href="./Journey_of_Life/index.html">
-						<div class="projectItemLeft">
-							<h1>人生旅行</h1>
-							<p>走过一座城市,到达一座港湾</p>
-						</div>
-						<div class="projectItemRight">
-							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/life.jpg" alt="">
-						</div>
+    <!-- 联系我 -->
+    <section class="contact" id="contact">
+        <div class="fade-in">
+            <h2 class="contact-title">联系我</h2>
+            <p class="contact-desc">
+                如果你对我的项目感兴趣，或者想要交流技术问题，欢迎通过以下方式联系我。
+            </p>
+            <div class="contact-links">
+                <a href="https://github.com/TonyDDcui" target="_blank" class="contact-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="mailto:tonyddcui@example.com" class="contact-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    邮箱
+                </a>
+            </div>
+        </div>
+    </section>
 
-					</a><a class="projectItem b"  target=""  href="./Life_Story/index.html">
-						<div class="projectItemLeft">
-							<h1>好久不见,好久,不见</h1>
-							<p>人生是一场旅行,沿途都是风景</p>
-						</div>
-						<div class="projectItemRight">
-							<img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@latest/static/img/travel.jpg" alt="">
-						</div>
-					</a>
-				</div>
-			</content>
-		</div>
-	</div>
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2024-2026 崔喆箫 · 用 ❤️ 和代码构建</p>
+    </footer>
 
-	<footer>
-		<p class = "designed-type" >Designed By CuiZheXiao</p>
-	</footer>
+    <script>
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
 
-	<div class="tc">
-		<div onclick="" class="tc-main">
-			<img class="tc-img" src="" alt="" srcset="">
-		</div>
-	</div>
+        // 恢复主题
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
 
+        // 滚动动画
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 导航栏滚动效果
+        let lastScroll = 0;
+        const navbar = document.querySelector('.navbar');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
 </body>
-
-<script src="/static/js/script.js"> </script>
-
 </html>
