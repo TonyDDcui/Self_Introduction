@@ -5,51 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>崔喆箫 | 嵌入式开发者</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #ffffff;
-            --bg-secondary: #f8f8fa;
-            --bg-card: #ffffff;
-            --text: #1a1a1a;
-            --text-secondary: #6e6e73;
+            --bg-secondary: #f5f5f7;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
             --accent: #0066cc;
             --accent-secondary: #5856d6;
             --gradient: linear-gradient(135deg, #0066cc, #5856d6);
-            --border: rgba(0,0,0,0.08);
-            --shadow: 0 4px 30px rgba(0,0,0,0.06);
-            --shadow-hover: 0 12px 50px rgba(0,0,0,0.12);
+            --border: rgba(0,0,0,0.06);
+            --shadow: 0 8px 40px rgba(0,0,0,0.06);
+            --card-bg: rgba(255,255,255,0.8);
         }
 
         [data-theme="dark"] {
             --bg: #000000;
             --bg-secondary: #0a0a0a;
-            --bg-card: #1c1c1e;
             --text: #f5f5f7;
             --text-secondary: #98989d;
             --accent: #0a84ff;
             --accent-secondary: #5e5ce6;
             --gradient: linear-gradient(135deg, #0a84ff, #5e5ce6);
-            --border: rgba(255,255,255,0.1);
-            --shadow: 0 4px 30px rgba(0,0,0,0.4);
-            --shadow-hover: 0 12px 50px rgba(0,0,0,0.6);
+            --border: rgba(255,255,255,0.08);
+            --shadow: 0 8px 40px rgba(0,0,0,0.4);
+            --card-bg: rgba(30,30,30,0.8);
         }
 
-        /* 跟随系统 */
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
                 --bg: #000000;
                 --bg-secondary: #0a0a0a;
-                --bg-card: #1c1c1e;
                 --text: #f5f5f7;
                 --text-secondary: #98989d;
                 --accent: #0a84ff;
                 --accent-secondary: #5e5ce6;
                 --gradient: linear-gradient(135deg, #0a84ff, #5e5ce6);
-                --border: rgba(255,255,255,0.1);
-                --shadow: 0 4px 30px rgba(0,0,0,0.4);
-                --shadow-hover: 0 12px 50px rgba(0,0,0,0.6);
+                --border: rgba(255,255,255,0.08);
+                --shadow: 0 8px 40px rgba(0,0,0,0.4);
+                --card-bg: rgba(30,30,30,0.8);
             }
         }
 
@@ -64,25 +59,23 @@
             overflow-x: hidden;
         }
 
-        /* 导航 */
-        .nav {
+        /* 导航栏 */
+        .navbar {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 1000;
-            padding: 16px 40px;
+            padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            background: var(--card-bg);
             border-bottom: 1px solid var(--border);
-            transition: all 0.3s;
         }
-        [data-theme="dark"] .nav { background: rgba(0,0,0,0.7); }
 
         .nav-logo {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -90,80 +83,90 @@
             background-clip: text;
         }
 
-        .theme-group {
+        .theme-switcher {
             display: flex;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            padding: 4px;
-            gap: 4px;
+            gap: 8px;
         }
 
         .theme-btn {
-            width: 36px;
-            height: 32px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 16px;
-            background: transparent;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: 20px;
+            background: var(--bg-secondary);
             color: var(--text-secondary);
-            transition: all 0.2s;
-            font-size: 1rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
         }
 
         .theme-btn.active {
-            background: var(--bg);
-            color: var(--text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: var(--text);
+            color: var(--bg);
         }
 
-        /* 视差背景 */
-        .parallax-bg {
+        .theme-btn:hover:not(.active) {
+            background: var(--border);
+        }
+
+        /* 全屏视差层 */
+        .parallax-container {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
             pointer-events: none;
             overflow: hidden;
         }
 
-        .parallax-item {
+        .parallax-cert {
             position: absolute;
-            width: 350px;
-            height: 250px;
-            border-radius: 20px;
-            opacity: 0.12;
+            width: 320px;
+            height: 226px;
+            border-radius: 12px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             background-size: cover;
             background-position: center;
-            transition: transform 0.1s ease-out;
         }
 
-        .parallax-item:nth-child(1) {
-            top: 15%; left: -5%;
+        .parallax-cert.active {
+            opacity: 0.2;
+            transform: scale(1) rotate(var(--rotate, 0deg));
+        }
+
+        .parallax-cert:nth-child(1) {
+            top: 15%; left: 5%;
             background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img1.jpg');
-            transform: rotate(-8deg);
+            --rotate: -8deg;
         }
-        .parallax-item:nth-child(2) {
-            top: 40%; right: -5%;
+        .parallax-cert:nth-child(2) {
+            top: 25%; right: 8%;
             background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img2.jpg');
-            transform: rotate(6deg);
+            --rotate: 6deg;
         }
-        .parallax-item:nth-child(3) {
-            top: 65%; left: 5%;
+        .parallax-cert:nth-child(3) {
+            top: 55%; left: 10%;
+            background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img3.png');
+            --rotate: -5deg;
+        }
+        .parallax-cert:nth-child(4) {
+            top: 70%; right: 5%;
             background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img4.jpg');
-            transform: rotate(-4deg);
+            --rotate: 7deg;
         }
-        .parallax-item:nth-child(4) {
-            top: 25%; left: 50%;
+        .parallax-cert:nth-child(5) {
+            top: 85%; left: 30%;
+            background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img5.jpg');
+            --rotate: -3deg;
+        }
+        .parallax-cert:nth-child(6) {
+            top: 10%; left: 40%;
             background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img6.png');
-            transform: translateX(-50%) rotate(3deg);
-        }
-        .parallax-item:nth-child(5) {
-            bottom: 10%; right: 10%;
-            background-image: url('https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img7.jpg');
-            transform: rotate(7deg);
+            --rotate: 4deg;
         }
 
         /* Hero */
@@ -172,23 +175,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 120px 40px 80px;
+            padding: 120px 40px;
+            text-align: center;
         }
 
         .hero-content {
-            text-align: center;
             max-width: 800px;
-            z-index: 1;
         }
 
         .hero-avatar {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             margin: 0 auto 40px;
             border-radius: 50%;
             background: var(--gradient);
             padding: 5px;
-            animation: float 4s ease-in-out infinite;
+            animation: heroFloat 4s ease-in-out infinite;
         }
 
         .hero-avatar-inner {
@@ -203,13 +205,13 @@
             color: var(--accent);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 20px;
@@ -224,10 +226,12 @@
         }
 
         .hero-desc {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: var(--text-secondary);
+            margin-bottom: 40px;
             max-width: 550px;
-            margin: 0 auto 36px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-tags {
@@ -238,26 +242,28 @@
         }
 
         .tag {
-            padding: 10px 22px;
-            background: var(--bg-card);
+            padding: 12px 24px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 100px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: default;
         }
 
         .tag:hover {
-            transform: translateY(-4px) scale(1.05);
+            transform: translateY(-5px) scale(1.08);
             border-color: var(--accent);
             color: var(--accent);
             box-shadow: var(--shadow);
         }
 
-        .scroll-hint {
+        /* 向下滚动提示 */
+        .scroll-indicator {
             position: absolute;
-            bottom: 50px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -265,81 +271,96 @@
             align-items: center;
             gap: 8px;
             color: var(--text-secondary);
-            animation: bounce 2s infinite;
+            font-size: 0.8rem;
+            animation: scrollBounce 2s infinite;
         }
 
-        .scroll-hint-icon {
-            width: 26px;
-            height: 42px;
+        .scroll-indicator-icon {
+            width: 24px;
+            height: 40px;
             border: 2px solid var(--text-secondary);
-            border-radius: 13px;
+            border-radius: 12px;
             position: relative;
         }
 
-        .scroll-hint-icon::before {
+        .scroll-indicator-icon::after {
             content: '';
             position: absolute;
-            top: 8px;
+            top: 6px;
             left: 50%;
             transform: translateX(-50%);
             width: 4px;
             height: 10px;
             background: var(--text-secondary);
             border-radius: 2px;
-            animation: scrollDown 1.5s infinite;
+            animation: scrollDot 1.5s infinite;
         }
 
-        @keyframes bounce {
+        @keyframes scrollBounce {
             0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(12px); }
+            50% { transform: translateX(-50%) translateY(10px); }
         }
 
-        @keyframes scrollDown {
-            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(14px); }
+        @keyframes scrollDot {
+            0% { opacity: 1; top: 6px; }
+            100% { opacity: 0; top: 24px; }
         }
 
-        /* 内容区域 */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
-        section { padding: 100px 0; }
+        /* 全屏区块 */
+        .full-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px;
+            position: relative;
+        }
+
+        .section-content {
+            max-width: 900px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-content.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
 
         .section-label {
             font-size: 0.8rem;
             color: var(--accent);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 12px;
+            letter-spacing: 0.2em;
+            margin-bottom: 16px;
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 700;
-            margin-bottom: 60px;
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
         }
 
-        /* 关于 */
-        .about-section {
-            background: var(--bg-secondary);
-            border-radius: 40px;
-            margin: 0 40px 40px;
-            padding: 80px;
-        }
-
-        .about-grid {
+        /* 关于区块 */
+        .about-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 60px;
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
+            grid-template-columns: 280px 1fr;
             gap: 60px;
             align-items: center;
         }
 
-        .about-image-wrap {
-            position: relative;
-        }
-
         .about-image {
-            width: 100%;
-            aspect-ratio: 1;
+            width: 280px;
+            height: 280px;
             border-radius: 24px;
             background: var(--gradient);
             padding: 4px;
@@ -348,7 +369,7 @@
         .about-image-inner {
             width: 100%; height: 100%;
             border-radius: 20px;
-            background: var(--bg-card);
+            background: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -368,7 +389,7 @@
             margin-bottom: 16px;
         }
 
-        .stats {
+        .about-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
@@ -377,9 +398,11 @@
             border-top: 1px solid var(--border);
         }
 
-        .stat { text-align: center; }
+        .stat {
+            text-align: center;
+        }
 
-        .stat-num {
+        .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
             background: var(--gradient);
@@ -391,182 +414,185 @@
         .stat-label {
             font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-top: 4px;
         }
 
-        /* 证书画廊 */
-        .cert-section {
+        /* 时间线 - 横向卡片式 */
+        .timeline-container {
             position: relative;
         }
 
-        .cert-display-area {
-            position: sticky;
-            top: 100px;
+        .timeline-track {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 60px 0;
+            gap: 40px;
+            overflow-x: auto;
+            padding: 40px 20px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .cert-frame {
-            position: relative;
-            width: 420px;
-            max-width: 90vw;
-            aspect-ratio: 16/10;
-            background: var(--bg-card);
-            border-radius: 16px;
-            box-shadow: var(--shadow-hover);
-            overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
+        .timeline-track::-webkit-scrollbar {
+            display: none;
         }
 
-        .cert-frame:hover {
-            transform: scale(1.03) translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        .timeline-card {
+            flex: 0 0 380px;
+            scroll-snap-align: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.9);
+            opacity: 0.6;
         }
 
-        .cert-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .timeline-card.active {
+            transform: scale(1.05);
+            opacity: 1;
+            border-color: var(--accent);
+            box-shadow: var(--shadow);
         }
 
-        .cert-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s;
+        .timeline-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
         }
 
-        .cert-frame:hover .cert-overlay { opacity: 1; }
-
-        .cert-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
+        .timeline-year {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--gradient);
             color: white;
-            transform: translateY(100%);
-            transition: transform 0.3s;
-        }
-
-        .cert-frame:hover .cert-info { transform: translateY(0); }
-
-        .cert-info-title {
-            font-size: 1.1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 20px;
         }
 
-        .cert-info-sub {
+        .timeline-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .timeline-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .timeline-details {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .timeline-details h4 {
             font-size: 0.85rem;
-            opacity: 0.8;
+            color: var(--accent);
+            margin-bottom: 8px;
         }
 
-        .cert-nav {
+        .timeline-details ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-details li {
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .timeline-details li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* 进度指示器 */
+        .timeline-progress {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
             margin-top: 24px;
         }
 
-        .cert-dot {
-            width: 10px;
-            height: 10px;
+        .progress-dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--border);
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .cert-dot.active {
-            width: 32px;
-            border-radius: 5px;
+        .progress-dot.active {
+            width: 36px;
+            border-radius: 6px;
             background: var(--gradient);
-        }
-
-        .cert-arrows {
-            display: flex;
-            gap: 16px;
-            margin-top: 20px;
-        }
-
-        .cert-arrow {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.2s;
-        }
-
-        .cert-arrow:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
         }
 
         /* 项目 */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
         }
 
         .project-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(40px);
+            opacity: 0;
         }
 
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s;
+        .project-card.visible {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow);
+            border-color: var(--accent);
         }
 
-        .project-card:hover::before { transform: scaleX(1); }
-
         .project-visual {
-            height: 180px;
+            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
+            font-size: 6rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .project-card:nth-child(1) .project-visual {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .project-card:nth-child(2) .project-visual {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
-        .project-info { padding: 28px; }
+        .project-info {
+            padding: 32px;
+        }
 
-        .project-tags { display: flex; gap: 8px; margin-bottom: 12px; }
+        .project-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
 
         .project-tag {
             padding: 4px 12px;
@@ -577,13 +603,12 @@
             font-weight: 500;
         }
 
-        .project-title {
-            font-size: 1.3rem;
-            font-weight: 600;
+        .project-info h3 {
+            font-size: 1.4rem;
             margin-bottom: 8px;
         }
 
-        .project-desc {
+        .project-info p {
             color: var(--text-secondary);
             font-size: 0.95rem;
         }
@@ -594,240 +619,135 @@
             flex-wrap: wrap;
             gap: 16px;
             justify-content: center;
-            max-width: 800px;
-            margin: 0 auto;
         }
 
-        .skill-item {
-            padding: 14px 28px;
-            background: var(--bg-card);
+        .skill-bubble {
+            padding: 16px 32px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 100px;
             font-size: 1rem;
             font-weight: 500;
             color: var(--text);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: default;
         }
 
-        .skill-item:hover {
-            transform: translateY(-4px) scale(1.05);
-            border-color: var(--accent);
-            box-shadow: var(--shadow);
-        }
-
-        /* 时间线 */
-        .timeline {
-            position: relative;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 100%;
-            background: var(--border);
-            border-radius: 2px;
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 50px;
-        }
-
-        .timeline-item:nth-child(odd) {
-            padding-right: calc(50% + 40px);
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(even) {
-            padding-left: calc(50% + 40px);
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: var(--gradient);
-            border: 4px solid var(--bg);
-            border-radius: 50%;
-            z-index: 1;
-            box-shadow: 0 0 0 4px var(--accent);
-        }
-
-        .timeline-content {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-
-        .timeline-content:hover {
-            transform: scale(1.02);
-            box-shadow: var(--shadow);
-        }
-
-        .timeline-year {
-            display: inline-block;
-            padding: 4px 12px;
+        .skill-bubble:hover {
+            transform: scale(1.1) translateY(-5px);
             background: var(--gradient);
             color: white;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .timeline-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .timeline-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            border-color: transparent;
+            box-shadow: 0 10px 30px rgba(0,102,204,0.3);
         }
 
         /* 联系 */
-        .contact {
+        .contact-section {
             text-align: center;
-            padding: 120px 40px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 80px;
         }
 
-        .contact-title {
+        .contact-section h2 {
             font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
             margin-bottom: 16px;
         }
 
-        .contact-desc {
+        .contact-section p {
             color: var(--text-secondary);
             font-size: 1.1rem;
-            max-width: 500px;
-            margin: 0 auto 40px;
+            margin-bottom: 40px;
         }
 
-        .contact-cards {
+        .contact-links {
             display: flex;
             gap: 20px;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
-        .contact-card {
+        .contact-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 18px 32px;
-            background: var(--bg-card);
+            gap: 10px;
+            padding: 16px 32px;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 100px;
             text-decoration: none;
             color: var(--text);
             font-weight: 500;
             transition: all 0.3s;
         }
 
-        .contact-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: var(--shadow);
+        .contact-link:hover {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-3px);
         }
 
         /* 页脚 */
         footer {
             text-align: center;
-            padding: 40px;
+            padding: 60px;
             color: var(--text-secondary);
+            font-size: 0.9rem;
             border-top: 1px solid var(--border);
-        }
-
-        /* 动画 */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 鼠标光效 */
-        .cursor-glow {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: -1;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s;
         }
 
         /* 响应式 */
         @media (max-width: 900px) {
-            .nav { padding: 12px 20px; }
+            .navbar { padding: 12px 20px; }
+            .theme-btn { padding: 6px 12px; font-size: 0.8rem; }
             .hero { padding: 100px 20px 60px; }
-            .about-section { margin: 0 20px 20px; padding: 40px 24px; }
-            .about-grid { grid-template-columns: 1fr; }
-            .container { padding: 0 20px; }
-            section { padding: 60px 0; }
-            .timeline::before { left: 20px; }
-            .timeline-item:nth-child(odd),
-            .timeline-item:nth-child(even) {
-                padding-left: 50px;
-                padding-right: 0;
-                text-align: left;
+            .full-section { padding: 60px 20px; }
+            .about-card { 
+                grid-template-columns: 1fr; 
+                padding: 40px 24px;
+                gap: 32px;
             }
-            .timeline-dot { left: 20px; }
-            .parallax-item { display: none; }
+            .about-image { width: 200px; height: 200px; margin: 0 auto; }
+            .timeline-card { flex: 0 0 320px; }
             .projects-grid { grid-template-columns: 1fr; }
+            .contact-section { padding: 40px 24px; }
         }
     </style>
 </head>
 <body>
-    <!-- 鼠标光效 -->
-    <div class="cursor-glow" id="cursorGlow"></div>
-
     <!-- 视差证书背景 -->
-    <div class="parallax-bg" id="parallaxBg">
-        <div class="parallax-item" data-speed="0.02"></div>
-        <div class="parallax-item" data-speed="0.03"></div>
-        <div class="parallax-item" data-speed="0.025"></div>
-        <div class="parallax-item" data-speed="0.035"></div>
-        <div class="parallax-item" data-speed="0.015"></div>
+    <div class="parallax-container">
+        <div class="parallax-cert" data-index="0"></div>
+        <div class="parallax-cert" data-index="1"></div>
+        <div class="parallax-cert" data-index="2"></div>
+        <div class="parallax-cert" data-index="3"></div>
+        <div class="parallax-cert" data-index="4"></div>
+        <div class="parallax-cert" data-index="5"></div>
     </div>
 
     <!-- 导航 -->
-    <nav class="nav">
+    <nav class="navbar">
         <div class="nav-logo">CZX</div>
-        <div class="theme-group">
-            <button class="theme-btn" onclick="setTheme('light')" title="浅色模式">☀️</button>
-            <button class="theme-btn" onclick="setTheme('dark')" title="深色模式">🌙</button>
-            <button class="theme-btn" onclick="setTheme('auto')" title="跟随系统">🔄</button>
+        <div class="theme-switcher">
+            <button class="theme-btn" onclick="setTheme('light')" id="btnLight">☀️ 浅色</button>
+            <button class="theme-btn" onclick="setTheme('dark')" id="btnDark">🌙 深色</button>
+            <button class="theme-btn" onclick="setTheme('auto')" id="btnAuto">⚙️ 系统</button>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" data-section="hero">
         <div class="hero-content">
             <div class="hero-avatar">
                 <div class="hero-avatar-inner">C</div>
             </div>
             <h1>你好，我是<span>崔喆箫</span></h1>
             <p class="hero-desc">
-                西安工业大学 · 嵌入式开发爱好者 · 从代码到硬件，用技术创造可能
+                西安工业大学 · 嵌入式开发爱好者<br>
+                从代码到硬件，用技术创造可能
             </p>
             <div class="hero-tags">
                 <span class="tag">C语言</span>
@@ -837,152 +757,180 @@
                 <span class="tag">智能车</span>
             </div>
         </div>
-        <div class="scroll-hint">
-            <div class="scroll-hint-icon"></div>
+        <div class="scroll-indicator">
+            <div class="scroll-indicator-icon"></div>
+            <span>向下滚动</span>
         </div>
     </section>
 
     <!-- 关于 -->
-    <section class="about-section fade-up">
-        <div class="section-label">About Me</div>
-        <h2 class="section-title">关于我</h2>
-        <div class="about-grid">
-            <div class="about-image-wrap">
+    <section class="full-section" data-section="about">
+        <div class="section-content" id="aboutContent">
+            <div class="about-card">
                 <div class="about-image">
                     <div class="about-image-inner">C</div>
                 </div>
-            </div>
-            <div class="about-text">
-                <h3>探索嵌入式世界的无限可能</h3>
-                <p>我是西安工业大学的学生，热爱嵌入式系统开发。从课堂理论到实际项目，我始终在探索如何让代码在硬件上"活"起来。</p>
-                <p>参与过物流车和消防车的设计开发，负责软件控制和传感器融合。这些经历让我深刻理解了一个产品从概念到落地的全过程。</p>
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-num">2+</div>
-                        <div class="stat-label">竞赛项目</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num">10+</div>
-                        <div class="stat-label">证书荣誉</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num">∞</div>
-                        <div class="stat-label">学习热情</div>
+                <div class="about-text">
+                    <div class="section-label">About Me</div>
+                    <h3>探索嵌入式世界的无限可能</h3>
+                    <p>我是西安工业大学的学生，热爱嵌入式系统开发。从课堂理论到实际项目，我始终在探索如何让代码在硬件上"活"起来。</p>
+                    <p>参与过物流车和消防车的设计开发，负责软件控制和传感器融合。这些经历让我深刻理解了一个产品从概念到落地的全过程。</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <div class="stat-number">2+</div>
+                            <div class="stat-label">竞赛项目</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-label">证书荣誉</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">学习热情</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 证书画廊 -->
-    <section class="container cert-section">
-        <div class="section-label fade-up">Certificates</div>
-        <h2 class="section-title fade-up">荣誉证书</h2>
-        <div class="cert-display-area fade-up">
-            <div class="cert-frame" id="certFrame">
-                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img1.jpg" alt="证书" id="certImage">
-                <div class="cert-overlay"></div>
-                <div class="cert-info">
-                    <div class="cert-info-title">证书 <span id="certNum">1</span> / <span id="certTotal">10</span></div>
-                    <div class="cert-info-sub">点击翻页或使用下方导航</div>
+    <!-- 时间线 -->
+    <section class="full-section" data-section="timeline">
+        <div class="section-content" id="timelineContent">
+            <div class="section-label">Timeline</div>
+            <h2 class="section-title">学习历程</h2>
+            
+            <div class="timeline-container">
+                <div class="timeline-track" id="timelineTrack">
+                    <div class="timeline-card" data-timeline="0">
+                        <span class="timeline-year">2024 初</span>
+                        <h3>嵌入式开发入门</h3>
+                        <p>开始系统学习C语言和单片机开发</p>
+                        <div class="timeline-details">
+                            <h4>学习成果</h4>
+                            <ul>
+                                <li>掌握C语言基础语法</li>
+                                <li>理解单片机工作原理</li>
+                                <li>完成首个LED闪烁项目</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card" data-timeline="1">
+                        <span class="timeline-year">2024 中</span>
+                        <h3>电子设计竞赛</h3>
+                        <p>参与学校电子设计竞赛，组建参赛队伍</p>
+                        <div class="timeline-details">
+                            <h4>项目目标</h4>
+                            <ul>
+                                <li>设计智能小车循迹系统</li>
+                                <li>实现传感器数据融合</li>
+                                <li>完成PID控制算法</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card" data-timeline="2">
+                        <span class="timeline-year">2024 下</span>
+                        <h3>智能车竞赛</h3>
+                        <p>参与物流车和消防车项目研发</p>
+                        <div class="timeline-details">
+                            <h4>主要成果</h4>
+                            <ul>
+                                <li>物流车预算1200元内完成</li>
+                                <li>消防车获ERCC参赛资格</li>
+                                <li>掌握STM32开发</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-card" data-timeline="3">
+                        <span class="timeline-year">2025</span>
+                        <h3>持续成长</h3>
+                        <p>深入学习STM32，探索物联网领域</p>
+                        <div class="timeline-details">
+                            <h4>未来目标</h4>
+                            <ul>
+                                <li>掌握FreeRTOS</li>
+                                <li>学习物联网协议</li>
+                                <li>完成更多实战项目</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="cert-nav" id="certNav"></div>
-            <div class="cert-arrows">
-                <button class="cert-arrow" onclick="prevCert()">←</button>
-                <button class="cert-arrow" onclick="nextCert()">→</button>
+
+                <div class="timeline-progress" id="timelineProgress">
+                    <div class="progress-dot active" onclick="scrollToTimeline(0)"></div>
+                    <div class="progress-dot" onclick="scrollToTimeline(1)"></div>
+                    <div class="progress-dot" onclick="scrollToTimeline(2)"></div>
+                    <div class="progress-dot" onclick="scrollToTimeline(3)"></div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- 项目 -->
-    <section class="container" id="projects">
-        <div class="section-label fade-up">Projects</div>
-        <h2 class="section-title fade-up">项目作品</h2>
-        <div class="projects-grid">
-            <div class="project-card fade-up">
-                <div class="project-visual">🚚</div>
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span class="project-tag">嵌入式</span>
-                        <span class="project-tag">C语言</span>
+    <section class="full-section" data-section="projects">
+        <div class="section-content" id="projectsContent">
+            <div class="section-label">Projects</div>
+            <h2 class="section-title">项目作品</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-visual">🚚</div>
+                    <div class="project-info">
+                        <div class="project-tags">
+                            <span class="project-tag">嵌入式</span>
+                            <span class="project-tag">C语言</span>
+                        </div>
+                        <h3>物流车项目</h3>
+                        <p>低成本物流运输车辆设计，总预算控制在1200元内，完成了从电路设计到程序编写的全流程开发。</p>
                     </div>
-                    <h3 class="project-title">物流车项目</h3>
-                    <p class="project-desc">低成本物流运输车辆设计，预算1200元内，完成电路设计到程序编写的全流程开发。</p>
                 </div>
-            </div>
-            <div class="project-card fade-up">
-                <div class="project-visual">🚒</div>
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span class="project-tag">STM32</span>
-                        <span class="project-tag">传感器</span>
+                <div class="project-card">
+                    <div class="project-visual">🚒</div>
+                    <div class="project-info">
+                        <div class="project-tags">
+                            <span class="project-tag">STM32</span>
+                            <span class="project-tag">传感器</span>
+                        </div>
+                        <h3>消防车项目</h3>
+                        <p>ERCC竞赛参赛作品，设计紧急救援消防车，集成了多种传感器，实现智能路径规划与灭火功能。</p>
                     </div>
-                    <h3 class="project-title">消防车项目</h3>
-                    <p class="project-desc">ERCC竞赛参赛作品，紧急救援消防车，实现智能路径规划与灭火功能。</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 技能 -->
-    <section class="container" id="skills">
-        <div class="section-label fade-up">Skills</div>
-        <h2 class="section-title fade-up">技术栈</h2>
-        <div class="skills-cloud fade-up">
-            <span class="skill-item">C语言</span>
-            <span class="skill-item">STM32</span>
-            <span class="skill-item">单片机开发</span>
-            <span class="skill-item">嵌入式系统</span>
-            <span class="skill-item">电路设计</span>
-            <span class="skill-item">传感器应用</span>
-            <span class="skill-item">PCB设计</span>
-            <span class="skill-item">Git</span>
-        </div>
-    </section>
-
-    <!-- 时间线 -->
-    <section class="container" id="timeline">
-        <div class="section-label fade-up">Timeline</div>
-        <h2 class="section-title fade-up">学习历程</h2>
-        <div class="timeline">
-            <div class="timeline-item fade-up">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2024</span>
-                    <h3 class="timeline-title">嵌入式开发入门</h3>
-                    <p class="timeline-desc">开始学习C语言和单片机，参与电子设计竞赛</p>
-                </div>
-            </div>
-            <div class="timeline-item fade-up">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2024</span>
-                    <h3 class="timeline-title">智能车竞赛</h3>
-                    <p class="timeline-desc">参与物流车和消防车研发，负责软件控制</p>
-                </div>
-            </div>
-            <div class="timeline-item fade-up">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2024-2025</span>
-                    <h3 class="timeline-title">持续成长</h3>
-                    <p class="timeline-desc">深入学习STM32，探索物联网领域</p>
-                </div>
+    <section class="full-section" data-section="skills">
+        <div class="section-content" id="skillsContent">
+            <div class="section-label">Skills</div>
+            <h2 class="section-title">技术栈</h2>
+            <div class="skills-cloud">
+                <span class="skill-bubble">C语言</span>
+                <span class="skill-bubble">STM32</span>
+                <span class="skill-bubble">单片机开发</span>
+                <span class="skill-bubble">嵌入式系统</span>
+                <span class="skill-bubble">电路设计</span>
+                <span class="skill-bubble">传感器应用</span>
+                <span class="skill-bubble">PCB设计</span>
+                <span class="skill-bubble">Git</span>
             </div>
         </div>
     </section>
 
     <!-- 联系 -->
-    <section class="contact" id="contact">
-        <div class="fade-up">
-            <h2 class="contact-title">联系我</h2>
-            <p class="contact-desc">如果你对项目感兴趣或有合作意向，欢迎联系</p>
-            <div class="contact-cards">
-                <a href="https://github.com/TonyDDcui" target="_blank" class="contact-card">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    GitHub
-                </a>
+    <section class="full-section" data-section="contact">
+        <div class="section-content" id="contactContent">
+            <div class="contact-section">
+                <h2>联系我</h2>
+                <p>如果你对项目感兴趣或有合作意向，欢迎联系我</p>
+                <div class="contact-links">
+                    <a href="https://github.com/TonyDDcui" target="_blank" class="contact-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        GitHub
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -994,19 +942,6 @@
 
     <script>
         // ============ 主题切换 ============
-        // 三种模式: 'light', 'dark', 'auto'
-        function setTheme(mode) {
-            const html = document.documentElement;
-            
-        // ============ 主题初始化 ============
-        (function initTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'light' || saved === 'dark') {
-                document.documentElement.setAttribute('data-theme', saved);
-            }
-            updateThemeButtons();
-        })();
-
         function setTheme(mode) {
             const html = document.documentElement;
             if (mode === 'auto') {
@@ -1021,116 +956,203 @@
 
         function updateThemeButtons() {
             const saved = localStorage.getItem('theme');
-            const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             
-            document.getElementById('btnLight').classList.toggle('active', saved === 'light');
-            document.getElementById('btnDark').classList.toggle('active', isDark && !saved);
-            document.getElementById('btnAuto').classList.toggle('active', !saved);
+            const btnLight = document.getElementById('btnLight');
+            const btnDark = document.getElementById('btnDark');
+            const btnAuto = document.getElementById('btnAuto');
+            
+            btnLight.classList.toggle('active', saved === 'light');
+            btnDark.classList.toggle('active', saved === 'dark');
+            btnAuto.classList.toggle('active', !saved);
         }
 
-        // ============ 鼠标光效 ============
-        const cursorGlow = document.getElementById('cursorGlow');
-        let mouseX = 0, mouseY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorGlow.style.left = mouseX + 'px';
-            cursorGlow.style.top = mouseY + 'px';
-        });
+        // 初始化
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+        updateThemeButtons();
 
-        // ============ 视差背景 ============
-        const parallaxItems = document.querySelectorAll('.parallax-item');
-        
-        window.addEventListener('scroll', () => {
+        // ============ 视差证书背景 ============
+        const parallaxCerts = document.querySelectorAll('.parallax-cert');
+        let currentCertIndex = 0;
+
+        function updateParallax() {
             const scrollY = window.pageYOffset;
-            parallaxItems.forEach(item => {
-                const speed = parseFloat(item.dataset.speed) || 0.02;
-                item.style.transform = `translateY(${scrollY * speed}px) rotate(${item.style.transform.match(/rotate\([^)]+\)/)?.[0]?.match(/-?\d+/)?.[0] || 0}deg)`;
+            const windowHeight = window.innerHeight;
+            
+            // 计算当前应该显示的证书
+            const sectionHeight = windowHeight;
+            const currentSection = Math.floor(scrollY / sectionHeight);
+            
+            // 根据滚动位置更新证书显示
+            parallaxCerts.forEach((cert, i) => {
+                const sectionTop = i * sectionHeight;
+                const distFromCenter = Math.abs(scrollY - sectionTop);
+                const opacity = Math.max(0, 0.25 - distFromCenter / (sectionHeight * 2));
+                cert.style.opacity = opacity;
             });
-        });
+        }
 
-        // ============ 滚动动画 ============
-        const observer = new IntersectionObserver((entries) => {
+        window.addEventListener('scroll', updateParallax);
+
+        // ============ 区块滚动动画 ============
+        const sections = document.querySelectorAll('[data-section]');
+        const sectionContents = document.querySelectorAll('.section-content');
+
+        const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                    entry.target.querySelector('.section-content')?.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.3 });
 
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-        // ============ 证书画廊 ============
-        const certImages = [
-            'img1.jpg', 'img2.jpg', 'img3.png', 'img4.jpg', 'img5.jpg',
-            'img6.png', 'img7.jpg', 'img8.png', 'img9.png', 'img10.png'
-        ];
-        let currentCert = 0;
-        const certImage = document.getElementById('certImage');
-        const certNum = document.getElementById('certNum');
-        const certNav = document.getElementById('certNav');
-
-        // 生成导航点
-        certImages.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.className = 'cert-dot' + (i === 0 ? ' active' : '');
-            dot.onclick = () => showCert(i);
-            certNav.appendChild(dot);
+        sections.forEach(section => {
+            sectionObserver.observe(section);
         });
 
-        function showCert(index) {
-            currentCert = index;
-            certImage.src = `https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/${certImages[index]}`;
-            certNum.textContent = index + 1;
+        // ============ 项目卡片动画 ============
+        const projectCards = document.querySelectorAll('.project-card');
+
+        const projectObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 150);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        projectCards.forEach(card => projectObserver.observe(card));
+
+        // ============ 时间线交互 ============
+        const timelineTrack = document.getElementById('timelineTrack');
+        const timelineCards = document.querySelectorAll('.timeline-card');
+        const progressDots = document.querySelectorAll('.progress-dot');
+
+        function updateActiveCard() {
+            const trackRect = timelineTrack.getBoundingClientRect();
+            const centerX = trackRect.left + trackRect.width / 2;
             
-            document.querySelectorAll('.cert-dot').forEach((dot, i) => {
+            timelineCards.forEach((card, index) => {
+                const cardRect = card.getBoundingClientRect();
+                const cardCenter = cardRect.left + cardRect.width / 2;
+                const distance = Math.abs(centerX - cardCenter);
+                
+                // 距离中心越近，缩放越大，透明度越高
+                const maxDistance = 300;
+                const scale = Math.max(0.85, 1 - (distance / maxDistance) * 0.15);
+                const opacity = Math.max(0.4, 1 - (distance / maxDistance) * 0.6);
+                
+                card.style.transform = `scale(${scale})`;
+                card.style.opacity = opacity;
+                
+                if (distance < 50) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+        }
+
+        function scrollToTimeline(index) {
+            const card = timelineCards[index];
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+            progressDots.forEach((dot, i) => {
                 dot.classList.toggle('active', i === index);
             });
         }
 
-        function nextCert() {
-            showCert((currentCert + 1) % certImages.length);
-        }
-
-        function prevCert() {
-            showCert((currentCert - 1 + certImages.length) % certImages.length);
-        }
-
-        // 键盘控制
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextCert();
-            if (e.key === 'ArrowLeft') prevCert();
-        });
-
-        // 触摸滑动
-        let touchStartX = 0;
-        document.getElementById('certFrame').addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-        });
-        document.getElementById('certFrame').addEventListener('touchend', (e) => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) nextCert();
-                else prevCert();
-            }
-        });
-
-        // ============ 滚动进入证书区自动切换 ============
-        let lastCertScroll = 0;
-        const certSection = document.getElementById('certSection');
+        // 监听滚动更新
+        timelineTrack.addEventListener('scroll', updateActiveCard);
         
-        window.addEventListener('scroll', () => {
-            if (!certSection) return;
-            const rect = certSection.getBoundingClientRect();
-            const scrollDelta = window.pageYOffset - lastCertScroll;
-            
-            // 当证书区域在视口中时，根据滚动方向切换
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                if (scrollDelta > 20) nextCert();
-                else if (scrollDelta < -20) prevCert();
+        // 初始更新
+        updateActiveCard();
+
+        // 点击卡片时更新进度点
+        timelineCards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                progressDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            });
+        });
+
+        // ============ 技能气泡悬浮效果 ============
+        const skillBubbles = document.querySelectorAll('.skill-bubble');
+        skillBubbles.forEach(bubble => {
+            bubble.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.15) translateY(-8px)';
+            });
+            bubble.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+
+        // ============ 标签悬浮效果 ============
+        const tags = document.querySelectorAll('.tag');
+        tags.forEach(tag => {
+            tag.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-6px) scale(1.1)';
+            });
+            tag.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+
+        // ============ 触摸滑动支持 ============
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const diff = touchStartY - touchEndY;
+            if (Math.abs(diff) > 100) {
+                // 快速滚动到下一个区块
+                const currentScroll = window.pageYOffset;
+                const windowHeight = window.innerHeight;
+                const currentSection = Math.round(currentScroll / windowHeight);
+                
+                if (diff > 0 && currentSection < sections.length - 1) {
+                    // 向上滑
+                    sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+                } else if (diff < 0 && currentSection > 0) {
+                    // 向下滑
+                    sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
+                }
             }
-            lastCertScroll = window.pageYOffset;
+        }
+
+        // ============ 键盘导航 ============
+        document.addEventListener('keydown', (e) => {
+            const currentScroll = window.pageYOffset;
+            const windowHeight = window.innerHeight;
+            const currentSection = Math.round(currentScroll / windowHeight);
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentSection < sections.length - 1) {
+                    sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentSection > 0) {
+                    sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
         });
     </script>
 </body>
