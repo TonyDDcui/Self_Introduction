@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>竞赛经历 | 崔喆箫</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --bg-elevated: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --border: rgba(0,0,0,0.06);
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 20px;
+        }
+
+        [data-theme="dark"] {
+            --bg: #000000;
+            --bg-elevated: #1c1c1e;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --accent: #0a84ff;
+            --border: rgba(255,255,255,0.08);
+            --glass-bg: rgba(28, 28, 30, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 2px 12px rgba(0,0,0,0.3);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 17px; }
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 52px;
+            padding: 0 max(48px, calc((100vw - 1200px) / 2));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid var(--glass-border);
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .theme-toggle:hover { opacity: 1; background: var(--border); }
+
+        .page-header {
+            padding: 140px 48px 60px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header h1 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .highlights-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 48px 120px;
+        }
+
+        .highlight-card {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 0.5px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .highlight-image {
+            position: relative;
+            min-height: 280px;
+        }
+
+        .highlight-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+        }
+
+        .highlight-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 6px 14px;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(12px);
+            color: white;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .highlight-content {
+            padding: 32px 32px 32px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .highlight-content h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .highlight-organizer {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .highlight-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        .fade-in-stagger > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in-stagger.visible > * { opacity: 1; transform: translateY(0); }
+        .fade-in-stagger.visible > *:nth-child(1) { transition-delay: 0.1s; }
+        .fade-in-stagger.visible > *:nth-child(2) { transition-delay: 0.15s; }
+        .fade-in-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; }
+        .fade-in-stagger.visible > *:nth-child(4) { transition-delay: 0.25s; }
+        .fade-in-stagger.visible > *:nth-child(5) { transition-delay: 0.3s; }
+        .fade-in-stagger.visible > *:nth-child(6) { transition-delay: 0.35s; }
+        .fade-in-stagger.visible > *:nth-child(7) { transition-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+            .page-header { padding: 120px 24px 40px; }
+            .highlights-container { padding: 0 24px 80px; }
+            .highlight-card { grid-template-columns: 1fr; gap: 0; }
+            .highlight-image { min-height: 220px; }
+            .highlight-content { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="index.html" class="nav-back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            返回首页
+        </a>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+        </button>
+    </nav>
+
+    <header class="page-header fade-in">
+        <h1>竞赛经历</h1>
+        <p>7+ 国家级竞赛奖项，展现专业能力与实践经验</p>
+    </header>
+
+    <div class="highlights-container fade-in-stagger">
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img2.jpg" alt="蓝桥杯">
+                <span class="highlight-badge">A级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>第十四届蓝桥杯<br>单片机全国总决赛</h3>
+                <p class="highlight-organizer">🏛️ 工业和信息化部人才交流中心</p>
+                <p class="highlight-desc">立足行业、突出实践、广泛参与、促进就业。提高工程实践和就业能力，推动产教融合。</p>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img3.png" alt="教育机器人大赛">
+                <span class="highlight-badge">A级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>中国教育机器人大赛</h3>
+                <p class="highlight-organizer">🏛️ 中国人工智能学会</p>
+                <p class="highlight-desc">推动教育机器人进课堂，促进机器人辅助工程创新实践教育课程的普及和实施。</p>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img4.jpg" alt="电子设计竞赛">
+                <span class="highlight-badge">A级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>2023年全国大学生<br>电子设计竞赛</h3>
+                <p class="highlight-organizer">🏛️ 教育部、工业和信息化部</p>
+                <p class="highlight-desc">推动高等学校促进信息与电子类学科课程体系和课程内容的改革，培养创新能力。</p>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img5.jpg" alt="创新设计竞赛">
+                <span class="highlight-badge">B级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>中国大学生创新能力<br>与设计竞赛</h3>
+                <p class="highlight-organizer">🏛️ 中国高校创新创业教育联盟</p>
+                <p class="highlight-desc">以赛促学、以赛促教、以赛促创，激发学习计算机知识的兴趣与潜能。</p>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img6.png" alt="机器人及人工智能大赛">
+                <span class="highlight-badge">A级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>中国机器人及<br>人工智能大赛</h3>
+                <p class="highlight-organizer">🏛️ 中国人工智能学会</p>
+                <p class="highlight-desc">引导和激励广大青年学生弘扬创新精神，搭建良好的科技创新赛事平台。</p>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img7.jpg" alt="嵌入式竞赛">
+                <span class="highlight-badge">B级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>全国大学生嵌入式竞赛</h3>
+                <p class="highlight-organizer">🏛️ 中国电子学会</p>
+                <p class="highlight-desc">培养具有创新思维、团队合作精神、解决复杂工程问题能力的优秀人才。</p>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <div class="highlight-image">
+                <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/cert_img/img9.png" alt="智能制造挑战赛">
+                <span class="highlight-badge">A级赛事</span>
+            </div>
+            <div class="highlight-content">
+                <h3>西门子杯中国<br>智能制造挑战赛</h3>
+                <p class="highlight-organizer">🏛️ 中国仿真学会、西门子</p>
+                <p class="highlight-desc">培育工程创新人才，涉及智能制造领域中的科技创新、产品研发、工程设计。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+            } else {
+                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+            }
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+            updateThemeIcon(theme);
+        })();
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in, .fade-in-stagger').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
