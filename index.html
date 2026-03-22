@@ -7,282 +7,135 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ═══════════════════════════════════════════════════════════════
+           CSS Variables - Apple Design System
+        ═══════════════════════════════════════════════════════════════ */
         :root {
-            --bg: #ffffff;
-            --bg-secondary: #fbfbfd;
+            --bg: #fbfbfd;
+            --bg-elevated: #ffffff;
             --text: #1d1d1f;
             --text-secondary: #86868b;
             --accent: #0071e3;
-            --accent-hover: #0077ED;
-            --gradient: linear-gradient(135deg, #0071e3, #5856d6);
-            --border: rgba(0,0,0,0.06);
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+            --radius: 20px;
+            --radius-lg: 28px;
         }
 
         [data-theme="dark"] {
             --bg: #000000;
-            --bg-secondary: #0a0a0a;
+            --bg-elevated: #1c1c1e;
             --text: #f5f5f7;
             --text-secondary: #86868b;
             --accent: #0a84ff;
             --accent-hover: #409cff;
-            --gradient: linear-gradient(135deg, #0a84ff, #5e5ce6);
-            --border: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.1);
+            --shadow: 0 2px 12px rgba(0,0,0,0.3);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
         }
 
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
                 --bg: #000000;
-                --bg-secondary: #0a0a0a;
+                --bg-elevated: #1c1c1e;
                 --text: #f5f5f7;
                 --text-secondary: #86868b;
                 --accent: #0a84ff;
                 --accent-hover: #409cff;
-                --gradient: linear-gradient(135deg, #0a84ff, #5e5ce6);
-                --border: rgba(255,255,255,0.08);
+                --border: rgba(255,255,255,0.1);
+                --shadow: 0 2px 12px rgba(0,0,0,0.3);
+                --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
             }
         }
 
+        /* ═══════════════════════════════════════════════════════════════
+           Base Styles
+        ═══════════════════════════════════════════════════════════════ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
 
         body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.5;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* 证书展示 - Get the highlights */
-        /* ── Get the highlights ── */
-        .certificate-section {
-            padding: 80px 0 60px;
-            background: var(--bg);
-            overflow: hidden;
-        }
-
-        .certificate-header {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 48px;
-            padding: 0 40px;
-        }
-
-        .certificate-header h2 {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
+        /* ═══════════════════════════════════════════════════════════════
+           Typography
+        ═══════════════════════════════════════════════════════════════ */
+        .headline-large {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
         }
 
-        .certificate-header p {
+        .headline {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .headline-small {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .eyebrow {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.02em;
+            margin-bottom: 8px;
+        }
+
+        .body-text {
+            font-size: 1.0625rem;
             color: var(--text-secondary);
-            font-size: 1rem;
             line-height: 1.6;
         }
 
-        /* 横向滚动轨道 */
-        .certificate-track-wrap {
-            position: relative;
-        }
-
-        .certificate-track {
-            display: flex;
-            gap: 20px;
-            padding: 0 max(40px, calc((100vw - 900px) / 2));
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            cursor: grab;
-            transition: scroll-behavior 0.3s;
-        }
-
-        .certificate-track::-webkit-scrollbar { display: none; }
-        .certificate-track.dragging { cursor: grabbing; scroll-behavior: auto; }
-
-        /* 每张卡片 */
-        .certificate-card {
-            flex: 0 0 900px;
-            max-width: calc(100vw - 80px);
-            scroll-snap-align: center;
-            border-radius: 28px;
-            overflow: hidden;
-            background: var(--bg-secondary);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.10);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .certificate-card:not(.active) {
-            opacity: 0.55;
-            transform: scale(0.97);
-        }
-
-        .certificate-card.active {
-            opacity: 1;
-            transform: scale(1);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.16);
-        }
-
-        .certificate-inner {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 420px;
-        }
-
-        .certificate-image {
-            position: relative;
-            background: #111;
-            overflow: hidden;
-        }
-
-        .certificate-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s ease;
-        }
-
-        .certificate-card.active .certificate-image img {
-            transform: scale(1.03);
-        }
-
-        .certificate-badge {
-            position: absolute;
-            top: 18px;
-            left: 18px;
-            padding: 6px 14px;
-            background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: white;
-            border-radius: 100px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-
-        .certificate-content {
-            padding: 44px 48px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .certificate-content h3 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
-
-        .certificate-organizer {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .certificate-divider {
-            width: 40px;
-            height: 3px;
-            background: var(--gradient);
-            border-radius: 2px;
-            margin-bottom: 24px;
-        }
-
-        .certificate-purpose {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .certificate-purpose strong {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        /* 胶囊进度条 */
-        .certificate-progress {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            margin-top: 28px;
-            padding-bottom: 8px;
-        }
-
-        .progress-pill {
-            height: 4px;
-            border-radius: 100px;
-            background: var(--border);
-            cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 20px;
-        }
-
-        .progress-pill:hover {
-            background: var(--text-secondary);
-        }
-
-        .progress-pill.active {
-            width: 36px;
-            background: var(--text);
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            .certificate-inner {
-                grid-template-columns: 1fr;
-            }
-            .certificate-image {
-                height: 240px;
-            }
-            .certificate-content {
-                padding: 28px 24px;
-            }
-            .certificate-card {
-                flex: 0 0 calc(100vw - 48px);
-                max-width: calc(100vw - 48px);
-            }
-            .certificate-track {
-                padding: 0 24px;
-                gap: 16px;
-            }
-        }
-
-        /* 导航 */
+        /* ═══════════════════════════════════════════════════════════════
+           Navigation - Apple Style
+        ═══════════════════════════════════════════════════════════════ */
         .nav {
             position: fixed;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
-            padding: 0 40px;
-            height: 52px;
+            height: 48px;
+            padding: 0 48px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: rgba(251, 251, 253, 0.8);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
-            background: rgba(255,255,255,0.72);
             border-bottom: 1px solid var(--border);
+            transition: background 0.3s;
         }
 
         [data-theme="dark"] .nav {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
         }
 
         .nav-logo {
-            font-size: 1.1rem;
+            font-size: 1.125rem;
             font-weight: 600;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text);
+            text-decoration: none;
         }
 
         .nav-links {
@@ -291,39 +144,44 @@
         }
 
         .nav-links a {
+            font-size: 0.8125rem;
             color: var(--text);
             text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 400;
             opacity: 0.8;
             transition: opacity 0.2s;
         }
 
-        .nav-links a:hover { opacity: 1; }
-
-        .theme-btns {
-            display: flex;
-            gap: 8px;
+        .nav-links a:hover {
+            opacity: 1;
         }
 
-        .theme-btn {
-            padding: 6px 14px;
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .theme-toggle {
+            width: 32px;
+            height: 32px;
             border: none;
-            border-radius: 18px;
-            background: var(--bg);
+            background: transparent;
             color: var(--text);
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .theme-btn:hover { background: var(--border); }
-        .theme-btn.active {
-            background: var(--text);
-            color: var(--bg);
+        .theme-toggle:hover {
+            opacity: 1;
         }
 
-        /* Hero 全屏 */
+        /* ═══════════════════════════════════════════════════════════════
+           Hero Section - Full Screen
+        ═══════════════════════════════════════════════════════════════ */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -331,15 +189,16 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 80px 40px 60px;
+            padding: 120px 48px 80px;
             position: relative;
         }
 
-        .hero-eyebrow {
-            font-size: 0.875rem;
-            color: var(--accent);
-            font-weight: 500;
-            letter-spacing: 0.05em;
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero .eyebrow {
+            font-size: 1rem;
             margin-bottom: 16px;
         }
 
@@ -348,1246 +207,893 @@
             font-weight: 700;
             letter-spacing: -0.03em;
             line-height: 1.05;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .hero h1 span {
-            background: var(--gradient);
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #0071e3, #5856d6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        .hero .intro {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
             color: var(--text-secondary);
             max-width: 600px;
-            margin-bottom: 40px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
         }
 
         .hero-cta {
             display: flex;
             gap: 16px;
-            flex-wrap: wrap;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .cta-btn {
-            padding: 14px 28px;
-            border-radius: 24px;
+        /* ═══════════════════════════════════════════════════════════════
+           Buttons - Apple Style
+        ═══════════════════════════════════════════════════════════════ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
             font-size: 0.9375rem;
             font-weight: 500;
+            border-radius: 980px;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
         }
 
-        .cta-primary {
+        .btn-primary {
             background: var(--accent);
             color: white;
         }
 
-        .cta-primary:hover {
+        .btn-primary:hover {
             background: var(--accent-hover);
             transform: scale(1.02);
         }
 
-        .cta-secondary {
+        .btn-secondary {
             background: transparent;
             color: var(--accent);
-            border: 1px solid var(--accent);
         }
 
-        .cta-secondary:hover {
-            background: var(--accent);
-            color: white;
+        .btn-secondary:hover {
+            background: var(--border);
         }
 
-        .hero-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 48px;
+        /* ═══════════════════════════════════════════════════════════════
+           Section Base
+        ═══════════════════════════════════════════════════════════════ */
+        .section {
+            padding: 100px 48px;
         }
 
-        .hero-tag {
-            padding: 8px 18px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        /* Highlights 特性卡片 - Apple风格 */
-        .highlights {
-            padding: 60px 0;
-        }
-
-        .highlights-header {
+        .section-header {
             text-align: center;
             max-width: 700px;
             margin: 0 auto 60px;
-            padding: 0 40px;
         }
 
-        .section-label {
-            font-size: 0.75rem;
-            color: var(--accent);
-            font-weight: 600;
+        .section-header .eyebrow {
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 12px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
         }
 
-        .highlights-header h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .highlights-grid {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 40px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
         }
 
-        .highlight-card {
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            padding: 40px 32px;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
+        /* ═══════════════════════════════════════════════════════════════
+           About Section
+        ═══════════════════════════════════════════════════════════════ */
+        .about-section {
+            background: var(--bg-elevated);
         }
 
-        .highlight-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s;
-        }
-
-        .highlight-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        .highlight-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .highlight-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--gradient);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 24px;
-        }
-
-        .highlight-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .highlight-card p {
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .highlight-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--accent);
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-top: 20px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s;
-        }
-
-        .highlight-card:hover .highlight-link {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 全屏区块 */
-        .full-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 40px;
-            position: relative;
-        }
-
-        .full-section-content {
-            max-width: 1100px;
-            width: 100%;
-        }
-
-        /* Design Section - 视差滚动 */
-        .design-section {
-            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 100%);
-            padding: 80px 40px;
-        }
-
-        .design-grid {
+        .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 80px;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
-        .design-text {
-            padding-right: 40px;
+        .about-image {
+            position: relative;
         }
 
-        .design-text h2 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            line-height: 1.1;
+        .about-image img {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-content h2 {
             margin-bottom: 24px;
         }
 
-        .design-text h2 span {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .about-content .body-text {
+            margin-bottom: 20px;
         }
 
-        .design-text p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 24px;
-        }
-
-        .design-visual {
-            position: relative;
-        }
-
-        .design-card {
-            background: var(--bg);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-        }
-
-        .design-card-inner {
-            background: var(--gradient);
-            border-radius: 16px;
-            height: 300px;
+        .about-stats {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            color: white;
-        }
-
-        /* Tab 导航切换 - Apple风格 */
-        .tab-section {
-            padding: 80px 0;
-            background: var(--bg-secondary);
-        }
-
-        .tab-nav {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            margin-bottom: 60px;
-            padding: 0 40px;
-        }
-
-        .tab-btn {
-            padding: 12px 28px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-radius: 100px;
-            transition: all 0.3s;
-        }
-
-        .tab-btn:hover {
-            background: var(--border);
-        }
-
-        .tab-btn.active {
-            background: var(--text);
-            color: var(--bg);
-        }
-
-        .tab-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 40px;
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .tab-panel {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .tab-panel-text h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .tab-panel-text p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.7;
-        }
-
-        .tab-panel-visual {
-            background: var(--gradient);
-            border-radius: 20px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-        }
-
-        /* 项目横向滚动 - Apple风格 */
-        .carousel-section {
-            padding: 60px 0;
-            overflow: hidden;
-        }
-
-        .carousel-header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 0 40px;
-        }
-
-        .carousel-header h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-        }
-
-        .carousel-track-wrapper {
-            position: relative;
-        }
-
-        .carousel-track {
-            display: flex;
-            gap: 24px;
-            padding: 0 40px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            scroll-behavior: smooth;
-        }
-
-        .carousel-track::-webkit-scrollbar { display: none; }
-
-        .carousel-card {
-            flex: 0 0 450px;
-            scroll-snap-align: center;
-            background: var(--bg);
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .carousel-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        .carousel-visual {
-            height: 240px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            position: relative;
-        }
-
-        .carousel-card:nth-child(1) .carousel-visual {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .carousel-card:nth-child(2) .carousel-visual {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .carousel-info {
-            padding: 28px;
-        }
-
-        .carousel-tags {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .carousel-tag {
-            padding: 4px 12px;
-            background: var(--accent);
-            color: white;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .carousel-info h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .carousel-info p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .carousel-nav {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 40px;
-        }
-
-        .carousel-arrow {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-        }
-
-        .carousel-arrow:hover {
-            background: var(--text);
-            color: var(--bg);
-            border-color: var(--text);
-        }
-
-        /* 时间线 - Apple风格 */
-        .timeline-section {
-            padding: 60px 40px;
-            background: var(--bg);
-        }
-
-        .timeline-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .timeline-header h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-        }
-
-        .timeline-container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--border);
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 60px;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .timeline-item:nth-child(odd) {
-            flex-direction: row;
-        }
-
-        .timeline-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .timeline-content {
-            flex: 1;
-            padding: 32px;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .timeline-content:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-right: 60px;
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(even) .timeline-content {
-            margin-left: 60px;
-        }
-
-        .timeline-year {
-            display: inline-block;
-            padding: 6px 16px;
-            background: var(--gradient);
-            color: white;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .timeline-content h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .timeline-content p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .timeline-details {
-            margin-top: 16px;
-            padding-top: 16px;
+            gap: 40px;
+            margin-top: 32px;
+            padding-top: 32px;
             border-top: 1px solid var(--border);
-            display: none;
         }
 
-        .timeline-content.expanded .timeline-details {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .timeline-details ul {
-            list-style: none;
+        .stat-item {
             text-align: left;
         }
 
-        .timeline-details li {
-            padding: 6px 0;
-            color: var(--text-secondary);
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
             font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
-        .timeline-details li::before {
-            content: '→ ';
-            color: var(--accent);
-        }
-
-        .timeline-dot {
-            width: 20px;
-            height: 20px;
-            background: var(--gradient);
-            border: 4px solid var(--bg);
-            border-radius: 50%;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            box-shadow: 0 0 0 4px var(--accent);
-        }
-
-        /* 技能展示 */
+        /* ═══════════════════════════════════════════════════════════════
+           Skills Section - Tags Style
+        ═══════════════════════════════════════════════════════════════ */
         .skills-section {
-            padding: 100px 40px;
-            background: var(--bg-secondary);
+            background: var(--bg);
         }
 
-        .skills-header {
-            text-align: center;
-            margin-bottom: 60px;
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
         }
 
-        .skills-cloud {
+        .skill-card {
+            background: var(--bg-elevated);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .skill-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), #5856d6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .skill-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .skill-card .body-text {
+            font-size: 0.9375rem;
+        }
+
+        .skill-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            max-width: 900px;
-            margin: 0 auto;
+            gap: 8px;
+            margin-top: 16px;
         }
 
-        .skill-item {
-            padding: 16px 32px;
+        .skill-tag {
+            padding: 6px 12px;
             background: var(--bg);
-            border: 1px solid var(--border);
             border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: default;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
         }
 
-        .skill-item:hover {
-            transform: scale(1.1) translateY(-4px);
-            background: var(--gradient);
+        /* ═══════════════════════════════════════════════════════════════
+           Highlights Section - Cards Carousel
+        ═══════════════════════════════════════════════════════════════ */
+        .highlights-section {
+            background: var(--bg-elevated);
+            overflow: hidden;
+        }
+
+        .highlights-track-wrap {
+            position: relative;
+        }
+
+        .highlights-track {
+            display: flex;
+            gap: 24px;
+            padding: 0 max(48px, calc((100vw - 1000px) / 2)) 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            cursor: grab;
+        }
+
+        .highlights-track::-webkit-scrollbar { display: none; }
+        .highlights-track.dragging { cursor: grabbing; }
+
+        .highlight-card {
+            flex: 0 0 500px;
+            scroll-snap-align: center;
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .highlight-card:not(.active) {
+            opacity: 0.6;
+            transform: scale(0.96);
+        }
+
+        .highlight-card.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .highlight-image {
+            position: relative;
+            height: 280px;
+            background: #111;
+            overflow: hidden;
+        }
+
+        .highlight-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .highlight-card.active .highlight-image img {
+            transform: scale(1.03);
+        }
+
+        .highlight-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 6px 14px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
             color: white;
-            border-color: transparent;
-            box-shadow: 0 10px 30px rgba(0,113,227,0.3);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
         }
 
-        /* 联系 */
+        .highlight-content {
+            padding: 28px;
+        }
+
+        .highlight-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .highlight-organizer {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .highlight-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Progress Pills */
+        .highlights-progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 32px;
+        }
+
+        .progress-pill {
+            width: 24px;
+            height: 4px;
+            border-radius: 100px;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.35s ease;
+        }
+
+        .progress-pill:hover {
+            background: var(--text-secondary);
+        }
+
+        .progress-pill.active {
+            width: 40px;
+            background: var(--text);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           Projects Section
+        ═══════════════════════════════════════════════════════════════ */
+        .projects-section {
+            background: var(--bg);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .project-card {
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 28px;
+        }
+
+        .project-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-content .body-text {
+            font-size: 0.9375rem;
+            margin-bottom: 16px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .project-tag {
+            padding: 4px 12px;
+            background: var(--bg);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           Contact Section
+        ═══════════════════════════════════════════════════════════════ */
         .contact-section {
-            padding: 120px 40px;
+            background: var(--bg-elevated);
             text-align: center;
         }
 
         .contact-section h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
             margin-bottom: 16px;
         }
 
-        .contact-section p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+        .contact-section .body-text {
             max-width: 500px;
-            margin: 0 auto 40px;
+            margin: 0 auto 32px;
         }
 
         .contact-links {
             display: flex;
-            gap: 16px;
             justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .contact-link {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 16px 32px;
+            gap: 8px;
+            padding: 12px 24px;
             background: var(--bg);
-            border: 1px solid var(--border);
             border-radius: 100px;
-            text-decoration: none;
             color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
         }
 
         .contact-link:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            transform: translateY(-3px);
+            background: var(--border);
+            transform: translateY(-2px);
         }
 
-        /* 页脚 */
-        footer {
+        /* ═══════════════════════════════════════════════════════════════
+           Footer
+        ═══════════════════════════════════════════════════════════════ */
+        .footer {
+            padding: 40px 48px;
             text-align: center;
-            padding: 40px;
-            color: var(--text-secondary);
             border-top: 1px solid var(--border);
         }
 
-        /* 滚动动画 */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        .footer p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
-        .reveal.visible {
+        /* ═══════════════════════════════════════════════════════════════
+           Scroll Animations
+        ═══════════════════════════════════════════════════════════════ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* 响应式 */
+        /* Staggered children */
+        .fade-in-stagger > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in-stagger.visible > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-stagger.visible > *:nth-child(1) { transition-delay: 0.1s; }
+        .fade-in-stagger.visible > *:nth-child(2) { transition-delay: 0.2s; }
+        .fade-in-stagger.visible > *:nth-child(3) { transition-delay: 0.3s; }
+        .fade-in-stagger.visible > *:nth-child(4) { transition-delay: 0.4s; }
+        .fade-in-stagger.visible > *:nth-child(5) { transition-delay: 0.5s; }
+        .fade-in-stagger.visible > *:nth-child(6) { transition-delay: 0.6s; }
+
+        /* ═══════════════════════════════════════════════════════════════
+           Responsive
+        ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 900px) {
-            .nav { padding: 0 20px; }
-            .nav-links { display: none; }
-            .highlights-grid { grid-template-columns: 1fr; }
-            .design-grid { grid-template-columns: 1fr; gap: 40px; }
-            .design-text { padding-right: 0; text-align: center; }
-            .tab-panel { grid-template-columns: 1fr; }
-            .carousel-card { flex: 0 0 320px; }
-            .timeline-container::before { left: 20px; }
-            .timeline-item:nth-child(odd),
-            .timeline-item:nth-child(even) {
-                flex-direction: row;
+            .nav {
+                padding: 0 24px;
             }
-            .timeline-item:nth-child(odd) .timeline-content,
-            .timeline-item:nth-child(even) .timeline-content {
-                margin: 0;
-                margin-left: 50px;
-                text-align: left;
+            .nav-links {
+                display: none;
             }
-            .timeline-dot { left: 20px; }
-            .contact-links { flex-direction: column; align-items: center; }
-
-            /* 证书响应式 */
-            .certificate-inner {
+            .section {
+                padding: 80px 24px;
+            }
+            .hero {
+                padding: 100px 24px 60px;
+            }
+            .about-grid {
                 grid-template-columns: 1fr;
+                gap: 40px;
             }
-
-            .certificate-image {
-                height: 200px;
+            .about-stats {
+                gap: 24px;
             }
-
-            .certificate-content {
-                padding: 28px;
+            .highlight-card {
+                flex: 0 0 calc(100vw - 72px);
             }
-
-            .certificate-content h3 {
-                font-size: 1.4rem;
+            .highlights-track {
+                padding: 0 24px 20px;
             }
-
-            .progress-dot {
-                width: 6px;
-                height: 6px;
-            }
-
-            .progress-dot.active {
-                width: 20px;
+            .projects-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 导航 -->
+    <!-- Navigation -->
     <nav class="nav">
-        <div class="nav-logo">CZX</div>
+        <a href="#" class="nav-logo">崔喆箫</a>
         <div class="nav-links">
             <a href="#about">关于</a>
-            <a href="#certificates">证书</a>
+            <a href="#skills">技能</a>
+            <a href="#highlights">经历</a>
             <a href="#projects">项目</a>
-            <a href="#timeline">历程</a>
             <a href="#contact">联系</a>
         </div>
-        <div class="theme-btns">
-            <button class="theme-btn" onclick="setTheme('light')" id="btnLight">☀️</button>
-            <button class="theme-btn" onclick="setTheme('dark')" id="btnDark">🌙</button>
-            <button class="theme-btn" onclick="setTheme('auto')" id="btnAuto">⚙️</button>
+        <div class="nav-actions">
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+                <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+            </button>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="hero" id="hero">
-        <div class="hero-eyebrow">西安工业大学 · 嵌入式方向</div>
-        <h1>你好，我是<br><span>崔喆箫</span></h1>
-        <p class="hero-subtitle">
-            从代码到硬件，用技术创造可能。<br>
-            热爱嵌入式开发，专注于智能硬件与单片机应用。
-        </p>
-        <div class="hero-cta">
-            <a href="#projects" class="cta-btn cta-primary">查看项目</a>
-            <a href="#contact" class="cta-btn cta-secondary">联系我</a>
-        </div>
-        <div class="hero-tags">
-            <span class="hero-tag">C语言</span>
-            <span class="hero-tag">STM32</span>
-            <span class="hero-tag">单片机</span>
-            <span class="hero-tag">嵌入式</span>
-            <span class="hero-tag">智能车</span>
-        </div>
-    </section>
-
-    <!-- Highlights 特性 -->
-    <section class="highlights" id="about">
-        <div class="highlights-header reveal">
-            <div class="section-label">About Me</div>
-            <h2>关于我</h2>
-        </div>
-        <div class="highlights-grid">
-            <div class="highlight-card reveal">
-                <div class="highlight-icon">🎓</div>
-                <h3>学术背景</h3>
-                <p>西安工业大学学生，专注于嵌入式系统开发，对硬件与软件的结合充满热情。</p>
-                <span class="highlight-link">了解更多 →</span>
-            </div>
-            <div class="highlight-card reveal">
-                <div class="highlight-icon">💻</div>
-                <h3>技术专长</h3>
-                <p>熟练掌握C语言、STM32单片机开发，能够独立完成从电路设计到程序编写的全流程。</p>
-                <span class="highlight-link">了解更多 →</span>
-            </div>
-            <div class="highlight-card reveal">
-                <div class="highlight-icon">🏆</div>
-                <h3>项目经验</h3>
-                <p>参与物流车和消防车项目，获ERCC竞赛参赛资格，积累了丰富的实战经验。</p>
-                <span class="highlight-link">了解更多 →</span>
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <p class="eyebrow">嵌入式开发者</p>
+            <h1>你好，我是<br><span class="highlight">崔喆箫</span></h1>
+            <p class="intro">专注于嵌入式系统开发，热爱用代码创造有价值的产品。在单片机、物联网和智能硬件领域持续探索。</p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">查看项目</a>
+                <a href="#contact" class="btn btn-secondary">联系我</a>
             </div>
         </div>
     </section>
 
-    <!-- Design Section -->
-    <section class="design-section">
-        <div class="design-grid">
-            <div class="design-text reveal">
-                <div class="section-label">Design Philosophy</div>
-                <h2>用代码<br><span>创造可能</span></h2>
-                <p>我相信好的嵌入式系统就像精心设计的艺术品——硬件与软件完美融合，用户体验流畅自然。从课堂理论到实际项目，我始终在探索如何让技术真正服务于生活。</p>
-                <a href="#projects" class="cta-btn cta-primary">探索项目</a>
-            </div>
-            <div class="design-visual reveal">
-                <div class="design-card">
-                    <div class="design-card-inner">C</div>
+    <!-- About -->
+    <section class="section about-section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image fade-in">
+                    <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/img1.jpg" alt="崔喆箫">
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tab 切换区域 -->
-    <section class="tab-section">
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab(0)">学习历程</button>
-            <button class="tab-btn" onclick="switchTab(1)">技术栈</button>
-            <button class="tab-btn" onclick="switchTab(2)">未来规划</button>
-        </div>
-
-        <div class="tab-content active" id="tab0">
-            <div class="tab-panel">
-                <div class="tab-panel-text">
-                    <h3>从入门到实践</h3>
-                    <p>从学习C语言基础语法开始，到单片机开发，再到参与实际竞赛项目。每一步都脚踏实地，在实践中不断提升技术水平。</p>
-                </div>
-                <div class="tab-panel-visual">📚</div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="tab1">
-            <div class="tab-panel">
-                <div class="tab-panel-text">
-                    <h3>技术栈概览</h3>
-                    <p>掌握嵌入式开发的核心技能，包括C语言、STM32、传感器应用等，为深入学习打下坚实基础。</p>
-                </div>
-                <div class="tab-panel-visual">⚡</div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="tab2">
-            <div class="tab-panel">
-                <div class="tab-panel-text">
-                    <h3>持续成长</h3>
-                    <p>计划深入学习FreeRTOS、物联网协议，参与更多竞赛项目，不断扩展技术边界。</p>
-                </div>
-                <div class="tab-panel-visual">🚀</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 证书展示 - Get the highlights -->
-    <section class="certificate-section" id="certificates">
-        <div class="certificate-header reveal">
-            <h2>Get the highlights</h2>
-            <p>国家级竞赛参赛经历，展示在嵌入式系统、电子设计、机器人等领域的专业能力与实践经验</p>
-        </div>
-
-        <!-- 证书轮播 -->
-        <div class="certificate-track-wrap">
-        <div class="certificate-track" id="certTrack">
-            <!-- img2: 蓝桥杯单片机全国总决赛 -->
-            <div class="certificate-card active" data-index="0">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img2.jpg" alt="蓝桥杯单片机全国总决赛" loading="lazy">
-                        <span class="certificate-badge">A 级</span>
-                    </div>
-                    <div class="certificate-content">
-                        <h3>第十四届蓝桥杯<br>单片机全国总决赛</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>工业和信息化部人才交流中心</span>
+                <div class="about-content fade-in">
+                    <p class="eyebrow">关于我</p>
+                    <h2 class="headline">用代码实现想法</h2>
+                    <p class="body-text">我是一名嵌入式开发者，本科在读。从第一次点亮 LED 到现在，我一直在探索硬件与软件的结合之美。</p>
+                    <p class="body-text">擅长 C 语言编程、STM32 开发、电路设计。参加过多个国家级竞赛并获奖，在实践中不断提升工程能力。</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">7+</div>
+                            <div class="stat-label">竞赛获奖</div>
                         </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛宗旨：</strong>立足行业、突出实践、广泛参与、促进就业。<br><br>
-                            提高工程实践和就业能力，推动产教融合，为制造强国和网络强国建设提供人才服务支撑。
-                        </p>
+                        <div class="stat-item">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-label">完成项目</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3+</div>
+                            <div class="stat-label">年开发经验</div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- img3: 中国教育机器人大赛 -->
-            <div class="certificate-card" data-index="1">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img3.png" alt="中国教育机器人大赛" loading="lazy">
-                        <span class="certificate-badge">A 级</span>
+    <!-- Skills -->
+    <section class="section skills-section" id="skills">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="eyebrow">Skills</p>
+                <h2 class="headline">技术栈</h2>
+            </div>
+            <div class="skills-grid fade-in-stagger">
+                <div class="skill-card">
+                    <div class="skill-icon">⚡</div>
+                    <h3>嵌入式开发</h3>
+                    <p class="body-text">精通 C 语言，熟练使用 STM32 系列芯片进行产品开发。</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">C语言</span>
+                        <span class="skill-tag">STM32</span>
+                        <span class="skill-tag">FreeRTOS</span>
                     </div>
-                    <div class="certificate-content">
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🔌</div>
+                    <h3>硬件设计</h3>
+                    <p class="body-text">具备电路设计与 PCB 绘制能力，熟悉常用传感器与通信协议。</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">PCB设计</span>
+                        <span class="skill-tag">I2C/SPI</span>
+                        <span class="skill-tag">传感器</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🌐</div>
+                    <h3>物联网</h3>
+                    <p class="body-text">探索 IoT 领域，熟悉常见的物联网协议与云平台对接。</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">MQTT</span>
+                        <span class="skill-tag">WiFi</span>
+                        <span class="skill-tag">蓝牙</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🛠️</div>
+                    <h3>开发工具</h3>
+                    <p class="body-text">熟练使用各类开发工具，注重代码质量与版本管理。</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">Keil</span>
+                        <span class="skill-tag">VS Code</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlights -->
+    <section class="section highlights-section" id="highlights">
+        <div class="section-header fade-in">
+            <p class="eyebrow">Highlights</p>
+            <h2 class="headline">竞赛经历</h2>
+            <p class="body-text">国家级竞赛参赛经历，展示专业能力与实践经验</p>
+        </div>
+
+        <div class="highlights-track-wrap">
+            <div class="highlights-track" id="highlightsTrack">
+                <!-- Card 1 -->
+                <div class="highlight-card active">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img2.jpg" alt="蓝桥杯" loading="lazy">
+                        <span class="highlight-badge">A级赛事</span>
+                    </div>
+                    <div class="highlight-content">
+                        <h3>蓝桥杯单片机全国总决赛</h3>
+                        <p class="highlight-organizer">工业和信息化部人才交流中心</p>
+                        <p class="highlight-desc">立足行业、突出实践，提高工程实践和就业能力，推动产教融合。</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img3.png" alt="教育机器人大赛" loading="lazy">
+                        <span class="highlight-badge">A级赛事</span>
+                    </div>
+                    <div class="highlight-content">
                         <h3>中国教育机器人大赛</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>中国人工智能学会</span>
-                        </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛宗旨：</strong>推动教育机器人进课堂，促进机器人辅助工程创新实践教育课程的普及和实施。<br><br>
-                            强调动手能力，普及机器人创新教育，培养工程实践能力。
-                        </p>
+                        <p class="highlight-organizer">中国人工智能学会</p>
+                        <p class="highlight-desc">推动教育机器人进课堂，培养工程实践能力。</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- img4: 全国大学生电子设计竞赛 -->
-            <div class="certificate-card" data-index="2">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img4.jpg" alt="全国大学生电子设计竞赛" loading="lazy">
-                        <span class="certificate-badge">A 级</span>
+                <!-- Card 3 -->
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img4.jpg" alt="电子设计竞赛" loading="lazy">
+                        <span class="highlight-badge">A级赛事</span>
                     </div>
-                    <div class="certificate-content">
-                        <h3>2023年全国大学生<br>电子设计竞赛陕西组G组</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>教育部、工业和信息化部</span>
-                        </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛目的：</strong>推动高等学校促进信息与电子类学科课程体系和课程内容的改革。<br><br>
-                            培养创新能力、协作精神、工程实践能力，提高针对实际问题进行电子设计制作的能力。
-                        </p>
+                    <div class="highlight-content">
+                        <h3>全国大学生电子设计竞赛</h3>
+                        <p class="highlight-organizer">教育部、工业和信息化部</p>
+                        <p class="highlight-desc">培养创新能力与协作精神，提高电子设计制作能力。</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- img5: 中国大学生创新能力与设计竞赛 -->
-            <div class="certificate-card" data-index="3">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img5.jpg" alt="中国大学生创新能力与设计竞赛" loading="lazy">
-                        <span class="certificate-badge">B 级</span>
+                <!-- Card 4 -->
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img5.jpg" alt="创新设计竞赛" loading="lazy">
+                        <span class="highlight-badge">B级赛事</span>
                     </div>
-                    <div class="certificate-content">
-                        <h3>中国大学生创新能力<br>与设计竞赛陕西赛区</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>中国高校创新创业教育联盟</span>
-                        </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛目标：</strong>以赛促学、以赛促教、以赛促创。<br><br>
-                            激发学习计算机知识和技能的兴趣与潜能，提高运用信息技术解决实际问题的综合能力。
-                        </p>
+                    <div class="highlight-content">
+                        <h3>中国大学生创新能力与设计竞赛</h3>
+                        <p class="highlight-organizer">中国高校创新创业教育联盟</p>
+                        <p class="highlight-desc">以赛促学、以赛促教、以赛促创。</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- img6: 中国机器人及人工智能大赛 -->
-            <div class="certificate-card" data-index="4">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img6.png" alt="中国机器人及人工智能大赛" loading="lazy">
-                        <span class="certificate-badge">A 级</span>
+                <!-- Card 5 -->
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img6.png" alt="机器人及人工智能大赛" loading="lazy">
+                        <span class="highlight-badge">A级赛事</span>
                     </div>
-                    <div class="certificate-content">
-                        <h3>中国机器人及人工智能大赛<br>全国大赛</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>中国人工智能学会</span>
-                        </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛目的：</strong>引导和激励广大青年学生弘扬创新精神，搭建良好的科技创新赛事平台。<br><br>
-                            助力人工智能、机器人产业发展，将关键技术研发与应用有机结合。
-                        </p>
+                    <div class="highlight-content">
+                        <h3>中国机器人及人工智能大赛</h3>
+                        <p class="highlight-organizer">中国人工智能学会</p>
+                        <p class="highlight-desc">搭建科技创新赛事平台，助力人工智能产业发展。</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- img7: 全国大学生嵌入式竞赛 -->
-            <div class="certificate-card" data-index="5">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img7.jpg" alt="全国大学生嵌入式竞赛" loading="lazy">
-                        <span class="certificate-badge">B 级</span>
+                <!-- Card 6 -->
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img7.jpg" alt="嵌入式竞赛" loading="lazy">
+                        <span class="highlight-badge">B级赛事</span>
                     </div>
-                    <div class="certificate-content">
-                        <h3>全国大学生嵌入式竞赛<br>陕西赛区</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>中国电子学会</span>
-                        </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛宗旨：</strong>培养具有创新思维、团队合作精神、解决复杂工程问题能力的优秀人才。<br><br>
-                            深化产教融合，提高在嵌入式芯片及系统设计领域的自主创新设计与工程实践能力。
-                        </p>
+                    <div class="highlight-content">
+                        <h3>全国大学生嵌入式竞赛</h3>
+                        <p class="highlight-organizer">中国电子学会</p>
+                        <p class="highlight-desc">培养创新思维、团队合作精神、解决复杂工程问题能力。</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- img9: 西门子杯中国智能制造挑战赛 -->
-            <div class="certificate-card" data-index="6">
-                <div class="certificate-inner">
-                    <div class="certificate-image">
-                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img9.png" alt="西门子杯中国智能制造挑战赛" loading="lazy">
-                        <span class="certificate-badge">A 级</span>
+                <!-- Card 7 -->
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img9.png" alt="智能制造挑战赛" loading="lazy">
+                        <span class="highlight-badge">A级赛事</span>
                     </div>
-                    <div class="certificate-content">
-                        <h3>西门子杯中国智能制造挑战赛<br>过程控制赛项</h3>
-                        <div class="certificate-organizer">
-                            <span>🏛️</span>
-                            <span>中国仿真学会、西门子（中国）有限公司</span>
-                        </div>
-                        <div class="certificate-divider"></div>
-                        <p class="certificate-purpose">
-                            <strong>竞赛目标：</strong>培育工程创新人才。<br><br>
-                            涉及智能制造领域中的科技创新、产品研发、工程设计和智能应用，面向控制科学与工程、电气工程等专业的全国性赛事。
-                        </p>
+                    <div class="highlight-content">
+                        <h3>西门子杯智能制造挑战赛</h3>
+                        <p class="highlight-organizer">中国仿真学会、西门子</p>
+                        <p class="highlight-desc">培育工程创新人才，涉及智能制造领域的科技创新。</p>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
 
-        <!-- 胶囊进度条 -->
-        <div class="certificate-progress" id="certProgress">
-            <div class="progress-pill active" onclick="scrollToCert(0)"></div>
-            <div class="progress-pill" onclick="scrollToCert(1)"></div>
-            <div class="progress-pill" onclick="scrollToCert(2)"></div>
-            <div class="progress-pill" onclick="scrollToCert(3)"></div>
-            <div class="progress-pill" onclick="scrollToCert(4)"></div>
-            <div class="progress-pill" onclick="scrollToCert(5)"></div>
-            <div class="progress-pill" onclick="scrollToCert(6)"></div>
+        <div class="highlights-progress" id="highlightsProgress">
+            <div class="progress-pill active" onclick="scrollToHighlight(0)"></div>
+            <div class="progress-pill" onclick="scrollToHighlight(1)"></div>
+            <div class="progress-pill" onclick="scrollToHighlight(2)"></div>
+            <div class="progress-pill" onclick="scrollToHighlight(3)"></div>
+            <div class="progress-pill" onclick="scrollToHighlight(4)"></div>
+            <div class="progress-pill" onclick="scrollToHighlight(5)"></div>
+            <div class="progress-pill" onclick="scrollToHighlight(6)"></div>
         </div>
     </section>
 
-    <!-- 项目轮播 -->
-    <section class="carousel-section" id="projects">
-        <div class="carousel-header reveal">
-            <div class="section-label">Projects</div>
-            <h2>项目作品</h2>
-        </div>
-
-        <div class="carousel-track-wrapper">
-            <div class="carousel-track" id="carouselTrack">
-                <div class="carousel-card">
-                    <div class="carousel-visual">🚚</div>
-                    <div class="carousel-info">
-                        <div class="carousel-tags">
-                            <span class="carousel-tag">嵌入式</span>
-                            <span class="carousel-tag">C语言</span>
+    <!-- Projects -->
+    <section class="section projects-section" id="projects">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="eyebrow">Projects</p>
+                <h2 class="headline">项目作品</h2>
+            </div>
+            <div class="projects-grid fade-in-stagger">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/project_img/img1.jpg" alt="智能小车" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3>智能循迹小车</h3>
+                        <p class="body-text">基于 STM32 的智能循迹小车，配备多种传感器，实现自主导航。</p>
+                        <div class="project-tags">
+                            <span class="project-tag">STM32</span>
+                            <span class="project-tag">传感器</span>
+                            <span class="project-tag">PID控制</span>
                         </div>
-                        <h3>物流车项目</h3>
-                        <p>低成本物流运输车辆设计，总预算控制在1200元内。</p>
                     </div>
                 </div>
-
-                <div class="carousel-card">
-                    <div class="carousel-visual">🚒</div>
-                    <div class="carousel-info">
-                        <div class="carousel-tags">
-                            <span class="carousel-tag">STM32</span>
-                            <span class="carousel-tag">传感器</span>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/project_img/img2.jpg" alt="智能家居" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3>智能家居控制系统</h3>
+                        <p class="body-text">物联网智能家居系统，支持远程控制和自动化场景。</p>
+                        <div class="project-tags">
+                            <span class="project-tag">IoT</span>
+                            <span class="project-tag">WiFi</span>
+                            <span class="project-tag">MQTT</span>
                         </div>
-                        <h3>消防车项目</h3>
-                        <p>ERCC竞赛参赛作品，紧急救援消防车设计。</p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="carousel-nav">
-            <button class="carousel-arrow" onclick="scrollCarousel(-1)">←</button>
-            <button class="carousel-arrow" onclick="scrollCarousel(1)">→</button>
-        </div>
-    </section>
-
-    <!-- 时间线 -->
-    <section class="timeline-section" id="timeline">
-        <div class="timeline-header reveal">
-            <div class="section-label">Timeline</div>
-            <h2>学习历程</h2>
-        </div>
-
-        <div class="timeline-container">
-            <div class="timeline-item" onclick="toggleTimeline(this)">
-                <div class="timeline-dot" style="top: 32px;"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2024</span>
-                    <h3>嵌入式开发入门</h3>
-                    <p>开始学习C语言和单片机开发</p>
-                    <div class="timeline-details">
-                        <ul>
-                            <li>掌握C语言基础语法</li>
-                            <li>理解单片机工作原理</li>
-                            <li>完成首个LED闪烁项目</li>
-                        </ul>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/project_img/img3.jpg" alt="机械臂" loading="lazy">
                     </div>
-                </div>
-            </div>
-
-            <div class="timeline-item" onclick="toggleTimeline(this)">
-                <div class="timeline-dot" style="top: 32px;"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2024</span>
-                    <h3>电子设计竞赛</h3>
-                    <p>参与学校电子设计竞赛</p>
-                    <div class="timeline-details">
-                        <ul>
-                            <li>设计智能小车循迹系统</li>
-                            <li>实现传感器数据融合</li>
-                            <li>完成PID控制算法</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item" onclick="toggleTimeline(this)">
-                <div class="timeline-dot" style="top: 32px;"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2024</span>
-                    <h3>智能车竞赛</h3>
-                    <p>参与物流车和消防车项目研发</p>
-                    <div class="timeline-details">
-                        <ul>
-                            <li>物流车预算1200元内完成</li>
-                            <li>消防车获ERCC参赛资格</li>
-                            <li>掌握STM32开发</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item" onclick="toggleTimeline(this)">
-                <div class="timeline-dot" style="top: 32px;"></div>
-                <div class="timeline-content">
-                    <span class="timeline-year">2025</span>
-                    <h3>持续成长</h3>
-                    <p>深入学习STM32，探索物联网领域</p>
-                    <div class="timeline-details">
-                        <ul>
-                            <li>学习FreeRTOS</li>
-                            <li>探索物联网协议</li>
-                            <li>完成更多实战项目</li>
-                        </ul>
+                    <div class="project-content">
+                        <h3>四自由度机械臂</h3>
+                        <p class="body-text">舵机控制机械臂，支持精确位置控制和轨迹规划。</p>
+                        <div class="project-tags">
+                            <span class="project-tag">舵机控制</span>
+                            <span class="project-tag">运动学</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 技能 -->
-    <section class="skills-section">
-        <div class="skills-header reveal">
-            <div class="section-label">Skills</div>
-            <h2>技术栈</h2>
-        </div>
-        <div class="skills-cloud">
-            <span class="skill-item">C语言</span>
-            <span class="skill-item">STM32</span>
-            <span class="skill-item">单片机开发</span>
-            <span class="skill-item">嵌入式系统</span>
-            <span class="skill-item">电路设计</span>
-            <span class="skill-item">传感器应用</span>
-            <span class="skill-item">PCB设计</span>
-            <span class="skill-item">Git</span>
-        </div>
-    </section>
-
-    <!-- 联系 -->
-    <section class="contact-section" id="contact">
-        <h2>联系我</h2>
-        <p>如果你对项目感兴趣或有合作意向，欢迎联系我</p>
-        <div class="contact-links">
-            <a href="https://github.com/TonyDDcui" target="_blank" class="contact-link">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                GitHub
-            </a>
+    <!-- Contact -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <div class="fade-in">
+                <p class="eyebrow">Contact</p>
+                <h2 class="headline">联系我</h2>
+                <p class="body-text">如果你对项目感兴趣或有合作意向，欢迎联系我</p>
+                <div class="contact-links">
+                    <a href="https://github.com/TonyDDcui" target="_blank" class="contact-link">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        GitHub
+                    </a>
+                    <a href="mailto:your-email@example.com" class="contact-link">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        邮箱
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 页脚 -->
-    <footer>
+    <!-- Footer -->
+    <footer class="footer">
         <p>© 2024-2026 崔喆箫 · 用 ❤️ 和代码构建</p>
     </footer>
 
     <script>
-        // ============ 证书横向滚动（Apple 风格） ============
-        const certTrack = document.getElementById('certTrack');
-        const certCards = document.querySelectorAll('.certificate-card');
-        const progressPills = document.querySelectorAll('.progress-pill');
+        // ═══════════════════════════════════════════════════════════════
+        // Theme Toggle
+        // ═══════════════════════════════════════════════════════════════
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        }
 
-        function scrollToCert(index) {
-            const card = certCards[index];
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+            } else {
+                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+            }
+        }
+
+        // Init theme
+        (function() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+            updateThemeIcon(theme);
+        })();
+
+        // ═══════════════════════════════════════════════════════════════
+        // Highlights Carousel
+        // ═══════════════════════════════════════════════════════════════
+        const track = document.getElementById('highlightsTrack');
+        const cards = document.querySelectorAll('.highlight-card');
+        const pills = document.querySelectorAll('.progress-pill');
+
+        function scrollToHighlight(index) {
+            const card = cards[index];
             if (!card) return;
-            const trackRect = certTrack.getBoundingClientRect();
+            const trackRect = track.getBoundingClientRect();
             const cardRect = card.getBoundingClientRect();
-            const scrollLeft = certTrack.scrollLeft + cardRect.left - trackRect.left - (trackRect.width - cardRect.width) / 2;
-            certTrack.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+            const scrollLeft = track.scrollLeft + cardRect.left - trackRect.left - (trackRect.width - cardRect.width) / 2;
+            track.scrollTo({ left: scrollLeft, behavior: 'smooth' });
         }
 
         function updateActiveCard() {
-            const trackRect = certTrack.getBoundingClientRect();
+            const trackRect = track.getBoundingClientRect();
             const trackCenter = trackRect.left + trackRect.width / 2;
             let closestIndex = 0;
             let closestDist = Infinity;
 
-            certCards.forEach((card, i) => {
+            cards.forEach((card, i) => {
                 const cardRect = card.getBoundingClientRect();
                 const cardCenter = cardRect.left + cardRect.width / 2;
                 const dist = Math.abs(cardCenter - trackCenter);
@@ -1597,98 +1103,38 @@
                     closestIndex = i;
                 }
 
-                // 判断是否在中心附近
-                const isActive = dist < cardRect.width / 2;
-                card.classList.toggle('active', isActive);
+                card.classList.toggle('active', dist < cardRect.width / 2);
             });
 
-            // 更新进度条
-            progressPills.forEach((pill, i) => {
+            pills.forEach((pill, i) => {
                 pill.classList.toggle('active', i === closestIndex);
             });
         }
 
-        // 滚动监听
-        certTrack.addEventListener('scroll', updateActiveCard, { passive: true });
+        track.addEventListener('scroll', updateActiveCard, { passive: true });
 
-        // 拖拽支持
+        // Drag support
         let isDown = false, startX = 0, scrollLeftStart = 0;
-        certTrack.addEventListener('mousedown', (e) => {
+        track.addEventListener('mousedown', (e) => {
             isDown = true;
-            certTrack.classList.add('dragging');
-            startX = e.pageX - certTrack.offsetLeft;
-            scrollLeftStart = certTrack.scrollLeft;
+            track.classList.add('dragging');
+            startX = e.pageX - track.offsetLeft;
+            scrollLeftStart = track.scrollLeft;
         });
-        certTrack.addEventListener('mouseleave', () => { isDown = false; certTrack.classList.remove('dragging'); });
-        certTrack.addEventListener('mouseup', () => { isDown = false; certTrack.classList.remove('dragging'); });
-        certTrack.addEventListener('mousemove', (e) => {
+        track.addEventListener('mouseleave', () => { isDown = false; track.classList.remove('dragging'); });
+        track.addEventListener('mouseup', () => { isDown = false; track.classList.remove('dragging'); });
+        track.addEventListener('mousemove', (e) => {
             if (!isDown) return;
             e.preventDefault();
-            const x = e.pageX - certTrack.offsetLeft;
+            const x = e.pageX - track.offsetLeft;
             const walk = (x - startX) * 1.5;
-            certTrack.scrollLeft = scrollLeftStart - walk;
+            track.scrollLeft = scrollLeftStart - walk;
         });
 
-        // 初始化
-        certCards[0].classList.add('active');
-
-        // ============ 主题切换 ============
-        function setTheme(mode) {
-            const html = document.documentElement;
-            if (mode === 'auto') {
-                html.removeAttribute('data-theme');
-                localStorage.removeItem('theme');
-            } else {
-                html.setAttribute('data-theme', mode);
-                localStorage.setItem('theme', mode);
-            }
-            updateThemeButtons();
-        }
-
-        function updateThemeButtons() {
-            const saved = localStorage.getItem('theme');
-            document.getElementById('btnLight').classList.toggle('active', saved === 'light');
-            document.getElementById('btnDark').classList.toggle('active', saved === 'dark');
-            document.getElementById('btnAuto').classList.toggle('active', !saved);
-        }
-
-        // 初始化
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-        updateThemeButtons();
-
-        // ============ Tab 切换 ============
-        function switchTab(index) {
-            // 更新按钮状态
-            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === index);
-            });
-
-            // 更新内容
-            document.querySelectorAll('.tab-content').forEach((content, i) => {
-                content.classList.toggle('active', i === index);
-            });
-        }
-
-        // ============ 轮播滚动 ============
-        function scrollCarousel(direction) {
-            const track = document.getElementById('carouselTrack');
-            const cardWidth = 474; // card width + gap
-            track.scrollBy({
-                left: direction * cardWidth,
-                behavior: 'smooth'
-            });
-        }
-
-        // ============ 时间线展开/收起 ============
-        function toggleTimeline(element) {
-            element.querySelector('.timeline-content').classList.toggle('expanded');
-        }
-
-        // ============ 滚动动画 ============
-        const revealObserver = new IntersectionObserver((entries) => {
+        // ═══════════════════════════════════════════════════════════════
+        // Scroll Animations
+        // ═══════════════════════════════════════════════════════════════
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
@@ -1696,63 +1142,16 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            revealObserver.observe(el);
+        document.querySelectorAll('.fade-in, .fade-in-stagger').forEach(el => {
+            observer.observe(el);
         });
 
-        // 时间线动画
-        const timelineItems = document.querySelectorAll('.timeline-item');
-        const timelineObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 150);
-                }
+        // Initial animations
+        setTimeout(() => {
+            document.querySelectorAll('.hero .fade-in').forEach(el => {
+                el.classList.add('visible');
             });
-        }, { threshold: 0.2 });
-
-        timelineItems.forEach(item => {
-            timelineObserver.observe(item);
-        });
-
-        // ============ 键盘导航 ============
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
-            }
-        });
-
-        // ============ 触摸滑动 ============
-        let touchStartY = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].screenY;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            const diff = touchStartY - e.touches[0].screenY;
-            if (Math.abs(diff) > 100) {
-                const currentScroll = window.pageYOffset;
-                const windowHeight = window.innerHeight;
-                const currentSection = Math.round(currentScroll / windowHeight);
-                
-                if (diff > 0 && currentSection < document.querySelectorAll('section').length - 1) {
-                    window.scrollTo({
-                        top: (currentSection + 1) * windowHeight,
-                        behavior: 'smooth'
-                    });
-                } else if (diff < 0 && currentSection > 0) {
-                    window.scrollTo({
-                        top: (currentSection - 1) * windowHeight,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
+        }, 100);
     </script>
 </body>
 </html>
