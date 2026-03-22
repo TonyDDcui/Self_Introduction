@@ -29,6 +29,23 @@
             --border: rgba(255,255,255,0.08);
         }
 
+        [data-theme="dark"] .progress-mask {
+            background: rgba(120, 120, 128, 0.24);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .progress-dot {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        [data-theme="dark"] .progress-dot:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        [data-theme="dark"] .progress-dot.active {
+            background: #fff;
+        }
+
 
 
         @media (prefers-color-scheme: dark) {
@@ -81,33 +98,43 @@
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 - 极简小圆点 */
+        /* Apple 风格进度条 - 磨砂玻璃蒙版 */
         .certificate-progress {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
             margin-bottom: 40px;
             padding: 0 40px;
+        }
+
+        .progress-mask {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(120, 120, 128, 0.12);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-radius: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .progress-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--text-secondary);
-            opacity: 0.3;
+            background: rgba(60, 60, 67, 0.36);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-dot:hover {
-            opacity: 0.6;
+            background: rgba(60, 60, 67, 0.5);
         }
 
         .progress-dot.active {
-            opacity: 1;
-            transform: scale(1.2);
+            background: var(--text);
         }
 
         /* 证书轮播卡片 */
@@ -1240,13 +1267,15 @@
 
         <!-- 进度条 -->
         <div class="certificate-progress">
-            <div class="progress-dot active" onclick="showCertificate(0)"></div>
-            <div class="progress-dot" onclick="showCertificate(1)"></div>
-            <div class="progress-dot" onclick="showCertificate(2)"></div>
-            <div class="progress-dot" onclick="showCertificate(3)"></div>
-            <div class="progress-dot" onclick="showCertificate(4)"></div>
-            <div class="progress-dot" onclick="showCertificate(5)"></div>
-            <div class="progress-dot" onclick="showCertificate(6)"></div>
+            <div class="progress-mask">
+                <div class="progress-dot active" onclick="showCertificate(0)"></div>
+                <div class="progress-dot" onclick="showCertificate(1)"></div>
+                <div class="progress-dot" onclick="showCertificate(2)"></div>
+                <div class="progress-dot" onclick="showCertificate(3)"></div>
+                <div class="progress-dot" onclick="showCertificate(4)"></div>
+                <div class="progress-dot" onclick="showCertificate(5)"></div>
+                <div class="progress-dot" onclick="showCertificate(6)"></div>
+            </div>
         </div>
 
         <!-- 证书轮播 -->
