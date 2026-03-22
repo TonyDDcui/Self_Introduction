@@ -31,7 +31,7 @@
 
         /* 浅色模式进度条 */
         :root:not([data-theme="dark"]) .progress-mask {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.72);
         }
 
         :root:not([data-theme="dark"]) .progress-dot {
@@ -98,12 +98,12 @@
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 - 参考 iPhone 17 页面 */
+        /* Apple 风格进度条 */
         .certificate-progress {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 40px;
+            margin-top: 32px;
             padding: 0 40px;
         }
 
@@ -111,8 +111,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 5px;
-            padding: 6px 14px;
+            gap: 8px;
+            padding: 8px 24px;
             background: rgba(29, 29, 31, 0.6);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -120,10 +120,10 @@
         }
 
         .progress-dot {
-            width: 4px;
-            height: 4px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.35);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
