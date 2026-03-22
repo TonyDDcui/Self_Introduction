@@ -29,25 +29,6 @@
             --border: rgba(255,255,255,0.08);
         }
 
-        /* 浅色模式进度条 */
-        :root:not([data-theme="dark"]) .progress-mask {
-            background: rgba(255, 255, 255, 0.72);
-        }
-
-        :root:not([data-theme="dark"]) .progress-dot {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        :root:not([data-theme="dark"]) .progress-dot:hover {
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        :root:not([data-theme="dark"]) .progress-dot.active {
-            background: #000;
-        }
-
-
-
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
                 --bg: #000000;
@@ -73,107 +54,85 @@
         }
 
         /* 证书展示 - Get the highlights */
+        /* ── Get the highlights ── */
         .certificate-section {
-            padding: 60px 0 80px;
-            background: var(--bg-secondary);
+            padding: 80px 0 60px;
+            background: var(--bg);
+            overflow: hidden;
         }
 
         .certificate-header {
             text-align: center;
             max-width: 800px;
-            margin: 0 auto 40px;
+            margin: 0 auto 48px;
             padding: 0 40px;
         }
 
         .certificate-header h2 {
             font-size: clamp(2.5rem, 6vw, 3.5rem);
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             letter-spacing: -0.02em;
         }
 
         .certificate-header p {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 */
-        .certificate-progress {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 32px;
-            padding: 0 40px;
-        }
-
-        .progress-mask {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-radius: 100px;
-        }
-
-        .progress-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .progress-dot:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .progress-dot.active {
-            background: #fff;
-        }
-
-        /* 证书轮播卡片 */
-        .certificate-carousel {
+        /* 横向滚动轨道 */
+        .certificate-track-wrap {
             position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 40px;
         }
 
+        .certificate-track {
+            display: flex;
+            gap: 20px;
+            padding: 0 max(40px, calc((100vw - 900px) / 2));
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            cursor: grab;
+            transition: scroll-behavior 0.3s;
+        }
+
+        .certificate-track::-webkit-scrollbar { display: none; }
+        .certificate-track.dragging { cursor: grabbing; scroll-behavior: auto; }
+
+        /* 每张卡片 */
         .certificate-card {
-            display: none;
-            background: var(--bg);
-            border-radius: 24px;
+            flex: 0 0 900px;
+            max-width: calc(100vw - 80px);
+            scroll-snap-align: center;
+            border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-            animation: slideIn 0.5s ease;
+            background: var(--bg-secondary);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .certificate-card:not(.active) {
+            opacity: 0.55;
+            transform: scale(0.97);
         }
 
         .certificate-card.active {
-            display: block;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.16);
         }
 
         .certificate-inner {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 400px;
+            min-height: 420px;
         }
 
         .certificate-image {
             position: relative;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: #111;
             overflow: hidden;
         }
 
@@ -182,24 +141,32 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .certificate-card.active .certificate-image img {
+            transform: scale(1.03);
         }
 
         .certificate-badge {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 16px;
-            background: var(--gradient);
+            top: 18px;
+            left: 18px;
+            padding: 6px 14px;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             color: white;
             border-radius: 100px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            border: 1px solid rgba(255,255,255,0.15);
         }
 
         .certificate-content {
-            padding: 48px;
+            padding: 44px 48px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -238,6 +205,55 @@
         .certificate-purpose strong {
             color: var(--text);
             font-weight: 600;
+        }
+
+        /* 胶囊进度条 */
+        .certificate-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 28px;
+            padding-bottom: 8px;
+        }
+
+        .progress-pill {
+            height: 4px;
+            border-radius: 100px;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 20px;
+        }
+
+        .progress-pill:hover {
+            background: var(--text-secondary);
+        }
+
+        .progress-pill.active {
+            width: 36px;
+            background: var(--text);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .certificate-inner {
+                grid-template-columns: 1fr;
+            }
+            .certificate-image {
+                height: 240px;
+            }
+            .certificate-content {
+                padding: 28px 24px;
+            }
+            .certificate-card {
+                flex: 0 0 calc(100vw - 48px);
+                max-width: calc(100vw - 48px);
+            }
+            .certificate-track {
+                padding: 0 24px;
+                gap: 16px;
+            }
         }
 
         /* 导航 */
@@ -1230,7 +1246,8 @@
         </div>
 
         <!-- 证书轮播 -->
-        <div class="certificate-carousel">
+        <div class="certificate-track-wrap">
+        <div class="certificate-track" id="certTrack">
             <!-- img2: 蓝桥杯单片机全国总决赛 -->
             <div class="certificate-card active" data-index="0">
                 <div class="certificate-inner">
@@ -1385,18 +1402,17 @@
                 </div>
             </div>
         </div>
+        </div>
 
-        <!-- 进度条 -->
-        <div class="certificate-progress">
-            <div class="progress-mask">
-                <div class="progress-dot active" onclick="showCertificate(0)"></div>
-                <div class="progress-dot" onclick="showCertificate(1)"></div>
-                <div class="progress-dot" onclick="showCertificate(2)"></div>
-                <div class="progress-dot" onclick="showCertificate(3)"></div>
-                <div class="progress-dot" onclick="showCertificate(4)"></div>
-                <div class="progress-dot" onclick="showCertificate(5)"></div>
-                <div class="progress-dot" onclick="showCertificate(6)"></div>
-            </div>
+        <!-- 胶囊进度条 -->
+        <div class="certificate-progress" id="certProgress">
+            <div class="progress-pill active" onclick="scrollToCert(0)"></div>
+            <div class="progress-pill" onclick="scrollToCert(1)"></div>
+            <div class="progress-pill" onclick="scrollToCert(2)"></div>
+            <div class="progress-pill" onclick="scrollToCert(3)"></div>
+            <div class="progress-pill" onclick="scrollToCert(4)"></div>
+            <div class="progress-pill" onclick="scrollToCert(5)"></div>
+            <div class="progress-pill" onclick="scrollToCert(6)"></div>
         </div>
     </section>
 
@@ -1551,62 +1567,70 @@
     </footer>
 
     <script>
-        // ============ 证书轮播 ============
-        let currentCert = 0;
-        const totalCerts = 7;
+        // ============ 证书横向滚动（Apple 风格） ============
+        const certTrack = document.getElementById('certTrack');
+        const certCards = document.querySelectorAll('.certificate-card');
+        const progressPills = document.querySelectorAll('.progress-pill');
 
-        function showCertificate(index) {
-            // 移除所有 active
-            document.querySelectorAll('.certificate-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            document.querySelectorAll('.progress-dot').forEach(dot => {
-                dot.classList.remove('active');
-            });
-
-            // 添加 active 到当前
-            document.querySelectorAll('.certificate-card')[index].classList.add('active');
-            document.querySelectorAll('.progress-dot')[index].classList.add('active');
-
-            currentCert = index;
+        function scrollToCert(index) {
+            const card = certCards[index];
+            if (!card) return;
+            const trackRect = certTrack.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+            const scrollLeft = certTrack.scrollLeft + cardRect.left - trackRect.left - (trackRect.width - cardRect.width) / 2;
+            certTrack.scrollTo({ left: scrollLeft, behavior: 'smooth' });
         }
 
-        // 触摸滑动
-        let touchStartX = 0;
-        document.querySelector('.certificate-carousel').addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-        });
+        function updateActiveCard() {
+            const trackRect = certTrack.getBoundingClientRect();
+            const trackCenter = trackRect.left + trackRect.width / 2;
+            let closestIndex = 0;
+            let closestDist = Infinity;
 
-        document.querySelector('.certificate-carousel').addEventListener('touchend', (e) => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && currentCert < totalCerts - 1) {
-                    showCertificate(currentCert + 1);
-                } else if (diff < 0 && currentCert > 0) {
-                    showCertificate(currentCert - 1);
+            certCards.forEach((card, i) => {
+                const cardRect = card.getBoundingClientRect();
+                const cardCenter = cardRect.left + cardRect.width / 2;
+                const dist = Math.abs(cardCenter - trackCenter);
+
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestIndex = i;
                 }
-            }
+
+                // 判断是否在中心附近
+                const isActive = dist < cardRect.width / 2;
+                card.classList.toggle('active', isActive);
+            });
+
+            // 更新进度条
+            progressPills.forEach((pill, i) => {
+                pill.classList.toggle('active', i === closestIndex);
+            });
+        }
+
+        // 滚动监听
+        certTrack.addEventListener('scroll', updateActiveCard, { passive: true });
+
+        // 拖拽支持
+        let isDown = false, startX = 0, scrollLeftStart = 0;
+        certTrack.addEventListener('mousedown', (e) => {
+            isDown = true;
+            certTrack.classList.add('dragging');
+            startX = e.pageX - certTrack.offsetLeft;
+            scrollLeftStart = certTrack.scrollLeft;
+        });
+        certTrack.addEventListener('mouseleave', () => { isDown = false; certTrack.classList.remove('dragging'); });
+        certTrack.addEventListener('mouseup', () => { isDown = false; certTrack.classList.remove('dragging'); });
+        certTrack.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - certTrack.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            certTrack.scrollLeft = scrollLeftStart - walk;
         });
 
-        // 触摸滑动
-        let touchStartX = 0;
-        document.querySelector('.certificate-carousel').addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-        });
-
-        document.querySelector('.certificate-carousel').addEventListener('touchend', (e) => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    nextCertificate();
-                } else {
-                    prevCertificate();
-                }
-            }
-        });
-
-        // 初始化证书轮播
-        showCertificate(0);
+        // 初始化
+        certCards[0].classList.add('active');
 
         // ============ 主题切换 ============
         function setTheme(mode) {
