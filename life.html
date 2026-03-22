@@ -5,225 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生活日常 | 崔喆箫</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f5f5f7;
-            --bg-elevated: #ffffff;
-            --text: #1d1d1f;
-            --text-secondary: #86868b;
-            --accent: #0071e3;
-            --accent-hover: #0077ed;
-            --border: rgba(0,0,0,0.06);
-            --glass-bg: rgba(255, 255, 255, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
-            --radius: 20px;
-            --radius-lg: 28px;
+            --bg: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-tertiary: #6e7681;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --radius: 12px;
         }
 
-        [data-theme="dark"] {
-            --bg: #000000;
-            --bg-elevated: #1c1c1e;
-            --text: #f5f5f7;
-            --text-secondary: #86868b;
-            --accent: #0a84ff;
-            --accent-hover: #409cff;
-            --border: rgba(255,255,255,0.08);
-            --glass-bg: rgba(28, 28, 30, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 2px 12px rgba(0,0,0,0.3);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #eaeef2;
+            --text: #1f2328;
+            --text-secondary: #656d76;
+            --text-tertiary: #8c959f;
+            --accent: #0969da;
+            --border: #d0d7de;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html {
-            scroll-behavior: smooth;
-            font-size: 17px;
-        }
-
+        html { scroll-behavior: smooth; font-size: 16px; }
         body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Sans SC', sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.5;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            height: 52px;
-            padding: 0 max(48px, calc((100vw - 1200px) / 2));
+            z-index: 100;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--glass-bg);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 0.5px solid var(--glass-border);
+            padding: 0 32px;
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .nav-logo {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text);
-            text-decoration: none;
-        }
+        [data-theme="light"] .nav { background: rgba(255,255,255,0.85); }
 
         .nav-back {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--accent);
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9375rem;
-            font-weight: 500;
-            transition: opacity 0.2s;
+            font-size: 0.875rem;
         }
 
-        .nav-back:hover {
-            opacity: 0.8;
+        .nav-back:hover { color: var(--text); }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-btn:hover { color: var(--text); border-color: var(--text-secondary); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+        .page-header {
+            padding: 120px 0 48px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 48px;
         }
 
-        .nav-actions {
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .theme-toggle {
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: transparent;
-            color: var(--text);
-            cursor: pointer;
-            opacity: 0.6;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
+        .page-subtitle { color: var(--text-secondary); font-size: 1rem; }
 
-        .theme-toggle:hover {
-            opacity: 1;
-            background: var(--border);
-        }
-
-        /* Header */
-        .page-header {
-            padding: 120px 48px 60px;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .page-header .eyebrow {
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: var(--accent);
-            letter-spacing: 0.02em;
-            margin-bottom: 12px;
-        }
-
-        .page-header h1 {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 16px;
-        }
-
-        .page-header p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-        }
-
-        /* Gallery Grid */
-        .gallery-section {
-            padding: 0 48px 120px;
-        }
-
-        .gallery-grid {
+        .albums-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
-            max-width: 1200px;
-            margin: 0 auto;
+            padding-bottom: 80px;
         }
 
-        .gallery-card {
-            background: var(--bg-elevated);
+        .album-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
-            border: 0.5px solid var(--border);
             text-decoration: none;
             color: var(--text);
+            transition: border-color 0.2s;
         }
 
-        .gallery-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-        }
+        .album-card:hover { border-color: var(--text-tertiary); }
 
-        .gallery-image {
+        .album-cover {
             position: relative;
-            aspect-ratio: 4/3;
+            aspect-ratio: 16/10;
             overflow: hidden;
         }
 
-        .gallery-image img {
+        .album-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.3s;
         }
 
-        .gallery-card:hover .gallery-image img {
-            transform: scale(1.05);
-        }
+        .album-card:hover .album-cover img { transform: scale(1.04); }
 
-        .gallery-count {
+        .album-count {
             position: absolute;
             top: 12px;
             right: 12px;
-            padding: 6px 12px;
-            background: rgba(0,0,0,0.6);
+            padding: 4px 10px;
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(8px);
-            color: white;
             border-radius: 100px;
+            font-size: 0.6875rem;
+            color: white;
+        }
+
+        .album-body { padding: 16px; }
+
+        .album-date {
             font-size: 0.75rem;
-            font-weight: 500;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
         }
 
-        .gallery-content {
-            padding: 24px;
-        }
-
-        .gallery-date {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .gallery-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-
-        .gallery-desc {
+        .album-title {
             font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .album-desc {
+            font-size: 0.8125rem;
             color: var(--text-secondary);
             line-height: 1.5;
             display: -webkit-box;
@@ -232,202 +172,134 @@
             overflow: hidden;
         }
 
-        /* Fade Animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
+        .fade-up { opacity: 0; transform: translateY(16px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .fade-in-stagger > * {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .fade-in-stagger.visible > * {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .fade-in-stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
-        .fade-in-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; }
-        .fade-in-stagger.visible > *:nth-child(3) { transition-delay: 0.15s; }
-        .fade-in-stagger.visible > *:nth-child(4) { transition-delay: 0.2s; }
-        .fade-in-stagger.visible > *:nth-child(5) { transition-delay: 0.25s; }
-        .fade-in-stagger.visible > *:nth-child(6) { transition-delay: 0.3s; }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .nav {
-                padding: 0 24px;
-            }
-            .page-header {
-                padding: 100px 24px 40px;
-            }
-            .gallery-section {
-                padding: 0 24px 80px;
-            }
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
+            .container { padding: 0 20px; }
+            .nav { padding: 0 20px; }
+            .albums-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="nav">
         <a href="index.html" class="nav-back">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             返回首页
         </a>
-        <div class="nav-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
-                <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="5"/>
-                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
-            </button>
-        </div>
+        <button class="theme-btn" onclick="toggleTheme()">
+            <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2"/>
+            </svg>
+        </button>
     </nav>
 
-    <!-- Header -->
-    <header class="page-header fade-in">
-        <p class="eyebrow">Life</p>
-        <h1>生活日常</h1>
-        <p>记录生活中的美好瞬间，用镜头捕捉每一个值得纪念的时刻</p>
-    </header>
+    <div class="container">
+        <header class="page-header fade-up">
+            <h1 class="page-title">
+                <span>📸</span>
+                生活日常
+            </h1>
+            <p class="page-subtitle">记录生活中的美好瞬间，用镜头捕捉每一个值得纪念的时刻</p>
+        </header>
 
-    <!-- Gallery Grid -->
-    <section class="gallery-section">
-        <div class="gallery-grid fade-in-stagger">
-            <a href="life-detail.html?id=1" class="gallery-card">
-                <div class="gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img1.jpg" alt="咖啡馆时光" loading="lazy">
-                    <span class="gallery-count">5 张</span>
+        <div class="albums-grid fade-up">
+            <a href="life-detail.html?id=1" class="album-card">
+                <div class="album-cover">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img1.jpg" alt="咖啡馆时光">
+                    <span class="album-count">5 张</span>
                 </div>
-                <div class="gallery-content">
-                    <div class="gallery-date">2025年3月</div>
-                    <h3 class="gallery-title">周末的咖啡馆时光</h3>
-                    <p class="gallery-desc">在城市的角落里发现了一家安静的咖啡馆，阳光透过窗户洒进来，一切都刚刚好。</p>
+                <div class="album-body">
+                    <p class="album-date">2025年3月</p>
+                    <h3 class="album-title">周末的咖啡馆时光</h3>
+                    <p class="album-desc">在城市的角落里发现了一家安静的咖啡馆，阳光透过窗户洒进来，一切都刚刚好。</p>
                 </div>
             </a>
 
-            <a href="life-detail.html?id=2" class="gallery-card">
-                <div class="gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img2.jpg" alt="城市夜景" loading="lazy">
-                    <span class="gallery-count">8 张</span>
+            <a href="life-detail.html?id=2" class="album-card">
+                <div class="album-cover">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img2.jpg" alt="城市夜景">
+                    <span class="album-count">8 张</span>
                 </div>
-                <div class="gallery-content">
-                    <div class="gallery-date">2025年2月</div>
-                    <h3 class="gallery-title">城市夜景漫步</h3>
-                    <p class="gallery-desc">夜幕降临，华灯初上。站在高处俯瞰这座城市的灯火，感受都市的脉搏。</p>
-                </div>
-            </a>
-
-            <a href="life-detail.html?id=3" class="gallery-card">
-                <div class="gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img3.jpg" alt="山间徒步" loading="lazy">
-                    <span class="gallery-count">12 张</span>
-                </div>
-                <div class="gallery-content">
-                    <div class="gallery-date">2025年2月</div>
-                    <h3 class="gallery-title">山间徒步之旅</h3>
-                    <p class="gallery-desc">远离城市的喧嚣，走进大自然。山间的空气清新，每一步都是与自然的对话。</p>
+                <div class="album-body">
+                    <p class="album-date">2025年2月</p>
+                    <h3 class="album-title">城市夜景漫步</h3>
+                    <p class="album-desc">夜幕降临，华灯初上。站在高处俯瞰这座城市的灯火，感受都市的脉搏。</p>
                 </div>
             </a>
 
-            <a href="life-detail.html?id=4" class="gallery-card">
-                <div class="gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img4.jpg" alt="书店时光" loading="lazy">
-                    <span class="gallery-count">6 张</span>
+            <a href="life-detail.html?id=3" class="album-card">
+                <div class="album-cover">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img3.jpg" alt="山间徒步">
+                    <span class="album-count">12 张</span>
                 </div>
-                <div class="gallery-content">
-                    <div class="gallery-date">2025年1月</div>
-                    <h3 class="gallery-title">书店里的午后</h3>
-                    <p class="gallery-desc">在书架间穿梭，偶然发现一本好书。时间在这里仿佛静止了。</p>
-                </div>
-            </a>
-
-            <a href="life-detail.html?id=5" class="gallery-card">
-                <div class="gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img5.jpg" alt="新年雪景" loading="lazy">
-                    <span class="gallery-count">10 张</span>
-                </div>
-                <div class="gallery-content">
-                    <div class="gallery-date">2025年1月</div>
-                    <h3 class="gallery-title">新年的第一场雪</h3>
-                    <p class="gallery-desc">雪花飘落，世界变成白色。这是新年最好的礼物。</p>
+                <div class="album-body">
+                    <p class="album-date">2025年2月</p>
+                    <h3 class="album-title">山间徒步之旅</h3>
+                    <p class="album-desc">远离城市的喧嚣，走进大自然。山间的空气清新，每一步都是与自然的对话。</p>
                 </div>
             </a>
 
-            <a href="life-detail.html?id=6" class="gallery-card">
-                <div class="gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img6.jpg" alt="美食探索" loading="lazy">
-                    <span class="gallery-count">7 张</span>
+            <a href="life-detail.html?id=4" class="album-card">
+                <div class="album-cover">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img4.jpg" alt="书店时光">
+                    <span class="album-count">6 张</span>
                 </div>
-                <div class="gallery-content">
-                    <div class="gallery-date">2024年12月</div>
-                    <h3 class="gallery-title">美食探索日记</h3>
-                    <p class="gallery-desc">生活中的小确幸，往往藏在美食里。记录每一次味蕾的惊喜。</p>
+                <div class="album-body">
+                    <p class="album-date">2025年1月</p>
+                    <h3 class="album-title">书店里的午后</h3>
+                    <p class="album-desc">在书架间穿梭，偶然发现一本好书。时间在这里仿佛静止了。</p>
+                </div>
+            </a>
+
+            <a href="life-detail.html?id=5" class="album-card">
+                <div class="album-cover">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img5.jpg" alt="新年雪景">
+                    <span class="album-count">10 张</span>
+                </div>
+                <div class="album-body">
+                    <p class="album-date">2025年1月</p>
+                    <h3 class="album-title">新年的第一场雪</h3>
+                    <p class="album-desc">雪花飘落，世界变成白色。这是新年最好的礼物，也是冬天最美的风景。</p>
+                </div>
+            </a>
+
+            <a href="life-detail.html?id=6" class="album-card">
+                <div class="album-cover">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img6.jpg" alt="美食探索">
+                    <span class="album-count">7 张</span>
+                </div>
+                <div class="album-body">
+                    <p class="album-date">2024年12月</p>
+                    <h3 class="album-title">美食探索日记</h3>
+                    <p class="album-desc">生活中的小确幸，往往藏在美食里。记录每一次味蕾的惊喜，分享每一份美味的快乐。</p>
                 </div>
             </a>
         </div>
-    </section>
+    </div>
 
     <script>
-        // Theme Toggle
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
-            updateThemeIcon(next);
         }
 
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeIcon');
-            if (theme === 'dark') {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-            } else {
-                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
-            }
-        }
-
-        // Init theme
         (function() {
             const saved = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = saved || (prefersDark ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', theme);
-            updateThemeIcon(theme);
+            if (saved) document.documentElement.setAttribute('data-theme', saved);
         })();
 
-        // Scroll Animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.fade-in, .fade-in-stagger').forEach(el => {
-            observer.observe(el);
-        });
-
-        setTimeout(() => {
-            document.querySelectorAll('.fade-in').forEach(el => {
-                el.classList.add('visible');
-            });
-        }, 100);
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
