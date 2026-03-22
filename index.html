@@ -55,14 +55,14 @@
 
         /* 证书展示 - Get the highlights */
         .certificate-section {
-            padding: 100px 0;
+            padding: 60px 0 80px;
             background: var(--bg-secondary);
         }
 
         .certificate-header {
             text-align: center;
             max-width: 800px;
-            margin: 0 auto 60px;
+            margin: 0 auto 40px;
             padding: 0 40px;
         }
 
@@ -79,43 +79,33 @@
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 */
+        /* Apple 风格进度条 - 极简小圆点 */
         .certificate-progress {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 50px;
+            gap: 8px;
+            margin-bottom: 40px;
             padding: 0 40px;
         }
 
         .progress-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--text-secondary);
-            opacity: 0.3;
+            opacity: 0.25;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-dot:hover {
-            opacity: 0.6;
-            transform: scale(1.2);
+            opacity: 0.5;
         }
 
         .progress-dot.active {
-            width: 24px;
-            border-radius: 4px;
-            background: var(--accent);
             opacity: 1;
-        }
-
-        .progress-text {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-left: 12px;
-            font-weight: 500;
+            transform: scale(1.2);
         }
 
         /* 证书轮播卡片 */
@@ -422,7 +412,7 @@
 
         /* Highlights 特性卡片 - Apple风格 */
         .highlights {
-            padding: 100px 0;
+            padding: 60px 0;
         }
 
         .highlights-header {
@@ -550,7 +540,7 @@
         /* Design Section - 视差滚动 */
         .design-section {
             background: linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 100%);
-            padding: 120px 40px;
+            padding: 80px 40px;
         }
 
         .design-grid {
@@ -692,7 +682,7 @@
 
         /* 项目横向滚动 - Apple风格 */
         .carousel-section {
-            padding: 100px 0;
+            padding: 60px 0;
             overflow: hidden;
         }
 
@@ -816,7 +806,7 @@
 
         /* 时间线 - Apple风格 */
         .timeline-section {
-            padding: 100px 40px;
+            padding: 60px 40px;
             background: var(--bg);
         }
 
@@ -1255,7 +1245,6 @@
             <div class="progress-dot" onclick="showCertificate(4)"></div>
             <div class="progress-dot" onclick="showCertificate(5)"></div>
             <div class="progress-dot" onclick="showCertificate(6)"></div>
-            <span class="progress-text" id="progressText">1 / 7</span>
         </div>
 
         <!-- 证书轮播 -->
@@ -1589,9 +1578,6 @@
             // 添加 active 到当前
             document.querySelectorAll('.certificate-card')[index].classList.add('active');
             document.querySelectorAll('.progress-dot')[index].classList.add('active');
-
-            // 更新进度文字
-            document.getElementById('progressText').textContent = `${index + 1} / ${totalCerts}`;
 
             // 更新按钮状态
             document.getElementById('prevBtn').disabled = index === 0;
