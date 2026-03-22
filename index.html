@@ -29,12 +29,16 @@
             --border: rgba(255,255,255,0.08);
         }
 
+        [data-theme="dark"] .progress-container {
+            background: rgba(120, 120, 120, 0.2);
+        }
+
         [data-theme="dark"] .progress-dot {
             background: rgba(255, 255, 255, 0.2);
         }
 
         [data-theme="dark"] .progress-dot:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.45);
         }
 
         [data-theme="dark"] .progress-dot.active {
@@ -91,27 +95,37 @@
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 - 灰色蒙版圆点 */
+        /* Apple 风格进度条 - 灰色蒙版 */
         .certificate-progress {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 0;
             margin-bottom: 40px;
             padding: 0 40px;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(120, 120, 120, 0.12);
+            border-radius: 100px;
         }
 
         .progress-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: rgba(128, 128, 128, 0.3);
+            background: rgba(90, 90, 90, 0.25);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-dot:hover {
-            background: rgba(128, 128, 128, 0.5);
+            background: rgba(90, 90, 90, 0.5);
         }
 
         .progress-dot.active {
@@ -1248,13 +1262,15 @@
 
         <!-- 进度条 -->
         <div class="certificate-progress">
-            <div class="progress-dot active" onclick="showCertificate(0)"></div>
-            <div class="progress-dot" onclick="showCertificate(1)"></div>
-            <div class="progress-dot" onclick="showCertificate(2)"></div>
-            <div class="progress-dot" onclick="showCertificate(3)"></div>
-            <div class="progress-dot" onclick="showCertificate(4)"></div>
-            <div class="progress-dot" onclick="showCertificate(5)"></div>
-            <div class="progress-dot" onclick="showCertificate(6)"></div>
+            <div class="progress-container">
+                <div class="progress-dot active" onclick="showCertificate(0)"></div>
+                <div class="progress-dot" onclick="showCertificate(1)"></div>
+                <div class="progress-dot" onclick="showCertificate(2)"></div>
+                <div class="progress-dot" onclick="showCertificate(3)"></div>
+                <div class="progress-dot" onclick="showCertificate(4)"></div>
+                <div class="progress-dot" onclick="showCertificate(5)"></div>
+                <div class="progress-dot" onclick="showCertificate(6)"></div>
+            </div>
         </div>
 
         <!-- 证书轮播 -->
