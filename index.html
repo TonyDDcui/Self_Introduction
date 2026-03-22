@@ -53,6 +53,210 @@
             overflow-x: hidden;
         }
 
+        /* 证书展示 - Get the highlights */
+        .certificate-section {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+
+        .certificate-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            padding: 0 40px;
+        }
+
+        .certificate-header h2 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .certificate-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Apple 风格进度条 */
+        .certificate-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 50px;
+            padding: 0 40px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .progress-dot:hover {
+            opacity: 0.6;
+            transform: scale(1.2);
+        }
+
+        .progress-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: var(--accent);
+            opacity: 1;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-left: 12px;
+            font-weight: 500;
+        }
+
+        /* 证书轮播卡片 */
+        .certificate-carousel {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .certificate-card {
+            display: none;
+            background: var(--bg);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            animation: slideIn 0.5s ease;
+        }
+
+        .certificate-card.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .certificate-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 400px;
+        }
+
+        .certificate-image {
+            position: relative;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .certificate-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .certificate-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .certificate-content {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .certificate-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .certificate-organizer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .certificate-divider {
+            width: 40px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+            margin-bottom: 24px;
+        }
+
+        .certificate-purpose {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .certificate-purpose strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* 播放按钮 */
+        .play-controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .play-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .play-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* 导航 */
         .nav {
             position: fixed;
@@ -883,6 +1087,32 @@
             }
             .timeline-dot { left: 20px; }
             .contact-links { flex-direction: column; align-items: center; }
+
+            /* 证书响应式 */
+            .certificate-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .certificate-image {
+                height: 200px;
+            }
+
+            .certificate-content {
+                padding: 28px;
+            }
+
+            .certificate-content h3 {
+                font-size: 1.4rem;
+            }
+
+            .progress-dot {
+                width: 6px;
+                height: 6px;
+            }
+
+            .progress-dot.active {
+                width: 20px;
+            }
         }
     </style>
 </head>
@@ -892,6 +1122,7 @@
         <div class="nav-logo">CZX</div>
         <div class="nav-links">
             <a href="#about">关于</a>
+            <a href="#certificates">证书</a>
             <a href="#projects">项目</a>
             <a href="#timeline">历程</a>
             <a href="#contact">联系</a>
@@ -1005,6 +1236,189 @@
                 </div>
                 <div class="tab-panel-visual">🚀</div>
             </div>
+        </div>
+    </section>
+
+    <!-- 证书展示 - Get the highlights -->
+    <section class="certificate-section" id="certificates">
+        <div class="certificate-header reveal">
+            <h2>Get the highlights</h2>
+            <p>国家级竞赛参赛经历，展示在嵌入式系统、电子设计、机器人等领域的专业能力与实践经验</p>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="certificate-progress">
+            <div class="progress-dot active" onclick="showCertificate(0)"></div>
+            <div class="progress-dot" onclick="showCertificate(1)"></div>
+            <div class="progress-dot" onclick="showCertificate(2)"></div>
+            <div class="progress-dot" onclick="showCertificate(3)"></div>
+            <div class="progress-dot" onclick="showCertificate(4)"></div>
+            <div class="progress-dot" onclick="showCertificate(5)"></div>
+            <div class="progress-dot" onclick="showCertificate(6)"></div>
+            <span class="progress-text" id="progressText">1 / 7</span>
+        </div>
+
+        <!-- 证书轮播 -->
+        <div class="certificate-carousel">
+            <!-- img2: 蓝桥杯单片机全国总决赛 -->
+            <div class="certificate-card active" data-index="0">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img2.jpg" alt="蓝桥杯单片机全国总决赛" loading="lazy">
+                        <span class="certificate-badge">A 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>第十四届蓝桥杯<br>单片机全国总决赛</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>工业和信息化部人才交流中心</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛宗旨：</strong>立足行业、突出实践、广泛参与、促进就业。<br><br>
+                            提高工程实践和就业能力，推动产教融合，为制造强国和网络强国建设提供人才服务支撑。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- img3: 中国教育机器人大赛 -->
+            <div class="certificate-card" data-index="1">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img3.png" alt="中国教育机器人大赛" loading="lazy">
+                        <span class="certificate-badge">A 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>中国教育机器人大赛</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>中国人工智能学会</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛宗旨：</strong>推动教育机器人进课堂，促进机器人辅助工程创新实践教育课程的普及和实施。<br><br>
+                            强调动手能力，普及机器人创新教育，培养工程实践能力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- img4: 全国大学生电子设计竞赛 -->
+            <div class="certificate-card" data-index="2">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img4.jpg" alt="全国大学生电子设计竞赛" loading="lazy">
+                        <span class="certificate-badge">A 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>2023年全国大学生<br>电子设计竞赛陕西组G组</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>教育部、工业和信息化部</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛目的：</strong>推动高等学校促进信息与电子类学科课程体系和课程内容的改革。<br><br>
+                            培养创新能力、协作精神、工程实践能力，提高针对实际问题进行电子设计制作的能力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- img5: 中国大学生创新能力与设计竞赛 -->
+            <div class="certificate-card" data-index="3">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img5.jpg" alt="中国大学生创新能力与设计竞赛" loading="lazy">
+                        <span class="certificate-badge">B 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>中国大学生创新能力<br>与设计竞赛陕西赛区</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>中国高校创新创业教育联盟</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛目标：</strong>以赛促学、以赛促教、以赛促创。<br><br>
+                            激发学习计算机知识和技能的兴趣与潜能，提高运用信息技术解决实际问题的综合能力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- img6: 中国机器人及人工智能大赛 -->
+            <div class="certificate-card" data-index="4">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img6.png" alt="中国机器人及人工智能大赛" loading="lazy">
+                        <span class="certificate-badge">A 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>中国机器人及人工智能大赛<br>全国大赛</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>中国人工智能学会</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛目的：</strong>引导和激励广大青年学生弘扬创新精神，搭建良好的科技创新赛事平台。<br><br>
+                            助力人工智能、机器人产业发展，将关键技术研发与应用有机结合。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- img7: 全国大学生嵌入式竞赛 -->
+            <div class="certificate-card" data-index="5">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img7.jpg" alt="全国大学生嵌入式竞赛" loading="lazy">
+                        <span class="certificate-badge">B 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>全国大学生嵌入式竞赛<br>陕西赛区</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>中国电子学会</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛宗旨：</strong>培养具有创新思维、团队合作精神、解决复杂工程问题能力的优秀人才。<br><br>
+                            深化产教融合，提高在嵌入式芯片及系统设计领域的自主创新设计与工程实践能力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- img9: 西门子杯中国智能制造挑战赛 -->
+            <div class="certificate-card" data-index="6">
+                <div class="certificate-inner">
+                    <div class="certificate-image">
+                        <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/cert_img/img9.png" alt="西门子杯中国智能制造挑战赛" loading="lazy">
+                        <span class="certificate-badge">A 级</span>
+                    </div>
+                    <div class="certificate-content">
+                        <h3>西门子杯中国智能制造挑战赛<br>过程控制赛项</h3>
+                        <div class="certificate-organizer">
+                            <span>🏛️</span>
+                            <span>中国仿真学会、西门子（中国）有限公司</span>
+                        </div>
+                        <div class="certificate-divider"></div>
+                        <p class="certificate-purpose">
+                            <strong>竞赛目标：</strong>培育工程创新人才。<br><br>
+                            涉及智能制造领域中的科技创新、产品研发、工程设计和智能应用，面向控制科学与工程、电气工程等专业的全国性赛事。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 播放控制按钮 -->
+        <div class="play-controls">
+            <button class="play-btn" onclick="prevCertificate()" id="prevBtn">←</button>
+            <button class="play-btn" onclick="nextCertificate()" id="nextBtn">→</button>
         </div>
     </section>
 
@@ -1159,6 +1573,76 @@
     </footer>
 
     <script>
+        // ============ 证书轮播 ============
+        let currentCert = 0;
+        const totalCerts = 7;
+
+        function showCertificate(index) {
+            // 移除所有 active
+            document.querySelectorAll('.certificate-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelectorAll('.progress-dot').forEach(dot => {
+                dot.classList.remove('active');
+            });
+
+            // 添加 active 到当前
+            document.querySelectorAll('.certificate-card')[index].classList.add('active');
+            document.querySelectorAll('.progress-dot')[index].classList.add('active');
+
+            // 更新进度文字
+            document.getElementById('progressText').textContent = `${index + 1} / ${totalCerts}`;
+
+            // 更新按钮状态
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalCerts - 1;
+
+            currentCert = index;
+        }
+
+        function nextCertificate() {
+            if (currentCert < totalCerts - 1) {
+                showCertificate(currentCert + 1);
+            }
+        }
+
+        function prevCertificate() {
+            if (currentCert > 0) {
+                showCertificate(currentCert - 1);
+            }
+        }
+
+        // 键盘导航
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextCertificate();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevCertificate();
+            }
+        });
+
+        // 触摸滑动
+        let touchStartX = 0;
+        document.querySelector('.certificate-carousel').addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.querySelector('.certificate-carousel').addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextCertificate();
+                } else {
+                    prevCertificate();
+                }
+            }
+        });
+
+        // 初始化证书轮播
+        showCertificate(0);
+
         // ============ 主题切换 ============
         function setTheme(mode) {
             const html = document.documentElement;
