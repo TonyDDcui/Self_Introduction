@@ -916,6 +916,93 @@
             font-size: 1.5rem;
         }
 
+        /* Life Entry Card */
+        .life-entry {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .life-entry-card {
+            display: block;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text);
+            border: 0.5px solid var(--border);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .life-entry-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .life-entry-image {
+            position: relative;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+        }
+
+        .life-entry-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .life-entry-card:hover .life-entry-image img {
+            transform: scale(1.03);
+        }
+
+        .life-entry-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+
+        .life-entry-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+
+        .life-entry-content {
+            padding: 28px 32px 32px;
+        }
+
+        .life-entry-content h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .life-entry-content p {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .life-entry-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: gap 0.2s ease;
+        }
+
+        .life-entry-card:hover .life-entry-arrow {
+            gap: 12px;
+        }
+
         /* Lightbox */
         .lightbox {
             position: fixed;
@@ -1243,20 +1330,8 @@
             .carousel-controls {
                 flex-wrap: wrap;
             }
-            .life-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            .life-card:nth-child(1) {
-                grid-column: span 2;
-                grid-row: span 1;
-                aspect-ratio: 16/10;
-            }
-            .life-card:nth-child(1) .life-title {
-                font-size: 1.125rem;
-            }
-            .lightbox-nav {
-                display: none;
+            .life-entry-image {
+                aspect-ratio: 4/3;
             }
         }
     </style>
@@ -1655,71 +1730,35 @@
         </div>
     </section>
 
-    <!-- Life - Photo Gallery -->
+    <!-- Life - Entry Card -->
     <section class="section life-section" id="life">
         <div class="section-header fade-in">
             <p class="eyebrow">Life</p>
             <h2 class="headline">生活日常</h2>
             <p class="body-text">记录生活中的美好瞬间，用镜头捕捉每一个值得纪念的时刻</p>
         </div>
-        <div class="life-grid fade-in-stagger">
-            <div class="life-card" onclick="openLightbox(0)">
-                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img1.jpg" alt="生活照片" loading="lazy">
-                <div class="life-overlay">
-                    <div class="life-date">2025.03.15</div>
-                    <div class="life-title">周末的午后时光，在咖啡馆里享受片刻宁静</div>
+        <div class="life-entry fade-in">
+            <a href="life.html" class="life-entry-card">
+                <div class="life-entry-image">
+                    <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img1.jpg" alt="生活相册">
+                    <div class="life-entry-overlay">
+                        <div class="life-entry-count">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                            6 个相册 · 50+ 照片
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="life-card" onclick="openLightbox(1)">
-                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img2.jpg" alt="生活照片" loading="lazy">
-                <div class="life-overlay">
-                    <div class="life-date">2025.02.28</div>
-                    <div class="life-title">城市夜景，灯火阑珊处</div>
+                <div class="life-entry-content">
+                    <h3>查看全部相册</h3>
+                    <p>咖啡馆时光、城市夜景、山间徒步、书店午后...</p>
+                    <span class="life-entry-arrow">
+                        进入相册
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </span>
                 </div>
-            </div>
-            <div class="life-card" onclick="openLightbox(2)">
-                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img3.jpg" alt="生活照片" loading="lazy">
-                <div class="life-overlay">
-                    <div class="life-date">2025.02.10</div>
-                    <div class="life-title">山间徒步，感受大自然的呼吸</div>
-                </div>
-            </div>
-            <div class="life-card" onclick="openLightbox(3)">
-                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img4.jpg" alt="生活照片" loading="lazy">
-                <div class="life-overlay">
-                    <div class="life-date">2025.01.20</div>
-                    <div class="life-title">书店的角落，发现一本好书</div>
-                </div>
-            </div>
-            <div class="life-card" onclick="openLightbox(4)">
-                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img5.jpg" alt="生活照片" loading="lazy">
-                <div class="life-overlay">
-                    <div class="life-date">2025.01.05</div>
-                    <div class="life-title">新年的第一场雪</div>
-                </div>
-            </div>
+            </a>
         </div>
     </section>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-        <button class="lightbox-close" onclick="closeLightbox(event)">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <button class="lightbox-nav prev" onclick="changeImage(-1, event)">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <div class="lightbox-content">
-            <img class="lightbox-image" id="lightboxImage" src="" alt="">
-            <div class="lightbox-caption">
-                <div class="date" id="lightboxDate"></div>
-                <div class="title" id="lightboxTitle"></div>
-            </div>
-        </div>
-        <button class="lightbox-nav next" onclick="changeImage(1, event)">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-    </div>
 
     <!-- Contact -->
     <section class="section contact-section" id="contact">
@@ -1857,60 +1896,6 @@
 
         // Initial state
         updateCarousel();
-
-        // ═══════════════════════════════════════════════════════════════
-        // Life Gallery Lightbox
-        // ═══════════════════════════════════════════════════════════════
-        const lifePhotos = [
-            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img1.jpg', date: '2025.03.15', title: '周末的午后时光，在咖啡馆里享受片刻宁静' },
-            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img2.jpg', date: '2025.02.28', title: '城市夜景，灯火阑珊处' },
-            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img3.jpg', date: '2025.02.10', title: '山间徒步，感受大自然的呼吸' },
-            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img4.jpg', date: '2025.01.20', title: '书店的角落，发现一本好书' },
-            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img5.jpg', date: '2025.01.05', title: '新年的第一场雪' }
-        ];
-
-        let currentLightboxIndex = 0;
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImage = document.getElementById('lightboxImage');
-        const lightboxDate = document.getElementById('lightboxDate');
-        const lightboxTitle = document.getElementById('lightboxTitle');
-
-        function openLightbox(index) {
-            currentLightboxIndex = index;
-            updateLightbox();
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox(event) {
-            if (event && (event.target === lightbox || event.target.closest('.lightbox-close'))) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
-
-        function updateLightbox() {
-            const photo = lifePhotos[currentLightboxIndex];
-            lightboxImage.src = photo.src;
-            lightboxDate.textContent = photo.date;
-            lightboxTitle.textContent = photo.title;
-        }
-
-        function changeImage(direction, event) {
-            event.stopPropagation();
-            currentLightboxIndex += direction;
-            if (currentLightboxIndex < 0) currentLightboxIndex = lifePhotos.length - 1;
-            if (currentLightboxIndex >= lifePhotos.length) currentLightboxIndex = 0;
-            updateLightbox();
-        }
-
-        // Lightbox keyboard support
-        document.addEventListener('keydown', (e) => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') changeImage(-1, { stopPropagation: () => {} });
-            if (e.key === 'ArrowRight') changeImage(1, { stopPropagation: () => {} });
-        });
 
         // ═══════════════════════════════════════════════════════════════
         // GitHub Contribution Graph Generator
