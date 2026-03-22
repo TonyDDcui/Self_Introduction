@@ -831,6 +831,196 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
+           Life Section - Photo Gallery
+        ═══════════════════════════════════════════════════════════════ */
+        .life-section {
+            background: var(--bg-elevated);
+            overflow: hidden;
+        }
+
+        .life-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .life-card {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+            background: var(--bg);
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
+        }
+
+        .life-card:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
+            aspect-ratio: auto;
+        }
+
+        .life-card:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+            z-index: 10;
+        }
+
+        .life-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .life-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .life-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+        }
+
+        .life-card:hover .life-overlay {
+            opacity: 1;
+        }
+
+        .life-card:nth-child(1) .life-overlay {
+            opacity: 1;
+        }
+
+        .life-date {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 4px;
+        }
+
+        .life-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            line-height: 1.4;
+        }
+
+        .life-card:nth-child(1) .life-title {
+            font-size: 1.5rem;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: var(--radius);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active .lightbox-image {
+            transform: scale(1);
+        }
+
+        .lightbox-caption {
+            margin-top: 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .lightbox-caption .date {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+        }
+
+        .lightbox-caption .title {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .lightbox-nav.prev { left: 24px; }
+        .lightbox-nav.next { right: 24px; }
+
+        /* ═══════════════════════════════════════════════════════════════
            Projects Section
         ═══════════════════════════════════════════════════════════════ */
         .projects-section {
@@ -1053,6 +1243,21 @@
             .carousel-controls {
                 flex-wrap: wrap;
             }
+            .life-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .life-card:nth-child(1) {
+                grid-column: span 2;
+                grid-row: span 1;
+                aspect-ratio: 16/10;
+            }
+            .life-card:nth-child(1) .life-title {
+                font-size: 1.125rem;
+            }
+            .lightbox-nav {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1065,6 +1270,7 @@
             <a href="#skills">技能</a>
             <a href="#highlights">经历</a>
             <a href="#projects">项目</a>
+            <a href="#life">生活</a>
             <a href="#contact">联系</a>
         </div>
         <div class="nav-actions">
@@ -1449,6 +1655,72 @@
         </div>
     </section>
 
+    <!-- Life - Photo Gallery -->
+    <section class="section life-section" id="life">
+        <div class="section-header fade-in">
+            <p class="eyebrow">Life</p>
+            <h2 class="headline">生活日常</h2>
+            <p class="body-text">记录生活中的美好瞬间，用镜头捕捉每一个值得纪念的时刻</p>
+        </div>
+        <div class="life-grid fade-in-stagger">
+            <div class="life-card" onclick="openLightbox(0)">
+                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img1.jpg" alt="生活照片" loading="lazy">
+                <div class="life-overlay">
+                    <div class="life-date">2025.03.15</div>
+                    <div class="life-title">周末的午后时光，在咖啡馆里享受片刻宁静</div>
+                </div>
+            </div>
+            <div class="life-card" onclick="openLightbox(1)">
+                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img2.jpg" alt="生活照片" loading="lazy">
+                <div class="life-overlay">
+                    <div class="life-date">2025.02.28</div>
+                    <div class="life-title">城市夜景，灯火阑珊处</div>
+                </div>
+            </div>
+            <div class="life-card" onclick="openLightbox(2)">
+                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img3.jpg" alt="生活照片" loading="lazy">
+                <div class="life-overlay">
+                    <div class="life-date">2025.02.10</div>
+                    <div class="life-title">山间徒步，感受大自然的呼吸</div>
+                </div>
+            </div>
+            <div class="life-card" onclick="openLightbox(3)">
+                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img4.jpg" alt="生活照片" loading="lazy">
+                <div class="life-overlay">
+                    <div class="life-date">2025.01.20</div>
+                    <div class="life-title">书店的角落，发现一本好书</div>
+                </div>
+            </div>
+            <div class="life-card" onclick="openLightbox(4)">
+                <img src="https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img5.jpg" alt="生活照片" loading="lazy">
+                <div class="life-overlay">
+                    <div class="life-date">2025.01.05</div>
+                    <div class="life-title">新年的第一场雪</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox(event)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <button class="lightbox-nav prev" onclick="changeImage(-1, event)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="lightbox-content">
+            <img class="lightbox-image" id="lightboxImage" src="" alt="">
+            <div class="lightbox-caption">
+                <div class="date" id="lightboxDate"></div>
+                <div class="title" id="lightboxTitle"></div>
+            </div>
+        </div>
+        <button class="lightbox-nav next" onclick="changeImage(1, event)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+    </div>
+
     <!-- Contact -->
     <section class="section contact-section" id="contact">
         <div class="contact-content fade-in">
@@ -1585,6 +1857,60 @@
 
         // Initial state
         updateCarousel();
+
+        // ═══════════════════════════════════════════════════════════════
+        // Life Gallery Lightbox
+        // ═══════════════════════════════════════════════════════════════
+        const lifePhotos = [
+            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img1.jpg', date: '2025.03.15', title: '周末的午后时光，在咖啡馆里享受片刻宁静' },
+            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img2.jpg', date: '2025.02.28', title: '城市夜景，灯火阑珊处' },
+            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img3.jpg', date: '2025.02.10', title: '山间徒步，感受大自然的呼吸' },
+            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img4.jpg', date: '2025.01.20', title: '书店的角落，发现一本好书' },
+            { src: 'https://raw.githubusercontent.com/TonyDDcui/Self_Introduction/main/Project_record/life_img/img5.jpg', date: '2025.01.05', title: '新年的第一场雪' }
+        ];
+
+        let currentLightboxIndex = 0;
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxDate = document.getElementById('lightboxDate');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            updateLightbox();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(event) {
+            if (event && (event.target === lightbox || event.target.closest('.lightbox-close'))) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function updateLightbox() {
+            const photo = lifePhotos[currentLightboxIndex];
+            lightboxImage.src = photo.src;
+            lightboxDate.textContent = photo.date;
+            lightboxTitle.textContent = photo.title;
+        }
+
+        function changeImage(direction, event) {
+            event.stopPropagation();
+            currentLightboxIndex += direction;
+            if (currentLightboxIndex < 0) currentLightboxIndex = lifePhotos.length - 1;
+            if (currentLightboxIndex >= lifePhotos.length) currentLightboxIndex = 0;
+            updateLightbox();
+        }
+
+        // Lightbox keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changeImage(-1, { stopPropagation: () => {} });
+            if (e.key === 'ArrowRight') changeImage(1, { stopPropagation: () => {} });
+        });
 
         // ═══════════════════════════════════════════════════════════════
         // GitHub Contribution Graph Generator
