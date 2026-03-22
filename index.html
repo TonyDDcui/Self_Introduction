@@ -29,21 +29,21 @@
             --border: rgba(255,255,255,0.08);
         }
 
-        [data-theme="dark"] .progress-mask {
-            background: rgba(120, 120, 128, 0.32);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* 浅色模式进度条 */
+        :root:not([data-theme="dark"]) .progress-mask {
+            background: rgba(255, 255, 255, 0.8);
         }
 
-        [data-theme="dark"] .progress-dot {
-            background: rgba(255, 255, 255, 0.3);
+        :root:not([data-theme="dark"]) .progress-dot {
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        [data-theme="dark"] .progress-dot:hover {
-            background: rgba(255, 255, 255, 0.5);
+        :root:not([data-theme="dark"]) .progress-dot:hover {
+            background: rgba(0, 0, 0, 0.4);
         }
 
-        [data-theme="dark"] .progress-dot.active {
-            background: #fff;
+        :root:not([data-theme="dark"]) .progress-dot.active {
+            background: #000;
         }
 
 
@@ -98,7 +98,7 @@
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 */
+        /* Apple 风格进度条 - 参考 iPhone 17 页面 */
         .certificate-progress {
             display: flex;
             justify-content: center;
@@ -111,30 +111,29 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(120, 120, 128, 0.12);
+            gap: 5px;
+            padding: 6px 14px;
+            background: rgba(29, 29, 31, 0.6);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
             border-radius: 100px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .progress-dot {
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
-            background: rgba(60, 60, 67, 0.29);
+            background: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-dot:hover {
-            background: rgba(60, 60, 67, 0.5);
+            background: rgba(255, 255, 255, 0.6);
         }
 
         .progress-dot.active {
-            background: var(--text);
+            background: #fff;
         }
 
         /* 证书轮播卡片 */
