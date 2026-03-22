@@ -29,6 +29,18 @@
             --border: rgba(255,255,255,0.08);
         }
 
+        [data-theme="dark"] .progress-dot {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] .progress-dot:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        [data-theme="dark"] .progress-dot.active {
+            background: #fff;
+        }
+
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
                 --bg: #000000;
@@ -79,7 +91,7 @@
             line-height: 1.6;
         }
 
-        /* Apple 风格进度条 - 极简小圆点 */
+        /* Apple 风格进度条 - 灰色蒙版圆点 */
         .certificate-progress {
             display: flex;
             justify-content: center;
@@ -90,22 +102,20 @@
         }
 
         .progress-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: var(--text-secondary);
-            opacity: 0.25;
+            background: rgba(128, 128, 128, 0.3);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-dot:hover {
-            opacity: 0.5;
+            background: rgba(128, 128, 128, 0.5);
         }
 
         .progress-dot.active {
-            opacity: 1;
-            transform: scale(1.2);
+            background: var(--text);
         }
 
         /* 证书轮播卡片 */
