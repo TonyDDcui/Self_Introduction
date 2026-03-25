@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="崔喆�?- 华为嵌入式开发工程师 | 物联网爱好�?>
-  <meta name="keywords" content="嵌入�? STM32, IoT, 华为, 个人作品�?>
-  <meta name="author" content="崔喆�?>
+  <meta name="description" content="宕斿枂绠?- 鍗庝负宓屽叆寮忓紑鍙戝伐绋嬪笀 | 鐗╄仈缃戠埍濂借€?>
+  <meta name="keywords" content="宓屽叆寮? STM32, IoT, 鍗庝负, 涓汉浣滃搧闆?>
+  <meta name="author" content="宕斿枂绠?>
   <meta name="theme-color" content="#030712">
-  <title>崔喆�?| 嵌入式开发工程师</title>
+  <title>宕斿枂绠?| 宓屽叆寮忓紑鍙戝伐绋嬪笀</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,153 +19,52 @@
   <link rel="stylesheet" href="./assets/css/nvidia-hero.css">
   <link rel="stylesheet" href="./assets/css/apple-components.css">
   <link rel="stylesheet" href="./assets/css/github-widgets.css">
-  <link rel="stylesheet" href="./assets/css/github-header.css">
   <link rel="stylesheet" href="./assets/css/main.css">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>�?/text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>鈿?/text></svg>">
 </head>
 <body data-theme="dark">
-  <!-- ===== 动态粒子背�?===== -->
+  <!-- ===== 鍔ㄦ€佺矑瀛愯儗鏅?===== -->
   <canvas id="particle-canvas"></canvas>
 
-  <!-- ===== GitHub 风格导航�?===== -->
-  <header class="github-header">
-    <div class="header-inner">
-      <!-- Logo -->
-      <a href="#" class="header-logo">
-        <svg height="32" viewBox="0 0 16 16" version="1.1" width="32">
-          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
-        <span class="logo-text">CZX</span>
+  <!-- ===== 瀵艰埅鏍?(Apple Glass Effect) ===== -->
+  <nav class="glass-nav" data-navbar>
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <span class="nav-logo">鈿?/span>
+        <span class="nav-name">CZS</span>
       </a>
 
-      <!-- 桌面端导�?-->
-      <nav class="header-nav">
-        <a href="#about" class="nav-item">关于</a>
-        <a href="#skills" class="nav-item">技�?/a>
-        <a href="#projects" class="nav-item">项目</a>
-        <a href="#github" class="nav-item">GitHub</a>
-        <a href="#life" class="nav-item">生活</a>
-        <a href="#contact" class="nav-item">联系</a>
-      </nav>
+      <div class="nav-links">
+        <a href="#about" class="nav-link">鍏充簬</a>
+        <a href="#skills" class="nav-link">鎶€鑳?/a>
+        <a href="#projects" class="nav-link">椤圭洰</a>
+        <a href="#github" class="nav-link">GitHub</a>
+        <a href="#life" class="nav-link">鐢熸椿</a>
+        <a href="#contact" class="nav-link">鑱旂郴</a>
+      </div>
 
-      <!-- 右侧操作�?-->
-      <div class="header-actions">
-        <!-- 主题切换 -->
-        <div class="theme-switcher">
-          <button class="theme-btn" data-theme-toggle title="切换主题">
-            <svg class="icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 11.307a3.307 3.307 0 100-6.614 3.307 3.307 0 000 6.614zm5.793-8.063a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 1.464a.75.75 0 011.06 0l1.06 1.06a.75.75 0 11-1.06 1.06L6.464 2.524a.75.75 0 010-1.06zm6.393 5.85a.75.75 0 010-1.06l1.06-1.06a.75.75 0 111.06 1.06l-1.06 1.06zm-11.62 0a.75.75 0 010-1.06L.137 6.197a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06zm8.167 4.773a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06zm-6.393 5.85a.75.75 0 010-1.06L2.737 11.84a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 010 1.06zm5.333-3.18a.75.75 0 100-1.5.75.75 0 000 1.5zM8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/>
-            </svg>
-            <svg class="icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M6 2.75C6 1.784 6.784 1 7.75 1c.966 0 1.75.784 1.75 1.75v10.5c0 .966-.784 1.75-1.75 1.75A1.75 1.75 0 016 15.25V3.5C6 2.784 5.216 2 4.25 2 3.284 2 2.5 2.784 2.5 3.75v.25h1.5V3.5c0-.966.784-1.75 1.75-1.75H6zM3.5 6.75c0-.69.56-1.25 1.25-1.25h.25v10.5c0 .69-.56 1.25-1.25 1.25C2.56 16.25 2 15.69 2 15v-.25h1.5v.25z"/>
-            </svg>
-            <svg class="icon-system" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M4.22 11.29l-.71-.71a.75.75 0 011.06-1.06l.71.71a.75.75 0 11-1.06 1.06zm7.56 0l-.71.71a.75.75 0 11-1.06-1.06l.71-.71a.75.75 0 111.06 1.06zm-7.56-8l.71.71a.75.75 0 01-1.06-1.06l-.71-.71a.75.75 0 011.06 1.06zm7.56 0a.75.75 0 01-1.06 1.06l-.71-.71a.75.75 0 011.06-1.06l.71.71zM8 4a.75.75 0 01.75.75v.25h1.5A.75.75 0 0111 5.75v.25a.75.75 0 01-.75.75h-.25v1.5h.25A.75.75 0 0111 8.5v.25a.75.75 0 01-.75.75H9.5v.25A.75.75 0 018.75 11h-.25v.25A.75.75 0 018 12.25h-.25v1.5H7.5A.75.75 0 016.75 13v-.25h-.25A.75.75 0 015.5 12v-.25h1.5v.25A.75.75 0 018 11.25h.25v-.25H7.5A.75.75 0 016.75 10V9.5h-.25A.75.75 0 015.5 8.75v-.25h1.5V8H5.5A.75.75 0 014.75 7.25v-.25h.25V5.5H4A.75.75 0 013.25 4.5v-.25A.75.75 0 014.25 3.5h.25v-.25A.75.75 0 015.75 2.25H7.5v.25A.75.75 0 018 3.5h.25V4H7.5A.75.75 0 016.75 4.5v.25h-.25V5.5H8v-.25A.75.75 0 018.75 4.5h.25v-.25A.75.75 0 018 3.5H7.5A.75.75 0 016.75 4.5v.25H5.5V4H7.5A.75.75 0 018 4z"/>
-            </svg>
-          </button>
-          <div class="theme-dropdown" id="theme-dropdown">
-            <button class="theme-option active" data-mode="light">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 11.307a3.307 3.307 0 100-6.614 3.307 3.307 0 000 6.614zm5.793-8.063a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 1.464a.75.75 0 011.06 0l1.06 1.06a.75.75 0 11-1.06 1.06L6.464 2.524a.75.75 0 010-1.06zm6.393 5.85a.75.75 0 010-1.06l1.06-1.06a.75.75 0 111.06 1.06l-1.06 1.06zm-11.62 0a.75.75 0 010-1.06L.137 6.197a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06zm8.167 4.773a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06zm-6.393 5.85a.75.75 0 010-1.06L2.737 11.84a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 010 1.06zm5.333-3.18a.75.75 0 100-1.5.75.75 0 000 1.5zM8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/>
-              </svg>
-              浅色
-            </button>
-            <button class="theme-option" data-mode="dark">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M6 2.75C6 1.784 6.784 1 7.75 1c.966 0 1.75.784 1.75 1.75v10.5c0 .966-.784 1.75-1.75 1.75A1.75 1.75 0 016 15.25V3.5C6 2.784 5.216 2 4.25 2 3.284 2 2.5 2.784 2.5 3.75v.25h1.5V3.5c0-.966.784-1.75 1.75-1.75H6zM3.5 6.75c0-.69.56-1.25 1.25-1.25h.25v10.5c0 .69-.56 1.25-1.25 1.25C2.56 16.25 2 15.69 2 15v-.25h1.5v.25z"/>
-              </svg>
-              深色
-            </button>
-            <button class="theme-option" data-mode="system">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M4.22 11.29l-.71-.71a.75.75 0 011.06-1.06l.71.71a.75.75 0 11-1.06 1.06zm7.56 0l-.71.71a.75.75 0 11-1.06-1.06l.71-.71a.75.75 0 111.06 1.06zm-7.56-8l.71.71a.75.75 0 01-1.06-1.06l-.71-.71a.75.75 0 011.06 1.06zm7.56 0a.75.75 0 01-1.06 1.06l-.71-.71a.75.75 0 111.06-1.06l.71.71zM8 4a.75.75 0 01.75.75v.25h1.5A.75.75 0 0111 5.75v.25a.75.75 0 01-.75.75h-.25v1.5h.25A.75.75 0 0111 8.5v.25a.75.75 0 01-.75.75H9.5v.25A.75.75 0 018.75 11h-.25v.25A.75.75 0 018 12.25h-.25v1.5H7.5A.75.75 0 016.75 13v-.25h-.25A.75.75 0 015.5 12v-.25h1.5V12H5.5A.75.75 0 014.75 11V9.5h-.25A.75.75 0 013.25 8.75v-.25h1.5V8H5.5A.75.75 0 014.75 7.25v-.25h.25V5.5H4A.75.75 0 013.25 4.5v-.25A.75.75 0 014.25 3.5h.25v-.25A.75.75 0 015.75 2.25H7.5v.25A.75.75 0 018 3.5h.25V4H7.5A.75.75 0 016.75 4.5v.25h-.25V5.5H8v-.25A.75.75 0 018.75 4.5h.25v-.25A.75.75 0 018 3.5H7.5A.75.75 0 016.75 4.5v.25H5.5V4H7.5A.75.75 0 018 4z"/>
-              </svg>
-              系统
-            </button>
-          </div>
-        </div>
-
-        <!-- 目录按钮 -->
-        <button class="menu-btn" id="menu-btn" title="目录">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 010 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 010 1.5H1.75A.75.75 0 011 7.75zm0 5A.75.75 0 011.75 12h12.5a.75.75 0 010 1.5H1.75A.75.75 0 011 12.75zM1.75 2a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h12.5a.75.75 0 00.75-.75V2.75a.75.75 0 00-.75-.75H1.75z"/>
-          </svg>
+      <div class="nav-actions">
+        <button class="pill-btn pill-btn-ghost" data-theme-toggle title="鍒囨崲涓婚">
+          <span class="theme-icon">馃寵</span>
         </button>
-
-        <!-- 移动端菜单按�?-->
         <button class="mobile-menu-btn" data-menu-toggle>
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
 
-    <!-- 移动端菜�?-->
-    <div class="mobile-menu" data-mobile-menu>
-      <a href="#about">关于</a>
-      <a href="#skills">技�?/a>
-      <a href="#projects">项目</a>
+    <!-- 绉诲姩绔彍鍗?-->
+    <div class="mobile-menu glass-card" data-mobile-menu>
+      <a href="#about">鍏充簬</a>
+      <a href="#skills">鎶€鑳?/a>
+      <a href="#projects">椤圭洰</a>
       <a href="#github">GitHub</a>
-      <a href="#life">生活</a>
-      <a href="#contact">联系</a>
+      <a href="#life">鐢熸椿</a>
+      <a href="#contact">鑱旂郴</a>
     </div>
-  </header>
-
-  <!-- 目录侧边�?-->
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <span>目录</span>
-      <button class="sidebar-close" id="sidebar-close">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"/>
-        </svg>
-      </button>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="#hero" class="sidebar-link">
-        <span class="sidebar-icon">🏠</span>
-        <span>首页</span>
-      </a>
-      <a href="#about" class="sidebar-link">
-        <span class="sidebar-icon">👤</span>
-        <span>关于�?/span>
-      </a>
-      <a href="#skills" class="sidebar-link">
-        <span class="sidebar-icon">�?/span>
-        <span>技能栈</span>
-      </a>
-      <a href="#projects" class="sidebar-link">
-        <span class="sidebar-icon">🚀</span>
-        <span>项目作品</span>
-      </a>
-      <a href="#github" class="sidebar-link">
-        <span class="sidebar-icon">🐙</span>
-        <span>GitHub</span>
-      </a>
-      <a href="#certificates" class="sidebar-link">
-        <span class="sidebar-icon">🏆</span>
-        <span>竞赛荣誉</span>
-      </a>
-      <a href="#life" class="sidebar-link">
-        <span class="sidebar-icon">📸</span>
-        <span>生活瞬间</span>
-      </a>
-      <a href="#contact" class="sidebar-link">
-        <span class="sidebar-icon">📧</span>
-        <span>联系�?/span>
-      </a>
-    </nav>
-    <div class="sidebar-footer">
-      <a href="https://github.com/TonyDDcui" target="_blank" class="sidebar-github">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
-        <span>GitHub</span>
-      </a>
-    </div>
-  </aside>
+  </nav>
 
   <!-- ===== Hero Section (NVIDIA Style) ===== -->
   <section class="hero-section" id="hero">
@@ -178,72 +77,64 @@
     <div class="hero-content">
       <div class="hero-badge">
         <span class="badge-dot"></span>
-        <span>华为 · 嵌入式开发工程师</span>
+        <span>鍗庝负 路 宓屽叆寮忓紑鍙戝伐绋嬪笀</span>
       </div>
 
       <h1 class="hero-title">
-        <span class="title-line">用代�?/span>
-        <span class="title-line gradient-text">驱动未来</span>
+        <span class="title-line">鐢ㄤ唬鐮?/span>
+        <span class="title-line gradient-text">椹卞姩鏈潵</span>
       </h1>
 
       <p class="hero-subtitle">
-        专注嵌入式系�?· 物联�?· 智能硬件<br>
-        从微控制器到云端，探索技术的无限可能
+        涓撴敞宓屽叆寮忕郴缁?路 鐗╄仈缃?路 鏅鸿兘纭欢<br>
+        浠庡井鎺у埗鍣ㄥ埌浜戠锛屾帰绱㈡妧鏈殑鏃犻檺鍙兘
       </p>
 
       <div class="hero-cta">
         <a href="#contact" class="pill-btn pill-btn-primary">
-          <span>立即联系</span>
+          <span>绔嬪嵆鑱旂郴</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </a>
         <a href="#about" class="pill-btn pill-btn-outline">
-          <span>了解更多</span>
+          <span>浜嗚В鏇村</span>
         </a>
       </div>
 
-      <!-- GitHub 贡献日历 (GitHub 官方风格) -->
-      <div class="hero-github-card glass-card">
-        <div class="github-card-header">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          <a href="https://github.com/TonyDDcui" target="_blank">@TonyDDcui</a>
-        </div>
-        <div class="github-calendar-mini" id="github-calendar"></div>
-        <div class="github-card-footer">
-          <span class="contrib-count" id="contrib-count">0 contributions</span>
-        </div>
+      <!-- GitHub 璐＄尞鏃ュ巻 (杩蜂綘鐗? -->
+      <div class="mini-contribution">
+        <div class="contribution-label">GitHub 娲昏穬搴?/div>
+        <div class="contribution-graph-mini" id="contribution-mini"></div>
       </div>
     </div>
 
-    <!-- 滚动指示�?-->
+    <!-- 婊氬姩鎸囩ず鍣?-->
     <div class="scroll-indicator">
       <div class="scroll-mouse">
         <div class="scroll-wheel"></div>
       </div>
-      <span>向下滚动</span>
+      <span>鍚戜笅婊氬姩</span>
     </div>
   </section>
 
-  <!-- ===== 关于�?(Apple Card Style) ===== -->
+  <!-- ===== 鍏充簬鎴?(Apple Card Style) ===== -->
   <section class="section" id="about">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">关于�?/h2>
-        <p class="section-subtitle">技术求道�?· 创新实践�?/p>
+        <h2 class="section-title">鍏充簬鎴?/h2>
+        <p class="section-subtitle">鎶€鏈眰閬撹€?路 鍒涙柊瀹炶返鑰?/p>
       </div>
 
       <div class="about-grid">
         <div class="glass-card about-card about-image-card">
           <div class="avatar-wrapper">
-            <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/real_img/img1.jpg" alt="崔喆�? class="avatar">
+            <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/real_img/img1.jpg" alt="宕斿枂绠? class="avatar">
             <div class="avatar-ring"></div>
           </div>
           <div class="about-info">
-            <h3>崔喆�?/h3>
-            <p class="about-role">华为 · 嵌入式开发工程师</p>
+            <h3>宕斿枂绠?/h3>
+            <p class="about-role">鍗庝负 路 宓屽叆寮忓紑鍙戝伐绋嬪笀</p>
             <div class="about-social">
               <a href="https://github.com/TonyDDcui" target="_blank" class="social-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -262,60 +153,60 @@
 
         <div class="about-cards">
           <div class="glass-card stat-card">
-            <div class="stat-icon">🏆</div>
+            <div class="stat-icon">馃弳</div>
             <div class="stat-content">
               <span class="stat-number" data-count="7">0</span>
               <span class="stat-suffix">+</span>
             </div>
-            <p class="stat-label">国家级竞赛奖�?/p>
+            <p class="stat-label">鍥藉绾х珵璧涘椤?/p>
           </div>
 
           <div class="glass-card stat-card">
-            <div class="stat-icon">🚀</div>
+            <div class="stat-icon">馃殌</div>
             <div class="stat-content">
               <span class="stat-number" data-count="15">0</span>
               <span class="stat-suffix">+</span>
             </div>
-            <p class="stat-label">完整项目经验</p>
+            <p class="stat-label">瀹屾暣椤圭洰缁忛獙</p>
           </div>
 
           <div class="glass-card stat-card">
-            <div class="stat-icon">💼</div>
+            <div class="stat-icon">馃捈</div>
             <div class="stat-content">
               <span class="stat-number" data-count="4">0</span>
               <span class="stat-suffix">+</span>
             </div>
-            <p class="stat-label">年工作经�?/p>
+            <p class="stat-label">骞村伐浣滅粡楠?/p>
           </div>
         </div>
       </div>
 
-      <!-- 时间�?-->
+      <!-- 鏃堕棿绾?-->
       <div class="timeline glass-card">
-        <h3 class="timeline-title">历程</h3>
+        <h3 class="timeline-title">鍘嗙▼</h3>
         <div class="timeline-items">
           <div class="timeline-item">
             <div class="timeline-dot"></div>
-            <div class="timeline-date">2024 - 至今</div>
+            <div class="timeline-date">2024 - 鑷充粖</div>
             <div class="timeline-content">
-              <h4>华为 · 智能设备开�?/h4>
-              <p>从事嵌入式系统开发，负责产品落地</p>
+              <h4>鍗庝负 路 鏅鸿兘璁惧寮€鍙?/h4>
+              <p>浠庝簨宓屽叆寮忕郴缁熷紑鍙戯紝璐熻矗浜у搧钀藉湴</p>
             </div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-date">2020 - 2024</div>
             <div class="timeline-content">
-              <h4>电子信息工程 · 本科</h4>
-              <p>学习嵌入式系统与硬件设计</p>
+              <h4>鐢靛瓙淇℃伅宸ョ▼ 路 鏈</h4>
+              <p>瀛︿範宓屽叆寮忕郴缁熶笌纭欢璁捐</p>
             </div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-date">2020</div>
             <div class="timeline-content">
-              <h4>编程之路起点</h4>
-              <p>�?C 语言开始，探索技术世�?/p>
+              <h4>缂栫▼涔嬭矾璧风偣</h4>
+              <p>浠?C 璇█寮€濮嬶紝鎺㈢储鎶€鏈笘鐣?/p>
             </div>
           </div>
         </div>
@@ -323,26 +214,26 @@
     </div>
   </section>
 
-  <!-- ===== 技能栈 ===== -->
+  <!-- ===== 鎶€鑳芥爤 ===== -->
   <section class="section section-alt" id="skills">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">技术栈</h2>
-        <p class="section-subtitle">持续学习 · 不断精进</p>
+        <h2 class="section-title">鎶€鏈爤</h2>
+        <p class="section-subtitle">鎸佺画瀛︿範 路 涓嶆柇绮捐繘</p>
       </div>
 
       <div class="skills-grid">
         <div class="glass-card skill-card">
           <div class="skill-header">
-            <span class="skill-icon">�?/span>
-            <h3>嵌入式开�?/h3>
+            <span class="skill-icon">鈿?/span>
+            <h3>宓屽叆寮忓紑鍙?/h3>
           </div>
-          <p class="skill-desc">精�?C 语言，深入理�?STM32 系统架构，熟练使�?FreeRTOS 进行任务调度与资源管理�?/p>
+          <p class="skill-desc">绮鹃€?C 璇█锛屾繁鍏ョ悊瑙?STM32 绯荤粺鏋舵瀯锛岀啛缁冧娇鐢?FreeRTOS 杩涜浠诲姟璋冨害涓庤祫婧愮鐞嗐€?/p>
           <div class="skill-tags">
             <span class="skill-tag">C/C++</span>
             <span class="skill-tag">STM32</span>
             <span class="skill-tag">FreeRTOS</span>
-            <span class="skill-tag">51单片�?/span>
+            <span class="skill-tag">51鍗曠墖鏈?/span>
           </div>
           <div class="skill-bar">
             <div class="skill-bar-fill" data-width="92"></div>
@@ -351,14 +242,14 @@
 
         <div class="glass-card skill-card">
           <div class="skill-header">
-            <span class="skill-icon">🌐</span>
-            <h3>物联�?/h3>
+            <span class="skill-icon">馃寪</span>
+            <h3>鐗╄仈缃?/h3>
           </div>
-          <p class="skill-desc">熟悉 MQTT、CoAP 等物联网协议，具备端到端 IoT 解决方案设计与实现能力�?/p>
+          <p class="skill-desc">鐔熸倝 MQTT銆丆oAP 绛夌墿鑱旂綉鍗忚锛屽叿澶囩鍒扮 IoT 瑙ｅ喅鏂规璁捐涓庡疄鐜拌兘鍔涖€?/p>
           <div class="skill-tags">
             <span class="skill-tag">MQTT</span>
             <span class="skill-tag">WiFi</span>
-            <span class="skill-tag">蓝牙</span>
+            <span class="skill-tag">钃濈墮</span>
             <span class="skill-tag">ESP8266</span>
           </div>
           <div class="skill-bar">
@@ -368,15 +259,15 @@
 
         <div class="glass-card skill-card">
           <div class="skill-header">
-            <span class="skill-icon">🔌</span>
-            <h3>硬件设计</h3>
+            <span class="skill-icon">馃攲</span>
+            <h3>纭欢璁捐</h3>
           </div>
-          <p class="skill-desc">掌握电路设计原理，熟练使�?Altium Designer 进行 PCB 设计与布线�?/p>
+          <p class="skill-desc">鎺屾彙鐢佃矾璁捐鍘熺悊锛岀啛缁冧娇鐢?Altium Designer 杩涜 PCB 璁捐涓庡竷绾裤€?/p>
           <div class="skill-tags">
-            <span class="skill-tag">PCB设计</span>
+            <span class="skill-tag">PCB璁捐</span>
             <span class="skill-tag">I2C/SPI</span>
             <span class="skill-tag">UART</span>
-            <span class="skill-tag">传感�?/span>
+            <span class="skill-tag">浼犳劅鍣?/span>
           </div>
           <div class="skill-bar">
             <div class="skill-bar-fill" data-width="85"></div>
@@ -385,10 +276,10 @@
 
         <div class="glass-card skill-card">
           <div class="skill-header">
-            <span class="skill-icon">🛠�?/span>
-            <h3>开发工�?/h3>
+            <span class="skill-icon">馃洜锔?/span>
+            <h3>寮€鍙戝伐鍏?/h3>
           </div>
-          <p class="skill-desc">熟练使用 Git、Keil、VS Code 等开发工具，注重代码质量与版本控制�?/p>
+          <p class="skill-desc">鐔熺粌浣跨敤 Git銆並eil銆乂S Code 绛夊紑鍙戝伐鍏凤紝娉ㄩ噸浠ｇ爜璐ㄩ噺涓庣増鏈帶鍒躲€?/p>
           <div class="skill-tags">
             <span class="skill-tag">Git</span>
             <span class="skill-tag">Keil</span>
@@ -403,65 +294,65 @@
     </div>
   </section>
 
-  <!-- ===== 项目展示 ===== -->
+  <!-- ===== 椤圭洰灞曠ず ===== -->
   <section class="section" id="projects">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">项目作品</h2>
-        <p class="section-subtitle">15+ 完整项目 · 多领域探�?/p>
+        <h2 class="section-title">椤圭洰浣滃搧</h2>
+        <p class="section-subtitle">15+ 瀹屾暣椤圭洰 路 澶氶鍩熸帰绱?/p>
       </div>
 
       <div class="projects-showcase">
         <div class="project-featured glass-card">
           <div class="project-visual">
             <div class="project-glow"></div>
-            <div class="project-icon-large">🤖</div>
+            <div class="project-icon-large">馃</div>
           </div>
           <div class="project-info">
             <span class="project-badge">Featured</span>
-            <h3>智能循迹小车</h3>
-            <p>基于 STM32 的智能循迹系统，配备红外传感器与 PID 控制算法，实现精准路径跟踪与自主避障功能�?/p>
+            <h3>鏅鸿兘寰抗灏忚溅</h3>
+            <p>鍩轰簬 STM32 鐨勬櫤鑳藉惊杩圭郴缁燂紝閰嶅绾㈠浼犳劅鍣ㄤ笌 PID 鎺у埗绠楁硶锛屽疄鐜扮簿鍑嗚矾寰勮窡韪笌鑷富閬块殰鍔熻兘銆?/p>
             <div class="project-tech">
               <span>STM32</span>
               <span>PID</span>
-              <span>传感�?/span>
+              <span>浼犳劅鍣?/span>
             </div>
-            <a href="/pages/projects.html" class="pill-btn pill-btn-outline">查看详情</a>
+            <a href="/pages/projects.html" class="pill-btn pill-btn-outline">鏌ョ湅璇︽儏</a>
           </div>
         </div>
 
         <div class="projects-grid">
           <div class="glass-card project-card">
-            <div class="project-card-icon">🏠</div>
-            <h4>智能家居系统</h4>
-            <p>物联网控制系统，支持远程控制与自动化场景</p>
+            <div class="project-card-icon">馃彔</div>
+            <h4>鏅鸿兘瀹跺眳绯荤粺</h4>
+            <p>鐗╄仈缃戞帶鍒剁郴缁燂紝鏀寔杩滅▼鎺у埗涓庤嚜鍔ㄥ寲鍦烘櫙</p>
             <div class="project-tags">
               <span>IoT</span><span>MQTT</span><span>WiFi</span>
             </div>
           </div>
 
           <div class="glass-card project-card">
-            <div class="project-card-icon">🦾</div>
-            <h4>四自由度机械�?/h4>
-            <p>舵机控制，支持精确位置与轨迹规划</p>
+            <div class="project-card-icon">馃</div>
+            <h4>鍥涜嚜鐢卞害鏈烘鑷?/h4>
+            <p>鑸垫満鎺у埗锛屾敮鎸佺簿纭綅缃笌杞ㄨ抗瑙勫垝</p>
             <div class="project-tags">
-              <span>舵机</span><span>运动�?/span><span>逆解�?/span>
+              <span>鑸垫満</span><span>杩愬姩瀛?/span><span>閫嗚В绠?/span>
             </div>
           </div>
 
           <div class="glass-card project-card">
-            <div class="project-card-icon">📡</div>
-            <h4>无线通信模块</h4>
-            <p>自定义无线协议实现设备互�?/p>
+            <div class="project-card-icon">馃摗</div>
+            <h4>鏃犵嚎閫氫俊妯″潡</h4>
+            <p>鑷畾涔夋棤绾垮崗璁疄鐜拌澶囦簰鑱?/p>
             <div class="project-tags">
-              <span>nRF24L01</span><span>LoRa</span><span>自定义协�?/span>
+              <span>nRF24L01</span><span>LoRa</span><span>鑷畾涔夊崗璁?/span>
             </div>
           </div>
         </div>
 
         <div class="projects-more">
           <a href="/pages/projects.html" class="pill-btn pill-btn-secondary">
-            查看全部项目
+            鏌ョ湅鍏ㄩ儴椤圭洰
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -471,7 +362,7 @@
     </div>
   </section>
 
-  <!-- ===== GitHub Trending 推荐 ===== -->
+  <!-- ===== GitHub Trending 鎺ㄨ崘 ===== -->
   <section class="section section-alt" id="github">
     <div class="container">
       <div class="section-header">
@@ -479,63 +370,62 @@
           <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="github-icon">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
-          GitHub 热门项目
+          GitHub 鐑棬椤圭洰
         </h2>
-        <p class="section-subtitle">发现优质开源项�?· 紧跟技术潮�?/p>
+        <p class="section-subtitle">鍙戠幇浼樿川寮€婧愰」鐩?路 绱ц窡鎶€鏈疆娴?/p>
       </div>
 
-      <!-- 搜索与筛�?-->
+      <!-- 鎼滅储涓庣瓫閫?-->
       <div class="github-controls glass-card">
         <div class="search-box">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
           </svg>
-          <input type="text" id="github-search" placeholder="搜索 GitHub 仓库...">
+          <input type="text" id="github-search" placeholder="鎼滅储 GitHub 浠撳簱...">
         </div>
         <div class="language-filter">
-          <button class="pill-btn pill-btn-sm pill-btn-ghost active" data-lang="all">全部</button>
+          <button class="pill-btn pill-btn-sm pill-btn-ghost active" data-lang="all">鍏ㄩ儴</button>
           <button class="pill-btn pill-btn-sm pill-btn-ghost" data-lang="C">C/C++</button>
           <button class="pill-btn pill-btn-sm pill-btn-ghost" data-lang="Python">Python</button>
           <button class="pill-btn pill-btn-sm pill-btn-ghost" data-lang="JavaScript">JavaScript</button>
         </div>
       </div>
 
-      <!-- Trending 加载状�?-->
+      <!-- Trending 鍔犺浇鐘舵€?-->
       <div class="trending-loading" id="trending-loading">
         <div class="loading-spinner"></div>
-        <span>正在获取热门项目...</span>
+        <span>姝ｅ湪鑾峰彇鐑棬椤圭洰...</span>
       </div>
 
-      <!-- Trending 列表 -->
+      <!-- Trending 鍒楄〃 -->
       <div class="trending-list" id="trending-list"></div>
 
-      <!-- 刷新按钮 -->
+      <!-- 鍒锋柊鎸夐挳 -->
       <div class="trending-refresh">
         <button class="pill-btn pill-btn-outline" id="refresh-trending">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M23 4v6h-6M1 20v-6h6"/>
             <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
           </svg>
-          换一�?
-        </button>
+          鎹竴鎵?        </button>
       </div>
     </div>
   </section>
 
-  <!-- ===== 竞赛证书 ===== -->
+  <!-- ===== 绔炶禌璇佷功 ===== -->
   <section class="section" id="certificates">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">竞赛荣誉</h2>
-        <p class="section-subtitle">7+ 国家级竞赛奖�?/p>
+        <h2 class="section-title">绔炶禌鑽ｈ獕</h2>
+        <p class="section-subtitle">7+ 鍥藉绾х珵璧涘椤?/p>
       </div>
 
       <div class="certs-showcase">
         <a href="/pages/highlights.html" class="glass-card cert-card">
           <div class="cert-badge-grade">A</div>
           <div class="cert-content">
-            <h4>蓝桥杯单片机大赛</h4>
-            <p>第十四届蓝桥杯单片机全国总决�?· 一等奖</p>
+            <h4>钃濇ˉ鏉崟鐗囨満澶ц禌</h4>
+            <p>绗崄鍥涘眾钃濇ˉ鏉崟鐗囨満鍏ㄥ浗鎬诲喅璧?路 涓€绛夊</p>
           </div>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -545,8 +435,8 @@
         <a href="/pages/highlights.html" class="glass-card cert-card">
           <div class="cert-badge-grade">A</div>
           <div class="cert-content">
-            <h4>全国大学生电子设计竞�?/h4>
-            <p>2023年全国大学生电子设计竞赛 · 奖项</p>
+            <h4>鍏ㄥ浗澶у鐢熺數瀛愯璁＄珵璧?/h4>
+            <p>2023骞村叏鍥藉ぇ瀛︾敓鐢靛瓙璁捐绔炶禌 路 濂栭」</p>
           </div>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -556,8 +446,8 @@
         <a href="/pages/highlights.html" class="glass-card cert-card">
           <div class="cert-badge-grade">A</div>
           <div class="cert-content">
-            <h4>中国机器人及人工智能大赛</h4>
-            <p>机器人技术创新赛 · 奖项</p>
+            <h4>涓浗鏈哄櫒浜哄強浜哄伐鏅鸿兘澶ц禌</h4>
+            <p>鏈哄櫒浜烘妧鏈垱鏂拌禌 路 濂栭」</p>
           </div>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -567,8 +457,8 @@
         <a href="/pages/highlights.html" class="glass-card cert-card">
           <div class="cert-badge-grade">A</div>
           <div class="cert-content">
-            <h4>西门子杯智能制造挑战赛</h4>
-            <p>智能制造领域工程创新人才培�?/p>
+            <h4>瑗块棬瀛愭澂鏅鸿兘鍒堕€犳寫鎴樿禌</h4>
+            <p>鏅鸿兘鍒堕€犻鍩熷伐绋嬪垱鏂颁汉鎵嶅煿鍏?/p>
           </div>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -578,51 +468,51 @@
     </div>
   </section>
 
-  <!-- ===== 生活瞬间 ===== -->
+  <!-- ===== 鐢熸椿鐬棿 ===== -->
   <section class="section section-alt" id="life">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">生活瞬间</h2>
-        <p class="section-subtitle">记录美好 · 热爱生活</p>
+        <h2 class="section-title">鐢熸椿鐬棿</h2>
+        <p class="section-subtitle">璁板綍缇庡ソ 路 鐑埍鐢熸椿</p>
       </div>
 
       <div class="life-gallery">
         <a href="/pages/life.html" class="glass-card life-card life-card-large">
-          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img1.jpg" alt="生活照片">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img1.jpg" alt="鐢熸椿鐓х墖">
           <div class="life-overlay">
             <span class="life-count">5+</span>
-            <h4>咖啡馆时�?/h4>
+            <h4>鍜栧暋棣嗘椂鍏?/h4>
           </div>
         </a>
 
         <a href="/pages/life.html" class="glass-card life-card">
-          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img3.jpg" alt="生活照片">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img3.jpg" alt="鐢熸椿鐓х墖">
           <div class="life-overlay">
             <span class="life-count">12+</span>
-            <h4>山间徒步</h4>
+            <h4>灞遍棿寰掓</h4>
           </div>
         </a>
 
         <a href="/pages/life.html" class="glass-card life-card">
-          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img5.jpg" alt="生活照片">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img5.jpg" alt="鐢熸椿鐓х墖">
           <div class="life-overlay">
             <span class="life-count">10+</span>
-            <h4>新年雪景</h4>
+            <h4>鏂板勾闆櫙</h4>
           </div>
         </a>
 
         <a href="/pages/life.html" class="glass-card life-card life-card-large">
-          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img2.jpg" alt="生活照片">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img2.jpg" alt="鐢熸椿鐓х墖">
           <div class="life-overlay">
             <span class="life-count">8+</span>
-            <h4>城市夜景</h4>
+            <h4>鍩庡競澶滄櫙</h4>
           </div>
         </a>
       </div>
 
       <div class="life-more">
         <a href="/pages/life.html" class="pill-btn pill-btn-secondary">
-          查看全部相册
+          鏌ョ湅鍏ㄩ儴鐩稿唽
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -631,25 +521,25 @@
     </div>
   </section>
 
-  <!-- ===== 联系�?===== -->
+  <!-- ===== 鑱旂郴鎴?===== -->
   <section class="section" id="contact">
     <div class="container">
       <div class="contact-wrapper glass-card">
         <div class="contact-content">
-          <h2>让我们一起创�?/h2>
-          <p>无论是技术讨论、项目合作，还是简单的打招呼，我都很期待收到你的消息�?/p>
+          <h2>璁╂垜浠竴璧峰垱閫?/h2>
+          <p>鏃犺鏄妧鏈璁恒€侀」鐩悎浣滐紝杩樻槸绠€鍗曠殑鎵撴嫑鍛硷紝鎴戦兘寰堟湡寰呮敹鍒颁綘鐨勬秷鎭€?/p>
 
           <div class="contact-links">
             <a href="mailto:someometony@outlook.com" class="contact-link">
-              <span class="contact-icon">📧</span>
+              <span class="contact-icon">馃摟</span>
               <div>
-                <span class="contact-label">邮箱</span>
+                <span class="contact-label">閭</span>
                 <span class="contact-value">someometony@outlook.com</span>
               </div>
             </a>
 
             <a href="https://github.com/TonyDDcui" target="_blank" class="contact-link">
-              <span class="contact-icon">🐙</span>
+              <span class="contact-icon">馃悪</span>
               <div>
                 <span class="contact-label">GitHub</span>
                 <span class="contact-value">@TonyDDcui</span>
@@ -658,7 +548,7 @@
           </div>
 
           <a href="mailto:someometony@outlook.com" class="pill-btn pill-btn-primary pill-btn-lg">
-            <span>发送邮�?/span>
+            <span>鍙戦€侀偖浠?/span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>
@@ -674,21 +564,21 @@
     </div>
   </section>
 
-  <!-- ===== 页脚 ===== -->
+  <!-- ===== 椤佃剼 ===== -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <span class="footer-logo">�?/span>
-          <span>崔喆�?/span>
+          <span class="footer-logo">鈿?/span>
+          <span>宕斿枂绠?/span>
         </div>
 
         <div class="footer-links">
-          <a href="#about">关于</a>
-          <a href="#skills">技�?/a>
-          <a href="#projects">项目</a>
+          <a href="#about">鍏充簬</a>
+          <a href="#skills">鎶€鑳?/a>
+          <a href="#projects">椤圭洰</a>
           <a href="#github">GitHub</a>
-          <a href="#contact">联系</a>
+          <a href="#contact">鑱旂郴</a>
         </div>
 
         <div class="footer-social">
@@ -701,12 +591,12 @@
       </div>
 
       <div class="footer-bottom">
-        <p>© 2024-2026 崔喆�?· 用爱与代码构�?/p>
+        <p>漏 2024-2026 宕斿枂绠?路 鐢ㄧ埍涓庝唬鐮佹瀯寤?/p>
       </div>
     </div>
   </footer>
 
-  <!-- 返回顶部 -->
+  <!-- 杩斿洖椤堕儴 -->
   <button class="back-to-top" data-back-to-top>
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M18 15l-6-6-6 6"/>
