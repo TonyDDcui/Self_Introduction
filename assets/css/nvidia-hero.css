@@ -244,6 +244,28 @@
   .hero-cta {
     flex-direction: column;
     align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+
+  /* GitHub 活跃度模块移动端适配 */
+  .mini-contribution {
+    width: calc(100% - var(--space-8));
+    max-width: 400px;
+    padding: var(--space-3) var(--space-4);
+    overflow-x: auto;
+  }
+
+  .contribution-graph-mini {
+    justify-content: flex-start;
+    min-width: 280px;
+  }
+
+  .mini-cell {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
   }
 
   .scroll-indicator {
