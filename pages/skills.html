@@ -6,40 +6,21 @@
     <title>技能栈 | 崔喆箫</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- 统一的设计系统 -->
+    <link rel="stylesheet" href="../static/css/design-system.css">
+    <link rel="stylesheet" href="../static/css/animations.css">
+
     <style>
         :root {
-            --bg: #f5f5f7;
-            --bg-elevated: #ffffff;
-            --text: #1d1d1f;
-            --text-secondary: #86868b;
-            --accent: #0071e3;
-            --border: rgba(0,0,0,0.06);
-            --glass-bg: rgba(255, 255, 255, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
-            --radius: 20px;
+            --page-padding: 48px;
+            --page-padding-mobile: 24px;
         }
 
-        [data-theme="dark"] {
-            --bg: #000000;
-            --bg-elevated: #1c1c1e;
-            --text: #f5f5f7;
-            --text-secondary: #86868b;
-            --accent: #0a84ff;
-            --border: rgba(255,255,255,0.08);
-            --glass-bg: rgba(28, 28, 30, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 2px 12px rgba(0,0,0,0.3);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 17px; }
         body {
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
@@ -50,22 +31,22 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 52px;
-            padding: 0 max(48px, calc((100vw - 1200px) / 2));
+            height: var(--navbar-height);
+            padding: 0 max(var(--page-padding), calc((100vw - 1200px) / 2));
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--glass-bg);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 0.5px solid var(--glass-border);
+            background: rgba(10, 20, 40, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            transition: all var(--transition-base);
         }
 
         .nav-back {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--accent);
+            color: var(--color-accent-primary);
             text-decoration: none;
             font-size: 0.9375rem;
             font-weight: 500;
@@ -73,25 +54,26 @@
 
         .nav-back:hover { opacity: 0.8; }
 
-        .theme-toggle {
+        button[data-theme-toggle] {
             width: 36px;
             height: 36px;
             border: none;
             background: transparent;
-            color: var(--text);
+            color: var(--color-text-primary);
             cursor: pointer;
             opacity: 0.6;
-            transition: all 0.2s;
+            transition: all var(--transition-base);
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            font-size: 1.2rem;
         }
 
-        .theme-toggle:hover { opacity: 1; background: var(--border); }
+        button[data-theme-toggle]:hover { opacity: 1; background: var(--color-border); }
 
         .page-header {
-            padding: 140px 48px 60px;
+            padding: calc(var(--navbar-height) + 60px) var(--page-padding) 60px;
             text-align: center;
             max-width: 900px;
             margin: 0 auto;
@@ -102,40 +84,44 @@
             font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 20px;
+            background: var(--color-accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .page-header p {
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             font-size: 1.125rem;
         }
 
         .skills-container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0 48px 120px;
+            padding: 0 var(--page-padding) 120px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
         }
 
         .skill-card {
-            background: var(--bg-elevated);
-            border-radius: var(--radius);
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-lg);
             padding: 36px;
-            border: 0.5px solid var(--border);
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            border: 1px solid var(--color-border);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
         }
 
         .skill-card:hover {
             transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--color-shadow-lg);
         }
 
         .skill-icon {
             width: 52px;
             height: 52px;
             border-radius: 14px;
-            background: linear-gradient(135deg, var(--accent), #5856d6);
+            background: var(--color-accent-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -151,7 +137,7 @@
 
         .skill-card p {
             font-size: 0.9375rem;
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             line-height: 1.6;
             margin-bottom: 20px;
         }
@@ -164,11 +150,11 @@
 
         .skill-tag {
             padding: 6px 14px;
-            background: var(--bg);
+            background: var(--color-bg-tertiary);
             border-radius: 100px;
             font-size: 0.8125rem;
-            color: var(--text-secondary);
-            border: 0.5px solid var(--border);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
         }
 
         .fade-in {
@@ -192,22 +178,18 @@
         .fade-in-stagger.visible > *:nth-child(4) { transition-delay: 0.25s; }
 
         @media (max-width: 768px) {
-            .page-header { padding: 120px 24px 40px; }
-            .skills-container { padding: 0 24px 80px; grid-template-columns: 1fr; }
+            .page-header { padding: calc(var(--navbar-height) + 40px) var(--page-padding-mobile) 40px; }
+            .skills-container { padding: 0 var(--page-padding-mobile) 80px; grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
     <nav class="nav">
         <a href="../index.html" class="nav-back">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             返回首页
         </a>
-        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
-            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-            </svg>
-        </button>
+        <button data-theme-toggle title="切换主题">🌙</button>
     </nav>
 
     <header class="page-header fade-in">
@@ -265,40 +247,20 @@
         </div>
     </div>
 
+    <script src="../static/js/main.js"></script>
     <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeIcon');
-            if (theme === 'dark') {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-            } else {
-                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
-            }
-        }
-
+        // 使用主 JS 中的 IntersectionObserver 来处理 fade-in 动画
         (function() {
-            const saved = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = saved || (prefersDark ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', theme);
-            updateThemeIcon(theme);
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in, .fade-in-stagger').forEach(el => observer.observe(el));
         })();
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-in, .fade-in-stagger').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>

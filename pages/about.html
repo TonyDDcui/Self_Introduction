@@ -6,41 +6,22 @@
     <title>关于我 | 崔喆箫</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- 统一的设计系统 -->
+    <link rel="stylesheet" href="../static/css/design-system.css">
+    <link rel="stylesheet" href="../static/css/animations.css">
+
     <style>
         :root {
-            --bg: #f5f5f7;
-            --bg-elevated: #ffffff;
-            --text: #1d1d1f;
-            --text-secondary: #86868b;
-            --accent: #0071e3;
-            --border: rgba(0,0,0,0.06);
-            --glass-bg: rgba(255, 255, 255, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
-            --radius: 20px;
-            --radius-lg: 28px;
+            --page-gap: 80px;
+            --page-padding: 48px;
+            --page-padding-mobile: 24px;
         }
 
-        [data-theme="dark"] {
-            --bg: #000000;
-            --bg-elevated: #1c1c1e;
-            --text: #f5f5f7;
-            --text-secondary: #86868b;
-            --accent: #0a84ff;
-            --border: rgba(255,255,255,0.08);
-            --glass-bg: rgba(28, 28, 30, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 2px 12px rgba(0,0,0,0.3);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 17px; }
         body {
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
@@ -51,22 +32,22 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 52px;
-            padding: 0 max(48px, calc((100vw - 1200px) / 2));
+            height: var(--navbar-height);
+            padding: 0 max(var(--page-padding), calc((100vw - 1200px) / 2));
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--glass-bg);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 0.5px solid var(--glass-border);
+            background: rgba(10, 20, 40, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            transition: all var(--transition-base);
         }
 
         .nav-back {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--accent);
+            color: var(--color-accent-primary);
             text-decoration: none;
             font-size: 0.9375rem;
             font-weight: 500;
@@ -76,25 +57,26 @@
 
         .nav-actions { display: flex; align-items: center; gap: 12px; }
 
-        .theme-toggle {
+        button[data-theme-toggle] {
             width: 36px;
             height: 36px;
             border: none;
             background: transparent;
-            color: var(--text);
+            color: var(--color-text-primary);
             cursor: pointer;
             opacity: 0.6;
-            transition: all 0.2s;
+            transition: all var(--transition-base);
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            font-size: 1.2rem;
         }
 
-        .theme-toggle:hover { opacity: 1; background: var(--border); }
+        button[data-theme-toggle]:hover { opacity: 1; background: var(--color-border); }
 
         .page-header {
-            padding: 140px 48px 60px;
+            padding: calc(var(--navbar-height) + 60px) var(--page-padding) 60px;
             text-align: center;
             max-width: 900px;
             margin: 0 auto;
@@ -105,16 +87,20 @@
             font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 20px;
+            background: var(--color-accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
-            gap: 80px;
+            gap: var(--page-gap);
             align-items: start;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0 48px 120px;
+            padding: 0 var(--page-padding) 120px;
         }
 
         .about-image {
@@ -125,7 +111,7 @@
         .about-image img {
             width: 100%;
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--color-shadow-lg);
         }
 
         .about-content h2 {
@@ -136,7 +122,7 @@
 
         .about-content p {
             font-size: 1.0625rem;
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             line-height: 1.7;
             margin-bottom: 20px;
         }
@@ -147,7 +133,7 @@
             gap: 24px;
             margin-top: 40px;
             padding-top: 36px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--color-border);
         }
 
         .stat-item { text-align: left; }
@@ -156,8 +142,9 @@
             font-weight: 700;
             line-height: 1;
             margin-bottom: 6px;
+            color: var(--color-accent-primary);
         }
-        .stat-label { font-size: 0.875rem; color: var(--text-secondary); }
+        .stat-label { font-size: 0.875rem; color: var(--color-text-secondary); }
 
         .timeline {
             margin-top: 48px;
@@ -173,7 +160,7 @@
             display: flex;
             gap: 24px;
             padding-bottom: 32px;
-            border-left: 2px solid var(--border);
+            border-left: 2px solid var(--color-border);
             padding-left: 24px;
             margin-left: 8px;
         }
@@ -182,14 +169,14 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: var(--accent);
+            background: var(--color-accent-primary);
             margin-left: -33px;
             flex-shrink: 0;
         }
 
         .timeline-date {
             font-size: 0.875rem;
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             min-width: 100px;
         }
 
@@ -201,7 +188,7 @@
 
         .timeline-content p {
             font-size: 0.9375rem;
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             margin: 0;
         }
 
@@ -217,10 +204,10 @@
             .about-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
-                padding: 0 24px 80px;
+                padding: 0 var(--page-padding-mobile) 80px;
             }
             .about-image { position: static; max-width: 400px; margin: 0 auto; }
-            .page-header { padding: 120px 24px 40px; }
+            .page-header { padding: calc(var(--navbar-height) + 40px) var(--page-padding-mobile) 40px; }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
@@ -231,18 +218,14 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
     <nav class="nav">
         <a href="../index.html" class="nav-back">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             返回首页
         </a>
         <div class="nav-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
-                <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
-            </button>
+            <button data-theme-toggle title="切换主题">🌙</button>
         </div>
     </nav>
 
@@ -306,40 +289,20 @@
         </div>
     </div>
 
+    <script src="../static/js/main.js"></script>
     <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeIcon');
-            if (theme === 'dark') {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-            } else {
-                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
-            }
-        }
-
+        // 使用主 JS 中的 IntersectionObserver 来处理 fade-in 动画
         (function() {
-            const saved = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = saved || (prefersDark ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', theme);
-            updateThemeIcon(theme);
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         })();
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
