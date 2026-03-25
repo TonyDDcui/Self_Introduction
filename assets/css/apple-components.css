@@ -935,6 +935,44 @@
     grid-column: span 2;
   }
 
+  /* ===== 联系模块移动端修复 ===== */
+  .contact-wrapper {
+    padding: var(--space-6);
+  }
+
+  .contact-content {
+    width: 100%;
+  }
+
+  .contact-content h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .contact-content > p {
+    font-size: 0.9375rem;
+    text-align: center;
+  }
+
+  .contact-links {
+    width: 100%;
+  }
+
+  .contact-link {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .contact-link:hover {
+    transform: none;
+  }
+
+  .contact-content > .pill-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-4);
+  }
+
   .footer-content {
     flex-direction: column;
     text-align: center;

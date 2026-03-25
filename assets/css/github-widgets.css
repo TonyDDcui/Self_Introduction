@@ -325,18 +325,76 @@
   .github-controls {
     flex-direction: column;
     align-items: stretch;
+    padding: var(--space-4);
+    gap: var(--space-3);
   }
 
   .search-box {
     max-width: none;
+    width: 100%;
   }
 
   .language-filter {
     justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .language-filter .pill-btn {
+    flex: 1;
+    min-width: 70px;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.75rem;
+  }
+
+  .trending-list {
+    gap: var(--space-3);
   }
 
   .trending-item {
     grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+
+  .trending-header {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .trending-author,
+  .trending-slash,
+  .trending-name {
+    font-size: 0.8125rem;
+  }
+
+  .trending-desc {
+    font-size: 0.8125rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .trending-meta {
+    gap: var(--space-3);
+  }
+
+  .trending-stat {
+    font-size: 0.75rem;
+  }
+
+  .trending-refresh {
+    margin-top: var(--space-4);
+  }
+
+  .trending-refresh .pill-btn {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.8125rem;
+  }
+
+  .trending-loading {
+    padding: var(--space-10) 0;
+  }
+
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
   }
 
   .cal-graph {
@@ -345,5 +403,33 @@
 
   .cal-labels {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .github-controls {
+    padding: var(--space-3);
+  }
+
+  .search-box {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .search-box svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .search-box input {
+    font-size: 0.875rem;
+  }
+
+  .trending-item {
+    padding: var(--space-3);
+  }
+
+  .trending-meta {
+    flex-wrap: wrap;
+    gap: var(--space-2);
   }
 }
