@@ -3,440 +3,611 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="崔喆箫 - 嵌入式开发工程师 | 华为">
-  <meta name="keywords" content="嵌入式, STM32, IoT, 物联网, 个人博客">
+  <meta name="description" content="崔喆箫 - 华为嵌入式开发工程师 | 物联网爱好者">
+  <meta name="keywords" content="嵌入式, STM32, IoT, 华为, 个人作品集">
   <meta name="author" content="崔喆箫">
-  <meta name="theme-color" content="#0a1428">
-
+  <meta name="theme-color" content="#030712">
   <title>崔喆箫 | 嵌入式开发工程师</title>
 
-  <!-- 预加载关键资源 -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- 谷歌字体 -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- 样式表 -->
-  <link rel="stylesheet" href="/static/css/design-system.css">
-  <link rel="stylesheet" href="/static/css/animations.css">
-  <link rel="stylesheet" href="/static/css/main.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="./assets/css/design-system.css">
+  <link rel="stylesheet" href="./assets/css/nvidia-hero.css">
+  <link rel="stylesheet" href="./assets/css/apple-components.css">
+  <link rel="stylesheet" href="./assets/css/github-widgets.css">
+  <link rel="stylesheet" href="./assets/css/main.css">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%2300d9ff'>C</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 </head>
 <body data-theme="dark">
+  <!-- ===== 动态粒子背景 ===== -->
+  <canvas id="particle-canvas"></canvas>
 
-  <!-- ===== 导航栏 ===== -->
-  <nav data-navbar class="navbar">
-    <div class="container-lg">
-      <div class="navbar-content">
-        <a href="#" class="navbar-brand">
-          <span style="font-size: 1.5rem;">💻</span>
-          <span>崔喆箫</span>
-        </a>
+  <!-- ===== 导航栏 (Apple Glass Effect) ===== -->
+  <nav class="glass-nav" data-navbar>
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <span class="nav-logo">⚡</span>
+        <span class="nav-name">CZS</span>
+      </a>
 
-        <div class="navbar-nav">
-          <a href="#about" data-scroll-to="#about">关于</a>
-          <a href="#skills" data-scroll-to="#skills">技能</a>
-          <a href="#tech-shares" data-scroll-to="#tech-shares">技术分享</a>
-          <a href="#projects" data-scroll-to="#projects">项目</a>
-          <a href="#life" data-scroll-to="#life">生活</a>
-          <a href="#contact" data-scroll-to="#contact">联系</a>
-        </div>
+      <div class="nav-links">
+        <a href="#about" class="nav-link">关于</a>
+        <a href="#skills" class="nav-link">技能</a>
+        <a href="#projects" class="nav-link">项目</a>
+        <a href="#github" class="nav-link">GitHub</a>
+        <a href="#life" class="nav-link">生活</a>
+        <a href="#contact" class="nav-link">联系</a>
+      </div>
 
-        <div class="navbar-actions">
-          <button data-theme-toggle title="切换主题">🌙</button>
-          <button data-menu-toggle class="menu-toggle" style="display: none;" title="菜单">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
-        </div>
+      <div class="nav-actions">
+        <button class="pill-btn pill-btn-ghost" data-theme-toggle title="切换主题">
+          <span class="theme-icon">🌙</span>
+        </button>
+        <button class="mobile-menu-btn" data-menu-toggle>
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
-    <!-- 移动菜单 -->
-    <div data-mobile-menu class="mobile-menu" style="display: none;">
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu glass-card" data-mobile-menu>
       <a href="#about">关于</a>
       <a href="#skills">技能</a>
-      <a href="#tech-shares">技术分享</a>
       <a href="#projects">项目</a>
+      <a href="#github">GitHub</a>
       <a href="#life">生活</a>
       <a href="#contact">联系</a>
     </div>
   </nav>
 
-  <!-- ===== 英雄区 ===== -->
-  <section class="hero" data-parallax="0.5" data-animate>
-    <div class="container-lg">
-      <div class="hero-content">
-        <h1 class="hero-title">
-          用代码<br>
-          <span style="color: var(--color-accent-primary);">创造精彩</span>
-        </h1>
-        <p class="hero-subtitle">嵌入式开发工程师 | 华为 | 物联网爱好者</p>
-        <p class="hero-description">
-          专注于嵌入式系统与智能硬件开发，热爱用技术解决现实问题。
-          从单片机到IoT，从电路设计到系统集成，不断探索技术的边界。
-        </p>
-        <div class="hero-cta">
-          <button class="btn btn-primary" data-scroll-to="#contact">立即联系我</button>
-          <a href="#about" class="btn btn-secondary" data-scroll-to="#about">了解更多</a>
-        </div>
+  <!-- ===== Hero Section (NVIDIA Style) ===== -->
+  <section class="hero-section" id="hero">
+    <div class="hero-bg">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>华为 · 嵌入式开发工程师</span>
       </div>
+
+      <h1 class="hero-title">
+        <span class="title-line">用代码</span>
+        <span class="title-line gradient-text">驱动未来</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        专注嵌入式系统 · 物联网 · 智能硬件<br>
+        从微控制器到云端，探索技术的无限可能
+      </p>
+
+      <div class="hero-cta">
+        <a href="#contact" class="pill-btn pill-btn-primary">
+          <span>立即联系</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#about" class="pill-btn pill-btn-outline">
+          <span>了解更多</span>
+        </a>
+      </div>
+
+      <!-- GitHub 贡献日历 (迷你版) -->
+      <div class="mini-contribution">
+        <div class="contribution-label">GitHub 活跃度</div>
+        <div class="contribution-graph-mini" id="contribution-mini"></div>
+      </div>
+    </div>
+
+    <!-- 滚动指示器 -->
+    <div class="scroll-indicator">
+      <div class="scroll-mouse">
+        <div class="scroll-wheel"></div>
+      </div>
+      <span>向下滚动</span>
     </div>
   </section>
 
-  <!-- ===== 个人介绍部分 ===== -->
-  <section class="section section-dark" id="about" data-animate>
-    <div class="container-lg">
+  <!-- ===== 关于我 (Apple Card Style) ===== -->
+  <section class="section" id="about">
+    <div class="container">
       <div class="section-header">
         <h2 class="section-title">关于我</h2>
-        <p class="section-subtitle">技术求道者，热爱创新与分享</p>
+        <p class="section-subtitle">技术求道者 · 创新实践者</p>
       </div>
 
-      <div class="grid grid-2">
-        <div class="card lift-on-hover">
-          <div class="card-icon">🎓</div>
-          <h3 class="card-title">学历背景</h3>
-          <div class="card-content">
-            <p>电子信息工程本科毕业</p>
-            <p style="margin-top: var(--spacing-sm); font-size: var(--font-size-sm);">
-              2020-2024 修读微电子学、嵌入式系统、物联网等核心课程
-            </p>
+      <div class="about-grid">
+        <div class="glass-card about-card about-image-card">
+          <div class="avatar-wrapper">
+            <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/real_img/img1.jpg" alt="崔喆箫" class="avatar">
+            <div class="avatar-ring"></div>
+          </div>
+          <div class="about-info">
+            <h3>崔喆箫</h3>
+            <p class="about-role">华为 · 嵌入式开发工程师</p>
+            <div class="about-social">
+              <a href="https://github.com/TonyDDcui" target="_blank" class="social-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </a>
+              <a href="mailto:someometony@outlook.com" class="social-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div class="card lift-on-hover">
-          <div class="card-icon">💼</div>
-          <h3 class="card-title">工作经历</h3>
-          <div class="card-content">
-            <p>华为 嵌入式开发工程师</p>
-            <p style="margin-top: var(--spacing-sm); font-size: var(--font-size-sm);">
-              从事智能设备开发，负责系统集成与固件优化
-            </p>
+        <div class="about-cards">
+          <div class="glass-card stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-content">
+              <span class="stat-number" data-count="7">0</span>
+              <span class="stat-suffix">+</span>
+            </div>
+            <p class="stat-label">国家级竞赛奖项</p>
+          </div>
+
+          <div class="glass-card stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-content">
+              <span class="stat-number" data-count="15">0</span>
+              <span class="stat-suffix">+</span>
+            </div>
+            <p class="stat-label">完整项目经验</p>
+          </div>
+
+          <div class="glass-card stat-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-content">
+              <span class="stat-number" data-count="4">0</span>
+              <span class="stat-suffix">+</span>
+            </div>
+            <p class="stat-label">年工作经验</p>
           </div>
         </div>
+      </div>
 
-        <div class="card lift-on-hover">
-          <div class="card-icon">🏆</div>
-          <h3 class="card-title">竞赛成果</h3>
-          <div class="card-content">
-            <p data-counter="7" data-duration="1500">0</p>
-            <p style="font-size: var(--font-size-sm); color: var(--color-text-muted);">国家级竞赛奖项</p>
+      <!-- 时间线 -->
+      <div class="timeline glass-card">
+        <h3 class="timeline-title">历程</h3>
+        <div class="timeline-items">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2024 - 至今</div>
+            <div class="timeline-content">
+              <h4>华为 · 智能设备开发</h4>
+              <p>从事嵌入式系统开发，负责产品落地</p>
+            </div>
           </div>
-        </div>
-
-        <div class="card lift-on-hover">
-          <div class="card-icon">🚀</div>
-          <h3 class="card-title">项目经验</h3>
-          <div class="card-content">
-            <p data-counter="15" data-duration="1500">0</p>
-            <p style="font-size: var(--font-size-sm); color: var(--color-text-muted);">完整项目完成</p>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2020 - 2024</div>
+            <div class="timeline-content">
+              <h4>电子信息工程 · 本科</h4>
+              <p>学习嵌入式系统与硬件设计</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2020</div>
+            <div class="timeline-content">
+              <h4>编程之路起点</h4>
+              <p>从 C 语言开始，探索技术世界</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== 技术栈部分 ===== -->
-  <section class="section" id="skills" data-animate>
-    <div class="container-lg">
+  <!-- ===== 技能栈 ===== -->
+  <section class="section section-alt" id="skills">
+    <div class="container">
       <div class="section-header">
         <h2 class="section-title">技术栈</h2>
-        <p class="section-subtitle">持续学习，不断精进</p>
+        <p class="section-subtitle">持续学习 · 不断精进</p>
       </div>
 
       <div class="skills-grid">
-        <div class="skill-card">
-          <div class="skill-category">嵌入式开发</div>
-          <div class="skill-list">
-            <span class="skill-badge"><i class="skill-dot" style="background: #555;"></i>C/C++</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #3fb950;"></i>STM32</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #3fb950;"></i>FreeRTOS</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #3fb950;"></i>51单片机</span>
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <span class="skill-icon">⚡</span>
+            <h3>嵌入式开发</h3>
+          </div>
+          <p class="skill-desc">精通 C 语言，深入理解 STM32 系统架构，熟练使用 FreeRTOS 进行任务调度与资源管理。</p>
+          <div class="skill-tags">
+            <span class="skill-tag">C/C++</span>
+            <span class="skill-tag">STM32</span>
+            <span class="skill-tag">FreeRTOS</span>
+            <span class="skill-tag">51单片机</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-bar-fill" data-width="92"></div>
           </div>
         </div>
 
-        <div class="skill-card">
-          <div class="skill-category">物联网/通信</div>
-          <div class="skill-list">
-            <span class="skill-badge"><i class="skill-dot" style="background: #f0883e;"></i>IoT</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #f0883e;"></i>MQTT</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #f0883e;"></i>ESP8266</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #00d9ff;"></i>WiFi/蓝牙</span>
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <span class="skill-icon">🌐</span>
+            <h3>物联网</h3>
+          </div>
+          <p class="skill-desc">熟悉 MQTT、CoAP 等物联网协议，具备端到端 IoT 解决方案设计与实现能力。</p>
+          <div class="skill-tags">
+            <span class="skill-tag">MQTT</span>
+            <span class="skill-tag">WiFi</span>
+            <span class="skill-tag">蓝牙</span>
+            <span class="skill-tag">ESP8266</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-bar-fill" data-width="88"></div>
           </div>
         </div>
 
-        <div class="skill-card">
-          <div class="skill-category">硬件设计</div>
-          <div class="skill-list">
-            <span class="skill-badge"><i class="skill-dot" style="background: #f34b7d;"></i>PCB设计</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #3fb950;"></i>电路设计</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #555;"></i>传感器</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #555;"></i>AD/DA</span>
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <span class="skill-icon">🔌</span>
+            <h3>硬件设计</h3>
+          </div>
+          <p class="skill-desc">掌握电路设计原理，熟练使用 Altium Designer 进行 PCB 设计与布线。</p>
+          <div class="skill-tags">
+            <span class="skill-tag">PCB设计</span>
+            <span class="skill-tag">I2C/SPI</span>
+            <span class="skill-tag">UART</span>
+            <span class="skill-tag">传感器</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-bar-fill" data-width="85"></div>
           </div>
         </div>
 
-        <div class="skill-card">
-          <div class="skill-category">工具/其他</div>
-          <div class="skill-list">
-            <span class="skill-badge"><i class="skill-dot" style="background: #555;"></i>Git/GitHub</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #3572A5;"></i>Python</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #00d9ff;"></i>Keil IDE</span>
-            <span class="skill-badge"><i class="skill-dot" style="background: #555;"></i>Altium</span>
+        <div class="glass-card skill-card">
+          <div class="skill-header">
+            <span class="skill-icon">🛠️</span>
+            <h3>开发工具</h3>
+          </div>
+          <p class="skill-desc">熟练使用 Git、Keil、VS Code 等开发工具，注重代码质量与版本控制。</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">Keil</span>
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">Altium</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-bar-fill" data-width="90"></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== 技术分享部分 ===== -->
-  <section class="section section-dark" id="tech-shares" data-animate>
-    <div class="container-lg">
+  <!-- ===== 项目展示 ===== -->
+  <section class="section" id="projects">
+    <div class="container">
       <div class="section-header">
-        <h2 class="section-title">技术分享</h2>
-        <p class="section-subtitle">分享学习笔记和技术insights</p>
+        <h2 class="section-title">项目作品</h2>
+        <p class="section-subtitle">15+ 完整项目 · 多领域探索</p>
       </div>
 
-      <div class="grid grid-3">
-        <!-- 文章卡片 - 占位符 -->
-        <article class="card lift-on-hover">
-          <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #7c3aed, #00d9ff); border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg); opacity: 0.3;"></div>
-          <h3 class="card-title">STM32 FreeRTOS 实践指南</h3>
-          <p class="card-content">深入浅出讲解实时操作系统在单片机上的应用，包括任务管理、队列通信等核心概念。</p>
-          <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
-            <span class="skill-badge" style="padding: 4px 10px;"><i class="skill-dot" style="background: #3fb950;"></i>FreeRTOS</span>
-            <span class="skill-badge" style="padding: 4px 10px;"><i class="skill-dot" style="background: #3fb950;"></i>STM32</span>
+      <div class="projects-showcase">
+        <div class="project-featured glass-card">
+          <div class="project-visual">
+            <div class="project-glow"></div>
+            <div class="project-icon-large">🤖</div>
           </div>
-        </article>
-
-        <article class="card lift-on-hover">
-          <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #00d9ff, #7c3aed); border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg); opacity: 0.3;"></div>
-          <h3 class="card-title">物联网设备联网那些事</h3>
-          <p class="card-content">从WiFi配置到云平台接入，完整讲解IoT设备的联网流程和最佳实践。</p>
-          <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
-            <span class="skill-badge" style="padding: 4px 10px;"><i class="skill-dot" style="background: #f0883e;"></i>MQTT</span>
-            <span class="skill-badge" style="padding: 4px 10px;"><i class="skill-dot" style="background: #f0883e;"></i>IoT</span>
+          <div class="project-info">
+            <span class="project-badge">Featured</span>
+            <h3>智能循迹小车</h3>
+            <p>基于 STM32 的智能循迹系统，配备红外传感器与 PID 控制算法，实现精准路径跟踪与自主避障功能。</p>
+            <div class="project-tech">
+              <span>STM32</span>
+              <span>PID</span>
+              <span>传感器</span>
+            </div>
+            <a href="/pages/projects.html" class="pill-btn pill-btn-outline">查看详情</a>
           </div>
-        </article>
+        </div>
 
-        <article class="card lift-on-hover">
-          <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #7c3aed, #00d9ff); border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg); opacity: 0.3;"></div>
-          <h3 class="card-title">PCB设计从入门到精通</h3>
-          <p class="card-content">分享PCB设计的核心原则，包括布线技巧、阻抗控制和EMC考量。</p>
-          <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
-            <span class="skill-badge" style="padding: 4px 10px;"><i class="skill-dot" style="background: #f34b7d;"></i>PCB设计</span>
-            <span class="skill-badge" style="padding: 4px 10px;"><i class="skill-dot" style="background: #555;"></i>硬件</span>
-          </div>
-        </article>
-      </div>
-
-      <div style="text-align: center; margin-top: var(--spacing-2xl);">
-        <a href="/pages/tech-shares.html" class="btn btn-secondary">查看全部文章</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 项目分享部分 ===== -->
-  <section class="section" id="projects" data-animate>
-    <div class="container-lg">
-      <div class="section-header">
-        <h2 class="section-title">项目分享</h2>
-        <p class="section-subtitle">15+ 完整项目，涵盖多个技术领域</p>
-      </div>
-
-      <div class="grid grid-3">
-        <div class="project-card">
-          <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #7c3aed, #00d9ff); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🤖</div>
-          <div class="project-content">
-            <h3 class="project-title">智能循迹小车</h3>
-            <p class="project-description">基于 STM32 的智能循迹小车，配备多种传感器，实现自主导航与避障。</p>
+        <div class="projects-grid">
+          <div class="glass-card project-card">
+            <div class="project-card-icon">🏠</div>
+            <h4>智能家居系统</h4>
+            <p>物联网控制系统，支持远程控制与自动化场景</p>
             <div class="project-tags">
-              <span class="project-tag">STM32</span>
-              <span class="project-tag">传感器</span>
-              <span class="project-tag">PID控制</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="project-link">查看详情</a>
+              <span>IoT</span><span>MQTT</span><span>WiFi</span>
             </div>
           </div>
-        </div>
 
-        <div class="project-card">
-          <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #00d9ff, #7c3aed); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🏠</div>
-          <div class="project-content">
-            <h3 class="project-title">智能家居系统</h3>
-            <p class="project-description">物联网智能家居系统，支持远程控制、语音交互和自动化场景。</p>
+          <div class="glass-card project-card">
+            <div class="project-card-icon">🦾</div>
+            <h4>四自由度机械臂</h4>
+            <p>舵机控制，支持精确位置与轨迹规划</p>
             <div class="project-tags">
-              <span class="project-tag">IoT</span>
-              <span class="project-tag">WiFi</span>
-              <span class="project-tag">MQTT</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="project-link">查看详情</a>
+              <span>舵机</span><span>运动学</span><span>逆解算</span>
             </div>
           </div>
-        </div>
 
-        <div class="project-card">
-          <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #7c3aed, #00d9ff); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🦾</div>
-          <div class="project-content">
-            <h3 class="project-title">四自由度机械臂</h3>
-            <p class="project-description">舵机控制机械臂，支持精确位置控制、轨迹规划与抓取。</p>
+          <div class="glass-card project-card">
+            <div class="project-card-icon">📡</div>
+            <h4>无线通信模块</h4>
+            <p>自定义无线协议实现设备互联</p>
             <div class="project-tags">
-              <span class="project-tag">舵机</span>
-              <span class="project-tag">运动学</span>
-              <span class="project-tag">逆解算</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="project-link">查看详情</a>
+              <span>nRF24L01</span><span>LoRa</span><span>自定义协议</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <div style="text-align: center; margin-top: var(--spacing-2xl);">
-        <a href="/pages/projects.html" class="btn btn-secondary">查看全部项目</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 生活日常部分 ===== -->
-  <section class="section section-dark" id="life" data-animate>
-    <div class="container-lg">
-      <div class="section-header">
-        <h2 class="section-title">生活日常</h2>
-        <p class="section-subtitle">用镜头记录生活中的美好瞬间</p>
-      </div>
-
-      <div class="masonry-grid">
-        <!-- Pinterest风格图片网格 - 占位符 -->
-        <div class="masonry-item" style="grid-column: span 1; grid-row: span 2;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #7c3aed, #00d9ff); border-radius: var(--radius-lg);"></div>
-          <div class="masonry-overlay">
-            <div class="masonry-title">周末的咖啡馆时光</div>
-          </div>
-        </div>
-
-        <div class="masonry-item" style="grid-column: span 1; grid-row: span 1;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #00d9ff, #7c3aed); border-radius: var(--radius-lg);"></div>
-          <div class="masonry-overlay">
-            <div class="masonry-title">城市夜景</div>
-          </div>
-        </div>
-
-        <div class="masonry-item" style="grid-column: span 1; grid-row: span 1;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #7c3aed, #00d9ff); border-radius: var(--radius-lg);"></div>
-          <div class="masonry-overlay">
-            <div class="masonry-title">山间徒步</div>
-          </div>
-        </div>
-
-        <div class="masonry-item" style="grid-column: span 1; grid-row: span 1;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #00d9ff, #7c3aed); border-radius: var(--radius-lg);"></div>
-          <div class="masonry-overlay">
-            <div class="masonry-title">书店午后</div>
-          </div>
-        </div>
-
-        <div class="masonry-item" style="grid-column: span 1; grid-row: span 2;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #7c3aed, #00d9ff); border-radius: var(--radius-lg);"></div>
-          <div class="masonry-overlay">
-            <div class="masonry-title">新年雪景</div>
-          </div>
-        </div>
-
-        <div class="masonry-item" style="grid-column: span 1; grid-row: span 1;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #00d9ff, #7c3aed); border-radius: var(--radius-lg);"></div>
-          <div class="masonry-overlay">
-            <div class="masonry-title">美食探索</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="text-align: center; margin-top: var(--spacing-2xl);">
-        <a href="/pages/life.html" class="btn btn-secondary">查看全部照片</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 联系我部分 ===== -->
-  <section class="section section-dark" id="contact" data-animate>
-    <div class="container-lg" style="text-align: center;">
-      <div class="section-header">
-        <h2 class="section-title">联系我</h2>
-        <p class="section-subtitle">有想法？让我们一起讨论</p>
-      </div>
-
-      <div style="max-width: 600px; margin: 0 auto;">
-        <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary); margin-bottom: var(--spacing-2xl); line-height: var(--line-height-relaxed);">
-          无论你是想讨论技术问题、合作机会，还是仅仅是打个招呼，我都很乐意听到你的声音。
-        </p>
-
-        <div class="flex flex-col gap-lg" style="align-items: center;">
-          <a href="mailto:someometony@outlook.com" class="btn btn-primary btn-lg">
-            发送邮件
+        <div class="projects-more">
+          <a href="/pages/projects.html" class="pill-btn pill-btn-secondary">
+            查看全部项目
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <div style="display: flex; gap: var(--spacing-lg); justify-content: center; flex-wrap: wrap;">
-            <a href="https://github.com/TonyDDcui" target="_blank" rel="noopener" class="btn btn-secondary">
-              GitHub
+  <!-- ===== GitHub Trending 推荐 ===== -->
+  <section class="section section-alt" id="github">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="github-icon">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub 热门项目
+        </h2>
+        <p class="section-subtitle">发现优质开源项目 · 紧跟技术潮流</p>
+      </div>
+
+      <!-- 搜索与筛选 -->
+      <div class="github-controls glass-card">
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input type="text" id="github-search" placeholder="搜索 GitHub 仓库...">
+        </div>
+        <div class="language-filter">
+          <button class="pill-btn pill-btn-sm pill-btn-ghost active" data-lang="all">全部</button>
+          <button class="pill-btn pill-btn-sm pill-btn-ghost" data-lang="C">C/C++</button>
+          <button class="pill-btn pill-btn-sm pill-btn-ghost" data-lang="Python">Python</button>
+          <button class="pill-btn pill-btn-sm pill-btn-ghost" data-lang="JavaScript">JavaScript</button>
+        </div>
+      </div>
+
+      <!-- Trending 加载状态 -->
+      <div class="trending-loading" id="trending-loading">
+        <div class="loading-spinner"></div>
+        <span>正在获取热门项目...</span>
+      </div>
+
+      <!-- Trending 列表 -->
+      <div class="trending-list" id="trending-list"></div>
+
+      <!-- 刷新按钮 -->
+      <div class="trending-refresh">
+        <button class="pill-btn pill-btn-outline" id="refresh-trending">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
+          换一批
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 竞赛证书 ===== -->
+  <section class="section" id="certificates">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">竞赛荣誉</h2>
+        <p class="section-subtitle">7+ 国家级竞赛奖项</p>
+      </div>
+
+      <div class="certs-showcase">
+        <a href="/pages/highlights.html" class="glass-card cert-card">
+          <div class="cert-badge-grade">A</div>
+          <div class="cert-content">
+            <h4>蓝桥杯单片机大赛</h4>
+            <p>第十四届蓝桥杯单片机全国总决赛 · 一等奖</p>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+
+        <a href="/pages/highlights.html" class="glass-card cert-card">
+          <div class="cert-badge-grade">A</div>
+          <div class="cert-content">
+            <h4>全国大学生电子设计竞赛</h4>
+            <p>2023年全国大学生电子设计竞赛 · 奖项</p>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+
+        <a href="/pages/highlights.html" class="glass-card cert-card">
+          <div class="cert-badge-grade">A</div>
+          <div class="cert-content">
+            <h4>中国机器人及人工智能大赛</h4>
+            <p>机器人技术创新赛 · 奖项</p>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+
+        <a href="/pages/highlights.html" class="glass-card cert-card">
+          <div class="cert-badge-grade">A</div>
+          <div class="cert-content">
+            <h4>西门子杯智能制造挑战赛</h4>
+            <p>智能制造领域工程创新人才培养</p>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 生活瞬间 ===== -->
+  <section class="section section-alt" id="life">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">生活瞬间</h2>
+        <p class="section-subtitle">记录美好 · 热爱生活</p>
+      </div>
+
+      <div class="life-gallery">
+        <a href="/pages/life.html" class="glass-card life-card life-card-large">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img1.jpg" alt="生活照片">
+          <div class="life-overlay">
+            <span class="life-count">5+</span>
+            <h4>咖啡馆时光</h4>
+          </div>
+        </a>
+
+        <a href="/pages/life.html" class="glass-card life-card">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img3.jpg" alt="生活照片">
+          <div class="life-overlay">
+            <span class="life-count">12+</span>
+            <h4>山间徒步</h4>
+          </div>
+        </a>
+
+        <a href="/pages/life.html" class="glass-card life-card">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img5.jpg" alt="生活照片">
+          <div class="life-overlay">
+            <span class="life-count">10+</span>
+            <h4>新年雪景</h4>
+          </div>
+        </a>
+
+        <a href="/pages/life.html" class="glass-card life-card life-card-large">
+          <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img2.jpg" alt="生活照片">
+          <div class="life-overlay">
+            <span class="life-count">8+</span>
+            <h4>城市夜景</h4>
+          </div>
+        </a>
+      </div>
+
+      <div class="life-more">
+        <a href="/pages/life.html" class="pill-btn pill-btn-secondary">
+          查看全部相册
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 联系我 ===== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="contact-wrapper glass-card">
+        <div class="contact-content">
+          <h2>让我们一起创造</h2>
+          <p>无论是技术讨论、项目合作，还是简单的打招呼，我都很期待收到你的消息。</p>
+
+          <div class="contact-links">
+            <a href="mailto:someometony@outlook.com" class="contact-link">
+              <span class="contact-icon">📧</span>
+              <div>
+                <span class="contact-label">邮箱</span>
+                <span class="contact-value">someometony@outlook.com</span>
+              </div>
             </a>
-            <a href="#" class="btn btn-secondary">
-              微博
-            </a>
-            <a href="#" class="btn btn-secondary">
-              微信
+
+            <a href="https://github.com/TonyDDcui" target="_blank" class="contact-link">
+              <span class="contact-icon">🐙</span>
+              <div>
+                <span class="contact-label">GitHub</span>
+                <span class="contact-value">@TonyDDcui</span>
+              </div>
             </a>
           </div>
+
+          <a href="mailto:someometony@outlook.com" class="pill-btn pill-btn-primary pill-btn-lg">
+            <span>发送邮件</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="contact-decoration">
+          <div class="deco-circle"></div>
+          <div class="deco-circle"></div>
+          <div class="deco-circle"></div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ===== 页脚 ===== -->
-  <footer data-animate>
-    <div class="container-lg">
+  <footer class="footer">
+    <div class="container">
       <div class="footer-content">
-        <div class="footer-section">
-          <h3>关于</h3>
-          <div class="footer-links">
-            <a href="#about">关于我</a>
-            <a href="/pages/about.html">更多信息</a>
-          </div>
+        <div class="footer-brand">
+          <span class="footer-logo">⚡</span>
+          <span>崔喆箫</span>
         </div>
 
-        <div class="footer-section">
-          <h3>作品</h3>
-          <div class="footer-links">
-            <a href="#projects">全部项目</a>
-            <a href="#tech-shares">技术分享</a>
-          </div>
+        <div class="footer-links">
+          <a href="#about">关于</a>
+          <a href="#skills">技能</a>
+          <a href="#projects">项目</a>
+          <a href="#github">GitHub</a>
+          <a href="#contact">联系</a>
         </div>
 
-        <div class="footer-section">
-          <h3>联系</h3>
-          <div class="footer-links">
-            <a href="mailto:someometony@outlook.com">邮箱</a>
-            <a href="https://github.com/TonyDDcui" target="_blank">GitHub</a>
-          </div>
+        <div class="footer-social">
+          <a href="https://github.com/TonyDDcui" target="_blank" title="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2024-2026 崔喆箫. 使用爱和代码制作.</p>
+        <p>© 2024-2026 崔喆箫 · 用爱与代码构建</p>
       </div>
     </div>
   </footer>
 
-  <!-- 返回顶部按钮 -->
-  <button data-back-to-top title="返回顶部">↑</button>
+  <!-- 返回顶部 -->
+  <button class="back-to-top" data-back-to-top>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
 
-  <!-- 脚本 -->
-  <script src="/static/js/main.js"></script>
-
+  <!-- Scripts -->
+  <script src="./assets/js/particles.js"></script>
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/github-trending.js"></script>
+  <script src="./assets/js/contribution-graph.js"></script>
 </body>
 </html>
