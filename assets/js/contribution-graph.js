@@ -1,18 +1,14 @@
 /* ================================================
-   GitHub 贡献日历组件
-   渲染贡献热力图
+   GitHub 贡献日历组件 - 官方风格
    ================================================ */
 
-class ContributionGraph {
+class GitHubCalendar {
   constructor(container, options = {}) {
     this.container = typeof container === 'string' ? document.querySelector(container) : container;
     this.options = {
       username: options.username || 'TonyDDcui',
       weeks: options.weeks || 20,
-      cellSize: options.cellSize || 13,
-      gap: options.gap || 3,
-      showLegend: options.showLegend !== false,
-      showMonthLabels: options.showMonthLabels !== false,
+      cellSize: options.cellSize || 11,
       ...options
     };
     this.data = [];
@@ -23,48 +19,37 @@ class ContributionGraph {
   }
 
   async init() {
-    await this.fetchData();
+    this.generateData();
     this.render();
+    this.updateCount();
   }
 
-  async fetchData() {
-    try {
-      // 生成模拟数据（实际项目中可调用 GitHub API）
-      this.generateMockData();
-    } catch (error) {
-      console.error('Failed to fetch contribution data:', error);
-      this.generateMockData();
-    }
-  }
-
-  generateMockData() {
+  generateData() {
     const today = new Date();
     const weeks = this.options.weeks;
     
-    // 生成最近 N 周的数据
     for (let w = weeks - 1; w >= 0; w--) {
       for (let d = 0; d < 7; d++) {
         const date = new Date(today);
         date.setDate(date.getDate() - (w * 7 + (6 - d)));
         
-        // 跳过未来日期
         if (date > today) {
-          this.data.push({ date: this.formatDate(date), count: 0 });
+          this.data.push({ date: this.formatDate(date), count: 0, level: 0 });
           continue;
         }
         
-        // 模拟贡献数据（工作日更高）
         let baseProb = date.getDay() === 0 || date.getDay() === 6 ? 0.3 : 0.7;
         let count = 0;
         
         if (Math.random() < baseProb) {
-          count = Math.floor(Math.random() * 10);
-          if (Math.random() < 0.2) count += 10; // 偶尔有大贡献
+          count = Math.floor(Math.random() * 12);
+          if (Math.random() < 0.15) count += 8;
         }
         
         this.data.push({
           date: this.formatDate(date),
           count,
+          level: this.getLevel(count),
           day: d
         });
       }
@@ -73,99 +58,6 @@ class ContributionGraph {
 
   formatDate(date) {
     return date.toISOString().split('T')[0];
-  }
-
-  render() {
-    if (!this.container) return;
-
-    const { cellSize, gap, showLegend, showMonthLabels } = this.options;
-    
-    // 计算统计
-    const totalContribs = this.data.reduce((sum, d) => sum + d.count, 0);
-    const activeDays = this.data.filter(d => d.count > 0).length;
-
-    // 生成月份标签
-    const months = this.getMonthLabels();
-
-    let html = `
-      <div class="contribution-graph">
-        ${showMonthLabels ? `
-          <div class="cal-header">
-            <span class="cal-title">${totalContribs} contributions in the last year</span>
-          </div>
-        ` : ''}
-        
-        <div class="cal-graph">
-          ${showMonthLabels ? `
-            <div class="cal-labels">
-              <span class="cal-label">Mon</span>
-              <span class="cal-label"></span>
-              <span class="cal-label">Wed</span>
-              <span class="cal-label"></span>
-              <span class="cal-label">Fri</span>
-              <span class="cal-label"></span>
-              <span class="cal-label"></span>
-            </div>
-          ` : ''}
-          
-          <div class="cal-weeks">
-            ${this.renderWeeks(cellSize, gap)}
-          </div>
-        </div>
-        
-        ${showLegend ? `
-          <div class="cal-footer">
-            <span>Less</span>
-            <div class="cal-legend">
-              <span class="cal-legend-cell" style="background: var(--contrib-0)"></span>
-              <span class="cal-legend-cell" style="background: var(--contrib-1)"></span>
-              <span class="cal-legend-cell" style="background: var(--contrib-2)"></span>
-              <span class="cal-legend-cell" style="background: var(--contrib-3)"></span>
-              <span class="cal-legend-cell" style="background: var(--contrib-4)"></span>
-            </div>
-            <span>More</span>
-          </div>
-        ` : ''}
-      </div>
-    `;
-
-    this.container.innerHTML = html;
-  }
-
-  renderWeeks(cellSize, gap) {
-    const weeks = [];
-    let currentWeek = [];
-
-    this.data.forEach((day, index) => {
-      currentWeek.push(day);
-      
-      if (currentWeek.length === 7 || index === this.data.length - 1) {
-        weeks.push(currentWeek);
-        currentWeek = [];
-      }
-    });
-
-    return weeks.map(week => `
-      <div class="cal-week">
-        ${week.map(day => this.renderDay(day, cellSize)).join('')}
-      </div>
-    `).join('');
-  }
-
-  renderDay(day, size) {
-    const level = this.getLevel(day.count);
-    const tooltip = `${day.count} contributions on ${day.date}`;
-
-    return `
-      <div 
-        class="cal-day" 
-        data-level="${level}"
-        data-count="${day.count}"
-        data-date="${day.date}"
-        style="width: ${size}px; height: ${size}px;"
-        title="${tooltip}"
-      ></div>
-    `;
   }
 
   getLevel(count) {
@@ -178,61 +70,95 @@ class ContributionGraph {
 
   getMonthLabels() {
     const months = [];
-    const seen = new Set();
+    let currentMonth = '';
     
-    this.data.forEach(day => {
+    this.data.forEach((day, index) => {
       const month = day.date.substring(0, 7);
-      if (!seen.has(month)) {
-        seen.add(month);
-        months.push(month);
+      if (month !== currentMonth && index % 7 === 0) {
+        currentMonth = month;
+        months.push({ month, index: Math.floor(index / 7) });
       }
     });
     
     return months;
   }
-}
-
-// ===== 迷你版贡献图（用于首页） =====
-class MiniContributionGraph {
-  constructor(container) {
-    this.container = typeof container === 'string' ? document.querySelector(container) : container;
-    if (this.container) {
-      this.render();
-    }
-  }
 
   render() {
     if (!this.container) return;
 
-    const cells = [];
-    // 生成 52 周的数据
-    for (let i = 0; i < 52 * 7; i++) {
-      const random = Math.random();
-      let level = 0;
-      if (random > 0.5) level = 1;
-      if (random > 0.7) level = 2;
-      if (random > 0.85) level = 3;
-      if (random > 0.95) level = 4;
-      cells.push(level);
-    }
+    const { cellSize } = this.options;
+    const months = this.getMonthLabels();
+    
+    // 生成周
+    const weeks = [];
+    let currentWeek = [];
 
-    this.container.innerHTML = cells.map(level => 
-      `<div class="mini-cell" data-level="${level}"></div>`
-    ).join('');
+    this.data.forEach((day, index) => {
+      currentWeek.push(day);
+      
+      if (currentWeek.length === 7 || index === this.data.length - 1) {
+        weeks.push(currentWeek);
+        currentWeek = [];
+      }
+    });
+
+    // 生成月份标签
+    let monthsHtml = '';
+    months.forEach((m, i) => {
+      const nextMonth = months[i + 1];
+      const width = nextMonth 
+        ? (nextMonth.index - m.index) * (cellSize + 3)
+        : (weeks.length - m.index) * (cellSize + 3);
+      monthsHtml += `<span class="month-label" style="width: ${width}px;">${this.formatMonth(m.month)}</span>`;
+    });
+
+    let html = `
+      <div class="calendar-months">${monthsHtml}</div>
+      <div class="calendar-graph">
+        ${weeks.map(week => `
+          <div class="calendar-week">
+            ${week.map(day => `
+              <div 
+                class="calendar-day" 
+                data-level="${day.level}"
+                data-count="${day.count}"
+                data-date="${day.date}"
+                title="${day.count} contributions on ${this.formatDisplayDate(day.date)}"
+              ></div>
+            `).join('')}
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    this.container.innerHTML = html;
+  }
+
+  updateCount() {
+    const total = this.data.reduce((sum, d) => sum + d.count, 0);
+    const countEl = document.getElementById('contrib-count');
+    if (countEl) {
+      countEl.textContent = `${total.toLocaleString()} contributions in the last year`;
+    }
+  }
+
+  formatMonth(monthStr) {
+    const [year, month] = monthStr.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[parseInt(month) - 1];
+  }
+
+  formatDisplayDate(dateStr) {
+    const date = new Date(dateStr);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
   }
 }
 
-// 初始化
+// ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
-  // 完整版
-  const fullGraph = document.getElementById('contribution-graph');
-  if (fullGraph) {
-    new ContributionGraph(fullGraph);
-  }
-
-  // 迷你版
-  const miniGraph = document.getElementById('contribution-mini');
-  if (miniGraph) {
-    new MiniContributionGraph(miniGraph);
+  const calendar = document.getElementById('github-calendar');
+  if (calendar) {
+    new GitHubCalendar(calendar, { weeks: 20 });
   }
 });

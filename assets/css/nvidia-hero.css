@@ -145,47 +145,115 @@
   margin-bottom: var(--space-12);
 }
 
-/* 迷你贡献图 */
-.mini-contribution {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
+/* ===== GitHub 官方风格日历卡片 ===== */
+.hero-github-card {
+  margin-top: var(--space-8);
   padding: var(--space-4) var(--space-6);
-  background: var(--bg-card);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
 }
 
-.contribution-label {
-  font-size: 0.75rem;
+.github-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.github-card-header svg {
   color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
-.contribution-graph-mini {
+.github-card-header a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.github-card-header a:hover {
+  text-decoration: underline;
+}
+
+.github-calendar-mini {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.calendar-months {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 18px;
+  flex-shrink: 0;
+}
+
+.month-label {
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
+  height: 13px;
+  line-height: 13px;
+  width: 28px;
+}
+
+.calendar-graph {
   display: flex;
   gap: 3px;
-  height: 32px;
 }
 
-.mini-cell {
-  width: 8px;
-  height: 8px;
+.calendar-week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.calendar-day {
+  width: 11px;
+  height: 11px;
   border-radius: 2px;
-  background: var(--contrib-1);
-  transition: transform var(--duration-fast);
+  background: var(--contrib-0);
+  transition: transform 0.1s;
 }
 
-.mini-cell:hover {
-  transform: scale(1.5);
+.calendar-day:hover {
+  transform: scale(1.2);
+  outline: 1px solid var(--accent-primary);
+  outline-offset: 1px;
 }
 
-.mini-cell:nth-child(3n) { background: var(--contrib-2); }
-.mini-cell:nth-child(5n) { background: var(--contrib-3); }
-.mini-cell:nth-child(7n) { background: var(--contrib-4); }
+.calendar-day[data-level="0"] { background: var(--contrib-0); }
+.calendar-day[data-level="1"] { background: var(--contrib-1); }
+.calendar-day[data-level="2"] { background: var(--contrib-2); }
+.calendar-day[data-level="3"] { background: var(--contrib-3); }
+.calendar-day[data-level="4"] { background: var(--contrib-4); }
+
+.github-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+}
+
+.contrib-count {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* 滚动条样式 */
+.github-calendar-mini::-webkit-scrollbar {
+  height: 4px;
+}
+
+.github-calendar-mini::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.github-calendar-mini::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 2px;
+}
 
 /* ===== 滚动指示器 ===== */
 .scroll-indicator {
@@ -249,23 +317,28 @@
     margin-bottom: var(--space-8);
   }
 
-  /* GitHub 活跃度模块移动端适配 */
-  .mini-contribution {
-    width: calc(100% - var(--space-8));
-    max-width: 400px;
+  /* GitHub 日历卡片移动端 */
+  .hero-github-card {
     padding: var(--space-3) var(--space-4);
-    overflow-x: auto;
+    margin-top: var(--space-6);
   }
 
-  .contribution-graph-mini {
-    justify-content: flex-start;
-    min-width: 280px;
+  .github-card-header {
+    font-size: 0.75rem;
   }
 
-  .mini-cell {
-    width: 6px;
-    height: 6px;
-    flex-shrink: 0;
+  .calendar-day {
+    width: 9px;
+    height: 9px;
+  }
+
+  .month-label {
+    font-size: 0.5625rem;
+    width: 22px;
+  }
+
+  .calendar-months {
+    padding-top: 16px;
   }
 
   .scroll-indicator {
