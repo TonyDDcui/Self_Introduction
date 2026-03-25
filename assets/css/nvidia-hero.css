@@ -145,11 +145,11 @@
   margin-bottom: var(--space-12);
 }
 
-/* ===== GitHub 官方风格日历卡片 ===== */
+/* ===== GitHub 风格日历卡片 ===== */
 .hero-github-card {
   margin-top: var(--space-8);
-  padding: var(--space-4) var(--space-6);
-  max-width: 600px;
+  padding: var(--space-4) var(--space-5);
+  max-width: 650px;
   width: 100%;
 }
 
@@ -158,7 +158,7 @@
   align-items: center;
   gap: var(--space-2);
   margin-bottom: var(--space-3);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: var(--text-secondary);
 }
 
@@ -176,64 +176,66 @@
   text-decoration: underline;
 }
 
+/* 日历网格 */
 .github-calendar-mini {
-  display: flex;
-  gap: var(--space-2);
   overflow-x: auto;
-  padding-bottom: var(--space-2);
+  padding-bottom: var(--space-1);
 }
 
-.calendar-months {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding-top: 18px;
-  flex-shrink: 0;
+.cal-wrapper {
+  display: inline-block;
+  min-width: fit-content;
 }
 
-.month-label {
-  font-size: 0.625rem;
+.cal-months {
+  display: grid;
+  grid-template-columns: repeat(20, 13px);
+  gap: 3px;
+  margin-bottom: var(--space-1);
+  padding-left: 0;
+}
+
+.cal-month {
+  font-size: 0.6875rem;
   color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(20, 13px);
+  grid-template-rows: repeat(7, 13px);
+  gap: 3px;
+}
+
+.cal-cell {
+  width: 13px;
   height: 13px;
-  line-height: 13px;
-  width: 28px;
-}
-
-.calendar-graph {
-  display: flex;
-  gap: 3px;
-}
-
-.calendar-week {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.calendar-day {
-  width: 11px;
-  height: 11px;
   border-radius: 2px;
-  background: var(--contrib-0);
   transition: transform 0.1s;
 }
 
-.calendar-day:hover {
+.cal-cell:hover {
   transform: scale(1.2);
-  outline: 1px solid var(--accent-primary);
-  outline-offset: 1px;
 }
 
-.calendar-day[data-level="0"] { background: var(--contrib-0); }
-.calendar-day[data-level="1"] { background: var(--contrib-1); }
-.calendar-day[data-level="2"] { background: var(--contrib-2); }
-.calendar-day[data-level="3"] { background: var(--contrib-3); }
-.calendar-day[data-level="4"] { background: var(--contrib-4); }
+.level-0 { background: var(--contrib-0); }
+.level-1 { background: var(--contrib-1); }
+.level-2 { background: var(--contrib-2); }
+.level-3 { background: var(--contrib-3); }
+.level-4 { background: var(--contrib-4); }
+
+/* 浅色主题适配 */
+[data-theme="light"] .level-0 { background: #ebedf0; }
+[data-theme="light"] .level-1 { background: #9be9a8; }
+[data-theme="light"] .level-2 { background: #40c463; }
+[data-theme="light"] .level-3 { background: #30a14e; }
+[data-theme="light"] .level-4 { background: #216e39; }
 
 .github-card-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
 }
 
 .contrib-count {
@@ -243,7 +245,7 @@
 
 /* 滚动条样式 */
 .github-calendar-mini::-webkit-scrollbar {
-  height: 4px;
+  height: 6px;
 }
 
 .github-calendar-mini::-webkit-scrollbar-track {
@@ -252,7 +254,11 @@
 
 .github-calendar-mini::-webkit-scrollbar-thumb {
   background: var(--text-muted);
-  border-radius: 2px;
+  border-radius: 3px;
+}
+
+.github-calendar-mini::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
 }
 
 /* ===== 滚动指示器 ===== */
@@ -321,24 +327,31 @@
   .hero-github-card {
     padding: var(--space-3) var(--space-4);
     margin-top: var(--space-6);
+    max-width: 100%;
   }
 
   .github-card-header {
     font-size: 0.75rem;
   }
 
-  .calendar-day {
-    width: 9px;
-    height: 9px;
+  .cal-grid {
+    grid-template-columns: repeat(20, 11px);
+    grid-template-rows: repeat(7, 11px);
+    gap: 2px;
   }
 
-  .month-label {
+  .cal-cell {
+    width: 11px;
+    height: 11px;
+  }
+
+  .cal-months {
+    grid-template-columns: repeat(20, 11px);
+    gap: 2px;
+  }
+
+  .cal-month {
     font-size: 0.5625rem;
-    width: 22px;
-  }
-
-  .calendar-months {
-    padding-top: 16px;
   }
 
   .scroll-indicator {
