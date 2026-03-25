@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生活日常 | 崔喆箫</title>
+    <title>项目作品 | 崔喆箫</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -102,74 +102,64 @@
 
         .page-subtitle { color: var(--text-secondary); font-size: 1rem; }
 
-        .albums-grid {
+        .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
             padding-bottom: 80px;
         }
 
-        .album-card {
+        .project-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
-            text-decoration: none;
-            color: var(--text);
             transition: border-color 0.2s;
         }
 
-        .album-card:hover { border-color: var(--text-tertiary); }
+        .project-card:hover { border-color: var(--text-tertiary); }
 
-        .album-cover {
-            position: relative;
-            aspect-ratio: 16/10;
+        .project-image {
+            height: 180px;
             overflow: hidden;
         }
 
-        .album-cover img {
+        .project-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s;
         }
 
-        .album-card:hover .album-cover img { transform: scale(1.04); }
+        .project-card:hover .project-image img { transform: scale(1.04); }
 
-        .album-count {
-            position: absolute;
-            top: 12px;
-            right: 12px;
+        .project-content { padding: 20px; }
+
+        .project-content h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-content p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .project-tag {
             padding: 4px 10px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
+            background: var(--bg-tertiary);
             border-radius: 100px;
             font-size: 0.6875rem;
-            color: white;
-        }
-
-        .album-body { padding: 16px; }
-
-        .album-date {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            margin-bottom: 4px;
-        }
-
-        .album-title {
-            font-size: 0.9375rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .album-desc {
-            font-size: 0.8125rem;
             color: var(--text-secondary);
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .fade-up { opacity: 0; transform: translateY(16px); transition: opacity 0.4s ease, transform 0.4s ease; }
@@ -178,13 +168,13 @@
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
             .nav { padding: 0 20px; }
-            .albums-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <nav class="nav">
-        <a href="index.html" class="nav-back">
+        <a href="../index.html" class="nav-back">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             返回首页
         </a>
@@ -198,84 +188,57 @@
     <div class="container">
         <header class="page-header fade-up">
             <h1 class="page-title">
-                <span>📸</span>
-                生活日常
+                <span>🚀</span>
+                项目作品
             </h1>
-            <p class="page-subtitle">记录生活中的美好瞬间，用镜头捕捉每一个值得纪念的时刻</p>
+            <p class="page-subtitle">15+ 完整项目，涵盖多个技术领域</p>
         </header>
 
-        <div class="albums-grid fade-up">
-            <a href="life-detail.html?id=1" class="album-card">
-                <div class="album-cover">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img1.jpg" alt="咖啡馆时光">
-                    <span class="album-count">5 张</span>
+        <div class="projects-grid fade-up">
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/project_img/img1.jpg" alt="智能小车">
                 </div>
-                <div class="album-body">
-                    <p class="album-date">2025年3月</p>
-                    <h3 class="album-title">周末的咖啡馆时光</h3>
-                    <p class="album-desc">在城市的角落里发现了一家安静的咖啡馆，阳光透过窗户洒进来，一切都刚刚好。</p>
+                <div class="project-content">
+                    <h3>智能循迹小车</h3>
+                    <p>基于 STM32 的智能循迹小车，配备多种传感器，实现自主导航与避障功能。</p>
+                    <div class="project-tags">
+                        <span class="project-tag">STM32</span>
+                        <span class="project-tag">传感器</span>
+                        <span class="project-tag">PID控制</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
-            <a href="life-detail.html?id=2" class="album-card">
-                <div class="album-cover">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img2.jpg" alt="城市夜景">
-                    <span class="album-count">8 张</span>
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/project_img/img2.jpg" alt="智能家居">
                 </div>
-                <div class="album-body">
-                    <p class="album-date">2025年2月</p>
-                    <h3 class="album-title">城市夜景漫步</h3>
-                    <p class="album-desc">夜幕降临，华灯初上。站在高处俯瞰这座城市的灯火，感受都市的脉搏。</p>
+                <div class="project-content">
+                    <h3>智能家居控制系统</h3>
+                    <p>物联网智能家居系统，支持远程控制、语音交互和自动化场景配置。</p>
+                    <div class="project-tags">
+                        <span class="project-tag">IoT</span>
+                        <span class="project-tag">WiFi</span>
+                        <span class="project-tag">MQTT</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
-            <a href="life-detail.html?id=3" class="album-card">
-                <div class="album-cover">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img3.jpg" alt="山间徒步">
-                    <span class="album-count">12 张</span>
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/project_img/img3.jpg" alt="机械臂">
                 </div>
-                <div class="album-body">
-                    <p class="album-date">2025年2月</p>
-                    <h3 class="album-title">山间徒步之旅</h3>
-                    <p class="album-desc">远离城市的喧嚣，走进大自然。山间的空气清新，每一步都是与自然的对话。</p>
+                <div class="project-content">
+                    <h3>四自由度机械臂</h3>
+                    <p>舵机控制机械臂，支持精确位置控制、轨迹规划与抓取作业。</p>
+                    <div class="project-tags">
+                        <span class="project-tag">舵机控制</span>
+                        <span class="project-tag">运动学</span>
+                        <span class="project-tag">逆解算</span>
+                    </div>
                 </div>
-            </a>
-
-            <a href="life-detail.html?id=4" class="album-card">
-                <div class="album-cover">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img4.jpg" alt="书店时光">
-                    <span class="album-count">6 张</span>
-                </div>
-                <div class="album-body">
-                    <p class="album-date">2025年1月</p>
-                    <h3 class="album-title">书店里的午后</h3>
-                    <p class="album-desc">在书架间穿梭，偶然发现一本好书。时间在这里仿佛静止了。</p>
-                </div>
-            </a>
-
-            <a href="life-detail.html?id=5" class="album-card">
-                <div class="album-cover">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img5.jpg" alt="新年雪景">
-                    <span class="album-count">10 张</span>
-                </div>
-                <div class="album-body">
-                    <p class="album-date">2025年1月</p>
-                    <h3 class="album-title">新年的第一场雪</h3>
-                    <p class="album-desc">雪花飘落，世界变成白色。这是新年最好的礼物，也是冬天最美的风景。</p>
-                </div>
-            </a>
-
-            <a href="life-detail.html?id=6" class="album-card">
-                <div class="album-cover">
-                    <img src="https://cdn.jsdelivr.net/gh/TonyDDcui/Self_Introduction@main/Project_record/life_img/img6.jpg" alt="美食探索">
-                    <span class="album-count">7 张</span>
-                </div>
-                <div class="album-body">
-                    <p class="album-date">2024年12月</p>
-                    <h3 class="album-title">美食探索日记</h3>
-                    <p class="album-desc">生活中的小确幸，往往藏在美食里。记录每一次味蕾的惊喜，分享每一份美味的快乐。</p>
-                </div>
-            </a>
+            </div>
         </div>
     </div>
 

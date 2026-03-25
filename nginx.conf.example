@@ -1,0 +1,35 @@
+# Nginx configuration example for this project
+# Place this in your nginx sites-available directory
+
+server {
+    listen 80;
+    server_name Your_Domain_Here;
+    root /path/to/Self_Introduction;
+
+    # Default to index.html for root
+    location / {
+        index index.html;
+    }
+
+    # Handle sub-pages
+    location /pages/ {
+        try_files $uri $uri/ =404;
+    }
+
+    # Handle sub-modules
+    location /submodules/ {
+        try_files $uri $uri/index.html =404;
+    }
+
+    # Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|ttf|woff|woff2)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+}
