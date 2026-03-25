@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-24) 0;
+  padding: calc(60px + var(--space-12)) var(--space-6) var(--space-12);
   overflow: hidden;
 }
 
@@ -308,7 +308,7 @@
 @media (max-width: 768px) {
   .hero-section {
     min-height: auto;
-    padding: calc(var(--nav-height) + var(--space-16)) 0 var(--space-16);
+    padding: calc(56px + var(--space-10)) var(--space-4) var(--space-10);
   }
 
   .hero-title {
