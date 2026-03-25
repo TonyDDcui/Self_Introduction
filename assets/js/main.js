@@ -1,5 +1,5 @@
 /* ================================================
-   主脚本 - Main JavaScript
+   主脚�?- Main JavaScript
    ================================================ */
 
 (function() {
@@ -8,316 +8,203 @@
   // ===== 主题管理 =====
   const ThemeManager = {
     KEY: 'portfolio-theme',
-    DARK: 'dark',
-    LIGHT: 'light',
-    SYSTEM: 'system',
-    currentMode: 'system',
-
-    init() {
+    init: function() {
       this.restore();
       this.bindEvents();
-      this.updateThemeIcon();
     },
-
-    restore() {
-      const saved = localStorage.getItem(this.KEY);
+    restore: function() {
+      var saved = localStorage.getItem(this.KEY);
       if (saved === 'light' || saved === 'dark') {
-        this.currentMode = saved;
         document.documentElement.setAttribute('data-theme', saved);
       } else {
-        // 系统偏好
-        this.currentMode = 'system';
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
       }
       this.updateActiveOption();
     },
-
-    setTheme(mode) {
-      this.currentMode = mode;
+    setTheme: function(mode) {
       localStorage.setItem(this.KEY, mode);
-      
       if (mode === 'system') {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
       } else {
         document.documentElement.setAttribute('data-theme', mode);
       }
-      
-      this.updateThemeIcon();
       this.updateActiveOption();
     },
-
-    updateThemeIcon() {
-      // 图标切换由 CSS 处理
+    updateActiveOption: function() {
+      var saved = localStorage.getItem(this.KEY);
+      var current = saved || 'system';
+      var opts = document.querySelectorAll('.theme-option');
+      for (var i = 0; i < opts.length; i++) {
+        opts[i].classList.toggle('active', opts[i].dataset.mode === current);
+      }
     },
-
-    updateActiveOption() {
-      document.querySelectorAll('.theme-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.mode === this.currentMode);
-      });
-    },
-
-    bindEvents() {
-      // 下拉菜单切换
-      const btn = document.querySelector('.theme-btn');
-      const dropdown = document.getElementById('theme-dropdown');
-      
-      if (btn && dropdown) {
-        btn.addEventListener('click', (e) => {
+    bindEvents: function() {
+      var themeBtn = document.getElementById('theme-btn');
+      var dropdown = document.getElementById('theme-dropdown');
+      if (themeBtn && dropdown) {
+        themeBtn.addEventListener('click', function(e) {
           e.stopPropagation();
           dropdown.classList.toggle('show');
         });
-
-        // 选项点击
-        dropdown.querySelectorAll('.theme-option').forEach(opt => {
-          opt.addEventListener('click', () => {
-            this.setTheme(opt.dataset.mode);
-            dropdown.classList.remove('show');
-          });
-        });
-
-        // 点击外部关闭
-        document.addEventListener('click', () => {
+        var opts = dropdown.querySelectorAll('.theme-option');
+        for (var i = 0; i < opts.length; i++) {
+          opts[i].addEventListener('click', (function(opt) {
+            return function() {
+              ThemeManager.setTheme(opt.dataset.mode);
+              dropdown.classList.remove('show');
+            };
+          })(opts[i]));
+        }
+        document.addEventListener('click', function() {
           dropdown.classList.remove('show');
         });
       }
-
-      // 系统主题变化监听
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (this.currentMode === 'system') {
-          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+        if (!localStorage.getItem(ThemeManager.KEY)) {
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
         }
       });
     }
   };
 
-  // ===== 侧边栏目录 =====
-  const Sidebar = {
-    sidebar: null,
-    overlay: null,
-    menuBtn: null,
-    closeBtn: null,
-
-    init() {
-      this.sidebar = document.getElementById('sidebar');
-      this.overlay = document.getElementById('sidebar-overlay');
-      this.menuBtn = document.getElementById('menu-btn');
-      this.closeBtn = document.getElementById('sidebar-close');
-
-      if (!this.sidebar) return;
-
+  // ===== 侧边导航 =====
+  var Sidebar = {
+    init: function() {
+      this.hamburger = document.getElementById('hamburger-btn');
+      this.overlay = document.getElementById('nav-overlay');
+      this.sidebar = document.getElementById('nav-sidebar');
+      this.closeBtn = document.getElementById('nav-close');
+      if (!this.hamburger) return;
       this.bindEvents();
     },
-
-    bindEvents() {
-      // 打开
-      if (this.menuBtn) {
-        this.menuBtn.addEventListener('click', () => this.open());
+    bindEvents: function() {
+      var self = this;
+      this.hamburger.addEventListener('click', function() { self.toggle(); });
+      if (this.closeBtn) this.closeBtn.addEventListener('click', function() { self.close(); });
+      if (this.overlay) this.overlay.addEventListener('click', function() { self.close(); });
+      var links = this.sidebar.querySelectorAll('.nav-link');
+      for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', function() { self.close(); });
       }
-
-      // 关闭
-      if (this.closeBtn) {
-        this.closeBtn.addEventListener('click', () => this.close());
-      }
-
-      if (this.overlay) {
-        this.overlay.addEventListener('click', () => this.close());
-      }
-
-      // 链接点击关闭
-      this.sidebar.querySelectorAll('.sidebar-link').forEach(link => {
-        link.addEventListener('click', () => this.close());
-      });
-
-      // ESC 关闭
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') this.close();
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') self.close();
       });
     },
-
-    open() {
+    toggle: function() {
+      this.hamburger.classList.toggle('active');
+      this.sidebar.classList.toggle('show');
+      if (this.overlay) this.overlay.classList.toggle('show');
+      document.body.style.overflow = this.sidebar.classList.contains('show') ? 'hidden' : '';
+    },
+    open: function() {
+      this.hamburger.classList.add('active');
       this.sidebar.classList.add('show');
-      this.overlay.classList.add('show');
+      if (this.overlay) this.overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
     },
-
-    close() {
+    close: function() {
+      this.hamburger.classList.remove('active');
       this.sidebar.classList.remove('show');
-      this.overlay.classList.remove('show');
+      if (this.overlay) this.overlay.classList.remove('show');
       document.body.style.overflow = '';
     }
   };
 
   // ===== 平滑滚动 =====
-  const SmoothScroll = {
-    init() {
-      document.addEventListener('click', (e) => {
-        const link = e.target.closest('[href^="#"], [data-scroll-to]');
+  var SmoothScroll = {
+    init: function() {
+      var self = this;
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href^="#"]');
         if (!link) return;
-
-        let targetId;
-        if (link.hasAttribute('data-scroll-to')) {
-          targetId = link.getAttribute('data-scroll-to');
-        } else {
-          targetId = link.getAttribute('href');
-        }
-
+        var targetId = link.getAttribute('href');
         if (!targetId || targetId === '#') return;
-
-        const target = document.querySelector(targetId);
+        var target = document.querySelector(targetId);
         if (target) {
           e.preventDefault();
-          const headerHeight = document.querySelector('.github-header')?.offsetHeight || 60;
-          const top = target.getBoundingClientRect().top + window.scrollY - headerHeight;
-          window.scrollTo({ top, behavior: 'smooth' });
+          var headerHeight = 60;
+          var top = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+          window.scrollTo({ top: top, behavior: 'smooth' });
         }
-      });
-    }
-  };
-
-  // ===== 移动端菜单 =====
-  const MobileMenu = {
-    init() {
-      const toggle = document.querySelector('[data-menu-toggle]');
-      const menu = document.querySelector('[data-mobile-menu]');
-
-      if (!toggle || !menu) return;
-
-      toggle.addEventListener('click', () => {
-        toggle.classList.toggle('active');
-        menu.classList.toggle('active');
-      });
-
-      menu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          toggle.classList.remove('active');
-          menu.classList.remove('active');
-        });
       });
     }
   };
 
   // ===== 数字动画 =====
-  const CounterAnimation = {
-    animate(element, target, duration = 1500) {
-      const start = 0;
-      const startTime = performance.now();
-
-      const update = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = Math.floor(eased * target);
-        element.textContent = current;
-
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        } else {
-          element.textContent = target;
-        }
+  var CounterAnimation = {
+    animate: function(element, target, duration) {
+      duration = duration || 1500;
+      var startTime = performance.now();
+      var update = function(currentTime) {
+        var elapsed = currentTime - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = Math.floor(eased * target);
+        if (progress < 1) requestAnimationFrame(update);
+        else element.textContent = target;
       };
-
       requestAnimationFrame(update);
     },
-
-    init() {
-      const counters = document.querySelectorAll('[data-count]');
-      if (!counters.length) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    init: function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            const target = parseInt(entry.target.getAttribute('data-count'));
-            this.animate(entry.target, target);
+            CounterAnimation.animate(entry.target, parseInt(entry.target.dataset.count));
             observer.unobserve(entry.target);
           }
         });
       }, { threshold: 0.5 });
-
-      counters.forEach(counter => observer.observe(counter));
+      var counters = document.querySelectorAll('[data-count]');
+      for (var i = 0; i < counters.length; i++) {
+        observer.observe(counters[i]);
+      }
     }
   };
 
   // ===== 技能条动画 =====
-  const SkillBars = {
-    init() {
-      const bars = document.querySelectorAll('.skill-bar-fill');
-      if (!bars.length) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+  var SkillBars = {
+    init: function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            const width = entry.target.getAttribute('data-width');
-            entry.target.style.width = width + '%';
+            entry.target.style.width = entry.target.dataset.width + '%';
             observer.unobserve(entry.target);
           }
         });
       }, { threshold: 0.5 });
-
-      bars.forEach(bar => observer.observe(bar));
-    }
-  };
-
-  // ===== 滚动动画 =====
-  const ScrollAnimations = {
-    init() {
-      const elements = document.querySelectorAll('[data-animate]');
-      if (!elements.length) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-
-      elements.forEach(el => observer.observe(el));
+      var bars = document.querySelectorAll('.skill-bar-fill');
+      for (var i = 0; i < bars.length; i++) {
+        observer.observe(bars[i]);
+      }
     }
   };
 
   // ===== 返回顶部 =====
-  const BackToTop = {
-    init() {
-      const btn = document.querySelector('[data-back-to-top]');
+  var BackToTop = {
+    init: function() {
+      var btn = document.querySelector('[data-back-to-top]');
       if (!btn) return;
-
-      let ticking = false;
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            if (window.scrollY > 400) {
-              btn.classList.add('visible');
-            } else {
-              btn.classList.remove('visible');
-            }
-            ticking = false;
-          });
-          ticking = true;
-        }
+      window.addEventListener('scroll', function() {
+        btn.classList.toggle('visible', window.scrollY > 400);
       });
-
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
   };
 
-  // ===== 初始化 =====
+  // ===== 初始�?=====
   function init() {
     ThemeManager.init();
     Sidebar.init();
     SmoothScroll.init();
-    MobileMenu.init();
     CounterAnimation.init();
     SkillBars.init();
-    ScrollAnimations.init();
     BackToTop.init();
-
-    console.log('✨ Portfolio loaded');
+    console.log('Portfolio loaded');
   }
 
   if (document.readyState === 'loading') {
