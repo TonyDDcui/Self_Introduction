@@ -1,6 +1,6 @@
 /**
- * 汉堡菜单 - 垂直列表 + 居中显示
- * 苹果设计理念
+ * 汉堡菜单 - 无矩形框 + 比例居中
+ * 简洁设计
  */
 
 (function() {
@@ -8,16 +8,16 @@
 
   // 板块配置
   const SECTIONS = [
-    { id: 'hero', icon: '⚡', name: '首页' },
+    { id: 'hero', icon: '🏠', name: '首页' },
     { id: 'about', icon: '👤', name: '关于' },
-    { id: 'skills', icon: '🛠️', name: '技能' },
+    { id: 'skills', icon: '⚡', name: '技能' },
     { id: 'projects', icon: '🚀', name: '项目' },
     { id: 'github', icon: '🐙', name: 'GitHub' },
-    { id: 'certificates', icon: '🏆', name: '荣誉' },
-    { id: 'life', icon: '📸', name: '生活' },
-    { id: 'quotes', icon: '✨', name: '好句' },
-    { id: 'guestbook', icon: '💬', name: '留言' },
-    { id: 'contact', icon: '📧', name: '联系' }
+    { id: 'certificates', icon: '🏅', name: '荣誉' },
+    { id: 'life', icon: '📷', name: '生活' },
+    { id: 'quotes', icon: '💭', name: '好句' },
+    { id: 'guestbook', icon: '✍️', name: '留言' },
+    { id: 'contact', icon: '✉️', name: '联系' }
   ];
 
   // 初始化
@@ -52,23 +52,12 @@
     const navContainer = document.createElement('div');
     navContainer.className = 'section-nav-container';
     navContainer.innerHTML = `
-      <div class="nav-section-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7" rx="2"/>
-          <rect x="14" y="3" width="7" height="7" rx="2"/>
-          <rect x="14" y="14" width="7" height="7" rx="2"/>
-          <rect x="3" y="14" width="7" height="7" rx="2"/>
-        </svg>
-        <span>板块导航</span>
-      </div>
+      <div class="nav-section-title">导航</div>
       <div class="nav-list">
         ${SECTIONS.map(section => `
           <a href="#${section.id}" class="nav-item" data-section="${section.id}">
             <span class="nav-icon">${section.icon}</span>
             <span class="nav-name">${section.name}</span>
-            <svg class="nav-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 18l6-6-6-6"/>
-            </svg>
           </a>
         `).join('')}
       </div>
@@ -108,18 +97,8 @@
     githubSection.innerHTML = `
       <div class="github-section-title">开发者</div>
       <a href="https://github.com/TonyDDcui" target="_blank" rel="noopener" class="github-link">
-        <div class="github-avatar">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 2.08-.8 3.97-2.1 5.39.26.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </div>
-        <div class="github-info">
-          <span class="github-name">TonyDDcui</span>
-          <span class="github-desc">访问 GitHub 主页</span>
-        </div>
-        <svg class="github-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M7 17L17 7M17 7H7M17 7V17"/>
-        </svg>
+        <span class="github-icon">🐙</span>
+        <span class="github-name">TonyDDcui</span>
       </a>
     `;
 
@@ -169,84 +148,60 @@
 
   // 添加样式
   function addStyles() {
-    if (document.getElementById('vertical-nav-styles')) return;
+    if (document.getElementById('clean-nav-styles')) return;
     
     const style = document.createElement('style');
-    style.id = 'vertical-nav-styles';
+    style.id = 'clean-nav-styles';
     style.textContent = `
       /* ============================================
-         垂直导航 - 居中显示
+         简洁导航 - 无矩形框
          ============================================ */
 
-      /* 导航容器 - 居中（向右偏移） */
+      /* 导航容器 */
       .section-nav-container {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-left: 28px; /* 向右偏移 */
+        padding: 24px 32px;
       }
 
-      /* 板块标题 - 居中 */
+      /* 板块标题 */
       .nav-section-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 16px;
-        padding: 0 4px;
-        color: var(--text-secondary);
+        text-align: center;
         font-size: 13px;
         font-weight: 600;
+        color: var(--text-muted);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        width: 100%;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
       }
 
-      .nav-section-title svg {
-        color: var(--accent-primary);
-        opacity: 0.8;
-      }
-
-      /* 列表容器 - 苹果风格卡片 */
+      /* 列表 - 无矩形框 */
       .nav-list {
-        width: 100%;
-        max-width: 320px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 20px;
-        overflow: hidden;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
       }
 
-      /* 导航项 */
+      /* 导航项 - 简洁设计 */
       .nav-item {
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 16px 20px;
+        justify-content: center;
+        gap: 12px;
+        padding: 14px 20px;
         text-decoration: none;
         color: var(--text-primary);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        transition: all 0.2s ease;
+        border-radius: 12px;
       }
 
-      .nav-item:last-child {
-        border-bottom: none;
-      }
-
-      /* 悬停效果 */
       .nav-item:hover {
-        background: rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.05);
       }
 
       .nav-item:active {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.08);
+        transform: scale(0.98);
       }
 
-      /* 活跃状态 */
       .nav-item.active {
         background: rgba(88, 166, 255, 0.12);
       }
@@ -258,36 +213,17 @@
 
       /* 图标 */
       .nav-item .nav-icon {
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.06);
-        border-radius: 12px;
-        font-size: 18px;
-        flex-shrink: 0;
+        font-size: 22px;
+        width: 32px;
+        text-align: center;
       }
 
       /* 名称 */
       .nav-item .nav-name {
-        flex: 1;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 500;
+        width: 60px;
         letter-spacing: -0.2px;
-      }
-
-      /* 箭头 */
-      .nav-item .nav-arrow {
-        color: var(--text-muted);
-        opacity: 0.4;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-      }
-
-      .nav-item:hover .nav-arrow {
-        opacity: 0.8;
-        transform: translateX(3px);
       }
 
       /* ============================================
@@ -296,9 +232,7 @@
       
       .nav-divider {
         height: 1px;
-        margin: 8px auto;
-        width: calc(100% - 40px);
-        max-width: 280px;
+        margin: 16px 32px;
         background: linear-gradient(
           90deg,
           transparent,
@@ -308,91 +242,47 @@
       }
 
       /* ============================================
-         GitHub 区域（底部）- 居中（向右偏移）
+         GitHub 区域（底部）
          ============================================ */
       
       .github-section {
-        padding: 0 20px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        padding-left: 8px;
+        padding: 0 32px 24px;
       }
 
       .github-section-title {
+        text-align: center;
         font-size: 13px;
         font-weight: 600;
         color: var(--text-muted);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
         margin-bottom: 12px;
-        text-align: center;
       }
 
       .github-link {
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 16px 20px;
-        width: 100%;
-        max-width: 320px;
-        background: rgba(88, 166, 255, 0.08);
-        border: 1px solid rgba(88, 166, 255, 0.15);
-        border-radius: 16px;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 20px;
         text-decoration: none;
         color: inherit;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.2s ease;
+        border-radius: 12px;
       }
 
       .github-link:hover {
-        background: rgba(88, 166, 255, 0.12);
-        border-color: rgba(88, 166, 255, 0.25);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(88, 166, 255, 0.15);
+        background: rgba(88, 166, 255, 0.1);
       }
 
-      .github-avatar {
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-        border-radius: 12px;
-        color: white;
-        flex-shrink: 0;
-      }
-
-      .github-info {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
+      .github-icon {
+        font-size: 22px;
       }
 
       .github-name {
         font-size: 16px;
         font-weight: 600;
-        color: var(--text-primary);
-        letter-spacing: -0.2px;
-      }
-
-      .github-desc {
-        font-size: 13px;
-        color: var(--text-muted);
-      }
-
-      .github-arrow {
         color: var(--accent-primary);
-        opacity: 0.6;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-      }
-
-      .github-link:hover .github-arrow {
-        opacity: 1;
-        transform: translate(2px, -2px);
       }
 
       /* ============================================
@@ -401,58 +291,7 @@
       
       @media (max-width: 768px) {
         .section-nav-container {
-          padding: 16px;
-        }
-
-        .nav-list {
-          border-radius: 16px;
-          max-width: 100%;
-        }
-
-        .nav-item {
-          padding: 14px 18px;
-        }
-
-        .nav-item .nav-icon {
-          width: 32px;
-          height: 32px;
-          font-size: 16px;
-          border-radius: 10px;
-        }
-
-        .nav-item .nav-name {
-          font-size: 14px;
-        }
-
-        .nav-divider {
-          margin: 6px auto;
-          width: calc(100% - 32px);
-        }
-
-        .github-section {
-          padding: 0 16px 16px;
-        }
-
-        .github-link {
-          padding: 14px 18px;
-          border-radius: 14px;
-          max-width: 100%;
-        }
-
-        .github-avatar {
-          width: 40px;
-          height: 40px;
-        }
-
-        .github-name {
-          font-size: 15px;
-        }
-      }
-
-      /* 小屏幕手机 */
-      @media (max-width: 380px) {
-        .nav-list {
-          border-radius: 14px;
+          padding: 20px 24px;
         }
 
         .nav-item {
@@ -460,26 +299,57 @@
         }
 
         .nav-item .nav-icon {
-          width: 28px;
-          height: 28px;
-          font-size: 14px;
+          font-size: 20px;
         }
 
-        .github-link {
-          border-radius: 12px;
+        .nav-item .nav-name {
+          font-size: 15px;
+        }
+
+        .nav-divider {
+          margin: 12px 24px;
+        }
+
+        .github-section {
+          padding: 0 24px 20px;
         }
       }
 
-      /* 侧边栏容器优化 */
+      /* 小屏幕手机 */
+      @media (max-width: 380px) {
+        .section-nav-container {
+          padding: 16px 20px;
+        }
+
+        .nav-item {
+          padding: 10px 14px;
+        }
+
+        .nav-item .nav-icon {
+          font-size: 18px;
+          width: 28px;
+        }
+
+        .nav-item .nav-name {
+          font-size: 14px;
+          width: 56px;
+        }
+
+        .github-section {
+          padding: 0 20px 16px;
+        }
+      }
+
+      /* 侧边栏容器 */
       #nav-sidebar {
-        background: rgba(13, 17, 23, 0.95);
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
+        background: rgba(13, 17, 23, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
       }
 
       /* 滚动条美化 */
       #nav-sidebar::-webkit-scrollbar {
-        width: 6px;
+        width: 4px;
       }
 
       #nav-sidebar::-webkit-scrollbar-track {
@@ -488,11 +358,7 @@
 
       #nav-sidebar::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-      }
-
-      #nav-sidebar::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
       }
     `;
     document.head.appendChild(style);
