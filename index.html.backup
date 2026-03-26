@@ -16,8 +16,7 @@
   <link rel="stylesheet" href="./assets/css/github-header.css">
   <link rel="stylesheet" href="./assets/css/main.css">
   <link rel="stylesheet" href="./assets/css/mobile-optimization.css">
-  <link rel="stylesheet" href="./assets/css/quotes-and-danmaku.css">
-  <link rel="stylesheet" href="./assets/css/guestbook.css">
+  <link rel="stylesheet" href="./assets/css/quotes-and-danmaku.css">`n  <link rel="stylesheet" href="./assets/css/guestbook.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 </head>
 <body data-theme="dark">
@@ -520,15 +519,6 @@
     </div>
   </section>
 
-  <!-- 留言板 -->
-  <section class="section section-alt" id="guestbook">
-    <div class="container">
-      <div class="guestbook-container">
-        <!-- 由 JavaScript 动态生成 -->
-      </div>
-    </div>
-  </section>
-
   <!-- Contact Section -->
   <section class="section" id="contact">
     <div class="container">
@@ -606,8 +596,6 @@
   <script src="./assets/js/main.js"></script>
   <script src="./assets/js/github-trending.js"></script>
   <script src="./assets/js/contribution-graph.js"></script>
-  <script src="./assets/js/quotes-and-danmaku.js"></script>
-  <script src="./assets/js/section-navigation.js"></script>
-  <script src="./assets/js/guestbook.js"></script>
+  <script src="./assets/js/quotes-and-danmaku.js"></script>`n  <script src="./assets/js/section-navigation.js"></script>`n  <script src="./assets/js/guestbook.js"></script>
 </body>
 </html>
