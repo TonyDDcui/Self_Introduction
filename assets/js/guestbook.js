@@ -11,10 +11,10 @@
   const CONFIG = {
     // JSONBin.io API Key（需要注册获取）
     // 注册地址：https://jsonbin.io/
-    API_KEY: '$2a$10$YOUR_API_KEY_HERE', // 替换为你的 API Key
+    API_KEY: '$2a$10$EOHGYh3otRTo8jQQw3FRc.XMcnhZ2c5E9UloscgNitQfHYArUBVCm', // 替换为你的 API Key
     
     // Bin ID（创建后获得）
-    BIN_ID: 'your_bin_id_here', // 替换为你的 Bin ID
+    BIN_ID: '69c51217aa77b81da91faf88', // 替换为你的 Bin ID
     
     // 使用示例数据作为默认（无需配置即可使用）
     USE_DEMO_MODE: true,
