@@ -256,47 +256,7 @@
     const style = document.createElement('style');
     style.id = 'github-trending-v3-styles';
     style.textContent = `
-      /* 加载状态 */
-      .github-loading {
-        text-align: center;
-        padding: 60px 20px;
-        color: var(--text-muted);
-      }
-
-      .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid rgba(255, 255, 255, 0.1);
-        border-top-color: var(--accent-primary);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 16px;
-      }
-
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-
-      .loading-hint {
-        display: block;
-        margin-top: 12px;
-        font-size: 13px;
-        opacity: 0.7;
-      }
-
-      .cancel-loading {
-        margin-top: 16px;
-        padding: 8px 16px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        color: var(--text-muted);
-        cursor: pointer;
-        font-size: 13px;
-        transition: all 0.2s ease;
-      }
-
-      .cancel-loading:hover {
+      /* 加载状态 - 已移除所有加载提示 */
         background: rgba(255, 255, 255, 0.15);
         color: var(--text-primary);
       }
