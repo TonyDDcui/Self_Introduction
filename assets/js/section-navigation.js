@@ -11,7 +11,6 @@
     { id: 'about', icon: '馃懁', name: '鍏充簬' },
     { id: 'skills', icon: '鈿?, name: '鎶€鑳? },
     { id: 'projects', icon: '馃殌', name: '椤圭洰' },
-    { id: 'github', icon: '馃悪', name: 'GitHub' },
     { id: 'certificates', icon: '馃弲', name: '鑽ｈ獕' },
     { id: 'life', icon: '馃摲', name: '鐢熸椿' },
     { id: 'quotes', icon: '馃挱', name: '濂藉彞' },
