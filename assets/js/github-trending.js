@@ -1,43 +1,43 @@
 /**
- * GitHub Trending - 实时调用，只显示3个项目
+ * GitHub Trending - 优化版（解决转圈问题）
+ * 实时调用，只显示3个项目
  */
 
 (function() {
   'use strict';
 
   const CONFIG = {
-    // API 配置
     apiUrl: 'https://api.github.com/search/repositories',
-    
-    // 只显示3个项目
     maxItems: 3,
-    
-    // 语言筛选
     languages: ['all', 'C', 'Python', 'JavaScript', 'TypeScript', 'Rust', 'Go'],
-    
-    // 当前语言
     currentLang: 'all',
-    
-    // 缓存时间（毫秒）- 5分钟
-    cacheTime: 300000
+    cacheTime: 300000, // 5分钟缓存
+    timeout: 10000 // 10秒超时
   };
 
-  // 缓存
   let cache = {
     data: null,
     timestamp: 0,
     lang: 'all'
   };
 
+  let isLoading = false;
+
   // 初始化
   function init() {
-    loadProjects();
+    // 延迟加载，避免页面加载时阻塞
+    setTimeout(() => {
+      loadProjects();
+    }, 500);
+    
     bindEvents();
     addStyles();
   }
 
   // 加载项目
   async function loadProjects(lang = 'all', force = false) {
+    if (isLoading) return; // 防止重复加载
+    
     const container = document.getElementById('trending-list');
     if (!container) return;
 
@@ -51,7 +51,7 @@
       return;
     }
 
-    // 显示加载状态
+    isLoading = true;
     showLoading(container);
 
     try {
@@ -60,11 +60,9 @@
         query += ` language:${lang}`;
       }
 
-      // 添加随机参数避免缓存
-      const randomParam = Math.random().toString(36).substring(7);
-      
-      const response = await fetch(
-        `${CONFIG.apiUrl}?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=${CONFIG.maxItems}&_=${randomParam}`,
+      // 使用 Promise.race 实现超时
+      const fetchPromise = fetch(
+        `${CONFIG.apiUrl}?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=${CONFIG.maxItems}`,
         {
           headers: {
             'Accept': 'application/vnd.github.v3+json'
@@ -72,11 +70,20 @@
         }
       );
 
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('请求超时')), CONFIG.timeout);
+      });
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+
       if (!response.ok) {
         if (response.status === 403) {
           throw new Error('API 速率限制，请稍后再试');
         }
-        throw new Error('加载失败');
+        if (response.status === 503) {
+          throw new Error('GitHub 服务暂时不可用');
+        }
+        throw new Error(`加载失败 (${response.status})`);
       }
 
       const data = await response.json();
@@ -96,32 +103,68 @@
     } catch (error) {
       console.error('GitHub API Error:', error);
       showError(container, error.message);
+    } finally {
+      isLoading = false;
     }
   }
 
-  // 显示加载状态
+  // 显示加载状态（带超时提示）
   function showLoading(container) {
     container.innerHTML = `
       <div class="github-loading">
         <div class="loading-spinner"></div>
         <span>正在获取 GitHub 热门项目...</span>
+        <span class="loading-hint">首次加载可能需要几秒</span>
       </div>
     `;
+
+    // 3秒后显示额外提示
+    setTimeout(() => {
+      const hint = container.querySelector('.loading-hint');
+      if (hint && isLoading) {
+        hint.textContent = '网络较慢，请耐心等待...';
+      }
+    }, 3000);
+
+    // 8秒后显示取消选项
+    setTimeout(() => {
+      if (isLoading) {
+        const loadingDiv = container.querySelector('.github-loading');
+        if (loadingDiv) {
+          loadingDiv.innerHTML += `
+            <button class="cancel-loading" onclick="GitHubTrending.cancel()">
+              取消加载
+            </button>
+          `;
+        }
+      }
+    }, 8000);
+  }
+
+  // 取消加载
+  function cancelLoading() {
+    isLoading = false;
+    const container = document.getElementById('trending-list');
+    if (container) {
+      showError(container, '加载已取消', true);
+    }
   }
 
   // 显示错误
-  function showError(container, message) {
+  function showError(container, message, showRetry = true) {
     container.innerHTML = `
       <div class="github-error">
         <span class="error-icon">😢</span>
         <p>${message}</p>
-        <button class="retry-btn" onclick="GitHubTrending.refresh()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M23 4v6h-6M1 20v-6h6"/>
-            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-          </svg>
-          重试
-        </button>
+        ${showRetry ? `
+          <button class="retry-btn" onclick="GitHubTrending.refresh()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6M1 20v-6h6"/>
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+            </svg>
+            重试
+          </button>
+        ` : ''}
       </div>
     `;
   }
@@ -138,7 +181,7 @@
             <div class="project-rank">${index + 1}</div>
             <div class="project-content">
               <div class="project-header">
-                <img src="${repo.owner.avatar_url}" alt="${repo.owner.login}" class="project-avatar" loading="lazy">
+                <img src="${repo.owner.avatar_url}" alt="${repo.owner.login}" class="project-avatar" loading="lazy" onerror="this.src='https://github.com/github.png'">
                 <div class="project-info">
                   <h4 class="project-name">${escapeHtml(repo.name)}</h4>
                   <p class="project-desc">${escapeHtml(repo.description || '暂无描述')}</p>
@@ -167,6 +210,7 @@
       </div>
       <div class="github-update-time">
         最后更新：${new Date().toLocaleTimeString('zh-CN')}
+        ${cache.data ? `<span class="cache-hint">（缓存5分钟）</span>` : ''}
       </div>
     `;
 
@@ -221,6 +265,7 @@
     const refreshBtn = document.getElementById('refresh-trending');
     if (refreshBtn) {
       refreshBtn.addEventListener('click', function() {
+        if (isLoading) return; // 防止重复点击
         this.classList.add('spinning');
         loadProjects(CONFIG.currentLang, true);
         setTimeout(() => this.classList.remove('spinning'), 1000);
@@ -230,10 +275,10 @@
 
   // 添加样式
   function addStyles() {
-    if (document.getElementById('github-trending-v2-styles')) return;
+    if (document.getElementById('github-trending-v3-styles')) return;
 
     const style = document.createElement('style');
-    style.id = 'github-trending-v2-styles';
+    style.id = 'github-trending-v3-styles';
     style.textContent = `
       /* 加载状态 */
       .github-loading {
@@ -254,6 +299,30 @@
 
       @keyframes spin {
         to { transform: rotate(360deg); }
+      }
+
+      .loading-hint {
+        display: block;
+        margin-top: 12px;
+        font-size: 13px;
+        opacity: 0.7;
+      }
+
+      .cancel-loading {
+        margin-top: 16px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s ease;
+      }
+
+      .cancel-loading:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--text-primary);
       }
 
       /* 错误状态 */
@@ -311,19 +380,19 @@
       .github-project-card:hover {
         background: rgba(255, 255, 255, 0.06);
         border-color: var(--accent-primary);
-        transform: translateX(4px);
+        transform: translateX(6px);
       }
 
       /* 排名 */
       .project-rank {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
         border-radius: 12px;
-        font-size: 1.25rem;
+        font-size: 18px;
         font-weight: 700;
         color: white;
         flex-shrink: 0;
@@ -438,6 +507,11 @@
         color: var(--text-muted);
       }
 
+      .cache-hint {
+        margin-left: 8px;
+        opacity: 0.7;
+      }
+
       /* 刷新按钮动画 */
       .spinning svg {
         animation: spin 0.8s linear infinite;
@@ -488,7 +562,8 @@
   window.GitHubTrending = {
     load: () => loadProjects(CONFIG.currentLang),
     refresh: () => loadProjects(CONFIG.currentLang, true),
-    switch: (lang) => loadProjects(lang, true)
+    switch: (lang) => loadProjects(lang, true),
+    cancel: cancelLoading
   };
 
 })();

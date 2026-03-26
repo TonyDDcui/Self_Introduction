@@ -178,12 +178,13 @@
          垂直导航 - 居中显示
          ============================================ */
 
-      /* 导航容器 - 居中 */
+      /* 导航容器 - 居中（向右偏移） */
       .section-nav-container {
         padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding-left: 28px; /* 向右偏移 */
       }
 
       /* 板块标题 - 居中 */
@@ -307,7 +308,7 @@
       }
 
       /* ============================================
-         GitHub 区域（底部）- 居中
+         GitHub 区域（底部）- 居中（向右偏移）
          ============================================ */
       
       .github-section {
@@ -316,6 +317,7 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
+        padding-left: 8px;
       }
 
       .github-section-title {
