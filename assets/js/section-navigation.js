@@ -1,12 +1,12 @@
 /**
- * 汉堡菜单 - 横向列表显示 + 移动端优化
+ * 汉堡菜单 - 垂直列表 + GitHub入口放底部
  * 苹果设计理念：大圆角、简洁、层次分明
  */
 
 (function() {
   'use strict';
 
-  // 板块配置
+  // 板块配置（10个板块）
   const SECTIONS = [
     { id: 'hero', icon: '⚡', name: '首页' },
     { id: 'about', icon: '👤', name: '关于' },
@@ -31,11 +31,14 @@
       navLinks.innerHTML = '';
     }
 
-    // 添加横向列表导航
-    addHorizontalListNav(sidebar);
+    // 添加板块导航
+    addSectionNav(sidebar);
     
-    // 添加底部信息
-    addFooterInfo(sidebar);
+    // 添加分隔线
+    addDivider(sidebar);
+    
+    // 添加 GitHub 入口（底部）
+    addGitHubLink(sidebar);
     
     // 初始化滚动监听
     initScrollSpy();
@@ -44,26 +47,26 @@
     addStyles();
   }
 
-  // 添加横向列表导航
-  function addHorizontalListNav(sidebar) {
+  // 添加板块导航
+  function addSectionNav(sidebar) {
     const navContainer = document.createElement('div');
-    navContainer.className = 'horizontal-list-nav';
+    navContainer.className = 'section-nav-container';
     navContainer.innerHTML = `
-      <div class="nav-list-header">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div class="nav-section-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7" rx="2"/>
           <rect x="14" y="3" width="7" height="7" rx="2"/>
           <rect x="14" y="14" width="7" height="7" rx="2"/>
           <rect x="3" y="14" width="7" height="7" rx="2"/>
         </svg>
-        <span>导航</span>
+        <span>板块导航</span>
       </div>
-      <div class="nav-list-container">
+      <div class="nav-list">
         ${SECTIONS.map(section => `
-          <a href="#${section.id}" class="nav-list-item" data-section="${section.id}">
-            <span class="item-icon">${section.icon}</span>
-            <span class="item-name">${section.name}</span>
-            <svg class="item-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <a href="#${section.id}" class="nav-item" data-section="${section.id}">
+            <span class="nav-icon">${section.icon}</span>
+            <span class="nav-name">${section.name}</span>
+            <svg class="nav-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 18l6-6-6-6"/>
             </svg>
           </a>
@@ -75,7 +78,7 @@
     navLinks.appendChild(navContainer);
 
     // 绑定点击事件
-    navContainer.querySelectorAll('.nav-list-item').forEach(item => {
+    navContainer.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', function(e) {
         e.preventDefault();
         const targetId = this.getAttribute('href').slice(1);
@@ -89,22 +92,39 @@
     });
   }
 
-  // 添加底部信息
-  function addFooterInfo(sidebar) {
-    const footer = document.createElement('div');
-    footer.className = 'nav-footer-info';
-    footer.innerHTML = `
-      <a href="https://github.com/TonyDDcui" target="_blank" rel="noopener" class="footer-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 2.08-.8 3.97-2.1 5.39.26.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+  // 添加分隔线
+  function addDivider(sidebar) {
+    const divider = document.createElement('div');
+    divider.className = 'nav-divider';
+    
+    const navLinks = sidebar.querySelector('.nav-links') || sidebar;
+    navLinks.appendChild(divider);
+  }
+
+  // 添加 GitHub 入口（放底部，单独区域）
+  function addGitHubLink(sidebar) {
+    const githubSection = document.createElement('div');
+    githubSection.className = 'github-section';
+    githubSection.innerHTML = `
+      <div class="github-section-title">开发者</div>
+      <a href="https://github.com/TonyDDcui" target="_blank" rel="noopener" class="github-link">
+        <div class="github-avatar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 2.08-.8 3.97-2.1 5.39.26.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </div>
+        <div class="github-info">
+          <span class="github-name">TonyDDcui</span>
+          <span class="github-desc">访问 GitHub 主页</span>
+        </div>
+        <svg class="github-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
         </svg>
-        <span>TonyDDcui</span>
       </a>
-      <div class="footer-version">v2.0</div>
     `;
 
     const navLinks = sidebar.querySelector('.nav-links') || sidebar;
-    navLinks.appendChild(footer);
+    navLinks.appendChild(githubSection);
   }
 
   // 关闭侧边栏
@@ -125,7 +145,7 @@
 
   // 滚动监听
   function initScrollSpy() {
-    const items = document.querySelectorAll('.nav-list-item');
+    const items = document.querySelectorAll('.nav-item');
     
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -147,33 +167,29 @@
     });
   }
 
-  // 添加样式 - 苹果设计理念
+  // 添加样式
   function addStyles() {
-    if (document.getElementById('apple-style-nav')) return;
+    if (document.getElementById('vertical-nav-styles')) return;
     
     const style = document.createElement('style');
-    style.id = 'apple-style-nav';
+    style.id = 'vertical-nav-styles';
     style.textContent = `
       /* ============================================
-         苹果设计理念导航
-         - 大圆角 (16-24px)
-         - 简洁层次
-         - 毛玻璃效果
-         - 精致动画
+         垂直导航 - 苹果风格
          ============================================ */
 
       /* 导航容器 */
-      .horizontal-list-nav {
-        padding: 16px;
+      .section-nav-container {
+        padding: 20px;
       }
 
-      /* 头部 */
-      .nav-list-header {
+      /* 板块标题 */
+      .nav-section-title {
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 12px;
-        padding: 0 8px;
+        margin-bottom: 16px;
+        padding: 0 4px;
         color: var(--text-secondary);
         font-size: 13px;
         font-weight: 600;
@@ -181,13 +197,13 @@
         letter-spacing: 0.5px;
       }
 
-      .nav-list-header svg {
+      .nav-section-title svg {
         color: var(--accent-primary);
         opacity: 0.8;
       }
 
       /* 列表容器 - 苹果风格卡片 */
-      .nav-list-container {
+      .nav-list {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 20px;
@@ -196,12 +212,12 @@
         -webkit-backdrop-filter: blur(20px);
       }
 
-      /* 列表项 */
-      .nav-list-item {
+      /* 导航项 */
+      .nav-item {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 16px;
+        gap: 14px;
+        padding: 16px 18px;
         text-decoration: none;
         color: var(--text-primary);
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -209,45 +225,44 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       }
 
-      .nav-list-item:last-child {
+      .nav-item:last-child {
         border-bottom: none;
       }
 
       /* 悬停效果 */
-      .nav-list-item:hover {
+      .nav-item:hover {
         background: rgba(255, 255, 255, 0.06);
       }
 
-      .nav-list-item:active {
+      .nav-item:active {
         background: rgba(255, 255, 255, 0.1);
-        transform: scale(0.99);
       }
 
       /* 活跃状态 */
-      .nav-list-item.active {
+      .nav-item.active {
         background: rgba(88, 166, 255, 0.12);
       }
 
-      .nav-list-item.active .item-name {
+      .nav-item.active .nav-name {
         color: var(--accent-primary);
         font-weight: 600;
       }
 
       /* 图标 */
-      .nav-list-item .item-icon {
-        width: 32px;
-        height: 32px;
+      .nav-item .nav-icon {
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: rgba(255, 255, 255, 0.06);
-        border-radius: 10px;
-        font-size: 16px;
+        border-radius: 12px;
+        font-size: 18px;
         flex-shrink: 0;
       }
 
       /* 名称 */
-      .nav-list-item .item-name {
+      .nav-item .nav-name {
         flex: 1;
         font-size: 15px;
         font-weight: 500;
@@ -255,53 +270,112 @@
       }
 
       /* 箭头 */
-      .nav-list-item .item-arrow {
+      .nav-item .nav-arrow {
         color: var(--text-muted);
-        opacity: 0.5;
+        opacity: 0.4;
         transition: all 0.2s ease;
         flex-shrink: 0;
       }
 
-      .nav-list-item:hover .item-arrow {
-        opacity: 1;
-        transform: translateX(2px);
+      .nav-item:hover .nav-arrow {
+        opacity: 0.8;
+        transform: translateX(3px);
       }
 
-      /* 底部信息 */
-      .nav-footer-info {
-        margin-top: 16px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      /* ============================================
+         分隔线
+         ============================================ */
+      
+      .nav-divider {
+        height: 1px;
+        margin: 8px 20px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
       }
 
-      .footer-link {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 14px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 100px;
-        text-decoration: none;
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.2s ease;
+      /* ============================================
+         GitHub 区域（底部）
+         ============================================ */
+      
+      .github-section {
+        padding: 0 20px 20px;
       }
 
-      .footer-link:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--text-primary);
-      }
-
-      .footer-version {
-        font-size: 12px;
+      .github-section-title {
+        font-size: 13px;
+        font-weight: 600;
         color: var(--text-muted);
-        font-weight: 500;
-        padding: 4px 10px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        padding-left: 4px;
+      }
+
+      .github-link {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        background: rgba(88, 166, 255, 0.08);
+        border: 1px solid rgba(88, 166, 255, 0.15);
+        border-radius: 16px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .github-link:hover {
+        background: rgba(88, 166, 255, 0.12);
+        border-color: rgba(88, 166, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(88, 166, 255, 0.15);
+      }
+
+      .github-avatar {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        border-radius: 12px;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .github-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .github-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+
+      .github-desc {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .github-arrow {
+        color: var(--accent-primary);
+        opacity: 0.6;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .github-link:hover .github-arrow {
+        opacity: 1;
+        transform: translate(2px, -2px);
       }
 
       /* ============================================
@@ -309,53 +383,70 @@
          ============================================ */
       
       @media (max-width: 768px) {
-        .horizontal-list-nav {
-          padding: 12px;
+        .section-nav-container {
+          padding: 16px;
         }
 
-        .nav-list-container {
+        .nav-list {
           border-radius: 16px;
         }
 
-        .nav-list-item {
-          padding: 12px 14px;
+        .nav-item {
+          padding: 14px 16px;
         }
 
-        .nav-list-item .item-icon {
-          width: 28px;
-          height: 28px;
+        .nav-item .nav-icon {
+          width: 32px;
+          height: 32px;
+          font-size: 16px;
+          border-radius: 10px;
+        }
+
+        .nav-item .nav-name {
           font-size: 14px;
-          border-radius: 8px;
         }
 
-        .nav-list-item .item-name {
-          font-size: 14px;
+        .nav-divider {
+          margin: 6px 16px;
         }
 
-        .nav-footer-info {
-          padding: 12px;
+        .github-section {
+          padding: 0 16px 16px;
         }
 
-        .footer-link {
-          padding: 6px 12px;
-          font-size: 13px;
+        .github-link {
+          padding: 14px 16px;
+          border-radius: 14px;
+        }
+
+        .github-avatar {
+          width: 40px;
+          height: 40px;
+        }
+
+        .github-name {
+          font-size: 15px;
         }
       }
 
       /* 小屏幕手机 */
       @media (max-width: 380px) {
-        .nav-list-container {
+        .nav-list {
           border-radius: 14px;
         }
 
-        .nav-list-item {
-          padding: 10px 12px;
+        .nav-item {
+          padding: 12px 14px;
         }
 
-        .nav-list-item .item-icon {
-          width: 26px;
-          height: 26px;
-          font-size: 13px;
+        .nav-item .nav-icon {
+          width: 28px;
+          height: 28px;
+          font-size: 14px;
+        }
+
+        .github-link {
+          border-radius: 12px;
         }
       }
 
