@@ -1,78 +1,112 @@
-/* ================================================
-   GitHub 贡献日历组件 - 简洁版
-   ================================================ */
+﻿/**
+ * GitHub Contribution Graph - Mobile Optimized
+ */
+(function() {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', function() {
-  const container = document.getElementById('github-calendar');
-  const countEl = document.getElementById('contrib-count');
-  if (!container) return;
+  const CONFIG = {
+    mobileBreakpoint: 768,
+    mobileWeeks: 13,
+    desktopWeeks: 52,
+    cellSize: { desktop: 12, mobile: 10 }
+  };
 
-  // 生成数据
-  const weeks = 20;
-  const data = [];
-  const today = new Date();
-  let total = 0;
+  function isMobile() {
+    return window.innerWidth < CONFIG.mobileBreakpoint;
+  }
 
-  for (let w = weeks - 1; w >= 0; w--) {
-    for (let d = 0; d < 7; d++) {
+  function generateContributionData(weeks) {
+    const data = [];
+    const today = new Date();
+    for (let i = weeks * 7; i >= 0; i--) {
       const date = new Date(today);
-      date.setDate(date.getDate() - (w * 7 + (6 - d)));
-      
+      date.setDate(date.getDate() - i);
+      const rand = Math.random();
       let count = 0;
-      if (date <= today) {
-        const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-        if (Math.random() < (isWeekend ? 0.3 : 0.65)) {
-          count = Math.floor(Math.random() * 10);
-          if (Math.random() < 0.2) count += 5;
-        }
+      if (rand > 0.7) count = Math.floor(Math.random() * 3) + 1;
+      if (rand > 0.9) count = Math.floor(Math.random() * 8) + 3;
+      if (rand > 0.97) count = Math.floor(Math.random() * 15) + 10;
+      data.push({ date: date.toISOString().split('T')[0], count: count, day: date.getDay() });
+    }
+    return data;
+  }
+
+  function getContributionColor(count, isDark) {
+    if (count === 0) return isDark ? '#161b22' : '#ebedf0';
+    if (count <= 3) return isDark ? '#0e4429' : '#9be9a8';
+    if (count <= 6) return isDark ? '#006d32' : '#40c463';
+    if (count <= 10) return isDark ? '#26a641' : '#30a14e';
+    return isDark ? '#39d353' : '#216e39';
+  }
+
+  function renderCalendar() {
+    const container = document.getElementById('github-calendar');
+    if (!container) return;
+
+    const isDarkMode = document.body.getAttribute('data-theme') === 'dark';
+    const mobile = isMobile();
+    const weeks = mobile ? CONFIG.mobileWeeks : CONFIG.desktopWeeks;
+    const data = generateContributionData(weeks);
+    const cellSize = mobile ? CONFIG.cellSize.mobile : CONFIG.cellSize.desktop;
+
+    container.innerHTML = '';
+    container.className = 'github-calendar-mini' + (mobile ? ' mobile' : '');
+
+    const grid = document.createElement('div');
+    grid.className = 'calendar-grid';
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(' + weeks + ', ' + cellSize + 'px); grid-template-rows: repeat(7, ' + cellSize + 'px); gap: 2px;' + (mobile ? 'overflow-x: auto; -webkit-overflow-scrolling: touch;' : '');
+
+    const weeksData = [];
+    let currentWeek = [];
+    data.forEach((day) => {
+      if (day.day === 0 && currentWeek.length > 0) {
+        weeksData.push(currentWeek);
+        currentWeek = [];
       }
-      
-      total += count;
-      data.push({
-        date: date.toISOString().split('T')[0],
-        count,
-        level: count === 0 ? 0 : count <= 2 ? 1 : count <= 5 ? 2 : count <= 9 ? 3 : 4
+      currentWeek.push(day);
+    });
+    if (currentWeek.length > 0) weeksData.push(currentWeek);
+
+    weeksData.forEach((week, weekIndex) => {
+      week.forEach((day) => {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell';
+        cell.style.cssText = 'width: ' + cellSize + 'px; height: ' + cellSize + 'px; background-color: ' + getContributionColor(day.count, isDarkMode) + '; border-radius: ' + (mobile ? '2px' : '3px') + '; cursor: pointer; grid-column: ' + (weekIndex + 1) + '; grid-row: ' + (day.day + 1) + ';';
+        cell.dataset.date = day.date;
+        cell.dataset.count = day.count;
+        cell.title = day.count + ' contributions on ' + day.date;
+        grid.appendChild(cell);
       });
+    });
+
+    container.appendChild(grid);
+    updateContributionCount(data);
+  }
+
+  function updateContributionCount(data) {
+    const countEl = document.getElementById('contrib-count');
+    if (countEl) {
+      const total = data.reduce((sum, day) => sum + day.count, 0);
+      countEl.textContent = total + ' contributions in the last year';
     }
   }
 
-  // 生成月份标签
-  const months = [];
-  let lastMonth = '';
-  data.forEach((day, i) => {
-    const month = day.date.substring(0, 7);
-    if (month !== lastMonth && i % 7 === 0) {
-      months.push({ month, col: Math.floor(i / 7) });
-      lastMonth = month;
-    }
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderCalendar, 250);
   });
 
-  // 渲染
-  let html = '<div class="cal-wrapper"><div class="cal-months">';
-  
-  // 顶部月份行
-  months.forEach((m, i) => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const name = months[parseInt(m.month.split('-')[1]) - 1];
-    const nextCol = months[i + 1] ? months[i + 1].col : weeks;
-    const span = nextCol - m.col;
-    html += `<span class="cal-month" style="grid-column: ${m.col + 1} / span ${span}">${name}</span>`;
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName === 'data-theme') renderCalendar();
+    });
   });
-  
-  html += '</div><div class="cal-grid">';
-  
-  // 方块
-  data.forEach(day => {
-    const date = new Date(day.date);
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    html += `<div class="cal-cell level-${day.level}" title="${day.count} contributions on ${dayNames[date.getDay()]}, ${day.date}"></div>`;
-  });
-  
-  html += '</div></div>';
-  container.innerHTML = html;
-  
-  // 更新计数
-  if (countEl) {
-    countEl.textContent = total.toLocaleString() + ' contributions in the last year';
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderCalendar);
+  } else {
+    renderCalendar();
   }
-});
+  observer.observe(document.body, { attributes: true });
+})();

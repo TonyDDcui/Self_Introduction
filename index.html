@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="./assets/css/github-widgets.css">
   <link rel="stylesheet" href="./assets/css/github-header.css">
   <link rel="stylesheet" href="./assets/css/main.css">
+  <link rel="stylesheet" href="./assets/css/mobile-optimization.css">
+  <link rel="stylesheet" href="./assets/css/quotes-and-danmaku.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 </head>
 <body data-theme="dark">
@@ -164,6 +166,13 @@
       <span>向下滚动</span>
     </div>
   </section>
+
+  <!-- 模块导航 -->
+  <div class="container">
+    <nav class="modules-nav" aria-label="模块导航">
+      <!-- 由 JavaScript 动态生成 -->
+    </nav>
+  </div>
 
   <!-- About Section -->
   <section class="section" id="about">
@@ -497,6 +506,19 @@
     </div>
   </section>
 
+  <!-- 好句分享板块 -->
+  <section class="section section-alt" id="quotes">
+    <div class="container quotes-container">
+      <div class="quotes-header">
+        <h2 class="section-title">✨ 好句分享</h2>
+        <p class="section-subtitle">生活中的智慧与灵感</p>
+      </div>
+      <div class="quotes-grid">
+        <!-- 由 JavaScript 动态生成 -->
+      </div>
+    </div>
+  </section>
+
   <!-- Contact Section -->
   <section class="section" id="contact">
     <div class="container">
@@ -566,10 +588,14 @@
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
   </button>
 
+  <!-- 页面底部弹幕 -->
+  <div class="danmaku-container"></div>
+
   <!-- Scripts -->
   <script src="./assets/js/particles.js"></script>
   <script src="./assets/js/main.js"></script>
   <script src="./assets/js/github-trending.js"></script>
   <script src="./assets/js/contribution-graph.js"></script>
+  <script src="./assets/js/quotes-and-danmaku.js"></script>
 </body>
 </html>
