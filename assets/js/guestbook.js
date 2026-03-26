@@ -1,59 +1,105 @@
 /**
- * GitHub Gist 留言板 - 云端存储
+ * 简化版留言板 - 使用本地存储 + 可选 Gist 读取
+ * 完全免费，无需后端
  */
 
 (function() {
   'use strict';
 
-  // 配置 - 需要用户创建自己的 Gist
-  // 请将下面的 GIST_ID 替换为你的 Gist ID
+  // 配置
   const CONFIG = {
-    // 创建一个公开的 Gist，将 ID 填在这里
-    // Gist 文件名应为 guestbook.json
-    // Gist ID 格式：xxxxxxxxxxxxxxxxxxxxxxx (32位字符)
-    GIST_ID: 'YOUR_GIST_ID_HERE',
-    
-    // Gist 文件名
+    // 是否启用 Gist 读取（可选）
+    // 如果不配置，只使用本地存储
+    GIST_ID: '', // 填入你的 Gist ID 可启用云端读取
     FILE_NAME: 'guestbook.json',
     
-    // 更新间隔（毫秒）
-    UPDATE_INTERVAL: 30000,
+    // 本地存储键名
+    STORAGE_KEY: 'guestbook_messages_v2',
     
     // 最大显示留言数
-    MAX_DISPLAY: 20
+    MAX_DISPLAY: 15,
+    
+    // 更新间隔（毫秒）
+    UPDATE_INTERVAL: 60000 // 1分钟
   };
 
-  // 示例留言
+  // 示例留言数据
   const SAMPLE_MESSAGES = [
-    { id: 1, name: '技术爱好者', message: '这个嵌入式网站太棒了！👍', time: new Date().toISOString(), color: '#58a6ff' },
-    { id: 2, name: '访客', message: '期待合作！', time: new Date().toISOString(), color: '#a371f7' },
-    { id: 3, name: '开发者', message: '代码写得很漂亮！', time: new Date().toISOString(), color: '#39d353' },
-    { id: 4, name: '校友', message: '学长加油！', time: new Date().toISOString(), color: '#d29922' },
-    { id: 5, name: 'HR', message: '人才啊，联系我！', time: new Date().toISOString(), color: '#f85149' }
+    { 
+      id: 1, 
+      name: '技术爱好者', 
+      message: '这个网站设计得太棒了！👍 特别是汉堡菜单的横向导航，手机端体验很好。', 
+      time: new Date(Date.now() - 3600000).toISOString(), 
+      color: '#58a6ff',
+      avatar: '技'
+    },
+    { 
+      id: 2, 
+      name: '前端开发者', 
+      message: 'UI优化做得很到位，渐变动画和卡片效果都很流畅！', 
+      time: new Date(Date.now() - 7200000).toISOString(), 
+      color: '#a371f7',
+      avatar: '前'
+    },
+    { 
+      id: 3, 
+      name: '校友', 
+      message: '学长加油！期待更多项目分享~', 
+      time: new Date(Date.now() - 86400000).toISOString(), 
+      color: '#39d353',
+      avatar: '校'
+    },
+    { 
+      id: 4, 
+      name: 'HR小姐姐', 
+      message: '人才啊！简历收下了，有机会联系你 😊', 
+      time: new Date(Date.now() - 172800000).toISOString(), 
+      color: '#d29922',
+      avatar: 'H'
+    },
+    { 
+      id: 5, 
+      name: '物联网同行', 
+      message: '同为嵌入式开发，互相学习！', 
+      time: new Date(Date.now() - 259200000).toISOString(), 
+      color: '#f85149',
+      avatar: '物'
+    }
   ];
 
   // 留言数据
   let messages = [];
-  let isConfigured = false;
 
-  // 检查是否已配置
-  function checkConfiguration() {
-    if (CONFIG.GIST_ID === 'YOUR_GIST_ID_HERE') {
-      console.warn('Gist 未配置，使用本地存储模式');
-      isConfigured = false;
-      return false;
+  // 从本地存储加载
+  function loadFromStorage() {
+    try {
+      const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
+      if (stored) {
+        messages = JSON.parse(stored);
+      } else {
+        // 首次使用，使用示例数据
+        messages = [...SAMPLE_MESSAGES];
+        saveToStorage();
+      }
+    } catch (e) {
+      console.warn('无法读取本地存储:', e);
+      messages = [...SAMPLE_MESSAGES];
     }
-    isConfigured = true;
-    return true;
   }
 
-  // 从 Gist 加载留言
-  async function loadFromGist() {
-    if (!isConfigured) {
-      loadFromLocalStorage();
-      return;
+  // 保存到本地存储
+  function saveToStorage() {
+    try {
+      localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(messages));
+    } catch (e) {
+      console.warn('无法保存到本地存储:', e);
     }
+  }
 
+  // 尝试从 Gist 加载（如果配置了）
+  async function loadFromGist() {
+    if (!CONFIG.GIST_ID) return;
+    
     try {
       const response = await fetch(`https://api.github.com/gists/${CONFIG.GIST_ID}`);
       if (!response.ok) throw new Error('Failed to load');
@@ -62,92 +108,42 @@
       const content = data.files[CONFIG.FILE_NAME];
       
       if (content) {
-        messages = JSON.parse(content.content);
-      } else {
-        messages = [];
-        // 创建文件
-        await saveToGist();
+        const gistMessages = JSON.parse(content.content);
+        // 合并 Gist 数据和本地数据
+        messages = mergeMessages(messages, gistMessages);
+        saveToStorage();
       }
     } catch (error) {
-      console.warn('从 Gist 加载失败，使用本地数据:', error);
-      loadFromLocalStorage();
+      console.warn('从 Gist 加载失败:', error);
     }
   }
 
-  // 保存到 Gist
-  async function saveToGist() {
-    if (!isConfigured) {
-      saveToLocalStorage();
-      return;
-    }
-
-    try {
-      const content = JSON.stringify(messages, null, 2);
-      
-      // 获取当前 Gist 信息
-      const getResponse = await fetch(`https://api.github.com/gists/${CONFIG.GIST_ID}`);
-      if (!getResponse.ok) throw new Error('Failed to get gist');
-      
-      const gistData = await getResponse.json();
-      
-      // 更新 Gist
-      const updateResponse = await fetch(`https://api.github.com/gists/${CONFIG.GIST_ID}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          files: {
-            [CONFIG.FILE_NAME]: {
-              content: content
-            }
-          }
-        })
-      });
-      
-      if (!updateResponse.ok) throw new Error('Failed to save');
-      
-      return true;
-    } catch (error) {
-      console.warn('保存到 Gist 失败，使用本地存储:', error);
-      saveToLocalStorage();
-      return false;
-    }
-  }
-
-  // 本地存储
-  function loadFromLocalStorage() {
-    try {
-      const stored = localStorage.getItem('guestbook_messages');
-      messages = stored ? JSON.parse(stored) : [...SAMPLE_MESSAGES];
-    } catch (e) {
-      messages = [...SAMPLE_MESSAGES];
-    }
-  }
-
-  function saveToLocalStorage() {
-    try {
-      localStorage.setItem('guestbook_messages', JSON.stringify(messages));
-    } catch (e) {
-      console.warn('无法保存留言:', e);
-    }
+  // 合并留言（去重）
+  function mergeMessages(local, remote) {
+    const all = [...local, ...remote];
+    const unique = all.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+    return unique.sort((a, b) => new Date(b.time) - new Date(a.time));
   }
 
   // 添加留言
-  async function addMessage(name, message) {
+  function addMessage(name, message) {
     const newMessage = {
       id: Date.now(),
-      name: name.trim(),
-      message: message.trim(),
+      name: name.trim().slice(0, 20),
+      message: message.trim().slice(0, 200),
       time: new Date().toISOString(),
-      color: getRandomColor()
+      color: getRandomColor(),
+      avatar: name.trim().charAt(0).toUpperCase()
     };
     
-    messages.push(newMessage);
+    messages.unshift(newMessage);
     
-    // 保存
-    await saveToGist();
+    // 限制数量
+    if (messages.length > 50) {
+      messages = messages.slice(0, 50);
+    }
     
+    saveToStorage();
     return newMessage;
   }
 
@@ -156,98 +152,9 @@
     const colors = [
       '#58a6ff', '#a371f7', '#39d353', '#d29922', 
       '#f85149', '#79c0ff', '#d2a8ff', '#56d364', 
-      '#e3b341', '#ffa198'
+      '#e3b341', '#ffa198', '#7ee787', '#ff7b72'
     ];
     return colors[Math.floor(Math.random() * colors.length)];
-  }
-
-  // 初始化留言板
-  async function initGuestbook() {
-    checkConfiguration();
-    await loadFromGist();
-    
-    const container = document.querySelector('.guestbook-container');
-    if (!container) return;
-
-    const html = `
-      <div class="guestbook-wrapper">
-        <div class="guestbook-form glass-card">
-          <div class="form-header">
-            <h3>💬 留言板</h3>
-            <p class="guestbook-subtitle">留下你的足迹吧 ~</p>
-          </div>
-          <form id="guestbook-form">
-            <div class="form-row">
-              <div class="form-group">
-                <input type="text" id="guest-name" placeholder="你的昵称" maxlength="20" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <textarea id="guest-message" placeholder="说点什么..." maxlength="200" required></textarea>
-            </div>
-            <button type="submit" class="pill-btn pill-btn-primary">
-              <span>发布留言</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-              </svg>
-            </button>
-          </form>
-          <div class="guestbook-stats">
-            <span class="stat-item">📝 共 <strong id="message-count">${messages.length}</strong> 条留言</span>
-          </div>
-        </div>
-        
-        <div class="guestbook-display glass-card">
-          <div class="display-header">
-            <h4>📜 最新留言</h4>
-            <button class="refresh-btn" id="refresh-messages" title="刷新留言">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M23 4v6h-6M1 20v-6h6"/>
-                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-              </svg>
-            </button>
-          </div>
-          <div class="guestbook-list" id="guestbook-list">
-            ${generateMessageList()}
-          </div>
-        </div>
-      </div>
-    `;
-
-    container.innerHTML = html;
-
-    // 绑定事件
-    bindEvents();
-    
-    // 启动自动刷新
-    startAutoRefresh();
-  }
-
-  // 生成留言列表
-  function generateMessageList() {
-    const recentMessages = messages.slice(-CONFIG.MAX_DISPLAY).reverse();
-    
-    if (recentMessages.length === 0) {
-      return `
-        <div class="guestbook-empty">
-          <span class="empty-icon">💭</span>
-          <p>还没有留言，快来抢沙发！</p>
-        </div>
-      `;
-    }
-
-    return recentMessages.map(msg => `
-      <div class="message-item" style="--msg-color: ${msg.color}">
-        <div class="message-avatar">${msg.name.charAt(0).toUpperCase()}</div>
-        <div class="message-content">
-          <div class="message-header">
-            <span class="message-name" style="color: ${msg.color}">${msg.name}</span>
-            <span class="message-time">${formatTime(msg.time)}</span>
-          </div>
-          <div class="message-text">${escapeHtml(msg.message)}</div>
-        </div>
-      </div>
-    `).join('');
   }
 
   // 格式化时间
@@ -261,7 +168,7 @@
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
     if (diff < 604800000) return `${Math.floor(diff / 86400000)}天前`;
     
-    return date.toLocaleDateString('zh-CN');
+    return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
   }
 
   // HTML 转义
@@ -271,216 +178,409 @@
     return div.innerHTML;
   }
 
-  // 绑定事件
-  function bindEvents() {
-    const form = document.getElementById('guestbook-form');
-    form.addEventListener('submit', handleSubmit);
+  // 初始化留言板
+  function initGuestbook() {
+    loadFromStorage();
     
-    const refreshBtn = document.getElementById('refresh-messages');
-    refreshBtn.addEventListener('click', refreshMessages);
-  }
-
-  // 处理提交
-  async function handleSubmit(e) {
-    e.preventDefault();
-    
-    const nameInput = document.getElementById('guest-name');
-    const messageInput = document.getElementById('guest-message');
-    
-    const name = nameInput.value.trim();
-    const message = messageInput.value.trim();
-    
-    if (!name || !message) return;
-    
-    // 显示加载状态
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.disabled = true;
-    btn.innerHTML = '<span>发布中...</span>';
-    
-    try {
-      const newMessage = await addMessage(name, message);
-      messages.push(newMessage);
-      
-      // 更新显示
-      updateMessageList();
-      updateCount();
-      
-      // 清空表单
-      nameInput.value = '';
-      messageInput.value = '';
-      
-      // 显示成功
-      showNotification('留言发布成功！✨');
-    } catch (error) {
-      showNotification('发布失败，请重试 😢');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = `
-        <span>发布留言</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-        </svg>
-      `;
+    // 如果配置了 Gist，尝试加载
+    if (CONFIG.GIST_ID) {
+      loadFromGist();
+      // 定期刷新
+      setInterval(loadFromGist, CONFIG.UPDATE_INTERVAL);
     }
+    
+    const container = document.querySelector('.guestbook-container');
+    if (!container) {
+      console.warn('未找到留言板容器');
+      return;
+    }
+
+    container.innerHTML = generateHTML();
+    bindEvents();
+    renderMessages();
   }
 
-  // 刷新留言
-  async function refreshMessages() {
-    const btn = document.getElementById('refresh-messages');
-    btn.classList.add('spinning');
-    
-    await loadFromGist();
-    updateMessageList();
-    updateCount();
-    
-    setTimeout(() => btn.classList.remove('spinning'), 500);
+  // 生成 HTML
+  function generateHTML() {
+    return `
+      <div class="guestbook-wrapper">
+        <!-- 留言表单 -->
+        <div class="guestbook-form-section">
+          <div class="guestbook-header">
+            <div class="guestbook-icon">💬</div>
+            <div class="guestbook-title">
+              <h3>留言板</h3>
+              <p class="guestbook-subtitle">留下你的足迹，分享你的想法</p>
+            </div>
+          </div>
+          
+          <form id="guestbook-form" class="guestbook-form">
+            <div class="form-group">
+              <label for="guest-name">昵称</label>
+              <input 
+                type="text" 
+                id="guest-name" 
+                placeholder="怎么称呼你？" 
+                maxlength="20" 
+                required
+                autocomplete="off"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="guest-message">留言</label>
+              <textarea 
+                id="guest-message" 
+                placeholder="说点什么..." 
+                maxlength="200" 
+                required
+                rows="3"
+              ></textarea>
+              <div class="char-count"><span id="char-count">0</span>/200</div>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+              <span>发布留言</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              </svg>
+            </button>
+          </form>
+          
+          <div class="guestbook-stats">
+            <span class="stat-item">
+              <strong id="message-count">${messages.length}</strong> 条留言
+            </span>
+            <span class="stat-separator">·</span>
+            <span class="stat-item">存储于本地</span>
+          </div>
+        </div>
+        
+        <!-- 留言列表 -->
+        <div class="guestbook-list-section">
+          <div class="list-header">
+            <h4>最新留言</h4>
+            <button class="refresh-btn" id="refresh-btn" title="刷新">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 4v6h-6M1 20v-6h6"/>
+                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="guestbook-list" id="guestbook-list">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  // 更新留言列表
-  function updateMessageList() {
+  // 渲染留言列表
+  function renderMessages() {
     const list = document.getElementById('guestbook-list');
     if (!list) return;
-    
-    list.innerHTML = generateMessageList();
-    
-    // 添加动画
-    list.querySelectorAll('.message-item').forEach((item, index) => {
-      item.style.animationDelay = `${index * 50}ms`;
-    });
-  }
 
-  // 更新计数
-  function updateCount() {
+    const recentMessages = messages.slice(0, CONFIG.MAX_DISPLAY);
+    
+    if (recentMessages.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">💭</div>
+          <p>还没有留言</p>
+          <p class="empty-hint">快来抢沙发，成为第一个留言的人！</p>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = recentMessages.map((msg, index) => `
+      <div class="message-card" style="--msg-color: ${msg.color}; animation-delay: ${index * 50}ms">
+        <div class="message-avatar" style="background: ${msg.color}">
+          ${msg.avatar}
+        </div>
+        <div class="message-body">
+          <div class="message-header">
+            <span class="message-name" style="color: ${msg.color}">${escapeHtml(msg.name)}</span>
+            <span class="message-time">${formatTime(msg.time)}</span>
+          </div>
+          <div class="message-content">${escapeHtml(msg.message)}</div>
+        </div>
+      </div>
+    `).join('');
+
+    // 更新计数
     const countEl = document.getElementById('message-count');
     if (countEl) {
       countEl.textContent = messages.length;
     }
   }
 
-  // 自动刷新
-  function startAutoRefresh() {
-    setInterval(async () => {
-      const oldLength = messages.length;
-      await loadFromGist();
-      
-      if (messages.length !== oldLength) {
-        updateMessageList();
-        updateCount();
-      }
-    }, CONFIG.UPDATE_INTERVAL);
+  // 绑定事件
+  function bindEvents() {
+    const form = document.getElementById('guestbook-form');
+    const nameInput = document.getElementById('guest-name');
+    const messageInput = document.getElementById('guest-message');
+    const charCount = document.getElementById('char-count');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    // 表单提交
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = nameInput.value.trim();
+        const message = messageInput.value.trim();
+        
+        if (!name || !message) return;
+        
+        // 添加留言
+        addMessage(name, message);
+        
+        // 重新渲染
+        renderMessages();
+        
+        // 清空表单
+        nameInput.value = '';
+        messageInput.value = '';
+        charCount.textContent = '0';
+        
+        // 显示成功提示
+        showToast('留言发布成功！✨');
+      });
+    }
+
+    // 字符计数
+    if (messageInput && charCount) {
+      messageInput.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+      });
+    }
+
+    // 刷新按钮
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', function() {
+        this.classList.add('spinning');
+        
+        // 重新加载
+        loadFromStorage();
+        if (CONFIG.GIST_ID) {
+          loadFromGist().then(() => {
+            renderMessages();
+            showToast('已刷新 ✓');
+          });
+        } else {
+          renderMessages();
+          showToast('已刷新 ✓');
+        }
+        
+        setTimeout(() => this.classList.remove('spinning'), 500);
+      });
+    }
   }
 
-  // 显示通知
-  function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'guestbook-toast';
-    notification.textContent = message;
-    document.body.appendChild(notification);
+  // 显示提示
+  function showToast(message) {
+    // 移除旧的提示
+    const oldToast = document.querySelector('.guestbook-toast');
+    if (oldToast) oldToast.remove();
     
+    const toast = document.createElement('div');
+    toast.className = 'guestbook-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // 触发动画
     requestAnimationFrame(() => {
-      notification.classList.add('show');
+      toast.classList.add('show');
     });
     
+    // 自动移除
     setTimeout(() => {
-      notification.classList.remove('show');
-      setTimeout(() => notification.remove(), 300);
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
     }, 2500);
   }
 
   // 添加样式
   function addStyles() {
-    if (document.getElementById('guestbook-enhanced-styles')) return;
+    if (document.getElementById('guestbook-simplified-styles')) return;
     
     const style = document.createElement('style');
-    style.id = 'guestbook-enhanced-styles';
+    style.id = 'guestbook-simplified-styles';
     style.textContent = `
-      /* 留言板容器 */
+      /* ============================================
+         留言板容器
+         ============================================ */
       .guestbook-wrapper {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
+        grid-template-columns: 380px 1fr;
+        gap: 32px;
         max-width: 1200px;
         margin: 0 auto;
       }
 
-      @media (max-width: 968px) {
+      @media (max-width: 900px) {
         .guestbook-wrapper {
           grid-template-columns: 1fr;
+          gap: 24px;
         }
       }
 
-      /* 表单卡片 */
-      .guestbook-form {
+      /* ============================================
+         表单区域
+         ============================================ */
+      .guestbook-form-section {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
         padding: 28px;
         height: fit-content;
         position: sticky;
-        top: 80px;
+        top: 100px;
       }
 
-      @media (max-width: 768px) {
-        .guestbook-form {
-          padding: 20px;
+      @media (max-width: 900px) {
+        .guestbook-form-section {
           position: static;
+          padding: 20px;
         }
       }
 
-      .form-header {
-        margin-bottom: 20px;
+      .guestbook-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
-      .guestbook-form h3 {
+      .guestbook-icon {
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #58a6ff, #a371f7);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+      }
+
+      .guestbook-title h3 {
         font-size: 1.5rem;
+        font-weight: 700;
         margin-bottom: 4px;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
 
       .guestbook-subtitle {
-        color: var(--text-muted);
         font-size: 0.875rem;
+        color: var(--text-muted);
       }
 
-      .form-row {
-        margin-bottom: 16px;
+      /* 表单样式 */
+      .guestbook-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
       }
 
       .form-group {
-        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-secondary);
       }
 
       .form-group input,
       .form-group textarea {
-        width: 100%;
         padding: 12px 16px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-secondary);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
         color: var(--text-primary);
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         transition: all 0.2s ease;
+        font-family: inherit;
       }
 
       .form-group input:focus,
       .form-group textarea:focus {
         outline: none;
         border-color: var(--accent-primary);
-        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+      }
+
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: var(--text-muted);
       }
 
       .form-group textarea {
-        min-height: 100px;
         resize: vertical;
+        min-height: 100px;
       }
 
-      .guestbook-stats {
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 1px solid var(--border-color);
-        text-align: center;
+      .char-count {
+        text-align: right;
+        font-size: 0.75rem;
         color: var(--text-muted);
+      }
+
+      /* 提交按钮 */
+      .submit-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #58a6ff, #a371f7);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 8px;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(88, 166, 255, 0.3);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      .submit-btn svg {
+        transition: transform 0.2s ease;
+      }
+
+      .submit-btn:hover svg {
+        transform: translateX(4px);
+      }
+
+      /* 统计信息 */
+      .guestbook-stats {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: center;
         font-size: 0.875rem;
+        color: var(--text-muted);
       }
 
       .guestbook-stats strong {
@@ -488,55 +588,70 @@
         font-weight: 600;
       }
 
-      /* 显示区域 */
-      .guestbook-display {
+      .stat-separator {
+        margin: 0 8px;
+        opacity: 0.5;
+      }
+
+      /* ============================================
+         留言列表区域
+         ============================================ */
+      .guestbook-list-section {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
         padding: 24px;
         max-height: 600px;
         overflow-y: auto;
       }
 
-      @media (max-width: 768px) {
-        .guestbook-display {
-          padding: 16px;
+      @media (max-width: 900px) {
+        .guestbook-list-section {
           max-height: 400px;
+          padding: 16px;
         }
       }
 
-      .display-header {
+      .list-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
-      .display-header h4 {
-        font-size: 1rem;
-        color: var(--text-secondary);
+      .list-header h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
       }
 
       .refresh-btn {
-        padding: 6px;
-        border-radius: 6px;
-        background: var(--bg-secondary);
-        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: var(--text-muted);
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.2s ease;
       }
 
       .refresh-btn:hover {
-        background: var(--bg-tertiary);
+        background: rgba(255, 255, 255, 0.1);
         color: var(--accent-primary);
+        border-color: var(--accent-primary);
       }
 
       .refresh-btn.spinning svg {
-        animation: spin 1s linear infinite;
+        animation: spin 0.8s linear infinite;
       }
 
       @keyframes spin {
-        from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
 
@@ -544,24 +659,20 @@
       .guestbook-list {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
       }
 
-      .message-item {
+      /* 留言卡片 */
+      .message-card {
         display: flex;
-        gap: 12px;
-        padding: 14px;
-        background: var(--bg-secondary);
-        border-radius: 12px;
+        gap: 14px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 14px;
         border-left: 3px solid var(--msg-color);
         transition: all 0.2s ease;
-        animation: fadeInUp 0.3s ease forwards;
+        animation: fadeInUp 0.4s ease forwards;
         opacity: 0;
-      }
-
-      .message-item:hover {
-        background: var(--bg-tertiary);
-        transform: translateX(4px);
       }
 
       @keyframes fadeInUp {
@@ -575,21 +686,25 @@
         }
       }
 
+      .message-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateX(4px);
+      }
+
       .message-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: var(--msg-color);
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 1rem;
         font-weight: 600;
-        font-size: 0.9rem;
         flex-shrink: 0;
       }
 
-      .message-content {
+      .message-body {
         flex: 1;
         min-width: 0;
       }
@@ -599,54 +714,66 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 6px;
+        gap: 8px;
       }
 
       .message-name {
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
       }
 
       .message-time {
         font-size: 0.75rem;
         color: var(--text-muted);
+        flex-shrink: 0;
       }
 
-      .message-text {
-        font-size: 0.875rem;
+      .message-content {
+        font-size: 0.9rem;
         color: var(--text-secondary);
         line-height: 1.5;
         word-break: break-word;
       }
 
       /* 空状态 */
-      .guestbook-empty {
+      .empty-state {
         text-align: center;
-        padding: 40px 20px;
+        padding: 48px 20px;
         color: var(--text-muted);
       }
 
       .empty-icon {
-        font-size: 3rem;
-        display: block;
-        margin-bottom: 12px;
+        font-size: 3.5rem;
+        margin-bottom: 16px;
+        opacity: 0.5;
       }
 
-      /* Toast 通知 */
+      .empty-state p {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .empty-hint {
+        font-size: 0.875rem;
+        opacity: 0.7;
+      }
+
+      /* Toast 提示 */
       .guestbook-toast {
         position: fixed;
-        top: 80px;
-        right: 20px;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        top: 100px;
+        right: 24px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #58a6ff, #a371f7);
         color: white;
-        padding: 12px 24px;
-        border-radius: 10px;
-        font-size: 0.9rem;
+        border-radius: 12px;
+        font-size: 0.95rem;
         font-weight: 500;
         z-index: 10000;
         opacity: 0;
-        transform: translateX(100%);
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+        transform: translateX(100px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(88, 166, 255, 0.3);
       }
 
       .guestbook-toast.show {
@@ -654,25 +781,70 @@
         transform: translateX(0);
       }
 
+      /* 滚动条美化 */
+      .guestbook-list-section::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .guestbook-list-section::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 3px;
+      }
+
+      .guestbook-list-section::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .guestbook-list-section::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
       /* 移动端优化 */
       @media (max-width: 768px) {
-        .guestbook-wrapper {
-          gap: 16px;
+        .guestbook-form-section,
+        .guestbook-list-section {
+          border-radius: 16px;
         }
 
-        .message-item {
-          padding: 12px;
+        .guestbook-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 24px;
+        }
+
+        .guestbook-title h3 {
+          font-size: 1.25rem;
         }
 
         .message-avatar {
-          width: 32px;
-          height: 32px;
-          font-size: 0.8rem;
+          width: 36px;
+          height: 36px;
+          font-size: 0.9rem;
         }
 
-        .form-group input,
-        .form-group textarea {
-          font-size: 16px; /* 防止 iOS 缩放 */
+        .message-card {
+          padding: 12px;
+        }
+
+        .message-content {
+          font-size: 0.875rem;
+        }
+
+        .submit-btn {
+          padding: 12px 20px;
+        }
+
+        .guestbook-toast {
+          right: 16px;
+          left: 16px;
+          top: auto;
+          bottom: 100px;
+          transform: translateY(100px);
+        }
+
+        .guestbook-toast.show {
+          transform: translateY(0);
         }
       }
     `;
@@ -689,5 +861,15 @@
     addStyles();
     initGuestbook();
   }
+
+  // 暴露全局接口
+  window.Guestbook = {
+    add: addMessage,
+    getMessages: () => messages,
+    refresh: () => {
+      loadFromStorage();
+      renderMessages();
+    }
+  };
 
 })();
