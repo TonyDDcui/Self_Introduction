@@ -1,12 +1,12 @@
 /**
- * 汉堡菜单 - 垂直列表 + GitHub入口放底部
- * 苹果设计理念：大圆角、简洁、层次分明
+ * 汉堡菜单 - 垂直列表 + 居中显示
+ * 苹果设计理念
  */
 
 (function() {
   'use strict';
 
-  // 板块配置（10个板块）
+  // 板块配置
   const SECTIONS = [
     { id: 'hero', icon: '⚡', name: '首页' },
     { id: 'about', icon: '👤', name: '关于' },
@@ -101,7 +101,7 @@
     navLinks.appendChild(divider);
   }
 
-  // 添加 GitHub 入口（放底部，单独区域）
+  // 添加 GitHub 入口（放底部）
   function addGitHubLink(sidebar) {
     const githubSection = document.createElement('div');
     githubSection.className = 'github-section';
@@ -175,18 +175,22 @@
     style.id = 'vertical-nav-styles';
     style.textContent = `
       /* ============================================
-         垂直导航 - 苹果风格
+         垂直导航 - 居中显示
          ============================================ */
 
-      /* 导航容器 */
+      /* 导航容器 - 居中 */
       .section-nav-container {
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
-      /* 板块标题 */
+      /* 板块标题 - 居中 */
       .nav-section-title {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 10px;
         margin-bottom: 16px;
         padding: 0 4px;
@@ -195,6 +199,7 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        width: 100%;
       }
 
       .nav-section-title svg {
@@ -204,6 +209,8 @@
 
       /* 列表容器 - 苹果风格卡片 */
       .nav-list {
+        width: 100%;
+        max-width: 320px;
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 20px;
@@ -217,7 +224,7 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        padding: 16px 18px;
+        padding: 16px 20px;
         text-decoration: none;
         color: var(--text-primary);
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -288,7 +295,9 @@
       
       .nav-divider {
         height: 1px;
-        margin: 8px 20px;
+        margin: 8px auto;
+        width: calc(100% - 40px);
+        max-width: 280px;
         background: linear-gradient(
           90deg,
           transparent,
@@ -298,11 +307,15 @@
       }
 
       /* ============================================
-         GitHub 区域（底部）
+         GitHub 区域（底部）- 居中
          ============================================ */
       
       .github-section {
         padding: 0 20px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
       }
 
       .github-section-title {
@@ -312,14 +325,16 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 12px;
-        padding-left: 4px;
+        text-align: center;
       }
 
       .github-link {
         display: flex;
         align-items: center;
         gap: 14px;
-        padding: 16px 18px;
+        padding: 16px 20px;
+        width: 100%;
+        max-width: 320px;
         background: rgba(88, 166, 255, 0.08);
         border: 1px solid rgba(88, 166, 255, 0.15);
         border-radius: 16px;
@@ -389,10 +404,11 @@
 
         .nav-list {
           border-radius: 16px;
+          max-width: 100%;
         }
 
         .nav-item {
-          padding: 14px 16px;
+          padding: 14px 18px;
         }
 
         .nav-item .nav-icon {
@@ -407,7 +423,8 @@
         }
 
         .nav-divider {
-          margin: 6px 16px;
+          margin: 6px auto;
+          width: calc(100% - 32px);
         }
 
         .github-section {
@@ -415,8 +432,9 @@
         }
 
         .github-link {
-          padding: 14px 16px;
+          padding: 14px 18px;
           border-radius: 14px;
+          max-width: 100%;
         }
 
         .github-avatar {
@@ -436,7 +454,7 @@
         }
 
         .nav-item {
-          padding: 12px 14px;
+          padding: 12px 16px;
         }
 
         .nav-item .nav-icon {
