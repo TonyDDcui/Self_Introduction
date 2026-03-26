@@ -108,37 +108,13 @@
     }
   }
 
-  // 显示加载状态（带超时提示）
+  // 静默加载，不显示加载提示
   function showLoading(container) {
-    container.innerHTML = `
-      <div class="github-loading">
-        <div class="loading-spinner"></div>
-        <span>正在获取 GitHub 热门项目...</span>
-        <span class="loading-hint">首次加载可能需要几秒</span>
-      </div>
-    `;
-
-    // 3秒后显示额外提示
-    setTimeout(() => {
-      const hint = container.querySelector('.loading-hint');
-      if (hint && isLoading) {
-        hint.textContent = '网络较慢，请耐心等待...';
-      }
-    }, 3000);
-
-    // 8秒后显示取消选项
-    setTimeout(() => {
-      if (isLoading) {
-        const loadingDiv = container.querySelector('.github-loading');
-        if (loadingDiv) {
-          loadingDiv.innerHTML += `
-            <button class="cancel-loading" onclick="GitHubTrending.cancel()">
-              取消加载
-            </button>
-          `;
-        }
-      }
-    }, 8000);
+    // 静默加载，不显示任何提示
+    // 直接显示缓存数据或等待加载完成
+    if (cache.data) {
+      renderProjects(cache.data);
+    }
   }
 
   // 取消加载
