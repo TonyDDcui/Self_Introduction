@@ -1,114 +1,97 @@
 /**
- * 留言板 - JSONBin.io 云端同步版
- * Collection ID: 69c63595c3097a1dd565de94
- * API Key: $2a$10$EOHGYh3otRTo8jQQw3FRc.XMcnhZ2c5E9UloscgNitQfHYArUBVCm
+ * 留言板 - JSONBin.io 云端同步版（修复版）
  */
 
 (function () {
   'use strict';
 
-  // ═══════════════════════════════════════
   // 配置
-  // ═══════════════════════════════════════
-  const CONFIG = {
-    collectionId: '69c63595c3097a1dd565de94',
-    apiKey: '$2a$10$EOHGYh3otRTo8jQQw3FRc.XMcnhZ2c5E9UloscgNitQfHYArUBVCm',
-    storageKey: 'guestbook_messages_v5',
-    maxMessages: 100,
-    pollInterval: 10000,
-  };
+  const COLLECTION_ID = '69c63595c3097a1dd565de94';
+  const API_KEY = '$2a$10$EOHGYh3otRTo8jQQw3FRc.XMcnhZ2c5E9UloscgNitQfHYArUBVCm';
+  const STORAGE_KEY = 'guestbook_v6';
+  const POLL_INTERVAL = 10000;
+
+  let messages = [];
+  let syncStatus = 'offline';
 
   // 预置留言
   const DEFAULT_MESSAGES = [
-    { id: 1700000001, name: '访客', message: '网站设计得很棒！', time: '2024-01-15T10:30:00Z', color: '#58a6ff' },
-    { id: 1700000002, name: '开发者', message: 'UI 精致，体验很好', time: '2024-01-14T09:15:00Z', color: '#a371f7' },
-    { id: 1700000003, name: '同学', message: '学长加油！', time: '2024-01-13T16:45:00Z', color: '#39d353' }
+    { id: 1, name: '访客', message: '网站设计得很棒！', time: '2024-01-15T10:30:00Z', color: '#58a6ff' },
+    { id: 2, name: '开发者', message: 'UI 精致', time: '2024-01-14T09:15:00Z', color: '#a371f7' }
   ];
 
-  let messages = [];
-
-  // ═══════════════════════════════════════
-  // 初始化
-  // ═══════════════════════════════════════
   function init() {
-    loadLocalMessages();
+    loadLocal();
     render();
     bindEvents();
     addStyles();
-    startCloudSync();
+    syncFromCloud();
+    setInterval(syncFromCloud, POLL_INTERVAL);
   }
 
-  // ═══════════════════════════════════════
-  // 云端同步
-  // ═══════════════════════════════════════
-  async function fetchFromCloud() {
-    if (!CONFIG.collectionId || !CONFIG.apiKey) {
-      console.warn('未配置云端同步');
-      return;
-    }
+  // ========== 云端同步 ==========
 
+  async function syncFromCloud() {
     try {
-      updateSyncStatus('syncing');
+      updateStatus('syncing');
 
+      // 读取 Collection 中的所有 bins
       const response = await fetch(
-        `https://api.jsonbin.io/v3/c/${CONFIG.collectionId}/records`,
+        `https://api.jsonbin.io/v3/c/${COLLECTION_ID}/bins`,
         {
-          method: 'GET',
           headers: {
-            'X-Access-Key': CONFIG.apiKey,
-            'Content-Type': 'application/json'
+            'X-Master-Key': API_KEY
           }
         }
       );
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('同步失败:', response.status, errorText);
         throw new Error(`HTTP ${response.status}`);
       }
 
       const data = await response.json();
 
-      if (data && Array.isArray(data)) {
-        // 直接是数组
+      // 处理返回的数据
+      if (Array.isArray(data)) {
+        // 可能直接是数组
         mergeMessages(data);
-      } else if (data && data.records) {
-        // 有 records 字段
-        const cloudMessages = [];
-        data.records.forEach(record => {
+      } else if (data.records) {
+        // 从 records 提取
+        const allMessages = [];
+        for (const record of data.records) {
           if (record.record && record.record.messages) {
-            cloudMessages.push(...record.record.messages);
+            allMessages.push(...record.record.messages);
           }
-        });
-        if (cloudMessages.length > 0) {
-          mergeMessages(cloudMessages);
+        }
+        if (allMessages.length > 0) {
+          mergeMessages(allMessages);
         }
       }
 
-      updateSyncStatus('synced');
+      updateStatus('synced');
+      console.log('✅ 云端同步成功');
 
     } catch (e) {
-      console.error('云端拉取失败:', e);
-      updateSyncStatus('offline');
+      console.error('云端同步失败:', e);
+      updateStatus('offline');
     }
   }
 
-  async function pushToCloud(newMessage) {
-    if (!CONFIG.collectionId || !CONFIG.apiKey) {
-      console.warn('未配置云端同步，仅本地存储');
-      return;
-    }
-
+  async function pushToCloud(newMsg) {
     try {
       // 创建新的 bin
       const response = await fetch(
-        `https://api.jsonbin.io/v3/c/${CONFIG.collectionId}/records`,
+        `https://api.jsonbin.io/v3/c/${COLLECTION_ID}/records`,
         {
           method: 'POST',
           headers: {
-            'X-Access-Key': CONFIG.apiKey,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY
           },
           body: JSON.stringify({
-            messages: [newMessage]
+            messages: [newMsg]
           })
         }
       );
@@ -117,25 +100,13 @@
         throw new Error(`HTTP ${response.status}`);
       }
 
-      updateSyncStatus('synced');
       console.log('✅ 留言已同步到云端');
+      updateStatus('synced');
 
     } catch (e) {
-      console.error('云端推送失败:', e);
-      updateSyncStatus('offline');
+      console.error('推送失败:', e);
+      // 推送失败但不影响本地
     }
-  }
-
-  function startCloudSync() {
-    fetchFromCloud();
-    setInterval(fetchFromCloud, CONFIG.pollInterval);
-
-    // 页面可见时同步
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        fetchFromCloud();
-      }
-    });
   }
 
   function mergeMessages(cloudMessages) {
@@ -144,17 +115,17 @@
     const localIds = new Set(messages.map(m => m.id));
     let hasNew = false;
 
-    cloudMessages.forEach(cm => {
-      if (cm && cm.id && !localIds.has(cm.id)) {
-        messages.push(cm);
+    for (const msg of cloudMessages) {
+      if (msg && msg.id && !localIds.has(msg.id)) {
+        messages.push(msg);
         hasNew = true;
       }
-    });
+    }
 
     if (hasNew) {
       messages.sort((a, b) => new Date(b.time) - new Date(a.time));
-      messages = messages.slice(0, CONFIG.maxMessages);
-      saveLocalMessages();
+      messages = messages.slice(0, 100);
+      saveLocal();
       render();
 
       if (document.visibilityState === 'visible') {
@@ -163,86 +134,67 @@
     }
   }
 
-  function updateSyncStatus(status) {
-    const el = document.getElementById('gb-sync-status');
+  function updateStatus(status) {
+    syncStatus = status;
+    const el = document.getElementById('gb-status');
     if (!el) return;
 
-    const statusMap = {
-      syncing: '<span class="sync-syncing">🔄 同步中...</span>',
-      synced: '<span class="sync-cloud">☁️ 已同步</span>',
-      offline: '<span class="sync-local">📱 本地</span>'
+    const icons = {
+      syncing: '🔄',
+      synced: '☁️',
+      offline: '📱'
     };
 
-    el.innerHTML = statusMap[status] || statusMap.offline;
+    el.textContent = icons[status] || '📱';
+    el.title = status === 'synced' ? '已同步' : status === 'syncing' ? '同步中...' : '本地模式';
   }
 
-  // ═══════════════════════════════════════
-  // 本地存储
-  // ═══════════════════════════════════════
-  function loadLocalMessages() {
+  // ========== 本地存储 ==========
+
+  function loadLocal() {
     try {
-      const stored = localStorage.getItem(CONFIG.storageKey);
-      if (stored) {
-        messages = JSON.parse(stored);
-      } else {
-        messages = [...DEFAULT_MESSAGES];
-        saveLocalMessages();
-      }
+      const stored = localStorage.getItem(STORAGE_KEY);
+      messages = stored ? JSON.parse(stored) : [...DEFAULT_MESSAGES];
     } catch (e) {
       messages = [...DEFAULT_MESSAGES];
     }
   }
 
-  function saveLocalMessages() {
+  function saveLocal() {
     try {
-      localStorage.setItem(CONFIG.storageKey, JSON.stringify(messages));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch (e) {
       console.error('本地保存失败:', e);
     }
   }
 
-  // ═══════════════════════════════════════
-  // 添加留言
-  // ═══════════════════════════════════════
-  function addMessage(name, message) {
-    const newMessage = {
+  // ========== 添加留言 ==========
+
+  function addMessage(name, text) {
+    const msg = {
       id: Date.now(),
       name: name.trim().slice(0, 20),
-      message: message.trim().slice(0, 200),
+      message: text.trim().slice(0, 200),
       time: new Date().toISOString(),
-      color: getRandomColor()
+      color: ['#58a6ff', '#a371f7', '#39d353', '#f778ba', '#ffa657'][Math.floor(Math.random() * 5)]
     };
 
-    messages.unshift(newMessage);
-    if (messages.length > CONFIG.maxMessages) {
-      messages = messages.slice(0, CONFIG.maxMessages);
-    }
+    messages.unshift(msg);
+    messages = messages.slice(0, 100);
+    saveLocal();
+    pushToCloud(msg);
 
-    saveLocalMessages();
-    pushToCloud(newMessage);
-
-    return newMessage;
+    return msg;
   }
 
-  function getRandomColor() {
-    const colors = ['#58a6ff', '#a371f7', '#39d353', '#d29922', '#f85149', '#79c0ff', '#f778ba', '#ffa657'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
+  // ========== 渲染 ==========
 
-  // ═══════════════════════════════════════
-  // 格式化
-  // ═══════════════════════════════════════
-  function formatTime(isoString) {
-    const date = new Date(isoString);
-    const now = new Date();
-    const diff = now - date;
-
+  function formatTime(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
     if (diff < 60000) return '刚刚';
     if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
     if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
-    if (diff < 604800000) return Math.floor(diff / 86400000) + '天前';
-
-    return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+    return Math.floor(diff / 86400000) + '天前';
   }
 
   function escapeHtml(text) {
@@ -251,300 +203,107 @@
     return div.innerHTML;
   }
 
-  // ═══════════════════════════════════════
-  // 渲染
-  // ═══════════════════════════════════════
   function render() {
     const container = document.querySelector('.guestbook-container');
     if (!container) return;
 
     container.innerHTML = `
-      <div class="gb-wrapper">
-        <div class="gb-header">
-          <div class="gb-title">
-            <h3>💬 留言板</h3>
-            <span class="gb-sync-status" id="gb-sync-status">
-              <span class="sync-cloud">☁️ 已同步</span>
-            </span>
-          </div>
-          <div class="gb-stats">
-            <span class="gb-count">${messages.length}</span> 条留言
-          </div>
+      <div class="gb-wrap">
+        <div class="gb-head">
+          <h3>💬 留言板 <span id="gb-status" title="同步状态">📱</span></h3>
+          <span class="gb-count">${messages.length} 条</span>
         </div>
 
-        <div class="gb-list" id="gb-list">
-          ${messages.length === 0 ? `
-            <div class="gb-empty">
-              <p>还没有留言，快来抢沙发！</p>
-            </div>
-          ` : messages.map(msg => `
+        <div class="gb-list">
+          ${messages.map(m => `
             <div class="gb-item">
-              <div class="gb-avatar" style="background: ${msg.color}">${msg.name.charAt(0).toUpperCase()}</div>
-              <div class="gb-body">
+              <div class="gb-avatar" style="background:${m.color}">${m.name[0].toUpperCase()}</div>
+              <div class="gb-content">
                 <div class="gb-meta">
-                  <span class="gb-name" style="color: ${msg.color}">${escapeHtml(msg.name)}</span>
-                  <span class="gb-time">${formatTime(msg.time)}</span>
+                  <span style="color:${m.color}">${escapeHtml(m.name)}</span>
+                  <span class="gb-time">${formatTime(m.time)}</span>
                 </div>
-                <div class="gb-text">${escapeHtml(msg.message)}</div>
+                <div class="gb-text">${escapeHtml(m.message)}</div>
               </div>
             </div>
           `).join('')}
         </div>
 
         <form class="gb-form" id="gb-form">
-          <input type="text" id="gb-name" placeholder="你的昵称" maxlength="20" required>
-          <textarea id="gb-message" placeholder="写下你的留言..." maxlength="200" rows="3" required></textarea>
-          <button type="submit" class="gb-submit">🚀 发布留言</button>
+          <input type="text" id="gb-name" placeholder="昵称" maxlength="20" required>
+          <textarea id="gb-msg" placeholder="留言..." maxlength="200" required></textarea>
+          <button type="submit">🚀 发布</button>
         </form>
       </div>
     `;
   }
 
-  // ═══════════════════════════════════════
-  // 事件
-  // ═══════════════════════════════════════
+  // ========== 事件 ==========
+
   function bindEvents() {
-    document.addEventListener('submit', function (e) {
+    document.addEventListener('submit', e => {
       if (e.target.id === 'gb-form') {
         e.preventDefault();
+        const nameEl = document.getElementById('gb-name');
+        const msgEl = document.getElementById('gb-msg');
 
-        const nameInput = document.getElementById('gb-name');
-        const msgInput = document.getElementById('gb-message');
-
-        if (nameInput && msgInput && nameInput.value.trim() && msgInput.value.trim()) {
-          addMessage(nameInput.value, msgInput.value);
+        if (nameEl && msgEl && nameEl.value.trim() && msgEl.value.trim()) {
+          addMessage(nameEl.value, msgEl.value);
           render();
-          showToast('留言发布成功！🎉');
+          showToast('发布成功！🎉');
         }
+      }
+    });
+
+    // 页面可见时同步
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        syncFromCloud();
       }
     });
   }
 
-  function showToast(message) {
-    const existing = document.querySelector('.gb-toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = 'gb-toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    requestAnimationFrame(() => toast.classList.add('show'));
-
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'gb-toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
     setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
     }, 2500);
   }
 
-  // ═══════════════════════════════════════
-  // 样式
-  // ═══════════════════════════════════════
+  // ========== 样式 ==========
+
   function addStyles() {
-    if (document.getElementById('gb-styles')) return;
+    if (document.getElementById('gb-style')) return;
 
     const style = document.createElement('style');
-    style.id = 'gb-styles';
+    style.id = 'gb-style';
     style.textContent = `
-      .gb-wrapper {
-        max-width: 680px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      .gb-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border, rgba(255,255,255,0.1));
-      }
-
-      .gb-title {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .gb-title h3 {
-        font-size: 1.3rem;
-        margin: 0;
-        color: var(--text-primary, #e6edf3);
-      }
-
-      .gb-sync-status {
-        font-size: 0.75rem;
-        padding: 2px 8px;
-        border-radius: 10px;
-        background: rgba(88,166,255,0.1);
-      }
-
-      .sync-cloud { color: #39d353; }
-      .sync-local { color: #8b949e; }
-      .sync-syncing { color: #58a6ff; }
-
-      .gb-stats {
-        font-size: 0.85rem;
-        color: var(--text-muted, #8b949e);
-      }
-
-      .gb-count {
-        font-weight: 600;
-        color: var(--accent, #58a6ff);
-      }
-
-      .gb-list {
-        max-height: 400px;
-        overflow-y: auto;
-        margin-bottom: 20px;
-      }
-
-      .gb-empty {
-        text-align: center;
-        padding: 40px;
-        color: var(--text-muted, #8b949e);
-      }
-
-      .gb-item {
-        display: flex;
-        gap: 12px;
-        padding: 14px;
-        margin-bottom: 12px;
-        background: var(--card, rgba(255,255,255,0.03));
-        border-radius: 12px;
-        border: 1px solid var(--border, rgba(255,255,255,0.08));
-      }
-
-      .gb-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 0.9rem;
-        flex-shrink: 0;
-      }
-
-      .gb-body {
-        flex: 1;
-        min-width: 0;
-      }
-
-      .gb-meta {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 6px;
-      }
-
-      .gb-name {
-        font-weight: 600;
-        font-size: 0.9rem;
-      }
-
-      .gb-time {
-        font-size: 0.75rem;
-        color: var(--text-muted, #8b949e);
-      }
-
-      .gb-text {
-        font-size: 0.88rem;
-        color: var(--text-secondary, #c9d1d9);
-        line-height: 1.5;
-        word-break: break-word;
-      }
-
-      .gb-form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .gb-form input,
-      .gb-form textarea {
-        padding: 12px 14px;
-        background: var(--input-bg, rgba(255,255,255,0.05));
-        border: 1px solid var(--input-border, rgba(255,255,255,0.1));
-        border-radius: 10px;
-        color: var(--text-primary, #e6edf3);
-        font-size: 0.9rem;
-        font-family: inherit;
-      }
-
-      .gb-form input:focus,
-      .gb-form textarea:focus {
-        outline: none;
-        border-color: var(--accent, #58a6ff);
-      }
-
-      .gb-form input::placeholder,
-      .gb-form textarea::placeholder {
-        color: var(--text-muted, #6e7681);
-      }
-
-      .gb-submit {
-        padding: 12px 20px;
-        background: linear-gradient(135deg, #58a6ff, #a371f7);
-        border: none;
-        border-radius: 10px;
-        color: white;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
-
-      .gb-submit:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 16px rgba(88,166,255,0.4);
-      }
-
-      .gb-submit:active {
-        transform: scale(0.98);
-      }
-
-      .gb-toast {
-        position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%) translateY(20px);
-        padding: 12px 24px;
-        background: linear-gradient(135deg, #39d353, #2ea043);
-        color: white;
-        border-radius: 12px;
-        font-size: 0.9rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        opacity: 0;
-        transition: all 0.3s;
-        z-index: 10000;
-      }
-
-      .gb-toast.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-
-      @media (max-width: 480px) {
-        .gb-wrapper {
-          padding: 12px;
-        }
-
-        .gb-item {
-          padding: 12px;
-        }
-
-        .gb-avatar {
-          width: 32px;
-          height: 32px;
-          font-size: 0.8rem;
-        }
-      }
+      .gb-wrap{max-width:680px;margin:0 auto;padding:20px}
+      .gb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border,rgba(255,255,255,0.1))}
+      .gb-head h3{margin:0;font-size:1.2rem;color:var(--text,#e6edf3)}
+      .gb-count{font-size:.85rem;color:var(--text-muted,#8b949e)}
+      .gb-list{max-height:400px;overflow-y:auto;margin-bottom:16px}
+      .gb-item{display:flex;gap:10px;padding:12px;margin-bottom:10px;background:var(--card,rgba(255,255,255,0.03));border-radius:10px;border:1px solid var(--border,rgba(255,255,255,0.08))}
+      .gb-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex-shrink:0}
+      .gb-content{flex:1;min-width:0}
+      .gb-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+      .gb-meta span:first-child{font-weight:600;font-size:.9rem}
+      .gb-time{font-size:.75rem;color:var(--text-muted,#8b949e)}
+      .gb-text{font-size:.88rem;color:var(--text-secondary,#c9d1d9);line-height:1.5;word-break:break-word}
+      .gb-form{display:flex;flex-direction:column;gap:10px}
+      .gb-form input,.gb-form textarea{padding:10px 12px;background:var(--input-bg,rgba(255,255,255,0.05));border:1px solid var(--border,rgba(255,255,255,0.1));border-radius:8px;color:var(--text,#e6edf3);font-size:.9rem;font-family:inherit}
+      .gb-form input:focus,.gb-form textarea:focus{outline:none;border-color:var(--accent,#58a6ff)}
+      .gb-form button{padding:10px 16px;background:linear-gradient(135deg,#58a6ff,#a371f7);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer}
+      .gb-form button:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(88,166,255,0.3)}
+      .gb-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 20px;background:#39d353;color:#fff;border-radius:8px;font-size:.9rem;opacity:0;transition:opacity .3s;z-index:10000}
+      .gb-toast.show{opacity:1}
+      @media(max-width:480px){.gb-wrap{padding:12px}.gb-avatar{width:30px;height:30px}}
     `;
-
     document.head.appendChild(style);
   }
 
