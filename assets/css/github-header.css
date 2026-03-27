@@ -1,693 +1,131 @@
-/* ================================================
-   GitHub 官方风格导航栏 v2.0
-   移除 GitHub Logo，优化目录为悬浮式
-   ================================================ */
-
-.github-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: var(--nav-height);
-  background: var(--header-bg);
-  border-bottom: 1px solid var(--header-border);
-}
-
-.header-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 var(--space-4);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-/* ===== 左侧：汉堡菜单 ===== */
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.hamburger-btn {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.15s;
-}
-
-.hamburger-btn:hover {
-  background: var(--header-hover);
-}
-
-.hamburger-btn span {
-  display: block;
-  width: 18px;
-  height: 2px;
-  background: var(--text-primary);
-  border-radius: 1px;
-  transition: all 0.25s ease;
-  transform-origin: center;
-}
-
-.hamburger-btn.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.hamburger-btn.active span:nth-child(2) {
-  opacity: 0;
-  transform: scaleX(0);
-}
-
-.hamburger-btn.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-/* ===== 中间品牌 ===== */
-.header-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.brand-link {
-  font-family: var(--font-mono);
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  transition: opacity 0.15s;
-}
-
-.brand-link:hover {
-  opacity: 0.8;
-  color: var(--text-primary);
-}
-
-/* ===== 右侧 ===== */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-/* 搜索框 */
-.header-search {
-  position: relative;
-  display: none;
-}
-
-.search-input {
-  width: 200px;
-  height: 32px;
-  padding: 0 var(--space-3);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  outline: none;
-  transition: all 0.15s;
-}
-
-.search-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-.search-input:focus {
-  background: var(--bg-secondary);
-  border-color: var(--accent-primary);
-  width: 260px;
-}
-
-/* 主题按钮 */
-.theme-btn {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.theme-btn:hover {
-  background: var(--header-hover);
-  color: var(--text-primary);
-}
-
-.theme-btn svg {
-  display: none;
-}
-
-[data-theme="dark"] .theme-btn .icon-sun { display: block; }
-[data-theme="dark"] .theme-btn .icon-moon { display: none; }
-[data-theme="light"] .theme-btn .icon-sun { display: none; }
-[data-theme="light"] .theme-btn .icon-moon { display: block; }
-
-/* 主题下拉菜单 */
-.theme-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 140px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  padding: var(--space-1);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: all 0.15s;
-  z-index: 100;
-}
-
-.theme-dropdown.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.theme-option {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: left;
-}
-
-.theme-option:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-.theme-option.active {
-  background: var(--accent-primary);
-  color: #ffffff;
-}
-
-/* 头像 */
-.header-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  object-fit: cover;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-
-.header-avatar:hover {
-  border-color: var(--accent-primary);
-}
-
-/* ===== 悬浮目录（GitHub 风格 TOC）===== */
-.floating-toc {
-  position: fixed;
-  top: calc(var(--nav-height) + var(--space-4));
-  left: var(--space-4);
-  z-index: 900;
-  max-width: 200px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(-10px);
-  transition: all 0.25s var(--ease-out);
-}
-
-.floating-toc.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0);
-}
-
-.toc-container {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
-  backdrop-filter: blur(8px);
-}
-
-.toc-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--space-2);
-  padding: 0 var(--space-2);
-}
-
-.toc-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.toc-item {
-  font-size: 0.8125rem;
-}
-
-.toc-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  color: var(--text-tertiary);
-  text-decoration: none;
-  transition: all 0.15s;
-  position: relative;
-}
-
-.toc-link::before {
-  content: '';
-  width: 2px;
-  height: 0;
-  background: var(--accent-primary);
-  border-radius: 1px;
-  transition: height 0.15s;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.toc-link:hover {
-  color: var(--text-primary);
-  background: var(--bg-tertiary);
-}
-
-.toc-link.active {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.toc-link.active::before {
-  height: 16px;
-}
-
-/* ===== 侧边导航（移动端菜单）===== */
-.nav-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 1001;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s, visibility 0.2s;
-}
-
-.nav-overlay.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.nav-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 280px;
-  height: 100vh;
-  background: var(--bg-secondary);
-  border-right: 1px solid var(--border);
-  z-index: 1002;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(-100%);
-  transition: transform 0.25s ease;
-  overflow-y: auto;
-}
-
-.nav-sidebar.show {
-  transform: translateX(0);
-}
-
-.nav-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--bg-secondary);
-}
-
-.nav-title {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text-primary);
-}
-
-.nav-close {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.nav-close:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-.nav-user {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-user-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.nav-user-name {
-  font-weight: 600;
-  font-size: 0.9375rem;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nav-user-id {
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-}
-
-.nav-links {
-  flex: 1;
-  padding: var(--space-2);
-}
-
-.nav-section-title {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: var(--space-2) var(--space-3);
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.9375rem;
-  border-radius: var(--radius-md);
-  transition: all 0.15s;
-}
-
-.nav-link:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-.nav-link svg {
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-}
-
-.nav-footer {
-  padding: var(--space-3);
-  border-top: 1px solid var(--border);
-}
-
-/* ===== 响应式 ===== */
-@media (min-width: 768px) {
-  .header-search {
-    display: block;
-  }
-
-  .floating-toc {
-    display: block;
-  }
-}
-
-@media (max-width: 768px) {
-  .github-header {
-    height: 52px;
-  }
-
-  .header-container {
-    padding: 0 12px;
-  }
-
-  .header-center {
-    flex: 1;
-    justify-content: flex-start;
-    margin-left: 8px;
-  }
-
-  .brand-link {
-    font-size: 1.1rem;
-  }
-
-  .header-search {
-    display: none !important;
-  }
-
-  .nav-sidebar {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .floating-toc {
-    display: none;
-  }
-
-  /* 修复移动端内容被 Header 遮挡 */
-  body {
-    padding-top: 52px;
-  }
-
-  section:first-of-type {
-    padding-top: calc(52px + 24px) !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .github-header {
-    height: 48px;
-  }
-
-  .header-container {
-    padding: 0 8px;
-  }
-
-  .hamburger-btn,
-  .theme-btn {
-    width: 36px;
-    height: 36px;
-  }
-
-  .brand-link {
-    font-size: 1rem;
-  }
-
-  body {
-    padding-top: 48px;
-  }
-}
-
-/* 确保 Header 在所有情况下都正确显示 */
-.github-header {
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-}
-
-/* ===== ����������ǿ��ʽ ===== */
-.github-calendar-enhanced {
-  padding: 16px;
+/* GitHub Contribution Card */
+.contrib-card {
   background: var(--card-bg, rgba(255,255,255,0.03));
-  border-radius: 12px;
   border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: 12px;
+  padding: 16px 20px;
 }
 
-.github-calendar-enhanced .calendar-header {
+.contrib-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
 }
 
-.github-calendar-enhanced .calendar-title {
+.contrib-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary, #e6edf3);
+  color: var(--text-primary);
 }
 
-.github-calendar-enhanced .calendar-legend {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--text-muted, #8b949e);
+.contrib-title svg {
+  color: var(--text-secondary);
 }
 
-.github-calendar-enhanced .legend-item {
-  display: flex;
-  align-items: center;
-  gap: 2px;
+.contrib-link {
+  font-size: 13px;
+  color: var(--accent, #58a6ff);
+  text-decoration: none;
 }
 
-.github-calendar-enhanced .legend-box {
-  width: 10px;
-  height: 10px;
+.contrib-link:hover {
+  text-decoration: underline;
+}
+
+.contrib-stats {
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.stat-total strong {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.contrib-grid {
+  display: grid;
+  grid-template-columns: repeat(52, 1fr);
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.contrib-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.contrib-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contrib-grid::-webkit-scrollbar-thumb {
+  background: rgba(128,128,128,0.3);
+  border-radius: 3px;
+}
+
+.contrib-cell {
+  aspect-ratio: 1;
   border-radius: 2px;
-}
-
-.github-calendar-enhanced .legend-box.less {
-  background: var(--bg-primary, #161b22);
-}
-
-.github-calendar-enhanced .legend-box.more {
-  background: #39d353;
-}
-
-.github-calendar-enhanced .calendar-grid {
-  margin: 8px 0;
-}
-
-.github-calendar-enhanced .calendar-cell {
+  min-width: 0;
   transition: transform 0.15s, box-shadow 0.15s;
   cursor: pointer;
 }
 
-.github-calendar-enhanced .calendar-cell:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 8px rgba(57, 211, 83, 0.5);
+.contrib-cell:hover {
+  transform: scale(1.4);
+  box-shadow: 0 0 8px rgba(57,211,83,0.4);
+  z-index: 1;
 }
 
-.github-calendar-enhanced .calendar-summary {
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--text-muted, #8b949e);
-  text-align: right;
+.contrib-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
-.github-calendar-enhanced.mobile {
-  padding: 12px;
+.legend-scale {
+  display: flex;
+  gap: 2px;
 }
 
-.github-calendar-enhanced.mobile .calendar-header {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.github-calendar-enhanced.mobile .calendar-legend {
-  display: none;
-}
-
-/* ===== �����˵�����˾��� ===== */
-@media (min-width: 769px) {
-  .header-container {
-    max-width: 1200px;
-    padding: 0 24px;
-  }
-
-  .header-left {
-    flex: 0 0 auto;
-  }
-
-  .header-center {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-
-  .header-right {
-    flex: 0 0 auto;
-  }
-
-  /* �����˵���ť������� */
-  .hamburger-btn {
-    display: flex;
-  }
-}
-
-/* ===== �����˵���Ӧʽ ===== */
-@media (max-width: 768px) {
-  .hamburger-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .header-container {
-    padding: 0 12px;
-  }
-}
-
-/* ===== 贡献日历溢出修复 ===== */
-.github-calendar-mini,
-.github-calendar-enhanced {
-  overflow-x: auto;
-  overflow-y: hidden;
-  max-width: 100%;
-  -webkit-overflow-scrolling: touch;
-}
-
-.github-calendar-mini .calendar-grid,
-.github-calendar-enhanced .calendar-grid {
-  min-width: max-content;
-}
-
-/* 隐藏滚动条但保持功能 */
-.github-calendar-mini::-webkit-scrollbar,
-.github-calendar-enhanced::-webkit-scrollbar {
-  height: 4px;
-}
-
-.github-calendar-mini::-webkit-scrollbar-track,
-.github-calendar-enhanced::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.github-calendar-mini::-webkit-scrollbar-thumb,
-.github-calendar-enhanced::-webkit-scrollbar-thumb {
-  background: rgba(128, 128, 128, 0.3);
+.legend-scale div {
+  width: 12px;
+  height: 12px;
   border-radius: 2px;
+}
+
+.legend-label {
+  padding: 0 4px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .contrib-card {
+    padding: 12px;
+  }
+
+  .contrib-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .contrib-grid {
+    grid-template-columns: repeat(26, 1fr);
+  }
+
+  .stat-total strong {
+    font-size: 18px;
+  }
 }
