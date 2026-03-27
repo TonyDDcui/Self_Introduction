@@ -467,14 +467,26 @@
 }
 
 @media (max-width: 768px) {
+  .github-header {
+    height: 52px;
+  }
+
+  .header-container {
+    padding: 0 12px;
+  }
+
   .header-center {
     flex: 1;
     justify-content: flex-start;
-    margin-left: var(--space-2);
+    margin-left: 8px;
   }
 
   .brand-link {
-    font-size: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .header-search {
+    display: none !important;
   }
 
   .nav-sidebar {
@@ -485,4 +497,43 @@
   .floating-toc {
     display: none;
   }
+
+  /* 修复移动端内容被 Header 遮挡 */
+  body {
+    padding-top: 52px;
+  }
+
+  section:first-of-type {
+    padding-top: calc(52px + 24px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .github-header {
+    height: 48px;
+  }
+
+  .header-container {
+    padding: 0 8px;
+  }
+
+  .hamburger-btn,
+  .theme-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-link {
+    font-size: 1rem;
+  }
+
+  body {
+    padding-top: 48px;
+  }
+}
+
+/* 确保 Header 在所有情况下都正确显示 */
+.github-header {
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }

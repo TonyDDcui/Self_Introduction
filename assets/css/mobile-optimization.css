@@ -1,6 +1,6 @@
-/* 移动端响应式优化 */
+﻿/* 绉诲姩绔搷搴斿紡浼樺寲 */
 
-/* Hero Section 移动端优化 */
+/* Hero Section 绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .hero-title {
     font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
@@ -35,7 +35,7 @@
   }
 }
 
-/* GitHub 日历移动端优化 */
+/* GitHub 鏃ュ巻绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .github-calendar-mini {
     padding: 12px !important;
@@ -71,7 +71,7 @@
   }
 }
 
-/* 联系按钮移动端优化 */
+/* 鑱旂郴鎸夐挳绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .contact-wrapper {
     padding: 24px 16px !important;
@@ -107,7 +107,7 @@
   }
 }
 
-/* 导航栏移动端优化 */
+/* 瀵艰埅鏍忕Щ鍔ㄧ浼樺寲 */
 @media (max-width: 768px) {
   .github-header {
     padding: 8px 12px;
@@ -136,14 +136,14 @@
   }
 }
 
-/* 悬浮目录移动端隐藏 */
+/* 鎮诞鐩綍绉诲姩绔殣钘?*/
 @media (max-width: 1024px) {
   .floating-toc {
     display: none;
   }
 }
 
-/* 卡片网格移动端优化 */
+/* 鍗＄墖缃戞牸绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .about-grid {
     grid-template-columns: 1fr !important;
@@ -166,7 +166,7 @@
   }
 }
 
-/* 技能卡片移动端优化 */
+/* 鎶€鑳藉崱鐗囩Щ鍔ㄧ浼樺寲 */
 @media (max-width: 768px) {
   .skills-grid {
     grid-template-columns: 1fr !important;
@@ -202,7 +202,7 @@
   }
 }
 
-/* 项目卡片移动端优化 */
+/* 椤圭洰鍗＄墖绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .project-featured {
     flex-direction: column;
@@ -238,7 +238,7 @@
   }
 }
 
-/* 生活相册移动端优化 */
+/* 鐢熸椿鐩稿唽绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .life-gallery {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -266,7 +266,7 @@
   }
 }
 
-/* 证书卡片移动端优化 */
+/* 璇佷功鍗＄墖绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .certs-showcase {
     grid-template-columns: 1fr !important;
@@ -291,7 +291,7 @@
   }
 }
 
-/* GitHub 热门项目移动端优化 */
+/* GitHub 鐑棬椤圭洰绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .github-controls {
     flex-direction: column;
@@ -325,7 +325,7 @@
   }
 }
 
-/* 页脚移动端优化 */
+/* 椤佃剼绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
@@ -347,7 +347,7 @@
   }
 }
 
-/* 返回顶部按钮移动端优化 */
+/* 杩斿洖椤堕儴鎸夐挳绉诲姩绔紭鍖?*/
 @media (max-width: 768px) {
   .back-to-top {
     width: 40px;
@@ -362,7 +362,7 @@
   }
 }
 
-/* 通用文本优化 */
+/* 閫氱敤鏂囨湰浼樺寲 */
 @media (max-width: 768px) {
   .section-title {
     font-size: clamp(1.5rem, 6vw, 2rem) !important;
@@ -394,7 +394,7 @@
   }
 }
 
-/* 液态玻璃效果优化 */
+/* 娑叉€佺幓鐠冩晥鏋滀紭鍖?*/
 .glass-card {
   backdrop-filter: blur(10px) !important;
   background: rgba(255, 255, 255, 0.05) !important;
@@ -406,7 +406,7 @@
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
-/* 标题动态效果 */
+/* 鏍囬鍔ㄦ€佹晥鏋?*/
 .section-title {
   position: relative;
   display: inline-block;
@@ -426,7 +426,7 @@
   }
 }
 
-/* 按钮悬停效果 */
+/* 鎸夐挳鎮仠鏁堟灉 */
 .pill-btn {
   position: relative;
   overflow: hidden;
@@ -448,7 +448,7 @@
   left: 100%;
 }
 
-/* 卡片悬停效果 */
+/* 鍗＄墖鎮仠鏁堟灉 */
 .glass-card {
   transition: all 0.3s ease;
 }
@@ -457,4 +457,17 @@
   transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(88, 166, 255, 0.15);
   border-color: rgba(88, 166, 255, 0.3);
+}
+
+/* 移动端 body padding 修复 */
+@media (max-width: 768px) {
+  body {
+    padding-top: 52px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 48px !important;
+  }
 }
