@@ -1,5 +1,5 @@
 /**
- * 汉堡菜单 - 点击后横向悬浮导航
+ * 汉堡菜单 v2 - 完美适配浅色/深色模式
  */
 
 (function () {
@@ -22,13 +22,77 @@
     buildMenu();
     bindEvents();
     initScrollSpy();
+    // 监听主题变化
+    observeTheme();
+  }
+
+  /* ── 动态适配主题色 ── */
+  function getThemeColors() {
+    const isDark = !document.documentElement.hasAttribute('data-theme') ||
+                   document.documentElement.getAttribute('data-theme') === 'dark' ||
+                   window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    return isDark ? {
+      bg: 'rgba(13, 17, 23, 0.97)',
+      border: 'rgba(255,255,255,0.08)',
+      text: '#e6edf3',
+      textMuted: '#8b949e',
+      activeBg: 'rgba(88,166,255,0.15)',
+      activeColor: '#58a6ff',
+      activeBorder: 'rgba(88,166,255,0.25)',
+      hoverBg: 'rgba(255,255,255,0.06)',
+      lineColor: '#e6edf3',
+      shadow: '0 8px 32px rgba(0,0,0,0.4)'
+    } : {
+      bg: 'rgba(255, 255, 255, 0.97)',
+      border: 'rgba(0,0,0,0.08)',
+      text: '#1f2328',
+      textMuted: '#656d76',
+      activeBg: 'rgba(88,166,255,0.12)',
+      activeColor: '#0969da',
+      activeBorder: 'rgba(88,166,255,0.2)',
+      hoverBg: 'rgba(0,0,0,0.04)',
+      lineColor: '#1f2328',
+      shadow: '0 8px 32px rgba(0,0,0,0.12)'
+    };
+  }
+
+  function updateTheme() {
+    const c = getThemeColors();
+    const panel = document.getElementById('hb-panel');
+    const btn = document.getElementById('hb-btn');
+    if (!panel) return;
+
+    panel.style.background = c.bg;
+    panel.style.borderBottomColor = c.border;
+    panel.style.boxShadow = c.shadow;
+
+    if (btn) {
+      btn.querySelectorAll('span').forEach(s => s.style.background = c.lineColor);
+    }
+
+    document.querySelectorAll('.hb-nav-item').forEach(item => {
+      item.style.color = c.textMuted;
+      if (!item.classList.contains('active')) {
+        item.style.background = 'transparent';
+        item.style.borderColor = 'transparent';
+      }
+    });
+  }
+
+  function observeTheme() {
+    const observer = new MutationObserver(() => updateTheme());
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => updateTheme());
   }
 
   /* ── 注入样式 ── */
   function injectStyles() {
-    if (document.getElementById('hamburger-nav-css')) return;
+    if (document.getElementById('hamburger-nav-v2-css')) return;
+
+    const c = getThemeColors();
     const s = document.createElement('style');
-    s.id = 'hamburger-nav-css';
+    s.id = 'hamburger-nav-v2-css';
     s.textContent = `
       /* ── 汉堡按钮 ── */
       #hb-btn {
@@ -37,28 +101,28 @@
         justify-content: center;
         align-items: center;
         gap: 5px;
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         background: none;
         border: none;
         cursor: pointer;
-        padding: 4px;
-        border-radius: 8px;
+        padding: 5px;
+        border-radius: 10px;
         transition: background 0.2s;
         z-index: 10001;
         position: relative;
       }
-      #hb-btn:hover { background: rgba(255,255,255,0.08); }
+      #hb-btn:hover { background: rgba(128,128,128,0.15); }
       #hb-btn span {
         display: block;
-        width: 20px;
+        width: 18px;
         height: 2px;
-        background: var(--text-primary, #e6edf3);
+        background: ${c.lineColor};
         border-radius: 2px;
         transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         transform-origin: center;
       }
-      /* 打开状态 → X */
+      /* 打开状态 → 动画变 X */
       #hb-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
       #hb-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
       #hb-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -66,22 +130,20 @@
       /* ── 悬浮横向导航面板 ── */
       #hb-panel {
         position: fixed;
-        top: 56px;          /* header 高度 */
+        top: 52px;
         left: 0;
         right: 0;
         z-index: 10000;
-        background: rgba(13, 17, 23, 0.96);
+        background: ${c.bg};
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-        padding: 12px 16px;
-        display: flex;
-        justify-content: center;
-        /* 隐藏状态 */
+        border-bottom: 1px solid ${c.border};
+        padding: 10px 12px 12px;
+        box-shadow: ${c.shadow};
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-8px);
-        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+        transform: translateY(-10px);
+        transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s;
       }
       #hb-panel.open {
         opacity: 1;
@@ -97,9 +159,8 @@
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
         max-width: 900px;
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
+        margin: 0 auto;
+        padding: 2px 0;
       }
       #hb-panel-inner::-webkit-scrollbar { display: none; }
 
@@ -108,47 +169,84 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
-        padding: 10px 16px;
-        border-radius: 14px;
+        gap: 3px;
+        padding: 9px 14px;
+        border-radius: 12px;
         text-decoration: none;
-        color: var(--text-secondary, #8b949e);
-        font-size: 12px;
+        color: ${c.textMuted};
+        font-size: 11px;
         font-weight: 500;
         white-space: nowrap;
         transition: all 0.2s ease;
         flex-shrink: 0;
         border: 1px solid transparent;
+        background: transparent;
       }
       .hb-nav-item:hover {
-        background: rgba(255,255,255,0.06);
-        color: var(--text-primary, #e6edf3);
-        border-color: rgba(255,255,255,0.1);
+        background: ${c.hoverBg};
+        color: ${c.text};
+        border-color: ${c.border};
       }
       .hb-nav-item.active {
-        background: rgba(88,166,255,0.15);
-        color: #58a6ff;
-        border-color: rgba(88,166,255,0.25);
+        background: ${c.activeBg};
+        color: ${c.activeColor};
+        border-color: ${c.activeBorder};
       }
       .hb-nav-item .hb-icon { font-size: 20px; line-height: 1; }
       .hb-nav-item .hb-name { font-size: 11px; letter-spacing: 0.2px; }
 
       /* 移动端更紧凑 */
       @media (max-width: 480px) {
-        .hb-nav-item { padding: 8px 12px; }
+        #hb-panel { top: 50px; padding: 8px 8px 10px; }
+        .hb-nav-item { padding: 8px 11px; }
         .hb-nav-item .hb-icon { font-size: 18px; }
-        #hb-panel-inner { justify-content: flex-start; flex-wrap: nowrap; }
+        .hb-nav-item .hb-name { font-size: 10px; }
       }
+
+      /* ── 深色主题覆盖 ── */
+      [data-theme="dark"] #hb-panel {
+        background: rgba(13, 17, 23, 0.97);
+        border-color: rgba(255,255,255,0.08);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      }
+      [data-theme="dark"] .hb-nav-item { color: #8b949e; }
+      [data-theme="dark"] .hb-nav-item:hover {
+        background: rgba(255,255,255,0.06);
+        color: #e6edf3;
+        border-color: rgba(255,255,255,0.08);
+      }
+      [data-theme="dark"] .hb-nav-item.active {
+        background: rgba(88,166,255,0.15);
+        color: #58a6ff;
+        border-color: rgba(88,166,255,0.25);
+      }
+      [data-theme="dark"] #hb-btn span { background: #e6edf3; }
+
+      /* ── 浅色主题覆盖 ── */
+      [data-theme="light"] #hb-panel {
+        background: rgba(255, 255, 255, 0.97);
+        border-color: rgba(0,0,0,0.08);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      }
+      [data-theme="light"] .hb-nav-item { color: #656d76; }
+      [data-theme="light"] .hb-nav-item:hover {
+        background: rgba(0,0,0,0.04);
+        color: #1f2328;
+        border-color: rgba(0,0,0,0.06);
+      }
+      [data-theme="light"] .hb-nav-item.active {
+        background: rgba(88,166,255,0.12);
+        color: #0969da;
+        border-color: rgba(88,166,255,0.2);
+      }
+      [data-theme="light"] #hb-btn span { background: #1f2328; }
     `;
     document.head.appendChild(s);
   }
 
   /* ── 构建 DOM ── */
   function buildMenu() {
-    /* 找到 header 里的汉堡按钮占位 */
     const placeholder = document.getElementById('hamburger-btn');
-
-    /* 创建新按钮 */
     const btn = document.createElement('button');
     btn.id = 'hb-btn';
     btn.setAttribute('aria-label', '导航菜单');
@@ -157,13 +255,11 @@
     if (placeholder) {
       placeholder.replaceWith(btn);
     } else {
-      /* 找不到占位就插到 header-left */
       const left = document.querySelector('.header-left');
       if (left) left.prepend(btn);
       else document.body.prepend(btn);
     }
 
-    /* 创建横向面板 */
     const panel = document.createElement('div');
     panel.id = 'hb-panel';
     panel.setAttribute('aria-hidden', 'true');
@@ -186,25 +282,22 @@
 
   /* ── 事件绑定 ── */
   function bindEvents() {
-    const btn   = document.getElementById('hb-btn');
+    const btn = document.getElementById('hb-btn');
     const panel = document.getElementById('hb-panel');
     if (!btn || !panel) return;
 
-    /* 切换面板 */
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const isOpen = panel.classList.contains('open');
       toggle(!isOpen);
     });
 
-    /* 点击面板外关闭 */
     document.addEventListener('click', (e) => {
       if (!panel.contains(e.target) && e.target !== btn) {
         toggle(false);
       }
     });
 
-    /* 点击导航项 */
     panel.querySelectorAll('.hb-nav-item').forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
@@ -218,14 +311,13 @@
       });
     });
 
-    /* ESC 关闭 */
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') toggle(false);
     });
   }
 
   function toggle(open) {
-    const btn   = document.getElementById('hb-btn');
+    const btn = document.getElementById('hb-btn');
     const panel = document.getElementById('hb-panel');
     if (!btn || !panel) return;
     btn.classList.toggle('open', open);
