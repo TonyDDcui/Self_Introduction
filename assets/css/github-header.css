@@ -660,3 +660,34 @@
     padding: 0 12px;
   }
 }
+
+/* ===== 贡献日历溢出修复 ===== */
+.github-calendar-mini,
+.github-calendar-enhanced {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.github-calendar-mini .calendar-grid,
+.github-calendar-enhanced .calendar-grid {
+  min-width: max-content;
+}
+
+/* 隐藏滚动条但保持功能 */
+.github-calendar-mini::-webkit-scrollbar,
+.github-calendar-enhanced::-webkit-scrollbar {
+  height: 4px;
+}
+
+.github-calendar-mini::-webkit-scrollbar-track,
+.github-calendar-enhanced::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.github-calendar-mini::-webkit-scrollbar-thumb,
+.github-calendar-enhanced::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 2px;
+}
