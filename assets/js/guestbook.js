@@ -33,7 +33,7 @@
     addStyles();
 
     // 妫€鏌ユ槸鍚﹂厤缃簡浜戠
-    if (BIN_ID && BIN_ID !== 'YOUR_BIN_ID_HERE') {
+    if (BIN_ID && BIN_ID !== '69c64aa9c3097a1dd56635bb') {
       syncEnabled = true;
       syncFromCloud();
       setInterval(syncFromCloud, POLL_INTERVAL);
