@@ -1,21 +1,31 @@
 /**
- * 留言板 - 云端同步版
- * 电脑端和手机端实时同步
+ * 留言板 - 云端同步版 (JSONBin.io)
+ * 手机和电脑实时同步
+ * 
+ * 使用方法：
+ * 1. 注册 https://jsonbin.io (免费)
+ * 2. 创建一个 Collection，获取 Collection ID
+ * 3. 修改下面的 CONFIG 对象
  */
 
 (function() {
   'use strict';
 
-  // ========== 配置 ==========
-  // 留言数据文件路径（请根据实际后端配置修改）
-  // 可用 GitHub Gist、JSONBin.io、或自己的后端 API
-  // 示例: const API_URL = 'https://api.jsonbin.io/v3/b/YOUR_BIN_ID/latest';
-  
+  // ═══════════════════════════════════════
+  // ⚠️ 请在这里配置你的后端
+  // ═══════════════════════════════════════
   const CONFIG = {
-    // 如果没有后端，使用 localStorage + 定时拉取
-    storageKey: 'guestbook_messages_v2',
+    // 方案1: JSONBin.io (推荐，免费简单)
+    // apiKey: 'YOUR-API-KEY',      // 从 JSONBin.io 获取
+    // binId: 'YOUR-BIN-ID',        // 创建 collection 后的 ID
+    // collectionId: 'YOUR-COLLECTION-ID', // Collection ID
+
+    // 方案2: 如果你没有后端，使用 localStorage（仅本设备有效）
+    useLocal: true,  // 设为 false 并填上上面的配置即可启用云端
+
+    storageKey: 'guestbook_messages_v3',
     maxMessages: 100,
-    pollInterval: 30000, // 30秒拉取一次
+    pollInterval: 10000,  // 10秒拉取一次
   };
 
   // 预置历史留言
@@ -26,25 +36,117 @@
   ];
 
   let messages = [];
-  let lastSyncTime = null;
+  let isOnline = navigator.onLine;
 
-  // ========== 核心函数 ==========
   function init() {
     loadMessages();
     render();
     bindEvents();
     addStyles();
-    // 启动定时同步
-    startPolling();
+    
+    if (!CONFIG.useLocal) {
+      startCloudSync();
+    }
+    
+    // 监听网络状态
+    window.addEventListener('online', () => { isOnline = true; showToast('已恢复网络连接 ✓'); });
+    window.addEventListener('offline', () => { isOnline = false; showToast('网络已断开'); });
+    
+    // 页面可见性变化时立即同步
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && !CONFIG.useLocal) {
+        fetchFromCloud();
+      }
+    });
   }
 
-  // 从本地存储加载
+  // ═══════════════════════════════════════
+  // 云端同步 - JSONBin.io
+  // ═══════════════════════════════════════
+  
+  async function fetchFromCloud() {
+    if (CONFIG.useLocal || !CONFIG.collectionId) return;
+    
+    try {
+      const response = await fetch(
+        `https://api.jsonbin.io/v3/c/${CONFIG.collectionId}/records`,
+        {
+          headers: {
+            'X-Access-Key': CONFIG.apiKey,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      if (!response.ok) throw new Error('获取失败');
+      
+      const data = await response.json();
+      const cloudMessages = data.records || [];
+      
+      // 合并消息
+      mergeMessages(cloudMessages);
+      
+    } catch (e) {
+      console.warn('云端拉取失败，使用本地数据:', e);
+    }
+  }
+
+  async function pushToCloud() {
+    if (CONFIG.useLocal || !CONFIG.collectionId) return;
+    
+    try {
+      await fetch(
+        `https://api.jsonbin.io/v3/c/${CONFIG.collectionId}/records`,
+        {
+          method: 'POST',
+          headers: {
+            'X-Access-Key': CONFIG.apiKey,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ messages })
+        }
+      );
+    } catch (e) {
+      console.warn('云端推送失败:', e);
+    }
+  }
+
+  function mergeMessages(cloudMessages) {
+    const localIds = messages.map(m => m.id);
+    let hasNew = false;
+    
+    cloudMessages.forEach(cm => {
+      if (!localIds.includes(cm.id)) {
+        messages.unshift(cm);
+        hasNew = true;
+      }
+    });
+    
+    if (hasNew) {
+      messages = messages.slice(0, CONFIG.maxMessages);
+      saveMessages();
+      render();
+      showToast('收到新留言 ✨');
+    }
+  }
+
+  function startCloudSync() {
+    // 立即拉取一次
+    fetchFromCloud();
+    
+    // 定时拉取
+    setInterval(fetchFromCloud, CONFIG.pollInterval);
+  }
+
+  // ═══════════════════════════════════════
+  // 本地存储
+  // ═══════════════════════════════════════
+  
   function loadMessages() {
     try {
       const stored = localStorage.getItem(CONFIG.storageKey);
       if (stored) {
         messages = JSON.parse(stored);
-        lastSyncTime = localStorage.getItem(CONFIG.storageKey + '_time');
       } else {
         messages = [...DEFAULT_MESSAGES];
         saveMessages();
@@ -54,79 +156,18 @@
     }
   }
 
-  // 保存到本地存储
   function saveMessages() {
     try {
       localStorage.setItem(CONFIG.storageKey, JSON.stringify(messages));
-      localStorage.setItem(CONFIG.storageKey + '_time', new Date().toISOString());
     } catch (e) {
       console.warn('保存失败:', e);
     }
   }
 
-  // 定时从云端拉取（跨设备同步关键！）
-  function startPolling() {
-    setInterval(async () => {
-      const cloudMessages = await fetchCloudMessages();
-      if (cloudMessages && cloudMessages.length > 0) {
-        // 合并：取最新发表的留言
-        const localIds = messages.map(m => m.id);
-        let hasNew = false;
-        cloudMessages.forEach(cm => {
-          if (!localIds.includes(cm.id)) {
-            messages.unshift(cm);
-            hasNew = true;
-          }
-        });
-        if (hasNew) {
-          messages = messages.slice(0, CONFIG.maxMessages);
-          saveMessages();
-          render();
-          if (document.visibilityState === 'visible') {
-            showToast('收到新留言 ✨');
-          }
-        }
-      }
-    }, CONFIG.pollInterval);
-
-    // 页面可见性变化时立即同步
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        fetchCloudMessages().then(cloudMessages => {
-          if (cloudMessages && cloudMessages.length > messages.length) {
-            messages = cloudMessages.slice(0, CONFIG.maxMessages);
-            saveMessages();
-            render();
-          }
-        });
-      }
-    });
-  }
-
-  // 获取云端留言（需要配合后端使用）
-  async function fetchCloudMessages() {
-    // ====== 请在这里配置你的后端 API ======
-    // 推荐方案：
-    // 1. GitHub Gist (免费)
-    // 2. JSONBin.io (免费额度)
-    // 3. 自己搭建的后端
-    //
-    // 示例 (GitHub Gist):
-    // const response = await fetch('https://api.github.com/gists/YOUR_GIST_ID', {
-    //   headers: { 'Accept': 'application/vnd.github.v3+json' }
-    // });
-    // const data = await response.json();
-    // return JSON.parse(data.files['guestbook.json'].content);
-    
-    // 目前暂时使用本地存储，多设备可通过以下方式共享：
-    // 1. 使用 JSONBin.io 等服务
-    // 2. 使用 Cloudflare Workers
-    // 3. 使用 GitHub Gist
-    
-    return null; // 暂不使用，保留本地
-  }
-
+  // ═══════════════════════════════════════
   // 添加留言
+  // ═══════════════════════════════════════
+  
   function addMessage(name, message) {
     const newMessage = {
       id: Date.now(),
@@ -135,19 +176,28 @@
       time: new Date().toISOString(),
       color: getRandomColor()
     };
+    
     messages.unshift(newMessage);
     if (messages.length > CONFIG.maxMessages) messages = messages.slice(0, CONFIG.maxMessages);
+    
     saveMessages();
+    
+    if (!CONFIG.useLocal) {
+      pushToCloud();
+    }
+    
     return newMessage;
   }
 
-  // 随机颜色
   function getRandomColor() {
     const colors = ['#58a6ff', '#a371f7', '#39d353', '#d29922', '#f85149', '#79c0ff', '#f778ba', '#ffa657'];
     return colors[Math.floor(Math.random() * colors.length)];
   }
 
-  // 格式化时间
+  // ═══════════════════════════════════════
+  // 格式化
+  // ═══════════════════════════════════════
+  
   function formatTime(isoString) {
     const date = new Date(isoString);
     const now = new Date();
@@ -159,14 +209,16 @@
     return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
   }
 
-  // HTML 转义
   function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  // ========== 渲染 ==========
+  // ═══════════════════════════════════════
+  // 渲染
+  // ═══════════════════════════════════════
+  
   function render() {
     const container = document.querySelector('.guestbook-container');
     if (!container) return;
@@ -175,8 +227,15 @@
       <div class="gb-wrapper">
         <div class="gb-header">
           <div class="gb-title">
-            <span class="gb-icon">💬</span>
+            <span class="gb-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
             <h3>留言板</h3>
+            <span class="gb-sync-status" id="gb-sync-status">
+              ${CONFIG.useLocal ? '<span class="sync-local">📱 仅本地</span>' : '<span class="sync-cloud">☁️ 已同步</span>'}
+            </span>
           </div>
           <div class="gb-stats">
             <span class="gb-count">${messages.length}</span> 条留言
@@ -184,7 +243,12 @@
         </div>
         
         <div class="gb-list" id="gb-list">
-          ${messages.map(msg => `
+          ${messages.length === 0 ? `
+            <div class="gb-empty">
+              <span class="gb-empty-icon">💬</span>
+              <p>还没有留言，快来抢沙发！</p>
+            </div>
+          ` : messages.map(msg => `
             <div class="gb-item" data-id="${msg.id}">
               <div class="gb-avatar" style="background: ${msg.color}">${msg.name.charAt(0).toUpperCase()}</div>
               <div class="gb-body">
@@ -208,8 +272,13 @@
           <div class="gb-form-footer">
             <span class="gb-hint">${new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' })}</span>
             <button type="submit" class="gb-submit">
-              <span class="gb-submit-icon">🚀</span>
-              发布
+              <span class="gb-submit-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </span>
+              发布留言
             </button>
           </div>
         </form>
@@ -217,7 +286,10 @@
     `;
   }
 
-  // ========== 事件 ==========
+  // ═══════════════════════════════════════
+  // 事件
+  // ═══════════════════════════════════════
+  
   function bindEvents() {
     const container = document.querySelector('.guestbook-container');
     if (!container) return;
@@ -231,9 +303,8 @@
         if (name.trim() && msg.trim()) {
           addMessage(name, msg);
           render();
-          showToast('留言发布成功！✨');
+          showToast('留言发布成功！🎉');
           
-          // 滚动到顶部显示新留言
           const list = document.getElementById('gb-list');
           if (list) list.scrollTop = 0;
         }
@@ -248,19 +319,16 @@
     });
   }
 
-  // Toast 提示
   function showToast(message) {
     const existing = document.querySelector('.gb-toast');
     if (existing) existing.remove();
     
     const toast = document.createElement('div');
     toast.className = 'gb-toast';
-    toast.innerHTML = `<span class="toast-icon">✓</span> ${message}`;
+    toast.innerHTML = message;
     document.body.appendChild(toast);
     
-    requestAnimationFrame(() => {
-      toast.classList.add('show');
-    });
+    requestAnimationFrame(() => toast.classList.add('show'));
     
     setTimeout(() => {
       toast.classList.remove('show');
@@ -268,11 +336,14 @@
     }, 2500);
   }
 
-  // ========== 样式 ==========
+  // ═══════════════════════════════════════
+  // 样式
+  // ═══════════════════════════════════════
+  
   function addStyles() {
-    if (document.getElementById('guestbook-v2-styles')) return;
+    if (document.getElementById('guestbook-v3-styles')) return;
     const s = document.createElement('style');
-    s.id = 'guestbook-v2-styles';
+    s.id = 'guestbook-v3-styles';
     s.textContent = `
       /* ── 容器 ── */
       .gb-wrapper {
@@ -293,7 +364,12 @@
         align-items: center;
         gap: 10px;
       }
-      .gb-icon { font-size: 1.6rem; }
+      .gb-icon {
+        width: 28px;
+        height: 28px;
+        color: #58a6ff;
+      }
+      .gb-icon svg { width: 100%; height: 100%; }
       .gb-title h3 {
         font-size: 1.4rem;
         font-weight: 700;
@@ -303,6 +379,14 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
+      .gb-sync-status {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        background: rgba(88,166,255,0.1);
+      }
+      .sync-cloud { color: #39d353; }
+      .sync-local { color: #8b949e; }
       .gb-stats {
         font-size: 0.8rem;
         color: var(--text-muted, #8b949e);
@@ -310,10 +394,7 @@
         padding: 4px 10px;
         border-radius: 20px;
       }
-      .gb-count {
-        font-weight: 600;
-        color: var(--accent, #58a6ff);
-      }
+      .gb-count { font-weight: 600; color: var(--accent, #58a6ff); }
 
       /* ── 留言列表 ── */
       .gb-list {
@@ -328,10 +409,16 @@
         scrollbar-color: rgba(88,166,255,0.3) transparent;
       }
       .gb-list::-webkit-scrollbar { width: 4px; }
-      .gb-list::-webkit-scrollbar-thumb {
-        background: rgba(88,166,255,0.3);
-        border-radius: 2px;
+      .gb-list::-webkit-scrollbar-thumb { background: rgba(88,166,255,0.3); border-radius: 2px; }
+
+      /* ── 空状态 ── */
+      .gb-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted, #8b949e);
       }
+      .gb-empty-icon { font-size: 3rem; display: block; margin-bottom: 12px; }
+      .gb-empty p { margin: 0; font-size: 0.95rem; }
 
       /* ── 单条留言 ── */
       .gb-item {
@@ -349,7 +436,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
       .gb-item:hover {
-        border-color: var(--border-hover, rgba(88,166,255,0.2));
+        border-color: var(--accent, rgba(88,166,255,0.2));
         transform: translateX(2px);
       }
 
@@ -377,10 +464,7 @@
         margin-bottom: 6px;
       }
       .gb-name { font-weight: 600; font-size: 0.9rem; }
-      .gb-time {
-        font-size: 0.72rem;
-        color: var(--text-muted, #8b949e);
-      }
+      .gb-time { font-size: 0.72rem; color: var(--text-muted, #8b949e); }
       .gb-text {
         font-size: 0.88rem;
         line-height: 1.6;
@@ -454,7 +538,11 @@
         box-shadow: 0 4px 16px rgba(88,166,255,0.4);
       }
       .gb-submit:active { transform: scale(0.97); }
-      .gb-submit-icon { font-size: 1rem; }
+      .gb-submit-icon {
+        width: 16px;
+        height: 16px;
+      }
+      .gb-submit-icon svg { width: 100%; height: 100%; }
 
       /* ── Toast ── */
       .gb-toast {
@@ -472,27 +560,14 @@
         opacity: 0;
         transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         z-index: 10000;
-        display: flex;
-        align-items: center;
-        gap: 8px;
         pointer-events: none;
       }
       .gb-toast.show {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
       }
-      .toast-icon {
-        width: 20px;
-        height: 20px;
-        background: rgba(255,255,255,0.2);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.7rem;
-      }
 
-      /* ── 浅色模式适配 ── */
+      /* ── 浅色模式 ── */
       [data-theme="light"] .gb-item,
       .light-theme .gb-item {
         background: rgba(255,255,255,0.8);
@@ -502,10 +577,6 @@
       .light-theme .gb-form {
         background: rgba(255,255,255,0.9);
         border-color: rgba(0,0,0,0.06);
-      }
-      [data-theme="light"] .gb-list,
-      .light-theme .gb-list {
-        scrollbar-color: rgba(88,166,255,0.4) transparent;
       }
       [data-theme="light"] .gb-form input,
       [data-theme="light"] .gb-form textarea,
