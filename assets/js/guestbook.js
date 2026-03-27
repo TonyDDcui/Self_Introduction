@@ -1,21 +1,17 @@
-/**
- * 留言板 - JSONBin.io 正确实现
+﻿/**
+ * 鐣欒█鏉?- JSONBin.io 姝ｇ‘瀹炵幇
  *
- * 使用说明：
- * 1. 访问 https://jsonbin.io
- * 2. 创建一个新的 Bin
- * 3. 初始内容设为：{"messages":[]}
- * 4. 获取 Bin ID（URL 中的 ID）
- * 5. 将 Bin ID 填入下方 BIN_ID
+ * 浣跨敤璇存槑锛? * 1. 璁块棶 https://jsonbin.io
+ * 2. 鍒涘缓涓€涓柊鐨?Bin
+ * 3. 鍒濆鍐呭璁句负锛歿"messages":[]}
+ * 4. 鑾峰彇 Bin ID锛圲RL 涓殑 ID锛? * 5. 灏?Bin ID 濉叆涓嬫柟 BIN_ID
  */
 
 (function () {
   'use strict';
 
-  // ═══════════════════════════════════════
-  // 配置 - 请填入你的 Bin ID
-  // ═══════════════════════════════════════
-  const BIN_ID = 'YOUR_BIN_ID_HERE'; // 替换为你的 Bin ID
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 閰嶇疆 - 璇峰～鍏ヤ綘鐨?Bin ID
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  const BIN_ID = '69c64aa9c3097a1dd56635bb'; // 鏇挎崲涓轰綘鐨?Bin ID
   const API_KEY = '$2a$10$EOHGYh3otRTo8jQQw3FRc.XMcnhZ2c5E9UloscgNitQfHYArUBVCm';
   const STORAGE_KEY = 'guestbook_local_v7';
   const POLL_INTERVAL = 10000;
@@ -23,45 +19,39 @@
   let messages = [];
   let syncEnabled = false;
 
-  // 预置留言
+  // 棰勭疆鐣欒█
   const DEFAULT_MESSAGES = [
-    { id: 1, name: '访客', message: '网站设计得很棒！', time: '2024-01-15T10:30:00Z', color: '#58a6ff' },
-    { id: 2, name: '开发者', message: 'UI 精致，体验很好', time: '2024-01-14T09:15:00Z', color: '#a371f7' },
-    { id: 3, name: '同学', message: '学长加油！', time: '2024-01-13T16:45:00Z', color: '#39d353' }
+    { id: 1, name: '璁垮', message: '缃戠珯璁捐寰楀緢妫掞紒', time: '2024-01-15T10:30:00Z', color: '#58a6ff' },
+    { id: 2, name: '寮€鍙戣€?, message: 'UI 绮捐嚧锛屼綋楠屽緢濂?, time: '2024-01-14T09:15:00Z', color: '#a371f7' },
+    { id: 3, name: '鍚屽', message: '瀛﹂暱鍔犳补锛?, time: '2024-01-13T16:45:00Z', color: '#39d353' }
   ];
 
-  // ═══════════════════════════════════════
-  // 初始化
-  // ═══════════════════════════════════════
-  function init() {
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 鍒濆鍖?  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  function init() {
     loadLocal();
     render();
     bindEvents();
     addStyles();
 
-    // 检查是否配置了云端
+    // 妫€鏌ユ槸鍚﹂厤缃簡浜戠
     if (BIN_ID && BIN_ID !== 'YOUR_BIN_ID_HERE') {
       syncEnabled = true;
       syncFromCloud();
       setInterval(syncFromCloud, POLL_INTERVAL);
-      console.log('☁️ 云端同步已启用');
+      console.log('鈽侊笍 浜戠鍚屾宸插惎鐢?);
     } else {
-      console.log('📱 使用本地存储模式');
-      console.log('提示：请创建 JSONBin 并填入 BIN_ID 以启用云端同步');
+      console.log('馃摫 浣跨敤鏈湴瀛樺偍妯″紡');
+      console.log('鎻愮ず锛氳鍒涘缓 JSONBin 骞跺～鍏?BIN_ID 浠ュ惎鐢ㄤ簯绔悓姝?);
     }
   }
 
-  // ═══════════════════════════════════════
-  // 云端同步（使用单个 Bin）
-  // ═══════════════════════════════════════
-
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 浜戠鍚屾锛堜娇鐢ㄥ崟涓?Bin锛?  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
   async function syncFromCloud() {
     if (!syncEnabled) return;
 
     try {
       updateStatus('syncing');
 
-      // 读取 Bin
+      // 璇诲彇 Bin
       const response = await fetch(
         `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
         {
@@ -77,16 +67,16 @@
 
       const data = await response.json();
 
-      // 合并云端消息
+      // 鍚堝苟浜戠娑堟伅
       if (data.record && data.record.messages) {
         mergeMessages(data.record.messages);
       }
 
       updateStatus('synced');
-      console.log('✅ 云端同步成功');
+      console.log('鉁?浜戠鍚屾鎴愬姛');
 
     } catch (e) {
-      console.error('云端同步失败:', e);
+      console.error('浜戠鍚屾澶辫触:', e);
       updateStatus('offline');
     }
   }
@@ -95,7 +85,7 @@
     if (!syncEnabled) return;
 
     try {
-      // 更新整个 Bin
+      // 鏇存柊鏁翠釜 Bin
       const response = await fetch(
         `https://api.jsonbin.io/v3/b/${BIN_ID}`,
         {
@@ -115,10 +105,10 @@
       }
 
       updateStatus('synced');
-      console.log('✅ 已同步到云端');
+      console.log('鉁?宸插悓姝ュ埌浜戠');
 
     } catch (e) {
-      console.error('云端推送失败:', e);
+      console.error('浜戠鎺ㄩ€佸け璐?', e);
       updateStatus('offline');
     }
   }
@@ -143,7 +133,7 @@
       render();
 
       if (document.visibilityState === 'visible') {
-        showToast('收到新留言 ✨');
+        showToast('鏀跺埌鏂扮暀瑷€ 鉁?);
       }
     }
   }
@@ -153,18 +143,16 @@
     if (!el) return;
 
     const icons = {
-      syncing: '🔄',
-      synced: '☁️',
-      offline: '📱'
+      syncing: '馃攧',
+      synced: '鈽侊笍',
+      offline: '馃摫'
     };
 
-    el.textContent = icons[status] || '📱';
+    el.textContent = icons[status] || '馃摫';
   }
 
-  // ═══════════════════════════════════════
-  // 本地存储
-  // ═══════════════════════════════════════
-
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 鏈湴瀛樺偍
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
   function loadLocal() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -178,14 +166,12 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch (e) {
-      console.error('本地保存失败:', e);
+      console.error('鏈湴淇濆瓨澶辫触:', e);
     }
   }
 
-  // ═══════════════════════════════════════
-  // 添加留言
-  // ═══════════════════════════════════════
-
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 娣诲姞鐣欒█
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
   function addMessage(name, text) {
     const msg = {
       id: Date.now(),
@@ -206,16 +192,14 @@
     return msg;
   }
 
-  // ═══════════════════════════════════════
-  // 渲染
-  // ═══════════════════════════════════════
-
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 娓叉煋
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
   function formatTime(iso) {
     const diff = Date.now() - new Date(iso).getTime();
-    if (diff < 60000) return '刚刚';
-    if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
-    if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
-    if (diff < 604800000) return Math.floor(diff / 86400000) + '天前';
+    if (diff < 60000) return '鍒氬垰';
+    if (diff < 3600000) return Math.floor(diff / 60000) + '鍒嗛挓鍓?;
+    if (diff < 86400000) return Math.floor(diff / 3600000) + '灏忔椂鍓?;
+    if (diff < 604800000) return Math.floor(diff / 86400000) + '澶╁墠';
     return new Date(iso).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
   }
 
@@ -229,17 +213,17 @@
     const container = document.querySelector('.guestbook-container');
     if (!container) return;
 
-    const statusIcon = syncEnabled ? '📱' : '📱';
+    const statusIcon = syncEnabled ? '馃摫' : '馃摫';
 
     container.innerHTML = `
       <div class="gb-wrap">
         <div class="gb-head">
-          <h3>💬 留言板 <span id="gb-status" title="同步状态">${statusIcon}</span></h3>
-          <span class="gb-count">${messages.length} 条</span>
+          <h3>馃挰 鐣欒█鏉?<span id="gb-status" title="鍚屾鐘舵€?>${statusIcon}</span></h3>
+          <span class="gb-count">${messages.length} 鏉?/span>
         </div>
 
         <div class="gb-list" id="gb-list">
-          ${messages.length === 0 ? '<div class="gb-empty">还没有留言，快来抢沙发！</div>' : ''}
+          ${messages.length === 0 ? '<div class="gb-empty">杩樻病鏈夌暀瑷€锛屽揩鏉ユ姠娌欏彂锛?/div>' : ''}
           ${messages.map(m => `
             <div class="gb-item">
               <div class="gb-avatar" style="background:${m.color}">${m.name[0].toUpperCase()}</div>
@@ -255,20 +239,18 @@
         </div>
 
         <form class="gb-form" id="gb-form">
-          <input type="text" id="gb-name" placeholder="你的昵称" maxlength="20" required>
-          <textarea id="gb-msg" placeholder="写下你的留言..." maxlength="200" rows="3" required></textarea>
-          <button type="submit">🚀 发布留言</button>
+          <input type="text" id="gb-name" placeholder="浣犵殑鏄电О" maxlength="20" required>
+          <textarea id="gb-msg" placeholder="鍐欎笅浣犵殑鐣欒█..." maxlength="200" rows="3" required></textarea>
+          <button type="submit">馃殌 鍙戝竷鐣欒█</button>
         </form>
 
-        ${!syncEnabled ? '<p class="gb-hint">💡 当前使用本地存储，配置 JSONBin 可跨设备同步</p>' : ''}
+        ${!syncEnabled ? '<p class="gb-hint">馃挕 褰撳墠浣跨敤鏈湴瀛樺偍锛岄厤缃?JSONBin 鍙法璁惧鍚屾</p>' : ''}
       </div>
     `;
   }
 
-  // ═══════════════════════════════════════
-  // 事件
-  // ═══════════════════════════════════════
-
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 浜嬩欢
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
   function bindEvents() {
     document.addEventListener('submit', e => {
       if (e.target.id === 'gb-form') {
@@ -279,13 +261,12 @@
         if (nameEl && msgEl && nameEl.value.trim() && msgEl.value.trim()) {
           addMessage(nameEl.value, msgEl.value);
           render();
-          showToast('发布成功！🎉');
+          showToast('鍙戝竷鎴愬姛锛侌煄?);
         }
       }
     });
 
-    // 页面可见时同步
-    if (syncEnabled) {
+    // 椤甸潰鍙鏃跺悓姝?    if (syncEnabled) {
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
           syncFromCloud();
@@ -309,10 +290,8 @@
     }, 2500);
   }
 
-  // ═══════════════════════════════════════
-  // 样式
-  // ═══════════════════════════════════════
-
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 鏍峰紡
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
   function addStyles() {
     if (document.getElementById('gb-style-v7')) return;
 
@@ -351,10 +330,8 @@
     document.head.appendChild(style);
   }
 
-  // ═══════════════════════════════════════
-  // 启动
-  // ═══════════════════════════════════════
-  if (document.readyState === 'loading') {
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 鍚姩
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
