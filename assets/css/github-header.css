@@ -537,3 +537,126 @@
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
+
+/* ===== 贡献日历增强样式 ===== */
+.github-calendar-enhanced {
+  padding: 16px;
+  background: var(--card-bg, rgba(255,255,255,0.03));
+  border-radius: 12px;
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+}
+
+.github-calendar-enhanced .calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.github-calendar-enhanced .calendar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #e6edf3);
+}
+
+.github-calendar-enhanced .calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted, #8b949e);
+}
+
+.github-calendar-enhanced .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.github-calendar-enhanced .legend-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.github-calendar-enhanced .legend-box.less {
+  background: var(--bg-primary, #161b22);
+}
+
+.github-calendar-enhanced .legend-box.more {
+  background: #39d353;
+}
+
+.github-calendar-enhanced .calendar-grid {
+  margin: 8px 0;
+}
+
+.github-calendar-enhanced .calendar-cell {
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+
+.github-calendar-enhanced .calendar-cell:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(57, 211, 83, 0.5);
+}
+
+.github-calendar-enhanced .calendar-summary {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-muted, #8b949e);
+  text-align: right;
+}
+
+.github-calendar-enhanced.mobile {
+  padding: 12px;
+}
+
+.github-calendar-enhanced.mobile .calendar-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.github-calendar-enhanced.mobile .calendar-legend {
+  display: none;
+}
+
+/* ===== 汉堡菜单桌面端居中 ===== */
+@media (min-width: 769px) {
+  .header-container {
+    max-width: 1200px;
+    padding: 0 24px;
+  }
+
+  .header-left {
+    flex: 0 0 auto;
+  }
+
+  .header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header-right {
+    flex: 0 0 auto;
+  }
+
+  /* 汉堡菜单按钮在桌面端 */
+  .hamburger-btn {
+    display: flex;
+  }
+}
+
+/* ===== 汉堡菜单响应式 ===== */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-container {
+    padding: 0 12px;
+  }
+}
