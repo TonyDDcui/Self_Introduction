@@ -1,0 +1,31 @@
+{
+  "name": "tonyddcui-portfolio",
+  "version": "1.0.0",
+  "description": "TonyDDcui - 個人作品集網站，受 Apple 設計風格啟發",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "npx http-server",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "echo 'Deploy to GitHub Pages, Netlify, or Vercel'"
+  },
+  "keywords": [
+    "portfolio",
+    "personal",
+    "developer",
+    "designer",
+    "apple-design",
+    "modern",
+    "responsive"
+  ],
+  "author": "TonyDDcui",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TonyDDcui/Self-Introduction.git"
+  },
+  "homepage": "https://tonyddcui.com",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

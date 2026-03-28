@@ -1,100 +1,227 @@
-# 崔喆箫 - 个人作品集
+# TonyDDcui - 個人作品集網站
 
-> 华为嵌入式开发工程师 | 物联网爱好者 | 技术探索者
+一個受 Apple 設計風格啟發的現代化個人作品集網站。採用最新的 Web 技術，展現創意開發者的專業形象。
 
-![Visitor Count](https://visitor-badge.laobia.top/badge?page_id=CuiZheXiao.Self_Introduction)
+## 🎨 設計特點
 
-## 🎯 站点特色
+### 視覺設計
+- **極簡主義風格** - 大量留白，清晰的視覺層次
+- **漸變色彩** - 現代化的紫色、粉紅色、青色漸變
+- **玻璃擬態效果** - 毛玻璃背景和透明卡片
+- **動態排版** - 巨大醒目的標題和流暢的文字動畫
 
-- **NVIDIA 科技风格** - 动态粒子背景、霓虹渐变、科技网格
-- **Apple 设计细节** - 液态玻璃效果、胶囊按钮、精致动效
-- **GitHub 像素风格** - 贡献日历、Trending 推荐、Octocat 图标
-- **实时 GitHub 推荐** - 自动获取热门项目，紧跟技术潮流
+### 交互動畫
+- **滾動驅動動畫** - 元素隨著滾動淡入、縮放、位移
+- **視差滾動效果** - 英雄區域的深度感
+- **微交互** - 按鈕懸停、卡片提升、平滑過渡
+- **頁面加載動畫** - 標題和內容的漸進式顯示
 
-## 📁 目录结构
+### 響應式設計
+- **完全響應式** - 從手機到桌面的完美適配
+- **移動優先** - 優化的移動體驗
+- **觸摸友好** - 適合觸摸設備的交互
+
+## 📁 項目結構
 
 ```
-Self_Introduction/
-├── index.html          # 首页
-├── README.md           # 说明文档
-├── LICENSE             # 许可证
-├── assets/
-│   ├── css/            # 样式文件
-│   │   ├── design-system.css
-│   │   ├── nvidia-hero.css
-│   │   ├── apple-components.css
-│   │   ├── github-widgets.css
-│   │   └── main.css
-│   ├── js/             # 脚本文件
-│   │   ├── particles.js
-│   │   ├── main.js
-│   │   ├── github-trending.js
-│   │   └── contribution-graph.js
-│   ├── img/            # 图片资源
-│   ├── fonts/          # 字体文件
-│   └── svg/            # SVG 矢量图
-├── pages/              # 二级页面
-│   ├── about.html      # 关于我
-│   ├── skills.html     # 技能栈
-│   ├── projects.html   # 项目作品
-│   ├── highlights.html # 竞赛证书
-│   ├── life.html       # 生活相册
-│   └── life-detail.html # 相册详情
-└── submodules/          # 子模块
-    ├── Journey_of_Life/
-    ├── Life_Story/
-    └── Project_record/
+apple-style-portfolio/
+├── index.html              # 主 HTML 文件
+├── css/
+│   ├── style.css          # 主樣式表
+│   ├── animations.css     # 動畫定義
+│   └── responsive.css     # 響應式設計
+├── js/
+│   └── main.js            # 主 JavaScript 文件
+├── images/                # 圖片資源
+├── assets/                # 其他資源
+└── README.md              # 本文件
 ```
 
-## 🛠️ 技术栈
+## 🚀 快速開始
 
-- **前端**: HTML5, CSS3 (CSS Variables, Flexbox, Grid)
-- **交互**: Vanilla JavaScript (ES6+)
-- **设计**: NVIDIA + Apple + GitHub 融合风格
-- **动画**: Canvas 粒子系统、Intersection Observer
+### 本地開發
 
-## 🚀 快速开始
-
+1. **克隆或下載項目**
 ```bash
-# 克隆仓库
-git clone https://github.com/CuiZheXiao/Self_Introduction.git
+git clone https://github.com/TonyDDcui/Self-Introduction.git
+cd apple-style-portfolio
+```
 
-# 使用任意 HTTP 服务器预览
-# Python
+2. **使用本地服務器運行**
+```bash
+# 使用 Python 3
 python -m http.server 8000
 
-# Node.js
-npx serve
-
-# 或直接用浏览器打开 index.html
+# 或使用 Node.js http-server
+npx http-server
 ```
 
-## 📝 页面说明
+3. **在瀏覽器中打開**
+```
+http://localhost:8000
+```
 
-| 页面 | 路径 | 说明 |
-|------|------|------|
-| 首页 | `/index.html` | 主页面，含所有功能模块 |
-| 关于 | `/pages/about.html` | 个人详细介绍 |
-| 技能 | `/pages/skills.html` | 技术栈详情 |
-| 项目 | `/pages/projects.html` | 项目作品集 |
-| 证书 | `/pages/highlights.html` | 竞赛获奖证书 |
-| 生活 | `/pages/life.html` | 生活照片相册 |
-| 相册 | `/pages/life-detail.html` | 相册详情页 |
+### 部署
 
-## 🌐 部署
+#### GitHub Pages
+1. 將項目推送到 GitHub
+2. 在倉庫設置中啟用 GitHub Pages
+3. 選擇 `main` 分支作為源
 
-支持多种部署方式：
+#### Netlify
+1. 連接 GitHub 倉庫
+2. 構建命令：留空
+3. 發佈目錄：`.`
 
-1. **GitHub Pages** - 推送到 `gh-pages` 分支
-2. **Vercel** - 一键部署
-3. **Netlify** - 拖拽部署
-4. **Nginx** - 参考 `nginx.conf.example`
+#### Vercel
+1. 導入 GitHub 倉庫
+2. 框架預設：其他
+3. 部署
 
-## 📧 联系我
+## 🎯 主要功能
 
-- 邮箱: someometony@outlook.com
+### 導航
+- 粘性導航欄，支持平滑滾動
+- 移動菜單，響應式設計
+- 活動鏈接指示
+
+### 英雄區域
+- 全屏背景，動態漸變
+- 動畫標題和副標題
+- 行動按鈕（CTA）
+- 滾動指示器
+
+### 關於部分
+- 個人介紹
+- 統計數據（經驗、項目、熱忱）
+- 個人圖片框架
+
+### 技能部分
+- 6 個技能卡片
+- 技能等級進度條
+- 懸停動畫效果
+
+### 項目部分
+- 項目卡片網格
+- 項目覆蓋層和鏈接
+- 技術標籤
+- 項目分類
+
+### 經歷部分
+- 時間軸設計
+- 工作經歷卡片
+- 日期和公司信息
+
+### 聯絡部分
+- 聯絡信息卡片
+- 聯絡表單
+- 表單驗證
+
+### 頁腳
+- 品牌信息
+- 導航鏈接
+- 社交媒體鏈接
+- 版權信息
+
+## 🛠️ 技術棧
+
+### 前端
+- **HTML5** - 語義化標記
+- **CSS3** - 現代樣式和動畫
+- **JavaScript (ES6+)** - 交互和動畫
+
+### 特性
+- 無框架依賴 - 純 HTML/CSS/JS
+- 響應式設計 - 移動優先
+- 可訪問性 - WCAG 標準
+- 性能優化 - 快速加載
+
+## 🎨 自定義
+
+### 修改顏色
+編輯 `css/style.css` 中的 CSS 變量：
+
+```css
+:root {
+    --color-accent: #0071e3;
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* ... 更多顏色 ... */
+}
+```
+
+### 修改內容
+編輯 `index.html` 中的相應部分：
+
+```html
+<!-- 修改標題 -->
+<h1 class="hero-title">
+    <span class="hero-title-line">你的標題</span>
+</h1>
+
+<!-- 修改技能 -->
+<div class="skill-card">
+    <h3 class="skill-title">你的技能</h3>
+    <!-- ... -->
+</div>
+```
+
+### 修改字體
+在 `index.html` 中修改 Google Fonts 鏈接：
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=你的字體&display=swap" rel="stylesheet">
+```
+
+## 📱 響應式斷點
+
+- **桌面** - 1024px 及以上
+- **平板** - 768px 到 1024px
+- **手機** - 480px 到 768px
+- **小手機** - 320px 到 480px
+
+## ♿ 可訪問性
+
+- 語義化 HTML
+- ARIA 標籤
+- 鍵盤導航支持
+- 焦點管理
+- 顏色對比度符合 WCAG AA 標準
+- 支持減少動畫偏好
+
+## 🚀 性能優化
+
+- 最小化 CSS 和 JavaScript
+- 圖片懶加載
+- 防抖滾動事件
+- 交叉觀察器 API 用於動畫觸發
+- 無外部依賴
+
+## 🔧 瀏覽器支持
+
+- Chrome (最新)
+- Firefox (最新)
+- Safari (最新)
+- Edge (最新)
+- 移動瀏覽器
+
+## 📄 許可證
+
+MIT License - 自由使用和修改
+
+## 🤝 貢獻
+
+歡迎提交 Issue 和 Pull Request！
+
+## 📞 聯絡
+
+- Email: tony@example.com
 - GitHub: [@TonyDDcui](https://github.com/TonyDDcui)
+- LinkedIn: [TonyDDcui](https://linkedin.com/in/tonyddcui)
+
+## 🙏 致謝
+
+設計靈感來自 Apple 官方網站的現代設計理念。
 
 ---
 
-*用爱与代码构建 · 2024-2026*
+**最後更新**: 2026 年 3 月 28 日
