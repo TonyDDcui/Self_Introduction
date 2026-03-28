@@ -1,20 +1,18 @@
-/**
- * 汉堡菜单 v2 - 完美适配浅色/深色模式
+﻿/**
+ * 姹夊牎鑿滃崟 v2 - 瀹岀編閫傞厤娴呰壊/娣辫壊妯″紡
  */
 
 (function () {
   'use strict';
 
   const SECTIONS = [
-    { id: 'hero',         icon: '🏠', name: '首页' },
-    { id: 'about',        icon: '👤', name: '关于' },
-    { id: 'skills',       icon: '⚡', name: '技能' },
-    { id: 'projects',     icon: '🚀', name: '项目' },
-    { id: 'certificates', icon: '🏅', name: '荣誉' },
-    { id: 'life',         icon: '📷', name: '生活' },
-    { id: 'quotes',       icon: '💭', name: '好句' },
-    { id: 'guestbook',    icon: '✍️', name: '留言' },
-    { id: 'contact',      icon: '✉️', name: '联系' }
+    { id: 'hero',     icon: '🏠', name: '首页' },
+    { id: 'about',    icon: '👤', name: '关于' },
+    { id: 'skills',   icon: '🛠', name: '技能' },
+    { id: 'projects', icon: '🚀', name: '项目' },
+    { id: 'life',     icon: '📷', name: '生活' },
+    { id: 'quotes',   icon: '💭', name: '好句' },
+    { id: 'contact',  icon: '✉️', name: '联系' }
   ];
 
   function init() {
@@ -22,11 +20,11 @@
     buildMenu();
     bindEvents();
     initScrollSpy();
-    // 监听主题变化
+    // 鐩戝惉涓婚鍙樺寲
     observeTheme();
   }
 
-  /* ── 动态适配主题色 ── */
+  /* 鈹€鈹€ 鍔ㄦ€侀€傞厤涓婚鑹?鈹€鈹€ */
   function getThemeColors() {
     const isDark = !document.documentElement.hasAttribute('data-theme') ||
                    document.documentElement.getAttribute('data-theme') === 'dark' ||
@@ -86,7 +84,7 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => updateTheme());
   }
 
-  /* ── 注入样式 ── */
+  /* 鈹€鈹€ 娉ㄥ叆鏍峰紡 鈹€鈹€ */
   function injectStyles() {
     if (document.getElementById('hamburger-nav-v2-css')) return;
 
@@ -94,7 +92,7 @@
     const s = document.createElement('style');
     s.id = 'hamburger-nav-v2-css';
     s.textContent = `
-      /* ── 汉堡按钮 ── */
+      /* 鈹€鈹€ 姹夊牎鎸夐挳 鈹€鈹€ */
       #hb-btn {
         display: flex;
         flex-direction: column;
@@ -122,12 +120,12 @@
         transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         transform-origin: center;
       }
-      /* 打开状态 → 动画变 X */
+      /* 鎵撳紑鐘舵€?鈫?鍔ㄧ敾鍙?X */
       #hb-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
       #hb-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
       #hb-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-      /* ── 悬浮横向导航面板 ── */
+      /* 鈹€鈹€ 鎮诞妯悜瀵艰埅闈㈡澘 鈹€鈹€ */
       #hb-panel {
         position: fixed;
         top: 52px;
@@ -151,7 +149,7 @@
         transform: translateY(0);
       }
 
-      /* 横向滚动容器 */
+      /* 妯悜婊氬姩瀹瑰櫒 */
       #hb-panel-inner {
         display: flex;
         gap: 6px;
@@ -164,7 +162,7 @@
       }
       #hb-panel-inner::-webkit-scrollbar { display: none; }
 
-      /* 每个导航项 */
+      /* 姣忎釜瀵艰埅椤?*/
       .hb-nav-item {
         display: flex;
         flex-direction: column;
@@ -195,7 +193,7 @@
       .hb-nav-item .hb-icon { font-size: 20px; line-height: 1; }
       .hb-nav-item .hb-name { font-size: 11px; letter-spacing: 0.2px; }
 
-      /* 移动端更紧凑 */
+      /* 绉诲姩绔洿绱у噾 */
       @media (max-width: 480px) {
         #hb-panel { top: 50px; padding: 8px 8px 10px; }
         .hb-nav-item { padding: 8px 11px; }
@@ -203,7 +201,7 @@
         .hb-nav-item .hb-name { font-size: 10px; }
       }
 
-      /* ── 深色主题覆盖 ── */
+      /* 鈹€鈹€ 娣辫壊涓婚瑕嗙洊 鈹€鈹€ */
       [data-theme="dark"] #hb-panel {
         background: rgba(13, 17, 23, 0.97);
         border-color: rgba(255,255,255,0.08);
@@ -222,7 +220,7 @@
       }
       [data-theme="dark"] #hb-btn span { background: #e6edf3; }
 
-      /* ── 浅色主题覆盖 ── */
+      /* 鈹€鈹€ 娴呰壊涓婚瑕嗙洊 鈹€鈹€ */
       [data-theme="light"] #hb-panel {
         background: rgba(255, 255, 255, 0.97);
         border-color: rgba(0,0,0,0.08);
@@ -244,12 +242,12 @@
     document.head.appendChild(s);
   }
 
-  /* ── 构建 DOM ── */
+  /* 鈹€鈹€ 鏋勫缓 DOM 鈹€鈹€ */
   function buildMenu() {
     const placeholder = document.getElementById('hamburger-btn');
     const btn = document.createElement('button');
     btn.id = 'hb-btn';
-    btn.setAttribute('aria-label', '导航菜单');
+    btn.setAttribute('aria-label', '瀵艰埅鑿滃崟');
     btn.innerHTML = '<span></span><span></span><span></span>';
 
     if (placeholder) {
@@ -280,7 +278,7 @@
     document.body.appendChild(panel);
   }
 
-  /* ── 事件绑定 ── */
+  /* 鈹€鈹€ 浜嬩欢缁戝畾 鈹€鈹€ */
   function bindEvents() {
     const btn = document.getElementById('hb-btn');
     const panel = document.getElementById('hb-panel');
@@ -325,7 +323,7 @@
     panel.setAttribute('aria-hidden', String(!open));
   }
 
-  /* ── 滚动高亮 ── */
+  /* 鈹€鈹€ 婊氬姩楂樹寒 鈹€鈹€ */
   function initScrollSpy() {
     const items = document.querySelectorAll('.hb-nav-item');
     const observer = new IntersectionObserver((entries) => {
@@ -343,7 +341,7 @@
     });
   }
 
-  /* ── 启动 ── */
+  /* 鈹€鈹€ 鍚姩 鈹€鈹€ */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

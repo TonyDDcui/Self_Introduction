@@ -721,6 +721,106 @@ body {
   font-size: 0.875rem;
 }
 
+/* ===== Life Section ===== */
+.life-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-5);
+}
+
+.life-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.life-image {
+  height: 160px;
+  background: linear-gradient(135deg, rgba(88, 166, 255, 0.1) 0%, rgba(163, 113, 247, 0.1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.life-placeholder {
+  font-size: 3rem;
+  opacity: 0.8;
+}
+
+.life-content {
+  padding: var(--space-4);
+}
+
+.life-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.life-content p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== Quotes Section ===== */
+.quotes-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.quote-card {
+  padding: var(--space-5);
+}
+
+.quote-featured {
+  text-align: center;
+  padding: var(--space-8);
+  background: linear-gradient(135deg, rgba(88, 166, 255, 0.08) 0%, rgba(163, 113, 247, 0.08) 100%);
+}
+
+.quote-icon {
+  font-size: 4rem;
+  line-height: 1;
+  opacity: 0.3;
+  margin-bottom: var(--space-3);
+}
+
+.quote-text {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin-bottom: var(--space-3);
+}
+
+.quote-featured .quote-text {
+  font-size: 1.375rem;
+  font-weight: 500;
+}
+
+.quote-author {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.quotes-grid .quote-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+.quotes-grid .quote-text {
+  font-size: 0.9375rem;
+}
+
 /* ===== 响应式 ===== */
 @media (max-width: 768px) {
   :root {
