@@ -1,42 +1,42 @@
 /* ================================================
-   GitHub 风格导航栏
+   GitHub 风格导航栏 - 完整版
    ================================================ */
 
 :root {
   --nav-height: 56px;
 }
 
-body {
-  padding-top: var(--nav-height);
-}
-
+/* ===== 导航栏主体 ===== */
 .github-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  height: 56px;
-  background: var(--header-bg);
-  border-bottom: 1px solid var(--header-border);
+  height: var(--nav-height);
+  background: var(--header-bg, rgba(22, 27, 34, 0.95));
+  border-bottom: 1px solid var(--header-border, rgba(240, 246, 252, 0.1));
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
 
+/* ===== 容器：三栏布局 ===== */
 .header-container {
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* 左侧 */
+/* ===== 左侧：汉堡菜单 ===== */
 .header-left {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
 }
 
 .hamburger-btn {
@@ -51,18 +51,19 @@ body {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  padding: 0;
   transition: background 0.15s;
 }
 
 .hamburger-btn:hover {
-  background: var(--header-hover);
+  background: var(--header-hover, rgba(240, 246, 252, 0.05));
 }
 
 .hamburger-btn span {
   display: block;
   width: 18px;
   height: 2px;
-  background: var(--text-primary);
+  background: var(--text-primary, #e6edf3);
   border-radius: 1px;
   transition: all 0.25s ease;
   transform-origin: center;
@@ -71,45 +72,48 @@ body {
 .hamburger-btn.active span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
-
 .hamburger-btn.active span:nth-child(2) {
   opacity: 0;
   transform: scaleX(0);
 }
-
 .hamburger-btn.active span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* 中间品牌 */
+/* ===== 中间：品牌名（绝对居中）===== */
 .header-center {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .brand-link {
-  font-family: var(--font-mono);
-  font-size: 1.125rem;
+  pointer-events: auto;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-primary, #e6edf3);
   text-decoration: none;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   transition: opacity 0.15s;
+  white-space: nowrap;
 }
 
 .brand-link:hover {
-  opacity: 0.8;
-  color: var(--text-primary);
+  opacity: 0.75;
 }
 
-/* 右侧 */
+/* ===== 右侧：主题按钮 + 头像 ===== */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex: 0 0 auto;
 }
 
+/* 主题切换按钮 */
 .theme-btn {
   width: 36px;
   height: 36px;
@@ -119,72 +123,79 @@ body {
   background: transparent;
   border: none;
   border-radius: 6px;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #b1bac4);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
 
 .theme-btn:hover {
-  background: var(--header-hover);
-  color: var(--text-primary);
+  background: var(--header-hover, rgba(240, 246, 252, 0.05));
+  color: var(--text-primary, #e6edf3);
 }
 
 .theme-btn svg {
   display: none;
+  flex-shrink: 0;
 }
 
-[data-theme="dark"] .theme-btn .icon-sun { display: block; }
-[data-theme="dark"] .theme-btn .icon-moon { display: none; }
-[data-theme="light"] .theme-btn .icon-sun { display: none; }
+[data-theme="dark"]  .theme-btn .icon-sun  { display: block; }
+[data-theme="dark"]  .theme-btn .icon-moon { display: none;  }
+[data-theme="light"] .theme-btn .icon-sun  { display: none;  }
 [data-theme="light"] .theme-btn .icon-moon { display: block; }
 
+/* 头像 */
 .header-avatar-wrapper {
   display: flex;
   align-items: center;
 }
 
 .header-avatar {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 2px solid var(--border);
+  border: 2px solid var(--border, rgba(240, 246, 252, 0.1));
   object-fit: cover;
   cursor: pointer;
   transition: border-color 0.15s;
+  display: block;
 }
 
 .header-avatar:hover {
-  border-color: var(--accent-primary);
+  border-color: var(--accent-primary, #76b900);
 }
 
-/* 移动端 */
+/* ===== body 顶部留白 ===== */
+body {
+  padding-top: var(--nav-height);
+}
+
+/* ===== 响应式 ===== */
 @media (max-width: 768px) {
-  .github-header {
-    height: 52px;
+  :root {
+    --nav-height: 52px;
   }
 
   .header-container {
     padding: 0 12px;
   }
 
-  .header-center {
-    position: static;
-    transform: none;
-    margin-left: 8px;
-  }
-
   .brand-link {
     font-size: 1rem;
-  }
-
-  .hamburger-btn {
-    width: 40px;
-    height: 40px;
   }
 }
 
 @media (max-width: 480px) {
-  .github-header {
-    height: 48px;
+  :root {
+    --nav-height: 48px;
+  }
+
+  .header-container {
+    padding: 0 10px;
+  }
+
+  .hamburger-btn,
+  .theme-btn {
+    width: 34px;
+    height: 34px;
   }
 }
