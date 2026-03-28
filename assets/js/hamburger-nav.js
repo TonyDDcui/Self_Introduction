@@ -6,11 +6,10 @@
   'use strict';
 
   const SECTIONS = [
-    { id: 'hero',     icon: '🏠', name: '首页' },
     { id: 'about',    icon: '👤', name: '关于' },
     { id: 'skills',   icon: '🛠', name: '技能' },
     { id: 'projects', icon: '🚀', name: '项目' },
-    { id: 'life',     icon: '📷', name: '生活' },
+    { id: 'gallery',  icon: '📷', name: '相册' },
     { id: 'quotes',   icon: '💭', name: '好句' },
     { id: 'contact',  icon: '✉️', name: '联系' }
   ];
