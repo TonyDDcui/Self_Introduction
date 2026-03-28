@@ -3,46 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="崔喆箫 - 嵌入式工程师">
+  <meta name="description" content="崔喆箫 - 嵌入式工程师 | 物联网开发者">
   <meta name="theme-color" content="#000000">
   <title>崔喆箫 | Cui Zhexiao</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/design-system.css">
   <link rel="icon" href="https://avatars.githubusercontent.com/u/134974495">
 </head>
 <body>
-  <!-- Navigation - Apple风格 -->
-  <nav class="nav-apple" id="nav">
-    <div class="nav-content">
+  <!-- Apple 风格导航栏 -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
       <a href="#hero" class="nav-logo">
         <img src="https://avatars.githubusercontent.com/u/134974495" alt="CZX">
       </a>
-      <div class="nav-links">
+      <div class="nav-menu" id="nav-menu">
         <a href="#about">关于</a>
         <a href="#skills">技能</a>
         <a href="#projects">项目</a>
         <a href="#life">生活</a>
         <a href="#contact">联系</a>
       </div>
-      <div class="nav-actions">
-        <button class="theme-btn" id="theme-btn" aria-label="主题切换">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      <div class="nav-right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
           </svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
-        <button class="menu-btn" id="menu-btn" aria-label="菜单">
-          <span></span><span></span>
+        <button class="hamburger" id="hamburger" aria-label="菜单">
+          <span></span>
+          <span></span>
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobile-menu">
+  <!-- 移动端菜单 -->
+  <div class="mobile-nav" id="mobile-nav">
     <a href="#about">关于</a>
     <a href="#skills">技能</a>
     <a href="#projects">项目</a>
@@ -50,55 +52,66 @@
     <a href="#contact">联系</a>
   </div>
 
-  <!-- Hero Section - Apple风格 -->
-  <section class="hero-section" id="hero">
+  <!-- Hero - Apple 产品页风格 -->
+  <section class="hero" id="hero">
     <div class="hero-bg">
-      <div class="hero-gradient"></div>
+      <div class="hero-gradient-1"></div>
+      <div class="hero-gradient-2"></div>
       <div class="hero-particles" id="particles"></div>
     </div>
+    
     <div class="hero-content">
-      <div class="hero-avatar-wrapper" data-aos="fade-up">
+      <div class="hero-avatar-container">
         <img src="https://avatars.githubusercontent.com/u/134974495" alt="崔喆箫" class="hero-avatar">
-        <div class="avatar-ring"></div>
+        <div class="avatar-glow"></div>
       </div>
-      <p class="hero-intro" data-aos="fade-up" data-aos-delay="100">你好，我是</p>
-      <h1 class="hero-name" data-aos="fade-up" data-aos-delay="200">崔喆箫</h1>
-      <p class="hero-title" data-aos="fade-up" data-aos-delay="300">嵌入式工程师</p>
-      <p class="hero-desc" data-aos="fade-up" data-aos-delay="400">专注于嵌入式系统开发与物联网应用<br>用技术探索未知，以代码创造可能</p>
-      <div class="hero-cta" data-aos="fade-up" data-aos-delay="500">
-        <a href="#contact" class="btn-primary">联系我</a>
-        <a href="#about" class="btn-secondary">了解更多</a>
+      
+      <h2 class="hero-intro">你好，我是</h2>
+      <h1 class="hero-name">崔喆箫</h1>
+      <p class="hero-title">嵌入式工程师</p>
+      <p class="hero-desc">专注于嵌入式系统开发与物联网应用<br>用技术探索未知，以代码创造可能</p>
+      
+      <div class="hero-cta">
+        <a href="#contact" class="btn-blue">联系我</a>
+        <a href="#about" class="btn-ghost">了解更多</a>
       </div>
     </div>
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
+    
+    <div class="scroll-hint">
+      <div class="scroll-arrow"></div>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section class="about-section" id="about">
-    <div class="section-inner">
-      <h2 class="section-title" data-aos="fade-up">关于我<span>About</span></h2>
-      <div class="about-grid">
-        <div class="about-text" data-aos="fade-up">
-          <p>我是一名热爱技术的嵌入式工程师，专注于物联网和智能硬件开发。</p>
+  <!-- About - Apple 功能介绍风格 -->
+  <section class="about" id="about">
+    <div class="section-content">
+      <div class="about-header">
+        <span class="eyebrow">About</span>
+        <h2 class="headline">关于我</h2>
+        <p class="subhead">热爱技术，追求极致</p>
+      </div>
+      
+      <div class="about-body">
+        <div class="about-text">
+          <p>我是一名嵌入式工程师，专注于物联网和智能硬件开发。</p>
           <p>从51单片机到STM32，从简单的LED闪烁到复杂的物联网系统，每一步都让我更加热爱这个行业。</p>
           <p>我相信技术的力量，相信代码可以改变世界。在探索的道路上，永不停歇。</p>
         </div>
-        <div class="about-stats" data-aos="fade-up" data-aos-delay="100">
-          <div class="stat-card">
-            <span class="stat-number" data-count="7">0</span>
-            <span class="stat-suffix">+</span>
+        
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-num" data-target="7">0</span>
+            <span class="stat-plus">+</span>
             <span class="stat-label">竞赛获奖</span>
           </div>
-          <div class="stat-card">
-            <span class="stat-number" data-count="15">0</span>
-            <span class="stat-suffix">+</span>
+          <div class="stat">
+            <span class="stat-num" data-target="15">0</span>
+            <span class="stat-plus">+</span>
             <span class="stat-label">项目经验</span>
           </div>
-          <div class="stat-card">
-            <span class="stat-number" data-count="4">0</span>
-            <span class="stat-suffix">+</span>
+          <div class="stat">
+            <span class="stat-num" data-target="4">0</span>
+            <span class="stat-plus">+</span>
             <span class="stat-label">专业认证</span>
           </div>
         </div>
@@ -106,116 +119,166 @@
     </div>
   </section>
 
-  <!-- Skills Section -->
-  <section class="skills-section" id="skills">
-    <div class="section-inner">
-      <h2 class="section-title" data-aos="fade-up">技能专长<span>Skills</span></h2>
+  <!-- Skills - Apple 规格展示风格 -->
+  <section class="skills" id="skills">
+    <div class="section-content">
+      <div class="section-header">
+        <span class="eyebrow">Skills</span>
+        <h2 class="headline">技能专长</h2>
+        <p class="subhead">多年深耕，专业过硬</p>
+      </div>
+      
       <div class="skills-grid">
-        <div class="skill-card" data-aos="fade-up">
+        <div class="skill-item">
           <div class="skill-icon">🔧</div>
           <h3>嵌入式开发</h3>
-          <p>STM32 / ESP32 / FreeRTOS</p>
-          <div class="skill-bar"><div class="skill-progress" data-progress="90"></div></div>
+          <p class="skill-desc">STM32 / ESP32 / FreeRTOS</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="90"></div>
+          </div>
+          <span class="skill-percent">90%</span>
         </div>
-        <div class="skill-card" data-aos="fade-up" data-aos-delay="50">
+        <div class="skill-item">
           <div class="skill-icon">📡</div>
           <h3>通信协议</h3>
-          <p>UART / I2C / SPI / BLE</p>
-          <div class="skill-bar"><div class="skill-progress" data-progress="85"></div></div>
+          <p class="skill-desc">UART / I2C / SPI / BLE</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="85"></div>
+          </div>
+          <span class="skill-percent">85%</span>
         </div>
-        <div class="skill-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="skill-item">
           <div class="skill-icon">🌐</div>
           <h3>物联网</h3>
-          <p>WiFi / MQTT / 云平台</p>
-          <div class="skill-bar"><div class="skill-progress" data-progress="80"></div></div>
+          <p class="skill-desc">WiFi / MQTT / 云平台</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="80"></div>
+          </div>
+          <span class="skill-percent">80%</span>
         </div>
-        <div class="skill-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="skill-item">
           <div class="skill-icon">⚡</div>
           <h3>硬件设计</h3>
-          <p>Altium / KiCad / PCB</p>
-          <div class="skill-bar"><div class="skill-progress" data-progress="75"></div></div>
+          <p class="skill-desc">Altium / KiCad / PCB</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="75"></div>
+          </div>
+          <span class="skill-percent">75%</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Projects Section -->
-  <section class="projects-section" id="projects">
-    <div class="section-inner">
-      <h2 class="section-title" data-aos="fade-up">项目作品<span>Projects</span></h2>
-      <div class="projects-showcase">
-        <div class="project-featured" data-aos="fade-up">
-          <div class="project-image">
-            <img src="./submodules/Project_record/cert_img/img1.jpg" alt="智能家居">
-          </div>
-          <div class="project-info">
-            <span class="project-tag">Featured</span>
-            <h3>智能家居控制系统</h3>
-            <p>基于 ESP32 的全屋智能解决方案，支持远程控制、场景自动化、语音交互</p>
-            <div class="project-tech">
-              <span>ESP32</span>
-              <span>MQTT</span>
-              <span>IoT</span>
-            </div>
+  <!-- Projects - Apple 产品展示风格 -->
+  <section class="projects" id="projects">
+    <div class="section-content">
+      <div class="section-header">
+        <span class="eyebrow">Projects</span>
+        <h2 class="headline">项目作品</h2>
+        <p class="subhead">从想法到实现</p>
+      </div>
+      
+      <!-- 特色项目 - Apple 大图展示风格 -->
+      <div class="project-hero">
+        <div class="project-hero-image">
+          <img src="submodules/Project_record/cert_img/img1.jpg" alt="智能家居">
+        </div>
+        <div class="project-hero-content">
+          <span class="tag">Featured Project</span>
+          <h3>智能家居控制系统</h3>
+          <p>基于 ESP32 的全屋智能解决方案。支持远程控制、场景自动化、语音交互，实现真正的智能生活。</p>
+          <div class="tech-tags">
+            <span>ESP32</span>
+            <span>MQTT</span>
+            <span>IoT</span>
+            <span>Cloud</span>
           </div>
         </div>
-        <div class="projects-grid">
-          <div class="project-card" data-aos="fade-up">
-            <img src="./submodules/Project_record/cert_img/img2.jpg" alt="智能小车">
-            <div class="project-card-info">
-              <h4>智能遥控小车</h4>
-              <p>STM32 + 手机APP控制</p>
-            </div>
+      </div>
+      
+      <!-- 项目网格 -->
+      <div class="projects-grid">
+        <div class="project-card">
+          <img src="submodules/Project_record/cert_img/img2.jpg" alt="智能小车">
+          <div class="project-card-content">
+            <h4>智能遥控小车</h4>
+            <p>STM32 + 手机APP控制</p>
           </div>
-          <div class="project-card" data-aos="fade-up" data-aos-delay="50">
-            <img src="./submodules/Project_record/cert_img/img4.jpg" alt="环境监测">
-            <div class="project-card-info">
-              <h4>环境监测系统</h4>
-              <p>多传感器数据采集</p>
-            </div>
+        </div>
+        <div class="project-card">
+          <img src="submodules/Project_record/cert_img/img4.jpg" alt="环境监测">
+          <div class="project-card-content">
+            <h4>环境监测系统</h4>
+            <p>多传感器数据采集</p>
           </div>
-          <div class="project-card" data-aos="fade-up" data-aos-delay="100">
-            <img src="./submodules/Project_record/cert_img/img5.jpg" alt="智能门锁">
-            <div class="project-card-info">
-              <h4>智能门锁</h4>
-              <p>多重身份验证</p>
-            </div>
+        </div>
+        <div class="project-card">
+          <img src="submodules/Project_record/cert_img/img5.jpg" alt="智能门锁">
+          <div class="project-card-content">
+            <h4>智能门锁</h4>
+            <p>多重身份验证</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Life Section -->
-  <section class="life-section" id="life">
-    <div class="section-inner">
-      <h2 class="section-title" data-aos="fade-up">生活点滴<span>Life</span></h2>
-      <div class="life-gallery" data-aos="fade-up">
-        <div class="gallery-item"><img src="./submodules/Journey_of_Life/life_img/img1.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Life_Story/img/img2.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Journey_of_Life/life_img/img3.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Life_Story/img/img4.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Journey_of_Life/life_img/img5.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Life_Story/img/img6.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Journey_of_Life/life_img/img7.jpg" alt="生活"></div>
-        <div class="gallery-item"><img src="./submodules/Life_Story/img/img8.jpg" alt="生活"></div>
+  <!-- Life - Apple 图库展示风格 -->
+  <section class="life" id="life">
+    <div class="section-content">
+      <div class="section-header">
+        <span class="eyebrow">Life</span>
+        <h2 class="headline">生活点滴</h2>
+        <p class="subhead">技术之外的世界</p>
+      </div>
+      
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="submodules/Journey_of_Life/life_img/img1.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Life_Story/img/img2.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Journey_of_Life/life_img/img3.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Life_Story/img/img4.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Journey_of_Life/life_img/img5.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Life_Story/img/img6.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Journey_of_Life/life_img/img7.jpg" alt="生活">
+        </div>
+        <div class="gallery-item">
+          <img src="submodules/Life_Story/img/img8.jpg" alt="生活">
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="contact-section" id="contact">
-    <div class="section-inner">
-      <h2 class="section-title" data-aos="fade-up">联系我<span>Contact</span></h2>
-      <div class="contact-grid">
-        <a href="mailto:someometony@outlook.com" class="contact-card" data-aos="fade-up">
+  <!-- Contact - Apple CTA 风格 -->
+  <section class="contact" id="contact">
+    <div class="section-content">
+      <div class="section-header">
+        <span class="eyebrow">Contact</span>
+        <h2 class="headline">联系我</h2>
+        <p class="subhead">期待与您合作</p>
+      </div>
+      
+      <div class="contact-cards">
+        <a href="mailto:someometony@outlook.com" class="contact-card">
           <div class="contact-icon">📧</div>
           <div class="contact-info">
             <h4>电子邮件</h4>
             <p>someometony@outlook.com</p>
           </div>
         </a>
-        <a href="https://github.com/TonyDDcui" target="_blank" class="contact-card" data-aos="fade-up" data-aos-delay="50">
+        <a href="https://github.com/TonyDDcui" target="_blank" class="contact-card">
           <div class="contact-icon">💻</div>
           <div class="contact-info">
             <h4>GitHub</h4>
@@ -228,12 +291,10 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer-content">
-      <p>© 2024 崔喆箫 Cui Zhexiao</p>
-      <p class="footer-tagline">以技术探索未知，用代码创造可能</p>
-    </div>
+    <p>© 2024 崔喆箫 Cui Zhexiao</p>
+    <p class="footer-motto">以技术探索未知，用代码创造可能</p>
   </footer>
 
-  <script src="./assets/js/main.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
