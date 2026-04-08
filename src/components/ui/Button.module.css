@@ -21,3 +21,21 @@
   padding: 8px 14px;
 }
 
+.appleBlue {
+  background: #0071e3;
+  color: #fff;
+  border-radius: var(--radius-8);
+}
+
+.applePill {
+  border-radius: var(--radius-pill);
+  border-color: var(--ring);
+  background: linear-gradient(
+    180deg,
+    var(--surface-1) 0%,
+    var(--surface-2, var(--surface-1)) 100%
+  );
+  color: var(--text-primary);
+  font-size: 14px;
+  padding: 8px 14px;
+}
