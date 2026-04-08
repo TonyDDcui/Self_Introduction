@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
 import RepoImage from "../../../src/components/media/RepoImage";
 import { getAllPostsMeta, getPostBySlug } from "../../../src/lib/blog/fs";
+import styles from "../../../src/styles/blog.module.css";
 
 // 默认组件映射：先保持为空，后续可在此处扩展（例如自定义 Image / Callout 等）
 const mdxComponents = { RepoImage };
@@ -33,29 +34,31 @@ export default async function BlogPostPage({
   });
 
   return (
-    <main style={{ padding: 24, maxWidth: 860, margin: "0 auto" }}>
-      <p style={{ margin: "0 0 16px" }}>
+    <main className={styles.main}>
+      <p className={styles.backLink}>
         <Link href="/blog">← 返回列表</Link>
       </p>
 
-      <header style={{ marginBottom: 24 }}>
-        <h1 style={{ margin: 0 }}>{post.meta.title}</h1>
+      <header className={styles.postHeader}>
+        <h1 className={styles.postTitle}>{post.meta.title}</h1>
         {post.meta.date ? (
-          <p style={{ margin: "8px 0 0", opacity: 0.8 }}>
+          <p className={styles.postMeta}>
             <time dateTime={post.meta.date}>{post.meta.date}</time>
           </p>
         ) : null}
         {post.meta.summary ? (
-          <p style={{ margin: "8px 0 0" }}>{post.meta.summary}</p>
+          <p className={styles.postSummary}>{post.meta.summary}</p>
         ) : null}
         {post.meta.tags.length ? (
-          <p style={{ margin: "8px 0 0", opacity: 0.9 }}>
+          <p className={styles.postTags}>
             {post.meta.tags.map((t) => `#${t}`).join(" ")}
           </p>
         ) : null}
       </header>
 
-      <article>{content}</article>
+      <div className={styles.postBody}>
+        <article className={styles.prose}>{content}</article>
+      </div>
     </main>
   );
 }
