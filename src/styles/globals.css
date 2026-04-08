@@ -1,6 +1,4 @@
 @import "./tokens.base.css";
-@import "./tokens.apple.light.css";
-@import "./tokens.apple.dark.css";
 @import "./tokens.claude.light.css";
 @import "./tokens.claude.dark.css";
 @import "../components/motion/reveal.css";
