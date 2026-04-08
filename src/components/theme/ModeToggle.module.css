@@ -1,6 +1,7 @@
 .button {
   height: 28px;
-  padding: 0 10px;
+  width: 32px;
+  padding: 0;
   border-radius: var(--radius-12);
 
   display: inline-flex;
@@ -23,13 +24,18 @@
     box-shadow var(--motion-fast) var(--motion-ease-out);
 }
 
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
 }
 
 .button:active {
   transform: translateY(0);
   box-shadow: none;
 }
-
