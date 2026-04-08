@@ -1,7 +1,8 @@
 .section {
   width: 100%;
-  background: var(--bg-dark);
-  color: var(--text-on-dark);
+  /* Claude-only: use warm surfaces + text tokens */
+  background: var(--surface-1);
+  color: var(--text-primary);
 
   display: flex;
   justify-content: center;
@@ -39,7 +40,7 @@
   font-size: 19px;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text-secondary);
   max-width: 740px;
 }
 
@@ -54,11 +55,11 @@
   --card-delay: 0ms;
 
   grid-column: span 6;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--ring);
   border-radius: var(--radius-12);
   padding: 18px 18px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--surface-1) 78%, transparent);
+  backdrop-filter: none;
   min-height: 168px;
 
   display: flex;
@@ -110,8 +111,8 @@
 
 .section.is-visible .card:hover {
   transform: translate3d(0, -3px, 0);
-  border-color: rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.045);
+  border-color: color-mix(in srgb, var(--ring) 72%, var(--text-tertiary));
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 82%, transparent);
   box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
 }
 
@@ -126,7 +127,7 @@
   margin: 0;
   font-size: 15px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.76);
+  color: var(--text-secondary);
   max-width: 72ch;
 }
 
@@ -145,7 +146,7 @@
   padding: 0 14px;
   border-radius: var(--radius-pill);
   background: var(--accent);
-  color: #fff;
+  color: var(--surface-1);
   text-decoration: none;
   font-size: 14px;
   letter-spacing: -0.01em;
@@ -163,15 +164,15 @@
   height: 36px;
   padding: 0 14px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  color: var(--link-on-dark);
+  border: 1px solid var(--ring);
+  color: var(--link);
   text-decoration: none;
   font-size: 14px;
   letter-spacing: -0.01em;
 }
 
 .pillLinkOutline:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 72%, transparent);
   text-decoration: none;
 }
 

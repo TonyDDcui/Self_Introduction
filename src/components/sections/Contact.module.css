@@ -1,7 +1,8 @@
 .section {
   width: 100%;
-  background: var(--bg-dark);
-  color: var(--text-on-dark);
+  /* Claude-only: follow tokens (light=paper, dark=near-black) */
+  background: var(--surface-1);
+  color: var(--text-primary);
 
   display: flex;
   justify-content: center;
@@ -39,7 +40,7 @@
   font-size: 19px;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text-secondary);
   max-width: 740px;
 }
 
@@ -54,11 +55,11 @@
   font-size: 17px;
   line-height: 1.55;
   letter-spacing: -0.012em;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text-secondary);
 }
 
 .link {
-  color: var(--link-on-dark);
+  color: var(--link);
   text-decoration: none;
 }
 
@@ -79,15 +80,15 @@
   height: 40px;
   padding: 0 16px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--ring);
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 14px;
   letter-spacing: -0.01em;
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
 }
 
 .pillLink:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 78%, transparent);
   text-decoration: none;
 }
