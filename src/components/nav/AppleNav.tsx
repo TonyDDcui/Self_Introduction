@@ -1,4 +1,5 @@
 import Link from "next/link";
+import styles from "./AppleNav.module.css";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -8,23 +9,18 @@ const navItems = [
 
 export default function AppleNav() {
   return (
-    <nav aria-label="Primary">
-      <ul
-        style={{
-          display: "flex",
-          gap: 16,
-          listStyle: "none",
-          margin: 0,
-          padding: 16,
-        }}
-      >
-        {navItems.map((item) => (
-          <li key={item.href}>
-            <Link href={item.href}>{item.label}</Link>
-          </li>
-        ))}
-      </ul>
+    <nav aria-label="Primary" className={styles.nav}>
+      <div className={styles.inner}>
+        <ul className={styles.list}>
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <Link className={styles.link} href={item.href}>
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 }
-
