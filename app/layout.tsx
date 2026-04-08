@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import "../src/styles/globals.css";
 import AppleNav from "../src/components/nav/AppleNav";
+import Reveal from "../src/components/motion/Reveal";
 import ThemeProvider from "../src/components/theme/ThemeProvider";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AppleNav />
+          <Reveal />
           {children}
         </ThemeProvider>
       </body>

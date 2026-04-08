@@ -7,6 +7,8 @@ export default function Contact() {
       id="contact"
       className={styles.section}
       aria-label="Contact section"
+      data-reveal
+      data-delay="240"
     >
       <div className={styles.inner}>
         <header className={styles.header}>

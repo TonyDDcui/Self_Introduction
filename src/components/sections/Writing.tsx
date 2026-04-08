@@ -10,6 +10,8 @@ export default async function Writing() {
       id="writing"
       className={styles.section}
       aria-label="Latest writing section"
+      data-reveal
+      data-delay="160"
     >
       <div className={styles.inner}>
         <header className={styles.header}>

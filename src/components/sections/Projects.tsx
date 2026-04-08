@@ -38,6 +38,8 @@ export default function Projects() {
       id="projects"
       className={styles.section}
       aria-label="Featured projects section"
+      data-reveal
+      data-delay="80"
     >
       <div className={styles.inner}>
         <header className={styles.header}>

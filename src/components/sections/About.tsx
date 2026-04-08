@@ -4,7 +4,13 @@ import AboutAvatar from "./AboutAvatar";
 
 export default function About() {
   return (
-    <section id="about" className={styles.section} aria-label="About section">
+    <section
+      id="about"
+      className={styles.section}
+      aria-label="About section"
+      data-reveal
+      data-delay="0"
+    >
       <div className={styles.inner}>
         <header className={styles.header}>
           <div className={styles.headerText}>
