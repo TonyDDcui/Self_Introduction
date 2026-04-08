@@ -23,8 +23,11 @@ function SunIcon() {
       aria-hidden="true"
       focusable="false"
     >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      <circle className={styles.core} cx="12" cy="12" r="3.6" />
+      <path
+        className={styles.rays}
+        d="M12 2.4v2.2M12 19.4v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"
+      />
     </svg>
   );
 }
@@ -44,7 +47,10 @@ function MoonIcon() {
       aria-hidden="true"
       focusable="false"
     >
-      <path d="M21 12.8A8.5 8.5 0 0 1 11.2 3a6.5 6.5 0 1 0 9.8 9.8z" />
+      <path
+        className={styles.moon}
+        d="M21 13.2A8.6 8.6 0 0 1 10.8 3.1a7.1 7.1 0 1 0 10.2 10.1z"
+      />
     </svg>
   );
 }
@@ -76,7 +82,7 @@ export default function ModeToggle() {
       aria-pressed={mode === "dark"}
       title={label}
     >
-      <span className={styles.icon} aria-hidden="true">
+      <span key={mode} className={styles.icon} aria-hidden="true">
         {mode === "light" ? <SunIcon /> : <MoonIcon />}
       </span>
     </button>

@@ -30,6 +30,54 @@
   justify-content: center;
 }
 
+.icon svg {
+  transform-origin: 50% 50%;
+  animation: iconPop 160ms var(--motion-ease-out);
+  transition: transform 180ms var(--motion-ease-out),
+    opacity 180ms var(--motion-ease-out);
+}
+
+.button:hover .icon svg,
+.button:focus-visible .icon svg {
+  transform: translateY(-0.5px);
+}
+
+.core,
+.rays,
+.moon {
+  transform-origin: 50% 50%;
+  transition: transform 220ms var(--motion-ease-out),
+    opacity 220ms var(--motion-ease-out);
+}
+
+/* sun “breath” */
+.button:hover .core,
+.button:focus-visible .core {
+  transform: scale(1.06);
+}
+.button:hover .rays,
+.button:focus-visible .rays {
+  transform: scale(1.04);
+  opacity: 0.95;
+}
+
+/* moon “tilt” (only when dark) */
+.button[aria-pressed="true"]:hover .moon,
+.button[aria-pressed="true"]:focus-visible .moon {
+  transform: rotate(-10deg);
+}
+
+@keyframes iconPop {
+  from {
+    transform: translateY(1px);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .button:hover {
   transform: translateY(-1px);
   box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
@@ -38,4 +86,15 @@
 .button:active {
   transform: translateY(0);
   box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon svg,
+  .core,
+  .rays,
+  .moon {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }
