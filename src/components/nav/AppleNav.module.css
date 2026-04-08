@@ -21,6 +21,7 @@
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   padding: 0 16px;
 }
@@ -33,6 +34,15 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1 1 auto;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
 }
 
 .link {
@@ -46,4 +56,3 @@
 .link:focus-visible {
   text-decoration: underline;
 }
-

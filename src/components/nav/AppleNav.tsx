@@ -1,6 +1,9 @@
 import Link from "next/link";
 import styles from "./AppleNav.module.css";
 
+import ModeToggle from "../theme/ModeToggle";
+import ThemeToggle from "../theme/ThemeToggle";
+
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
@@ -20,6 +23,10 @@ export default function AppleNav() {
             </li>
           ))}
         </ul>
+        <div className={styles.controls}>
+          <ThemeToggle />
+          <ModeToggle />
+        </div>
       </div>
     </nav>
   );
