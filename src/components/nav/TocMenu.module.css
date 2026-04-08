@@ -31,6 +31,39 @@
   justify-content: center;
 }
 
+.icon svg {
+  transform-origin: 50% 50%;
+  transition: transform 180ms var(--motion-ease-out),
+    opacity 180ms var(--motion-ease-out);
+}
+
+.button:hover .icon svg,
+.button:focus-visible .icon svg {
+  transform: translateY(-0.5px) rotate(-6deg);
+}
+
+.line1,
+.line2,
+.line3 {
+  transform-origin: 6px 12px;
+  transition: transform 200ms var(--motion-ease-out);
+}
+
+.button:hover .line1,
+.button:focus-visible .line1 {
+  transform: translateX(0.3px);
+}
+
+.button:hover .line2,
+.button:focus-visible .line2 {
+  transform: translateX(-0.2px);
+}
+
+.button:hover .line3,
+.button:focus-visible .line3 {
+  transform: translateX(0.6px);
+}
+
 .popover {
   position: absolute;
   top: calc(100% + 10px);
@@ -74,5 +107,12 @@
   .button:hover {
     transform: none !important;
   }
-}
 
+  .icon svg,
+  .line1,
+  .line2,
+  .line3 {
+    transition: none !important;
+    transform: none !important;
+  }
+}
