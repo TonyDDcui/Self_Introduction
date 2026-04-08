@@ -1,0 +1,23 @@
+.base {
+  border: 1px solid transparent;
+  border-radius: var(--radius-8);
+  padding: 8px 15px;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.pillOutline {
+  background: transparent;
+  border-color: var(--link-on-dark);
+  color: var(--link-on-dark);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  padding: 8px 14px;
+}
+
