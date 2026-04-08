@@ -71,6 +71,8 @@
 }
 
 .item {
+  --item-delay: 0ms;
+
   grid-column: span 4;
   border: 1px solid rgba(0, 0, 0, 0.10);
   border-radius: var(--radius-12);
@@ -81,6 +83,51 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  transition-property: opacity, transform, filter, box-shadow, border-color, background-color;
+  transition-duration: 520ms;
+  transition-timing-function: var(--motion-ease-out);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--item-delay, 0ms));
+  will-change: opacity, transform, filter;
+}
+
+.item:nth-child(2) {
+  --item-delay: 50ms;
+}
+
+.item:nth-child(3) {
+  --item-delay: 100ms;
+}
+
+.item:nth-child(4) {
+  --item-delay: 150ms;
+}
+
+.item:nth-child(5) {
+  --item-delay: 200ms;
+}
+
+.item:nth-child(6) {
+  --item-delay: 250ms;
+}
+
+.section:not(.is-visible) .item {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  filter: blur(1px);
+}
+
+.section.is-visible .item {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+.section.is-visible .item:hover {
+  transform: translate3d(0, -3px, 0);
+  border-color: rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-card), var(--shadow-whisper);
 }
 
 .itemTitle {
@@ -168,5 +215,19 @@
 @media (max-width: 640px) {
   .item {
     grid-column: span 12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .item:hover {
+    transform: none !important;
   }
 }

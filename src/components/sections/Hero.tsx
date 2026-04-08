@@ -1,15 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Hero.module.css";
 import Button from "../ui/Button";
 
 export default function Hero() {
   const router = useRouter();
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    // Trigger entrance animation after mount (respects prefers-reduced-motion via CSS).
+    setEntered(true);
+  }, []);
 
   return (
     <section className={styles.hero} aria-label="Home hero">
-      <div className={styles.inner}>
+      <div className={`${styles.inner} ${entered ? styles.entered : ""}`}>
         <h1 className={styles.title}>崔喆箫</h1>
         <p className={styles.subtitle}>
           嵌入式 / 硬件 / 软件开发工程师。<br />
