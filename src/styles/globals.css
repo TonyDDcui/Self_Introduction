@@ -1,3 +1,5 @@
+@import "./tokens.css";
+
 /* Minimal CSS reset */
 *,
 *::before,
@@ -8,16 +10,20 @@
 html,
 body {
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  color: #111;
-  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  color: var(--text-on-light);
+  background: var(--bg-light);
 }
 
 img,
@@ -37,7 +43,15 @@ select {
 }
 
 a {
-  color: inherit;
+  color: var(--link-on-light);
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
