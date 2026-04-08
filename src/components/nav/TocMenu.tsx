@@ -22,6 +22,7 @@ function MenuIcon() {
       strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
+      data-uiverse-icon="gagan-gv-menu"
       aria-hidden="true"
       focusable="false"
     >
@@ -105,4 +106,3 @@ export default function TocMenu() {
     </div>
   );
 }
-

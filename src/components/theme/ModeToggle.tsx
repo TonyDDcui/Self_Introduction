@@ -19,6 +19,7 @@ function SunIcon() {
       strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
+      data-uiverse-icon="RiccardoRapelli-sun"
       aria-hidden="true"
       focusable="false"
     >
@@ -39,6 +40,7 @@ function MoonIcon() {
       strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
+      data-uiverse-icon="RiccardoRapelli-moon"
       aria-hidden="true"
       focusable="false"
     >
