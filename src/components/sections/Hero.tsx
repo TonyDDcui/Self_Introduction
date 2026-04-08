@@ -5,9 +5,10 @@ export default function Hero() {
   return (
     <section className={styles.hero} aria-label="Home hero">
       <div className={styles.inner}>
-        <h1 className={styles.title}>Self Introduction</h1>
+        <h1 className={styles.title}>崔喆箫</h1>
         <p className={styles.subtitle}>
-          一个极简的 Apple 风格主页 Hero，包含关于我锚点入口与 Blog 主 CTA。
+          嵌入式 / 硬件 / 软件开发工程师。<br />
+          科技与摄影是日常，文学与日落是背景音乐。
         </p>
 
         <div className={styles.ctaRow}>
@@ -22,4 +23,3 @@ export default function Hero() {
     </section>
   );
 }
-

@@ -12,15 +12,15 @@ export default function Contact() {
         <header className={styles.header}>
           <h2 className={styles.title}>Contact</h2>
           <p className={styles.subtitle}>
-            联系方式占位：后续可替换为 Email、社交账号、以及可选的表单/Calendly 等。
+            如果你也在做硬件、软件，或只是想聊聊日落与相机，都欢迎来信。
           </p>
         </header>
 
         <div className={styles.body}>
           <p className={styles.paragraph}>
             Email：{" "}
-            <a className={styles.link} href="mailto:hello@example.com">
-              hello@example.com
+            <a className={styles.link} href="mailto:someometony@outlook.com">
+              someometony@outlook.com
             </a>
           </p>
           <p className={styles.paragraph}>
@@ -33,7 +33,7 @@ export default function Contact() {
         </div>
 
         <div className={styles.footer}>
-          <a className={styles.pillLink} href="mailto:hello@example.com">
+          <a className={styles.pillLink} href="mailto:someometony@outlook.com">
             Send email
           </a>
         </div>

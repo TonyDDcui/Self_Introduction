@@ -8,26 +8,27 @@ type ProjectCard = {
   cta2?: { label: string; href: string };
 };
 
-const PLACEHOLDER_PROJECTS: ProjectCard[] = [
+const FEATURED_PROJECTS: ProjectCard[] = [
   {
-    title: "Project Alpha（占位）",
+    title: "Self_Introduction（个人主页 + 博客）",
     description:
-      "一个偏产品化的 Web 体验实验：强调动效、排版与信息层级。后续会从 content/projects 接入真实数据。",
-    cta1: { label: "Learn more", href: "#" },
-    cta2: { label: "View code", href: "#" },
+      "以 Apple 风格为灵感的个人站点：Home 分镜、MDX 博客、仓库图片自动接入与图库页。",
+    cta1: { label: "Learn more", href: "/blog/hello" },
+    cta2: { label: "View code", href: "https://github.com/TonyDDcui/Self_Introduction" },
   },
   {
-    title: "Design System Notes（占位）",
+    title: "Logistics-truck（路径学习搬运物流车）",
     description:
-      "整理 tokens、组件规范与可复用布局模块，服务于个人站点与内容发布流。",
-    cta1: { label: "Learn more", href: "#" },
-    cta2: { label: "View code", href: "#" },
+      "低成本物流车项目（预算 1200 元）：围绕嵌入式控制与驱动层搭建，聚焦可实现与可维护。",
+    cta1: { label: "Learn more", href: "/blog/logistics-truck" },
+    cta2: { label: "View code", href: "https://github.com/TonyDDcui/Logistics-truck" },
   },
   {
-    title: "MDX Blog Tooling（占位）",
+    title: "Fire_Car-ERCC（ERCC 消防车项目）",
     description:
-      "围绕 MDX 的内容工作流：元信息、静态生成、组件映射与图片资源管理。",
-    cta1: { label: "Learn more", href: "#" },
+      "面向 ERCC 竞赛的消防车项目：以 C 语言为主，包含运动控制、传感器与工程文件。",
+    cta1: { label: "Learn more", href: "/blog/fire-car-ercc" },
+    cta2: { label: "View code", href: "https://github.com/TonyDDcui/Fire_Car-ERCC" },
   },
 ];
 
@@ -42,12 +43,12 @@ export default function Projects() {
         <header className={styles.header}>
           <h2 className={styles.title}>Featured Projects</h2>
           <p className={styles.subtitle}>
-            2–3 个项目卡占位，未来将从 content/projects 接入。保持深色背景与轻量边框。
+            一些真实项目与实践记录。后续可以补充“项目实际展示”（照片/视频/文档）到 Gallery。
           </p>
         </header>
 
         <div className={styles.grid}>
-          {PLACEHOLDER_PROJECTS.map((p) => (
+          {FEATURED_PROJECTS.map((p) => (
             <article key={p.title} className={styles.card}>
               <h3 className={styles.cardTitle}>{p.title}</h3>
               <p className={styles.cardDesc}>{p.description}</p>
