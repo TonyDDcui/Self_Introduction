@@ -1,15 +1,19 @@
 import Link from "next/link";
 import styles from "./About.module.css";
+import AboutAvatar from "./AboutAvatar";
 
 export default function About() {
   return (
     <section id="about" className={styles.section} aria-label="About section">
       <div className={styles.inner}>
         <header className={styles.header}>
-          <h2 className={styles.title}>About</h2>
-          <p className={styles.subtitle}>
-            做工程，也写日常；爱拆解，也爱抬头看天色。
-          </p>
+          <div className={styles.headerText}>
+            <h2 className={styles.title}>About</h2>
+            <p className={styles.subtitle}>
+              做工程，也写日常；爱拆解，也爱抬头看天色。
+            </p>
+          </div>
+          <AboutAvatar />
         </header>
 
         <div className={styles.body}>
