@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
+import RepoImage from "../../../src/components/media/RepoImage";
 import { getAllPostsMeta, getPostBySlug } from "../../../src/lib/blog/fs";
 
 // 默认组件映射：先保持为空，后续可在此处扩展（例如自定义 Image / Callout 等）
-const mdxComponents = {};
+const mdxComponents = { RepoImage };
 
 export async function generateStaticParams() {
   const posts = await getAllPostsMeta();
@@ -58,4 +59,3 @@ export default async function BlogPostPage({
     </main>
   );
 }
-

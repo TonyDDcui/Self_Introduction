@@ -13,24 +13,42 @@ type RepoImageManifestItem = {
 const manifest = manifestJson as RepoImageManifestItem[];
 
 export default function GalleryPage() {
-  const copySnippet = async (publicPath: string, name: string) => {
-    const snippet = `<RepoImage src="${publicPath}" alt="${name}" />`;
+  const copySnippet = async (originalPath: string, name: string) => {
+    // IMPORTANT: MDX side should pass originalPath, and RepoImage will resolve via manifest.
+    const snippet = `<RepoImage src="${originalPath}" alt="${name}" />`;
 
     try {
       await navigator.clipboard.writeText(snippet);
       // Minimal feedback; avoid complex UI
       alert("已复制到剪贴板");
     } catch {
-      // Fallback for older browsers / restricted contexts
+      // Fallback: select text for manual copy (and try execCommand when available).
       const ta = document.createElement("textarea");
       ta.value = snippet;
+      ta.setAttribute("readonly", "");
       ta.style.position = "fixed";
-      ta.style.left = "-9999px";
+      ta.style.left = "0";
+      ta.style.top = "0";
+      ta.style.opacity = "0";
       document.body.appendChild(ta);
+      ta.focus();
       ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      alert("已复制到剪贴板");
+
+      let copied = false;
+      try {
+        copied = document.execCommand("copy");
+      } catch {
+        copied = false;
+      }
+
+      if (copied) {
+        alert("已复制到剪贴板");
+      } else {
+        alert("无法自动复制：已选中文本，请手动复制（Ctrl/Cmd + C）。");
+      }
+
+      // Remove after user closes alert (alert is blocking; this runs afterwards).
+      setTimeout(() => document.body.removeChild(ta), 0);
     }
   };
 
@@ -114,7 +132,7 @@ export default function GalleryPage() {
 
                 <button
                   type="button"
-                  onClick={() => copySnippet(item.publicPath, item.name)}
+                  onClick={() => copySnippet(item.originalPath, item.name)}
                   style={{
                     marginTop: 10,
                     width: "100%",
