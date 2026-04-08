@@ -4,10 +4,11 @@
   "description": "TonyDDcui - 個人作品集網站，受 Apple 設計風格啟發",
   "main": "index.html",
   "scripts": {
-    "start": "python -m http.server 8000",
-    "dev": "npx http-server",
-    "build": "echo 'No build step required for static site'",
-    "deploy": "echo 'Deploy to GitHub Pages, Netlify, or Vercel'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest"
   },
   "keywords": [
     "portfolio",
@@ -25,7 +26,18 @@
     "url": "https://github.com/TonyDDcui/Self-Introduction.git"
   },
   "homepage": "https://tonyddcui.com",
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "http-server": "^14.1.1",
+    "typescript": "^5.0.0"
   }
 }

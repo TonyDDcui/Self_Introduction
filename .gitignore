@@ -6,6 +6,8 @@ yarn.lock
 # Build outputs
 dist/
 build/
+.next/
+out/
 *.min.js
 *.min.css
 
