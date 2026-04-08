@@ -65,6 +65,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  cursor: pointer;
 
   transition-property: opacity, transform, filter, box-shadow, border-color, background-color;
   transition-duration: 520ms;
