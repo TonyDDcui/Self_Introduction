@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import "../src/styles/globals.css";
 import AppleNav from "../src/components/nav/AppleNav";
+import ThemeProvider from "../src/components/theme/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Self Introduction",
@@ -17,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="zh-HK">
       <body>
-        <AppleNav />
-        {children}
+        <ThemeProvider>
+          <AppleNav />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
