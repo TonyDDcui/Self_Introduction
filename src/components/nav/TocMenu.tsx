@@ -22,10 +22,13 @@ function MenuIcon() {
       strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
+      data-uiverse-icon="gagan-gv-menu"
       aria-hidden="true"
       focusable="false"
     >
-      <path d="M4 7h16M4 12h16M4 17h12" />
+      <path className={styles.line1} d="M5 7.25h14" />
+      <path className={styles.line2} d="M5 12h14" />
+      <path className={styles.line3} d="M5 16.75h10.5" />
     </svg>
   );
 }
@@ -105,4 +108,3 @@ export default function TocMenu() {
     </div>
   );
 }
-
