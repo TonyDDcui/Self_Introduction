@@ -12,7 +12,7 @@ export default function Hero() {
         </p>
 
         <div className={styles.ctaRow}>
-          <a className={[styles.cta, styles.ctaOutline].join(" ")} href="#about">
+          <a className={[styles.cta, styles.ctaSecondary].join(" ")} href="#about">
             Learn more
           </a>
           <Link className={[styles.cta, styles.ctaPrimary].join(" ")} href="/blog">

@@ -6,12 +6,23 @@
   height: 48px;
   width: 100%;
 
+  display: flex;
+  justify-content: center;
+}
+
+html[data-theme="apple"] .nav {
+  /* Keep existing Apple dark glass */
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
 
-  display: flex;
-  justify-content: center;
+html[data-theme="claude"] .nav {
+  /* Claude: parchment/surface nav, no black glass */
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--ring);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .inner {
@@ -46,10 +57,17 @@
 }
 
 .link {
-  color: rgba(255, 255, 255, 0.92);
   font-size: 12px;
   text-decoration: none;
   line-height: 1;
+}
+
+html[data-theme="apple"] .link {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+html[data-theme="claude"] .link {
+  color: var(--text-primary);
 }
 
 .link:hover,
