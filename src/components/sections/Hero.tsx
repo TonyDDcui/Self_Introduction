@@ -1,7 +1,12 @@
-import Link from "next/link";
+"use client";
+
+import { useRouter } from "next/navigation";
 import styles from "./Hero.module.css";
+import Button from "../ui/Button";
 
 export default function Hero() {
+  const router = useRouter();
+
   return (
     <section className={styles.hero} aria-label="Home hero">
       <div className={styles.inner}>
@@ -12,12 +17,24 @@ export default function Hero() {
         </p>
 
         <div className={styles.ctaRow}>
-          <a className={[styles.cta, styles.ctaSecondary].join(" ")} href="#about">
-            Learn more
-          </a>
-          <Link className={[styles.cta, styles.ctaPrimary].join(" ")} href="/blog">
+          <Button
+            variant="appleBlue"
+            className={styles.cta}
+            onClick={() => router.push("/blog")}
+          >
             Blog
-          </Link>
+          </Button>
+          <Button
+            variant="applePill"
+            className={styles.cta}
+            onClick={() => {
+              const el = document.getElementById("about");
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              window.location.hash = "about";
+            }}
+          >
+            Learn more
+          </Button>
         </div>
       </div>
     </section>
