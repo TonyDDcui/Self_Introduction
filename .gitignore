@@ -19,6 +19,9 @@ out/
 *~
 .DS_Store
 
+# Superpowers brainstorming artifacts
+.superpowers/
+
 # OS
 Thumbs.db
 .DS_Store
