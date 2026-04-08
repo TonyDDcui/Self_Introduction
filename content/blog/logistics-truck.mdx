@@ -1,0 +1,36 @@
+---
+title: "Logistics-truck：低成本路径学习搬运物流车"
+date: "2026-04-08"
+summary: "预算 1200 元的物流车实践：围绕嵌入式控制与驱动层组织工程结构，把“能跑起来”变成“能复现”。"
+tags:
+  - embedded
+  - c
+  - robotics
+  - vehicle
+---
+
+这不是“豪华方案”，而是一次把预算、可实现性、可维护性放在同一张桌子上讨论的工程练习。
+
+## 项目定位
+
+- 目标：做一台**低成本**、能完成基础搬运与路径学习的物流车
+- 语言：C
+- 仓库：[github.com/TonyDDcui/Logistics-truck](https://github.com/TonyDDcui/Logistics-truck)
+
+## 我做了什么（简版）
+
+- 按嵌入式工程的习惯拆分目录（BSP / DRIVERS / User 等）
+- 把“功能能跑”推进到“结构可读、可迁移”
+- 为后续：传感器、控制策略、路径逻辑的迭代留出位置
+
+## 演示与图片
+
+如果你把图片提交进仓库（任意目录均可），我会用站点的 `RepoImage` 组件把它自动接入到文章里，例如：
+
+```mdx
+<RepoImage src="path/to/your/image.jpg" alt="Logistics truck demo" />
+```
+
+---
+
+“工程不是一口气跑到终点，而是每一次都能回到起点再跑一遍。”

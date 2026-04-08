@@ -1,0 +1,12 @@
+html[data-theme="apple"][data-mode="dark"] {
+  --bg-page: #000000;
+  --bg-dark: #000000;
+  --surface-1: #272729;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-tertiary: rgba(255, 255, 255, 0.52);
+  --link: #2997ff;
+  --accent: #0071e3;
+  --focus: #0071e3;
+  --ring: rgba(255, 255, 255, 0.18);
+}

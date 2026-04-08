@@ -1,0 +1,24 @@
+---
+title: "Hello MDX"
+date: "2026-04-08"
+summary: "第一篇 MDX 文章，用于验证 Blog 管线（frontmatter + 编译渲染）。"
+tags:
+  - nextjs
+  - mdx
+  - demo
+---
+
+# Hello MDX
+
+这是一篇示例文章，用于验证：
+
+- `content/blog/*.mdx` 可以被读取
+- `frontmatter` 可以被解析为 meta（title/date/summary/tags）
+- 内容可以在 App Router 下被编译并渲染
+
+下面是一段 **Markdown**，以及一个代码块：
+
+```ts
+export const hello = (name: string) => `Hello, ${name}!`;
+```
+

@@ -1,0 +1,201 @@
+.main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.pageTitle {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  margin: 0 0 16px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 30px rgba(0, 0, 0, 0.06);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.meta {
+  margin: 8px 0 0;
+  color: var(--text-secondary-on-light);
+}
+
+.summary {
+  margin: 8px 0 0;
+}
+
+.tags {
+  margin: 8px 0 0;
+  color: var(--text-secondary-on-light);
+}
+
+.backLink {
+  margin: 0 0 16px;
+}
+
+.postHeader {
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+
+.postTitle {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  margin: 0;
+}
+
+.postMeta {
+  margin: 10px 0 0;
+  color: var(--text-secondary-on-light);
+}
+
+.postSummary {
+  margin: 10px 0 0;
+}
+
+.postTags {
+  margin: 10px 0 0;
+  color: var(--text-secondary-on-light);
+}
+
+.postBody {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Typography / "prose" styles for MDX content */
+.prose {
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  color: var(--text-on-light);
+}
+
+.prose :where(p) {
+  margin: 0 0 16px;
+}
+
+.prose :where(a) {
+  color: var(--link-on-light);
+  text-decoration: none;
+}
+
+.prose :where(a:hover) {
+  text-decoration: underline;
+}
+
+.prose :where(h1) {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  margin: 32px 0 16px;
+}
+
+.prose :where(h2) {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 28px;
+  line-height: 1.14;
+  font-weight: 400;
+  letter-spacing: -0.4px;
+  margin: 28px 0 12px;
+}
+
+.prose :where(h3) {
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  margin: 22px 0 10px;
+}
+
+.prose :where(ul, ol) {
+  margin: 0 0 16px;
+  padding-left: 22px;
+}
+
+.prose :where(li) {
+  margin: 6px 0;
+}
+
+.prose :where(blockquote) {
+  margin: 16px 0;
+  padding: 0 0 0 16px;
+  border-left: 3px solid rgba(0, 0, 0, 0.18);
+  color: var(--text-secondary-on-light);
+}
+
+.prose :where(strong) {
+  font-weight: 600;
+}
+
+.prose :where(em) {
+  font-style: italic;
+}
+
+.prose :where(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.95em;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  padding: 0.18em 0.38em;
+}
+
+.prose :where(pre) {
+  margin: 16px 0 20px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #1d1d1f;
+  color: #f5f5f7;
+  overflow-x: auto;
+}
+
+.prose :where(pre code) {
+  background: transparent;
+  padding: 0;
+  font-size: 0.92em;
+  color: inherit;
+}
+
+.prose :where(hr) {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin: 28px 0;
+}
+

@@ -1,0 +1,12 @@
+html[data-theme="claude"][data-mode="dark"] {
+  --bg-page: #141413;
+  --surface-1: #30302e;
+  --surface-2: #262624;
+  --text-primary: #faf9f5;
+  --text-secondary: #b0aea5;
+  --text-tertiary: #87867f;
+  --link: #d97757;
+  --accent: #c96442;
+  --focus: #3898ec;
+  --ring: #30302e;
+}

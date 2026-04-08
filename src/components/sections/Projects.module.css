@@ -1,0 +1,197 @@
+.section {
+  width: 100%;
+  /* Claude-only: use warm surfaces + text tokens */
+  background: var(--surface-1);
+  color: var(--text-primary);
+
+  display: flex;
+  justify-content: center;
+
+  padding: 88px 0;
+}
+
+.inner {
+  width: 100%;
+  max-width: 980px;
+  padding: 0 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 28px;
+}
+
+.header {
+  display: grid;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
+  max-width: 740px;
+}
+
+.grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.card {
+  --card-delay: 0ms;
+
+  grid-column: span 6;
+  border: 1px solid var(--ring);
+  border-radius: var(--radius-12);
+  padding: 18px 18px 16px;
+  background: color-mix(in srgb, var(--surface-1) 78%, transparent);
+  backdrop-filter: none;
+  min-height: 168px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  transition-property: opacity, transform, filter, box-shadow, border-color, background-color;
+  transition-duration: 520ms;
+  transition-timing-function: var(--motion-ease-out);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--card-delay, 0ms));
+  will-change: opacity, transform, filter;
+}
+
+.card:nth-child(2) {
+  --card-delay: 60ms;
+}
+
+.card:nth-child(3) {
+  --card-delay: 120ms;
+}
+
+.card:nth-child(4) {
+  --card-delay: 180ms;
+}
+
+.card:nth-child(5) {
+  --card-delay: 240ms;
+}
+
+.card:nth-child(6) {
+  --card-delay: 300ms;
+}
+
+.card:nth-child(3) {
+  grid-column: span 12;
+}
+
+.section:not(.is-visible) .card {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  filter: blur(1px);
+}
+
+.section.is-visible .card {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+.section.is-visible .card:hover {
+  transform: translate3d(0, -3px, 0);
+  border-color: color-mix(in srgb, var(--ring) 72%, var(--text-tertiary));
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 82%, transparent);
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.cardDesc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 72ch;
+}
+
+.cardCtas {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pillLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--surface-1);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.pillLink:hover {
+  filter: brightness(1.06);
+  text-decoration: none;
+}
+
+.pillLinkOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ring);
+  color: var(--link);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.pillLinkOutline:hover {
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 72%, transparent);
+  text-decoration: none;
+}
+
+@media (max-width: 780px) {
+  .card {
+    grid-column: span 12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .card:hover {
+    transform: none !important;
+  }
+}

@@ -1,0 +1,13 @@
+html[data-theme="claude"][data-mode="light"] {
+  --bg-page: #f5f4ed;
+  --surface-1: #faf9f5;
+  --surface-2: #e8e6dc;
+  /* 用户要求：浅色模式文字为纯黑 */
+  --text-primary: #000000;
+  --text-secondary: #5e5d59;
+  --text-tertiary: #87867f;
+  --link: #3d3d3a;
+  --accent: #c96442;
+  --focus: #3898ec;
+  --ring: #d1cfc5;
+}

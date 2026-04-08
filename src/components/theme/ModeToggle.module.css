@@ -1,0 +1,41 @@
+.button {
+  height: 28px;
+  width: 32px;
+  padding: 0;
+  border-radius: var(--radius-12);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--ring);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  color: var(--text-primary);
+
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.2px;
+
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform var(--motion-fast) var(--motion-ease-out),
+    background var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}

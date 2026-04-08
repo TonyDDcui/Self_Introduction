@@ -1,0 +1,23 @@
+:root {
+  /* Color tokens (Apple-style neutrals + single blue accent) */
+  --bg-dark: #000000;
+  --bg-light: #f5f5f7;
+
+  --text-on-light: #1d1d1f;
+  --text-secondary-on-light: rgba(0, 0, 0, 0.8);
+  --text-tertiary-on-light: rgba(0, 0, 0, 0.48);
+  --text-on-dark: #ffffff;
+
+  --accent: #0071e3;
+  --link-on-light: #0066cc;
+  --link-on-dark: #2997ff;
+
+  /* Radius tokens */
+  --radius-8: 8px;
+  --radius-11: 11px;
+  --radius-12: 12px;
+  --radius-pill: 980px;
+
+  /* Shadow tokens (use sparingly) */
+  --shadow-card: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+}

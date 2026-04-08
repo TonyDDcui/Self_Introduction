@@ -1,0 +1,94 @@
+.section {
+  width: 100%;
+  /* Claude-only: follow tokens (light=paper, dark=near-black) */
+  background: var(--surface-1);
+  color: var(--text-primary);
+
+  display: flex;
+  justify-content: center;
+
+  padding: 88px 0 96px;
+}
+
+.inner {
+  width: 100%;
+  max-width: 980px;
+  padding: 0 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 24px;
+}
+
+.header {
+  display: grid;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
+  max-width: 740px;
+}
+
+.body {
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+}
+
+.paragraph {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+  letter-spacing: -0.012em;
+  color: var(--text-secondary);
+}
+
+.link {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pillLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ring);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+}
+
+.pillLink:hover {
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 78%, transparent);
+  text-decoration: none;
+}
