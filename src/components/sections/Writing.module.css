@@ -1,7 +1,7 @@
 .section {
   width: 100%;
-  background: var(--bg-light);
-  color: var(--text-on-light);
+  background: var(--surface-1);
+  color: var(--text-primary);
 
   display: flex;
   justify-content: center;
@@ -39,7 +39,7 @@
   font-size: 19px;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  color: var(--text-secondary-on-light);
+  color: var(--text-secondary);
   max-width: 740px;
 }
 
@@ -47,11 +47,11 @@
   margin: 0;
   font-size: 17px;
   line-height: 1.55;
-  color: var(--text-secondary-on-light);
+  color: var(--text-secondary);
 }
 
 .link {
-  color: var(--link-on-light);
+  color: var(--link);
   text-decoration: none;
 }
 
@@ -74,10 +74,10 @@
   --item-delay: 0ms;
 
   grid-column: span 4;
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  border: 1px solid var(--ring);
   border-radius: var(--radius-12);
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: var(--shadow-card);
+  background: color-mix(in srgb, var(--surface-1) 86%, transparent);
+  box-shadow: var(--shadow-whisper);
   padding: 16px 16px 14px;
 
   display: flex;
@@ -125,8 +125,8 @@
 
 .section.is-visible .item:hover {
   transform: translate3d(0, -3px, 0);
-  border-color: rgba(0, 0, 0, 0.14);
-  background: rgba(255, 255, 255, 0.86);
+  border-color: color-mix(in srgb, var(--ring) 70%, var(--text-tertiary));
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 86%, transparent);
   box-shadow: 0 0 0 1px var(--ring), var(--shadow-card), var(--shadow-whisper);
 }
 
@@ -150,14 +150,14 @@
 .meta {
   margin: 0;
   font-size: 13px;
-  color: var(--text-tertiary-on-light);
+  color: var(--text-tertiary);
 }
 
 .summary {
   margin: 0;
   font-size: 15px;
   line-height: 1.5;
-  color: var(--text-secondary-on-light);
+  color: var(--text-secondary);
 }
 
 .tags {
@@ -173,11 +173,11 @@
   height: 26px;
   padding: 0 10px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  color: rgba(0, 0, 0, 0.68);
+  border: 1px solid var(--ring);
+  color: var(--text-secondary);
   font-size: 12px;
   letter-spacing: -0.01em;
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
 }
 
 .footer {
@@ -193,16 +193,16 @@
   height: 36px;
   padding: 0 14px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  color: var(--link-on-light);
+  border: 1px solid var(--ring);
+  color: var(--link);
   text-decoration: none;
   font-size: 14px;
   letter-spacing: -0.01em;
-  background: rgba(255, 255, 255, 0.6);
+  background: color-mix(in srgb, var(--surface-1) 80%, transparent);
 }
 
 .pillLink:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 90%, transparent);
   text-decoration: none;
 }
 
