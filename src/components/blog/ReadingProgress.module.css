@@ -1,0 +1,31 @@
+.wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.track {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ring) 22%, transparent);
+}
+
+.bar {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: transform 120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}
+

@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import styles from "./Projects.module.css";
+import ProjectDrawer, { type ProjectDrawerProject } from "./ProjectDrawer";
 
 type ProjectCard = {
   title: string;
@@ -33,6 +37,8 @@ const FEATURED_PROJECTS: ProjectCard[] = [
 ];
 
 export default function Projects() {
+  const [active, setActive] = useState<ProjectDrawerProject | null>(null);
+
   return (
     <section
       id="projects"
@@ -51,16 +57,36 @@ export default function Projects() {
 
         <div className={styles.grid}>
           {FEATURED_PROJECTS.map((p) => (
-            <article key={p.title} className={styles.card}>
+            <article
+              key={p.title}
+              className={styles.card}
+              role="button"
+              tabIndex={0}
+              onClick={() => setActive(p)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActive(p);
+                }
+              }}
+            >
               <h3 className={styles.cardTitle}>{p.title}</h3>
               <p className={styles.cardDesc}>{p.description}</p>
 
               <div className={styles.cardCtas}>
-                <Link className={styles.pillLink} href={p.cta1.href}>
+                <Link
+                  className={styles.pillLink}
+                  href={p.cta1.href}
+                  onClick={(e) => e.stopPropagation()}
+                >
                   {p.cta1.label}
                 </Link>
                 {p.cta2 ? (
-                  <Link className={styles.pillLinkOutline} href={p.cta2.href}>
+                  <Link
+                    className={styles.pillLinkOutline}
+                    href={p.cta2.href}
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     {p.cta2.label}
                   </Link>
                 ) : null}
@@ -69,6 +95,8 @@ export default function Projects() {
           ))}
         </div>
       </div>
+
+      <ProjectDrawer project={active} onClose={() => setActive(null)} />
     </section>
   );
 }

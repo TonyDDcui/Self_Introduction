@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
+import ReadingProgress from "../../../src/components/blog/ReadingProgress";
 import RepoImage from "../../../src/components/media/RepoImage";
 import { getAllPostsMeta, getPostBySlug } from "../../../src/lib/blog/fs";
 import styles from "../../../src/styles/blog.module.css";
@@ -35,6 +36,7 @@ export default async function BlogPostPage({
 
   return (
     <main className={styles.main}>
+      <ReadingProgress targetSelector={`.${styles.prose}`} />
       <p className={styles.backLink}>
         <Link href="/blog">← 返回列表</Link>
       </p>
