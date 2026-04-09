@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "./About.module.css";
 import AboutAvatar from "./AboutAvatar";
-import GlasswingExpand from "./GlasswingExpand";
+import SectionGlass from "./SectionGlass";
 
 export default function About() {
   return (
@@ -12,13 +12,13 @@ export default function About() {
       data-reveal
       data-delay="0"
     >
-      <GlasswingExpand>
+      <SectionGlass>
         <div className={styles.inner}>
           <header className={styles.header}>
             <div className={styles.headerText}>
               <h2 className={styles.title}>About</h2>
               <p className={styles.subtitle}>
-                做工程，也写日常；爱拆解，也爱抬头看天色。
+                一点自我介绍与日常兴趣。
               </p>
             </div>
             <AboutAvatar />
@@ -60,7 +60,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </GlasswingExpand>
+      </SectionGlass>
     </section>
   );
 }

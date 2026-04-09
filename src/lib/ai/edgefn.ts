@@ -69,13 +69,6 @@ function extractChatContent(data: EdgeFnChatResponse): string {
     if (msgFinal) return msgFinal;
     const msgTextField = extractTextFromUnknownContent(msgObj.text);
     if (msgTextField) return msgTextField;
-
-    // 兜底：某些模型会只返回 reasoning / reasoning_content（尽量避免用它，但至少不空）
-    for (const [k, v] of Object.entries(msgObj)) {
-      if (!k.toLowerCase().startsWith("reasoning")) continue;
-      const r = extractTextFromUnknownContent(v);
-      if (r) return r;
-    }
   }
 
   const choiceText = c0?.text;
@@ -84,6 +77,24 @@ function extractChatContent(data: EdgeFnChatResponse): string {
   if (typeof data.output_text === "string" && data.output_text.trim()) return data.output_text;
   if (typeof data.response === "string" && data.response.trim()) return data.response;
   return "";
+}
+
+function stripReasoningArtifacts(text: string): string {
+  const original = text;
+  let s = text;
+
+  // DeepSeek R1 系列经常用 <think>...</think> 包裹思考过程
+  if (s.includes("</think>")) {
+    const idx = s.lastIndexOf("</think>");
+    if (idx !== -1) s = s.slice(idx + "</think>".length);
+  }
+  s = s.replace(/<think>[\s\S]*?<\/think>/gi, "");
+
+  // 常见前缀
+  s = s.replace(/^\s*(最终答案|final answer|答案)\s*[:：]\s*/i, "");
+
+  const cleaned = s.trim();
+  return cleaned ? cleaned : original.trim();
 }
 
 export async function edgefnChatComplete(input: {
@@ -127,7 +138,7 @@ export async function edgefnChatComplete(input: {
     throw new Error(`EDGEFN_INVALID_JSON${raw ? `:${raw.slice(0, 200)}` : ""}`);
   }
 
-  const content = extractChatContent(data).trim();
+  const content = stripReasoningArtifacts(extractChatContent(data)).trim();
   if (!content) {
     // 把响应体打出来一小段，方便定位“返回结构不兼容/网关无输出”
     throw new Error(`EDGEFN_EMPTY_RESPONSE${raw ? `:${raw.slice(0, 200)}` : ""}`);
