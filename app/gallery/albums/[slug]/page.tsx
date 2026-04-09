@@ -268,11 +268,10 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
               这个相册里还没有照片。
             </div>
           ) : (
-            <GalleryGrid photos={albumPhotos} />
+            <GalleryGrid photos={albumPhotos} canDelete={canUpload} />
           )}
         </div>
       </div>
     </main>
   );
 }
-

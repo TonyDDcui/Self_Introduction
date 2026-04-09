@@ -35,6 +35,7 @@
 }
 
 .media {
+  position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
   background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 70%, transparent);
@@ -44,6 +45,40 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.deleteButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ring) 78%, transparent);
+  background: color-mix(in srgb, var(--bg-page) 62%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  font-size: 12px;
+  line-height: 1;
+  color: color-mix(in srgb, var(--text-primary) 92%, transparent);
+
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  border-color: color-mix(in srgb, var(--ring) 90%, transparent);
+  background: color-mix(in srgb, var(--bg-page) 72%, transparent);
+}
+
+.deleteButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .caption {
@@ -64,4 +99,3 @@
   line-height: 1.35;
   color: var(--text-secondary);
 }
-

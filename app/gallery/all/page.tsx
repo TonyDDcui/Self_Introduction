@@ -243,11 +243,10 @@ export default async function GalleryAllPage() {
               暂无公开照片。
             </div>
           ) : (
-            <GalleryGrid photos={photos} />
+            <GalleryGrid photos={photos} canDelete={canUpload} />
           )}
         </div>
       </div>
     </main>
   );
 }
-
