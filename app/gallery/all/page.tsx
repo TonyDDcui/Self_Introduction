@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 
 import GalleryGrid from "../../../src/components/gallery/GalleryGrid";
+import GalleryAuthActions from "../../../src/components/gallery/GalleryAuthActions";
 import { authOptions } from "../../../src/lib/auth/options";
 import { isUploader } from "../../../src/lib/auth/guards";
 import { listPublicPhotos } from "../../../src/lib/gallery/photos";
@@ -21,10 +22,6 @@ export default async function GalleryAllPage() {
     console.error("[gallery/all] failed to load photos:", err);
   }
 
-  const loginLabel =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (session?.user && (session.user as any).login) || session?.user?.name || null;
-  const avatarUrl = session?.user?.image || null;
   const canUpload = isUploader(session);
 
   return (
@@ -74,144 +71,12 @@ export default async function GalleryAllPage() {
             </nav>
           </div>
 
-          <div
-            style={{
-              flex: "0 0 auto",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              gap: 10,
-              flexWrap: "wrap",
-            }}
-          >
-            {session ? (
-              <>
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 10,
-                    borderRadius: "var(--radius-pill)",
-                    border: "1px solid var(--ring)",
-                    background:
-                      "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
-                    padding: "6px 10px",
-                    boxShadow: "var(--shadow-whisper)",
-                  }}
-                >
-                  {avatarUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={avatarUrl}
-                      alt="GitHub avatar"
-                      width={22}
-                      height={22}
-                      style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: 999,
-                        border: "1px solid var(--ring)",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: 999,
-                        border: "1px solid var(--ring)",
-                        background:
-                          "color-mix(in srgb, var(--surface-2, var(--surface-1)) 68%, transparent)",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 12,
-                        color: "var(--text-secondary)",
-                      }}
-                    >
-                      {loginLabel ? String(loginLabel).slice(0, 1).toUpperCase() : "U"}
-                    </span>
-                  )}
-
-                  <span
-                    style={{
-                      fontSize: 13,
-                      color: "var(--text-primary)",
-                      lineHeight: 1,
-                      maxWidth: 180,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                    title={loginLabel ? String(loginLabel) : undefined}
-                  >
-                    {loginLabel ? String(loginLabel) : "已登录"}
-                  </span>
-
-                  <Link
-                    href="/api/auth/signout?callbackUrl=/gallery/all"
-                    style={{
-                      fontSize: 13,
-                      color: "var(--text-secondary)",
-                      textDecoration: "none",
-                      padding: "4px 8px",
-                      borderRadius: 999,
-                    }}
-                  >
-                    退出
-                  </Link>
-                </div>
-
-                {canUpload ? (
-                  <Link
-                    href="/gallery/upload"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 8,
-                      borderRadius: "var(--radius-pill)",
-                      border: "1px solid var(--ring)",
-                      background:
-                        "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
-                      color: "var(--text-primary)",
-                      padding: "8px 14px",
-                      fontSize: 14,
-                      lineHeight: 1,
-                      textDecoration: "none",
-                      boxShadow: "var(--shadow-whisper)",
-                    }}
-                  >
-                    添加照片
-                  </Link>
-                ) : null}
-              </>
-            ) : (
-              <Link
-                href="/api/auth/signin?callbackUrl=/gallery/all"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                  borderRadius: "var(--radius-pill)",
-                  border: "1px solid var(--ring)",
-                  background:
-                    "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
-                  color: "var(--text-primary)",
-                  padding: "8px 14px",
-                  fontSize: 14,
-                  lineHeight: 1,
-                  textDecoration: "none",
-                  boxShadow: "var(--shadow-whisper)",
-                }}
-              >
-                使用 GitHub 登录
-              </Link>
-            )}
-          </div>
+          <GalleryAuthActions
+            session={session}
+            canUpload={canUpload}
+            signInCallbackUrl="/gallery/all"
+            signOutCallbackUrl="/gallery/all"
+          />
         </header>
 
         <div style={{ marginTop: 18 }}>

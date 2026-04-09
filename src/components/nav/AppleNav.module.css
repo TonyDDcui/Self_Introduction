@@ -11,11 +11,31 @@
   display: flex;
   justify-content: center;
 
-  /* Claude: warm paper nav */
-  background: color-mix(in srgb, var(--bg-page) 70%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--ring) 70%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* 更明显的毛玻璃 + “液态玻璃”高光 */
+  background: color-mix(in srgb, var(--bg-page) 55%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  backdrop-filter: blur(22px) saturate(1.22);
+  -webkit-backdrop-filter: blur(22px) saturate(1.22);
+}
+
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 顶部高光 + 轻微的液态折射感 */
+  background:
+    radial-gradient(
+      1200px 80px at 20% 0%,
+      color-mix(in srgb, var(--surface-1) 40%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-1) 22%, transparent),
+      transparent 70%
+    );
+  opacity: 0.9;
 }
 
 .nav::after {
@@ -45,6 +65,32 @@
   padding: 0 16px;
 }
 
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.avatarLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  object-fit: cover;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bg-page) 30%, transparent);
+}
+
 .list {
   list-style: none;
   margin: 0;
@@ -54,6 +100,7 @@
   align-items: center;
   gap: 16px;
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .controls {
