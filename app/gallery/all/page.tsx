@@ -5,7 +5,7 @@ import GalleryGrid from "../../../src/components/gallery/GalleryGrid";
 import GalleryAuthActions from "../../../src/components/gallery/GalleryAuthActions";
 import { authOptions } from "../../../src/lib/auth/options";
 import { isUploader } from "../../../src/lib/auth/guards";
-import { listPublicPhotos } from "../../../src/lib/gallery/photos";
+import { listPublicPhotosCached } from "../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,10 +13,10 @@ export const dynamic = "force-dynamic";
 export default async function GalleryAllPage() {
   const session = await getServerSession(authOptions);
 
-  let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
+  let photos: Awaited<ReturnType<typeof listPublicPhotosCached>> = [];
   let photosError = false;
   try {
-    photos = await listPublicPhotos();
+    photos = await listPublicPhotosCached();
   } catch (err) {
     photosError = true;
     console.error("[gallery/all] failed to load photos:", err);

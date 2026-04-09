@@ -8,7 +8,7 @@ import { authOptions } from "../../../../src/lib/auth/options";
 import { isUploader } from "../../../../src/lib/auth/guards";
 import { buildAlbumSummaries, filterPhotosByAlbumSlug } from "../../../../src/lib/gallery/albums";
 import { getOrCreatePhotoNarratives } from "../../../../src/lib/gallery/photoNarratives";
-import { listPublicPhotos } from "../../../../src/lib/gallery/photos";
+import { listPublicPhotosCached } from "../../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,10 +17,10 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
   const slug = props.params.slug;
   const session = await getServerSession(authOptions);
 
-  let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
+  let photos: Awaited<ReturnType<typeof listPublicPhotosCached>> = [];
   let photosError = false;
   try {
-    photos = await listPublicPhotos();
+    photos = await listPublicPhotosCached();
   } catch (err) {
     photosError = true;
     console.error("[gallery/albums] failed to load photos:", err);

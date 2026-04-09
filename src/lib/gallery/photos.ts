@@ -1,4 +1,5 @@
 import { sql } from "../db";
+import { unstable_cache } from "next/cache";
 
 export type PhotoRow = {
   id: string;
@@ -44,3 +45,12 @@ export async function listPublicPhotos(): Promise<PhotoRow[]> {
   return rows;
 }
 
+/**
+ * Cached variant to reduce DB load for SSR pages.
+ * Note: write paths (upload/delete) currently rely on short revalidate window rather than explicit invalidation.
+ */
+export const listPublicPhotosCached = unstable_cache(
+  async () => listPublicPhotos(),
+  ["gallery:publicPhotos:v1"],
+  { revalidate: 60 },
+);
