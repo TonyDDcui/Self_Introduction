@@ -7,10 +7,18 @@
   flex-wrap: wrap;
 }
 
-.pill {
+.identity {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--ring);
   background: linear-gradient(
@@ -84,8 +92,14 @@
   box-shadow: var(--shadow-whisper);
 }
 
-.labelShort {
+.labelStack {
   display: none;
+}
+
+.labelStackSub {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 2px;
 }
 
 @media (max-width: 520px) {
@@ -101,9 +115,14 @@
   }
 
   .pill {
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 10px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .identity {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
 
   .loginLabel {
@@ -119,7 +138,10 @@
   .labelLong {
     display: none;
   }
-  .labelShort {
-    display: inline;
+  .labelStack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.05;
   }
 }

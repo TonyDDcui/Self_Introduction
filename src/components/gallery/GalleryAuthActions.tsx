@@ -20,20 +20,22 @@ export default function GalleryAuthActions(props: {
       {session ? (
         <>
           <div className={styles.pill}>
-            {avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className={styles.avatar} src={avatarUrl} alt="GitHub avatar" />
-            ) : (
-              <span aria-hidden="true" className={styles.avatarFallback}>
-                {loginLabel ? String(loginLabel).slice(0, 1).toUpperCase() : "U"}
-              </span>
-            )}
+            <span className={styles.identity}>
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className={styles.avatar} src={avatarUrl} alt="GitHub avatar" />
+              ) : (
+                <span aria-hidden="true" className={styles.avatarFallback}>
+                  {loginLabel ? String(loginLabel).slice(0, 1).toUpperCase() : "U"}
+                </span>
+              )}
 
-            <span
-              className={styles.loginLabel}
-              title={loginLabel ? String(loginLabel) : undefined}
-            >
-              {loginLabel ? String(loginLabel) : "已登录"}
+              <span
+                className={styles.loginLabel}
+                title={loginLabel ? String(loginLabel) : undefined}
+              >
+                {loginLabel ? String(loginLabel) : "已登录"}
+              </span>
             </span>
 
             <Link
@@ -47,8 +49,9 @@ export default function GalleryAuthActions(props: {
           {canUpload ? (
             <Link href="/gallery/upload" className={styles.button}>
               <span className={styles.labelLong}>添加照片</span>
-              <span className={styles.labelShort} aria-hidden="true">
-                上传
+              <span className={styles.labelStack} aria-hidden="true">
+                <span>上传</span>
+                <span className={styles.labelStackSub}>照片</span>
               </span>
             </Link>
           ) : null}
@@ -59,8 +62,9 @@ export default function GalleryAuthActions(props: {
           className={styles.button}
         >
           <span className={styles.labelLong}>使用 GitHub 登录</span>
-          <span className={styles.labelShort} aria-hidden="true">
-            GitHub 登录
+          <span className={styles.labelStack} aria-hidden="true">
+            <span>GitHub</span>
+            <span className={styles.labelStackSub}>登录</span>
           </span>
         </Link>
       )}
