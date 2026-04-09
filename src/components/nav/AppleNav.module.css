@@ -82,8 +82,8 @@
 }
 
 .avatar {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
   object-fit: cover;

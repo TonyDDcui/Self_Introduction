@@ -28,8 +28,8 @@ export default function AppleNav() {
               className={styles.avatar}
               src="https://github.com/TonyDDcui.png"
               alt="GitHub avatar"
-              width={26}
-              height={26}
+              width={30}
+              height={30}
             />
           </Link>
         </div>
