@@ -29,6 +29,7 @@
   },
   "homepage": "https://tonyddcui.com",
   "dependencies": {
+    "@vercel/blob": "^2.3.3",
     "@vercel/postgres": "^0.10.0",
     "gray-matter": "^4.0.3",
     "next": "^14.2.0",
