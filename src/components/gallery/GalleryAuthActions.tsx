@@ -46,7 +46,10 @@ export default function GalleryAuthActions(props: {
 
           {canUpload ? (
             <Link href="/gallery/upload" className={styles.button}>
-              添加照片
+              <span className={styles.labelLong}>添加照片</span>
+              <span className={styles.labelShort} aria-hidden="true">
+                上传
+              </span>
             </Link>
           ) : null}
         </>
@@ -55,10 +58,12 @@ export default function GalleryAuthActions(props: {
           href={`/api/auth/signin?callbackUrl=${encodeURIComponent(signInCallbackUrl)}`}
           className={styles.button}
         >
-          使用 GitHub 登录
+          <span className={styles.labelLong}>使用 GitHub 登录</span>
+          <span className={styles.labelShort} aria-hidden="true">
+            GitHub 登录
+          </span>
         </Link>
       )}
     </div>
   );
 }
-
