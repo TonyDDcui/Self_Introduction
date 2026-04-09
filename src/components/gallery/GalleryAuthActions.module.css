@@ -7,13 +7,6 @@
   flex-wrap: wrap;
 }
 
-.identity {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
 .pill {
   display: inline-flex;
   align-items: center;
@@ -92,14 +85,8 @@
   box-shadow: var(--shadow-whisper);
 }
 
-.labelStack {
+.labelShort {
   display: none;
-}
-
-.labelStackSub {
-  font-size: 12px;
-  opacity: 0.85;
-  margin-top: 2px;
 }
 
 @media (max-width: 520px) {
@@ -115,14 +102,8 @@
   }
 
   .pill {
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .identity {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    gap: 8px;
+    padding: 6px 10px;
   }
 
   .loginLabel {
@@ -138,10 +119,7 @@
   .labelLong {
     display: none;
   }
-  .labelStack {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.05;
+  .labelShort {
+    display: inline;
   }
 }

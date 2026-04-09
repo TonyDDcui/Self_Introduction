@@ -46,6 +46,7 @@ export default async function GalleryPage() {
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",
+            flexWrap: "wrap",
             gap: 16,
           }}
         >

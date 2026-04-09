@@ -82,6 +82,7 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",
+            flexWrap: "wrap",
             gap: 16,
           }}
         >
