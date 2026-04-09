@@ -10,6 +10,11 @@ export type AlbumNarrativeRow = {
   updated_at: string | Date;
 };
 
+export type AlbumNarrativeResult = {
+  narrative: string | null;
+  debug?: string;
+};
+
 async function ensureTable() {
   // 防呆：即使忘了跑 scripts/db/init.sql，也尽量不让线上直接 500
   // 注意：这会增加一次轻量 DDL 检查请求，但只在首次调用时触发（PG 会缓存 plan）
@@ -75,15 +80,20 @@ export async function getOrCreateAlbumNarrative(input: {
   slug: string;
   title: string;
   photos: PhotoRow[];
-}): Promise<string | null> {
+  debug?: boolean;
+}): Promise<AlbumNarrativeResult> {
   const existing = await getAlbumNarrative(input.slug);
-  if (existing) return existing;
+  if (existing) return { narrative: existing };
 
   // 如果没有照片，就不生成（避免被刷无效 slug）
-  if (!input.photos.length) return null;
+  if (!input.photos.length) {
+    return { narrative: null, debug: input.debug ? "ALBUM_EMPTY" : undefined };
+  }
 
   // 没配置 API key 时，不阻断页面，只返回 null
-  if (!process.env.EDGEFN_API_KEY) return null;
+  if (!process.env.EDGEFN_API_KEY) {
+    return { narrative: null, debug: input.debug ? "EDGEFN_API_KEY_NOT_SET" : undefined };
+  }
 
   try {
     const prompt = buildPrompt(input);
@@ -102,10 +112,10 @@ export async function getOrCreateAlbumNarrative(input: {
       narrativeMd: narrative,
     });
 
-    return narrative;
+    return { narrative };
   } catch (err) {
-    console.error("[gallery/albums] narrative generation failed:", err);
-    return null;
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[gallery/albums] narrative generation failed:", msg);
+    return { narrative: null, debug: input.debug ? msg : undefined };
   }
 }
-

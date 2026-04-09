@@ -35,8 +35,8 @@ export async function edgefnChatComplete(input: {
       authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      // 你的 API 侧固定模型的话，这个字段通常会被忽略；保留一个默认值用于兼容
-      model: process.env.EDGEFN_MODEL || "default",
+      // 如你的 API 侧固定模型，可不传；如网关要求必须传，可通过 EDGEFN_MODEL 配置
+      ...(process.env.EDGEFN_MODEL ? { model: process.env.EDGEFN_MODEL } : {}),
       messages: input.messages,
       temperature: input.temperature ?? 0.7,
       max_tokens: input.maxTokens ?? 600,
@@ -55,4 +55,3 @@ export async function edgefnChatComplete(input: {
   }
   return content;
 }
-

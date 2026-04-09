@@ -63,11 +63,14 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
   const albumPhotos = filterPhotosByAlbumSlug(photos, slug);
 
   const canUpload = isUploader(session);
-  const narrative = await getOrCreateAlbumNarrative({
+  const narrativeResult = await getOrCreateAlbumNarrative({
     slug,
     title: album.title,
     photos: albumPhotos,
+    debug: canUpload,
   });
+  const narrative = narrativeResult.narrative;
+  const narrativeDebug = narrativeResult.debug;
 
   return (
     <main
@@ -127,7 +130,27 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
           />
         </header>
 
-        {narrative ? <AlbumNarrative narrative={narrative} /> : null}
+        {narrative ? (
+          <AlbumNarrative narrative={narrative} />
+        ) : canUpload && narrativeDebug ? (
+          <section
+            style={{
+              marginTop: 14,
+              padding: "14px 14px 16px",
+              borderRadius: "var(--radius-12)",
+              border: "1px solid var(--ring)",
+              background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
+              boxShadow: "var(--shadow-whisper)",
+            }}
+          >
+            <div style={{ fontWeight: 600, letterSpacing: "-0.02em" }}>
+              AI 配文未生成（仅管理员可见）
+            </div>
+            <div style={{ marginTop: 8, color: "var(--text-secondary)", fontSize: 13 }}>
+              <code style={{ fontFamily: "var(--font-mono)" }}>{narrativeDebug}</code>
+            </div>
+          </section>
+        ) : null}
 
         <div style={{ marginTop: 18 }}>
           {albumPhotos.length === 0 ? (
