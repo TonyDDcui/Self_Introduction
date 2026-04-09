@@ -28,8 +28,8 @@ export async function edgefnChatComplete(input: {
     throw new Error("EDGEFN_API_KEY_NOT_SET");
   }
 
-  // EdgeFn 网关若要求必填 model，则用环境变量；否则给一个合理默认值防止 400
-  const model = process.env.EDGEFN_MODEL || "gpt-4o-mini";
+  // EdgeFn 网关要求必填 model：优先使用环境变量，否则使用默认模型名
+  const model = process.env.EDGEFN_MODEL || "DeepSeek-R1-Distill-Qwen-14B";
 
   const res = await fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
