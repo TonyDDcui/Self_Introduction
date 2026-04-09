@@ -111,9 +111,7 @@
 
 .link {
   /* Apple-ish type */
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji",
-    "Segoe UI Emoji";
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.012em;

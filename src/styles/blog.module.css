@@ -5,8 +5,7 @@
 }
 
 .pageTitle {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-display);
   font-size: 40px;
   line-height: 1.1;
   font-weight: 600;
@@ -67,8 +66,7 @@
 }
 
 .postTitle {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-display);
   font-size: 40px;
   line-height: 1.1;
   font-weight: 600;
@@ -117,8 +115,7 @@
 }
 
 .prose :where(h1) {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-display);
   font-size: 40px;
   line-height: 1.1;
   font-weight: 600;
@@ -127,8 +124,7 @@
 }
 
 .prose :where(h2) {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   line-height: 1.14;
   font-weight: 400;
@@ -169,8 +165,7 @@
 }
 
 .prose :where(code) {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: 0.95em;
   background: rgba(0, 0, 0, 0.06);
   border-radius: 6px;
@@ -198,4 +193,3 @@
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   margin: 28px 0;
 }
-

@@ -10,6 +10,22 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Apple-ish system font stack (SF Pro on Apple devices, system-ui elsewhere) */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "SF Pro Text", "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica,
+    Arial, "PingFang SC", "PingFang HK", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", "Noto Sans CJK TC", sans-serif;
+
+  --font-display: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "SF Pro Display", "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica,
+    Arial, "PingFang SC", "PingFang HK", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", "Noto Sans CJK TC", sans-serif;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
 html,
 body {
   height: 100%;
@@ -20,8 +36,7 @@ body {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   font-size: 17px;
   line-height: 1.47;
   letter-spacing: -0.374px;
@@ -43,6 +58,13 @@ button,
 textarea,
 select {
   font: inherit;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
 }
 
 a {

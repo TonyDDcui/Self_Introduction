@@ -60,7 +60,7 @@
   font-weight: 600;
   line-height: 1.07;
   letter-spacing: -0.28px;
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: var(--font-display);
 }
 
 .subtitle {
