@@ -4,6 +4,8 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "../../../../src/lib/auth/options";
 import { isUploader } from "../../../../src/lib/auth/guards";
+import { getClientIp, assertSameOrigin, json429 } from "../../../../src/lib/security/requestGuards";
+import { enforceRateLimit } from "../../../../src/lib/security/rateLimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,6 +27,27 @@ const ALLOWED_IMAGE_TYPES = [
  * - 本路由仅负责：鉴权 + 生成 upload token + 接收 upload 完成回调
  */
 export async function POST(request: Request): Promise<NextResponse> {
+  const sameOrigin = assertSameOrigin(request);
+  if (!sameOrigin.ok) {
+    return NextResponse.json({ ok: false, reason: sameOrigin.reason }, { status: 403 });
+  }
+
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
+  }
+  if (!isUploader(session)) {
+    return NextResponse.json({ ok: false, reason: "forbidden" }, { status: 403 });
+  }
+
+  const ip = getClientIp(request);
+  const rl = await enforceRateLimit({
+    key: `api:gallery:blob:ip=${ip}:actor=uploader`,
+    limit: 60,
+    windowSeconds: 60,
+  });
+  if (!rl.ok) return json429({ resetAt: rl.resetAt, retryAfterSeconds: rl.retryAfterSeconds });
+
   const body = (await request.json()) as HandleUploadBody;
 
   try {
@@ -32,7 +55,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       body,
       request,
       onBeforeGenerateToken: async (pathname) => {
-        const session = await getServerSession(authOptions);
+        // 复用外层校验结果：避免重复读取 session
         if (!session) throw new Error("Not authenticated");
         if (!isUploader(session)) throw new Error("Forbidden");
 
