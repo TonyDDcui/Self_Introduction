@@ -5,7 +5,7 @@
   right: 0;
   z-index: 1000;
 
-  height: 56px;
+  height: var(--nav-height);
   width: 100%;
 
   display: flex;
@@ -112,9 +112,9 @@
 .link {
   /* Apple-ish type */
   font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.012em;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.016em;
   text-decoration: none;
   line-height: 1;
   color: var(--text-secondary);
@@ -131,6 +131,6 @@
     gap: 14px;
   }
   .link {
-    font-size: 13px;
+    font-size: 14px;
   }
 }

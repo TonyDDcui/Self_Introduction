@@ -24,6 +24,9 @@
 
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
+
+  /* Layout */
+  --nav-height: 64px;
 }
 
 html,

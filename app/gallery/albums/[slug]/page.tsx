@@ -2,11 +2,13 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
+import AlbumNarrative from "../../../../src/components/gallery/AlbumNarrative";
 import GalleryGrid from "../../../../src/components/gallery/GalleryGrid";
 import GalleryAuthActions from "../../../../src/components/gallery/GalleryAuthActions";
 import { authOptions } from "../../../../src/lib/auth/options";
 import { isUploader } from "../../../../src/lib/auth/guards";
 import { buildAlbumSummaries, filterPhotosByAlbumSlug } from "../../../../src/lib/gallery/albums";
+import { getOrCreateAlbumNarrative } from "../../../../src/lib/gallery/albumNarratives";
 import { listPublicPhotos } from "../../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
@@ -61,6 +63,11 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
   const albumPhotos = filterPhotosByAlbumSlug(photos, slug);
 
   const canUpload = isUploader(session);
+  const narrative = await getOrCreateAlbumNarrative({
+    slug,
+    title: album.title,
+    photos: albumPhotos,
+  });
 
   return (
     <main
@@ -119,6 +126,8 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
             signOutCallbackUrl={`/gallery/albums/${encodeURIComponent(slug)}`}
           />
         </header>
+
+        {narrative ? <AlbumNarrative narrative={narrative} /> : null}
 
         <div style={{ marginTop: 18 }}>
           {albumPhotos.length === 0 ? (

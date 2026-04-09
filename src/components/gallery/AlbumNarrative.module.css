@@ -1,0 +1,21 @@
+.wrap {
+  margin-top: 14px;
+  padding: 14px 14px 16px;
+  border-radius: var(--radius-12);
+  border: 1px solid var(--ring);
+  background: color-mix(in srgb, var(--surface-1) 84%, transparent);
+  box-shadow: var(--shadow-whisper);
+}
+
+.p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.018em;
+  color: var(--text-secondary);
+}
+
+.p + .p {
+  margin-top: 10px;
+}
+

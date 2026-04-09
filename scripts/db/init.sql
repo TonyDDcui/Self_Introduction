@@ -20,3 +20,12 @@ create table if not exists photos (
 create index if not exists idx_photos_published_at on photos (published_at desc);
 create index if not exists idx_photos_visibility on photos (visibility);
 create index if not exists idx_photos_tags on photos using gin (tags);
+
+-- Album narratives (AI-generated captions) for /gallery/albums/[slug]
+create table if not exists album_narratives (
+  slug text primary key,
+  title text,
+  narrative_md text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
