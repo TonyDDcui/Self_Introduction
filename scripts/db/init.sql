@@ -40,3 +40,11 @@ create table if not exists photo_narratives (
 );
 
 create index if not exists idx_photo_narratives_album_slug on photo_narratives (album_slug);
+
+-- Rate limit counters (for abuse protection)
+create table if not exists rate_limits (
+  key text primary key,
+  count int not null,
+  reset_at timestamptz not null,
+  updated_at timestamptz not null default now()
+);
