@@ -6,7 +6,13 @@
   display: flex;
   justify-content: center;
 
-  padding: 88px 0;
+  padding: 56px 0 44px;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 34px 0 28px;
+  }
 }
 
 .inner {

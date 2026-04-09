@@ -7,7 +7,13 @@
   display: flex;
   justify-content: center;
 
-  padding: 88px 0 96px;
+  padding: 56px 0 64px;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 34px 0 44px;
+  }
 }
 
 .inner {

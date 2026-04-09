@@ -3,11 +3,17 @@
   display: flex;
   justify-content: center;
 
-  padding: 96px 0 88px;
+  padding: 84px 0 56px;
 
   /* Claude: parchment */
   background: var(--bg-page);
   color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 64px 0 40px;
+  }
 }
 
 .inner {

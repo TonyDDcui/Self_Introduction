@@ -19,6 +19,15 @@
   overflow: hidden;
 }
 
+@media (max-width: 640px) {
+  .glass {
+    /* 移动端不要顶格：参考 claude.com 的留白 */
+    width: 92%;
+    padding: 16px 0;
+    border-radius: 16px;
+  }
+}
+
 /* 纸质纹理：低频噪点 + 纤维方向纹理（克制） */
 .glass::before {
   content: "";
@@ -51,4 +60,3 @@
 :global(html[data-mode="light"]) .glass::before {
   opacity: 0.22;
 }
-
