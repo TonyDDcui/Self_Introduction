@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .avatarLink {
@@ -82,8 +82,8 @@
 }
 
 .avatar {
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
   object-fit: cover;
