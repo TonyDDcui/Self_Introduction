@@ -58,9 +58,9 @@
   max-width: 980px;
   height: 100%;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
 
   padding: 0 16px;
 }
@@ -68,9 +68,8 @@
 .left {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 12px;
-  flex: 1 1 auto;
-  min-width: 0;
 }
 
 .avatarLink {
@@ -98,9 +97,8 @@
 
   display: flex;
   align-items: center;
-  gap: 16px;
-  flex: 1 1 auto;
-  min-width: 0;
+  justify-content: center;
+  gap: 18px;
 }
 
 .controls {
@@ -112,7 +110,13 @@
 }
 
 .link {
-  font-size: 12px;
+  /* Apple-ish type */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
   text-decoration: none;
   line-height: 1;
   color: var(--text-secondary);
@@ -122,4 +126,13 @@
 .link:focus-visible {
   text-decoration: none;
   color: var(--text-primary);
+}
+
+@media (max-width: 420px) {
+  .list {
+    gap: 14px;
+  }
+  .link {
+    font-size: 13px;
+  }
 }

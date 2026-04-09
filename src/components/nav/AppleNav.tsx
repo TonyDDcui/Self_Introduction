@@ -32,17 +32,17 @@ export default function AppleNav() {
               height={26}
             />
           </Link>
-
-          <ul className={styles.list}>
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link className={styles.link} href={item.href}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
+
+        <ul className={styles.list}>
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <Link className={styles.link} href={item.href}>
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
         <div className={styles.controls}>
           <TocMenu />
           <ModeToggle />
