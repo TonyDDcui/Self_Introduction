@@ -11,7 +11,7 @@ export type EdgeFnChatMessage = {
 type EdgeFnChatResponse = {
   // 兼容 OpenAI-like / EdgeFn 不同返回结构
   choices?: Array<{
-    message?: { content?: unknown };
+    message?: Record<string, unknown>;
     text?: unknown;
   }>;
   output_text?: unknown;
@@ -28,6 +28,16 @@ function getEdgeFnApiKey() {
 
 function extractTextFromUnknownContent(content: unknown): string {
   if (typeof content === "string") return content;
+  if (content && typeof content === "object" && !Array.isArray(content)) {
+    // 有些网关会把内容包成对象：{ text: "..."} / { content: "..."} / { output_text: "..." }
+    const obj = content as Record<string, unknown>;
+    const t = obj.text;
+    if (typeof t === "string") return t;
+    const c = obj.content;
+    if (typeof c === "string") return c;
+    const ot = obj.output_text;
+    if (typeof ot === "string") return ot;
+  }
   if (!Array.isArray(content)) return "";
 
   // 兼容 content parts: string | {text:string} | {content:string} | {type:'text', text:string}
@@ -48,9 +58,25 @@ function extractTextFromUnknownContent(content: unknown): string {
 
 function extractChatContent(data: EdgeFnChatResponse): string {
   const c0 = data.choices?.[0];
-  const msg = c0?.message?.content;
-  const msgText = extractTextFromUnknownContent(msg);
-  if (msgText) return msgText;
+  const msgObj = c0?.message;
+  if (msgObj && typeof msgObj === "object") {
+    // 首选“正文”字段
+    const msgText = extractTextFromUnknownContent(msgObj.content);
+    if (msgText) return msgText;
+    const msgOutputText = extractTextFromUnknownContent(msgObj.output_text);
+    if (msgOutputText) return msgOutputText;
+    const msgFinal = extractTextFromUnknownContent(msgObj.final);
+    if (msgFinal) return msgFinal;
+    const msgTextField = extractTextFromUnknownContent(msgObj.text);
+    if (msgTextField) return msgTextField;
+
+    // 兜底：某些模型会只返回 reasoning / reasoning_content（尽量避免用它，但至少不空）
+    for (const [k, v] of Object.entries(msgObj)) {
+      if (!k.toLowerCase().startsWith("reasoning")) continue;
+      const r = extractTextFromUnknownContent(v);
+      if (r) return r;
+    }
+  }
 
   const choiceText = c0?.text;
   if (typeof choiceText === "string" && choiceText.trim()) return choiceText;

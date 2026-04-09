@@ -109,8 +109,9 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      if (!looksLikeUnsupportedMultimodal(msg)) throw e;
-      // 回退纯文本
+      // 若多模态不支持，或多模态返回空响应，则回退纯文本重试一次
+      if (!looksLikeUnsupportedMultimodal(msg) && !msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
+      // 回退纯文本（不带图片）
     }
   }
 
