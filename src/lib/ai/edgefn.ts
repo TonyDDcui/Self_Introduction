@@ -28,6 +28,9 @@ export async function edgefnChatComplete(input: {
     throw new Error("EDGEFN_API_KEY_NOT_SET");
   }
 
+  // EdgeFn 网关若要求必填 model，则用环境变量；否则给一个合理默认值防止 400
+  const model = process.env.EDGEFN_MODEL || "gpt-4o-mini";
+
   const res = await fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
@@ -35,8 +38,7 @@ export async function edgefnChatComplete(input: {
       authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      // 如你的 API 侧固定模型，可不传；如网关要求必须传，可通过 EDGEFN_MODEL 配置
-      ...(process.env.EDGEFN_MODEL ? { model: process.env.EDGEFN_MODEL } : {}),
+      model,
       messages: input.messages,
       temperature: input.temperature ?? 0.7,
       max_tokens: input.maxTokens ?? 600,
