@@ -9,10 +9,18 @@ import { listPublicPhotos } from "../../src/lib/gallery/photos";
 export const dynamic = "force-dynamic";
 
 export default async function GalleryPage() {
-  const [photos, session] = await Promise.all([
-    listPublicPhotos(),
-    getServerSession(authOptions),
-  ]);
+  const sessionPromise = getServerSession(authOptions);
+
+  let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
+  let photosError = false;
+  try {
+    photos = await listPublicPhotos();
+  } catch (err) {
+    photosError = true;
+    console.error("[gallery] failed to load photos:", err);
+  }
+
+  const session = await sessionPromise;
 
   const canUpload = isUploader(session);
 
@@ -82,7 +90,21 @@ export default async function GalleryPage() {
         </header>
 
         <div style={{ marginTop: 18 }}>
-          {photos.length === 0 ? (
+          {photosError ? (
+            <div
+              style={{
+                padding: 16,
+                borderRadius: "var(--radius-12)",
+                border: "1px solid var(--ring)",
+                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
+                boxShadow: "var(--shadow-whisper)",
+                color: "var(--text-secondary)",
+              }}
+            >
+              Gallery 数据源尚未配置完成（请确认 Vercel Postgres 已创建并执行
+              <code style={{ marginLeft: 6 }}>scripts/db/init.sql</code>）。
+            </div>
+          ) : photos.length === 0 ? (
             <div
               style={{
                 padding: 16,
