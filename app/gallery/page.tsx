@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
-<<<<<<< ours
-import GalleryGrid from "../../src/components/gallery/GalleryGrid";
-import { authOptions } from "../../src/lib/auth/options";
-import { isUploader } from "../../src/lib/auth/guards";
-=======
 import AlbumGrid from "../../src/components/gallery/AlbumGrid";
 import { authOptions } from "../../src/lib/auth/options";
 import { isUploader } from "../../src/lib/auth/guards";
 import { buildAlbumSummaries } from "../../src/lib/gallery/albums";
->>>>>>> theirs
 import { listPublicPhotos } from "../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
@@ -37,10 +31,7 @@ export default async function GalleryPage() {
   const avatarUrl = session?.user?.image || null;
 
   const canUpload = isUploader(session);
-<<<<<<< ours
-=======
   const albums = buildAlbumSummaries(photos);
->>>>>>> theirs
 
   return (
     <main
