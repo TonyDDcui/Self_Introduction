@@ -7,6 +7,9 @@ import { isUploader } from "../../../../src/lib/auth/guards";
 import { sql } from "../../../../src/lib/db";
 import { vercelBlobProvider } from "../../../../src/lib/storage/vercelBlobProvider";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
@@ -143,6 +146,7 @@ export async function POST(req: Request) {
     const id = rows[0]?.id;
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (err) {
+    console.error("[api/gallery/upload][POST] failed:", err);
     if (putResult?.pathname) {
       try {
         await vercelBlobProvider.delImage(putResult.pathname);
@@ -161,4 +165,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

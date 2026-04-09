@@ -5,6 +5,9 @@ import { isUploader } from "../../../../src/lib/auth/guards";
 import { sql } from "../../../../src/lib/db";
 import { listPublicPhotos } from "../../../../src/lib/gallery/photos";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 function asNonEmptyString(v: unknown): string | null {
   if (typeof v !== "string") return null;
   const s = v.trim();
@@ -37,8 +40,28 @@ function normalizeTags(v: unknown): string[] {
 }
 
 export async function GET() {
-  const rows = await listPublicPhotos();
-  return NextResponse.json(rows, { status: 200 });
+  try {
+    const rows = await listPublicPhotos();
+    return NextResponse.json(rows, { status: 200 });
+  } catch (err) {
+    console.error("[api/gallery/photos][GET] failed:", err);
+
+    const hasDbEnv = Boolean(
+      process.env.POSTGRES_URL ||
+        process.env.POSTGRES_URL_NON_POOLING ||
+        process.env.DATABASE_URL,
+    );
+
+    return NextResponse.json(
+      {
+        ok: false,
+        reason: "internal_error",
+        message: "读取 Gallery 数据失败（请查看 Vercel Logs 获取具体报错）。",
+        hasDbEnv,
+      },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(request: Request) {
@@ -81,27 +104,35 @@ export async function POST(request: Request) {
   const visibility =
     asOptionalString((body as Record<string, unknown>).visibility) ?? "public";
 
-  const { rows } = await sql<{ id: string }>`
-    insert into photos (
-      blob_url,
-      blob_pathname,
-      title,
-      caption,
-      category,
-      tags,
-      visibility
-    ) values (
-      ${blobUrl},
-      ${blobPathname},
-      ${title},
-      ${caption},
-      ${category},
-      coalesce(string_to_array(${tagsCsv}, ','), '{}'::text[]),
-      ${visibility}
-    )
-    returning id
-  `;
+  try {
+    const { rows } = await sql<{ id: string }>`
+      insert into photos (
+        blob_url,
+        blob_pathname,
+        title,
+        caption,
+        category,
+        tags,
+        visibility
+      ) values (
+        ${blobUrl},
+        ${blobPathname},
+        ${title},
+        ${caption},
+        ${category},
+        coalesce(string_to_array(${tagsCsv}, ','), '{}'::text[]),
+        ${visibility}
+      )
+      returning id
+    `;
 
-  const id = rows[0]?.id;
-  return NextResponse.json({ ok: true, id }, { status: 201 });
+    const id = rows[0]?.id;
+    return NextResponse.json({ ok: true, id }, { status: 201 });
+  } catch (err) {
+    console.error("[api/gallery/photos][POST] failed:", err);
+    return NextResponse.json(
+      { ok: false, reason: "internal_error" },
+      { status: 500 },
+    );
+  }
 }
