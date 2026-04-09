@@ -1,25 +1,12 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import type { Session } from "next-auth";
 
 import GalleryGrid from "../../src/components/gallery/GalleryGrid";
-import { authOptions } from "../../src/lib/auth/options";
-import { isUploader } from "../../src/lib/auth/guards";
 import { listPublicPhotos } from "../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export default async function GalleryPage() {
-  let session: Session | null = null;
-  let sessionError = false;
-  try {
-    session = (await getServerSession(authOptions)) as Session | null;
-  } catch (err) {
-    sessionError = true;
-    console.error("[gallery] getServerSession failed:", err);
-  }
-
   let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
   let photosError = false;
   try {
@@ -28,8 +15,6 @@ export default async function GalleryPage() {
     photosError = true;
     console.error("[gallery] failed to load photos:", err);
   }
-
-  const canUpload = !sessionError && isUploader(session);
 
   return (
     <main
@@ -70,50 +55,31 @@ export default async function GalleryPage() {
             </p>
           </div>
 
-          {canUpload ? (
-            <Link
-              href="/gallery/upload"
-              style={{
-                flex: "0 0 auto",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 8,
-                borderRadius: "var(--radius-pill)",
-                border: "1px solid var(--ring)",
-                background:
-                  "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
-                color: "var(--text-primary)",
-                padding: "8px 14px",
-                fontSize: 14,
-                lineHeight: 1,
-                textDecoration: "none",
-                boxShadow: "var(--shadow-whisper)",
-              }}
-            >
-              添加照片
-            </Link>
-          ) : null}
+          <Link
+            href="/gallery/upload"
+            style={{
+              flex: "0 0 auto",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              borderRadius: "var(--radius-pill)",
+              border: "1px solid var(--ring)",
+              background:
+                "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
+              color: "var(--text-primary)",
+              padding: "8px 14px",
+              fontSize: 14,
+              lineHeight: 1,
+              textDecoration: "none",
+              boxShadow: "var(--shadow-whisper)",
+            }}
+          >
+            添加照片（需登录）
+          </Link>
         </header>
 
         <div style={{ marginTop: 18 }}>
-          {sessionError ? (
-            <div
-              style={{
-                marginBottom: 12,
-                padding: 12,
-                borderRadius: "var(--radius-12)",
-                border: "1px solid var(--ring)",
-                background:
-                  "color-mix(in srgb, var(--surface-1) 84%, transparent)",
-                boxShadow: "var(--shadow-whisper)",
-                color: "var(--text-secondary)",
-              }}
-            >
-              登录状态获取失败（通常是 NEXTAUTH_SECRET / NEXTAUTH_URL 未在 Production
-              环境配置）。不影响公开浏览，但会隐藏“添加照片”入口。
-            </div>
-          ) : null}
           {photosError ? (
             <div
               style={{
