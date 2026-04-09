@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,6 +17,14 @@ function formatError(res: Response, data: UploadResponse | null) {
   return `上传失败（${res.status}）`;
 }
 
+function randomId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (crypto as any).randomUUID() as string;
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export default function UploadForm() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -28,11 +37,43 @@ export default function UploadForm() {
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+    const file = fd.get("file");
+
+    if (!(file instanceof File)) {
+      setError("缺少图片文件（file）");
+      setSubmitting(false);
+      return;
+    }
 
     try {
-      const res = await fetch("/api/gallery/upload", {
+      // 关键修复：
+      // - Vercel 服务端上传受限于 4.5MB request body，容易触发 413
+      // - 采用 Vercel Blob Client Upload，让文件从浏览器直传到 Blob
+      const ext =
+        (file.name.split(".").pop() || "").toLowerCase().replace(/[^a-z0-9]/g, "") ||
+        "img";
+      const filename = `gallery/${randomId()}.${ext}`;
+
+      const blob = await upload(filename, file, {
+        access: "public",
+        handleUploadUrl: "/api/gallery/blob",
+      });
+
+      // 上传完成后再写数据库（小 JSON，不会触发 body 限制）
+      const payload = {
+        blobUrl: blob.url,
+        blobPathname: blob.pathname,
+        title: fd.get("title"),
+        caption: fd.get("caption"),
+        category: fd.get("category"),
+        tags: fd.get("tags"),
+        visibility: "public",
+      };
+
+      const res = await fetch("/api/gallery/photos", {
         method: "POST",
-        body: fd,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const data = (await res.json().catch(() => null)) as UploadResponse | null;
@@ -148,4 +189,3 @@ export default function UploadForm() {
     </section>
   );
 }
-
