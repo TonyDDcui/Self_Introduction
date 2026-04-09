@@ -33,29 +33,27 @@ export default async function Writing() {
           <ul className={styles.list}>
             {posts.map((p) => (
               <li key={p.slug} className={styles.item}>
-                <h3 className={styles.itemTitle}>
-                  <Link className={styles.itemLink} href={`/blog/${p.slug}`}>
-                    {p.title}
-                  </Link>
-                </h3>
+                <Link className={styles.itemLinkWrap} href={`/blog/${p.slug}`}>
+                  <h3 className={styles.itemTitle}>{p.title}</h3>
 
-                {p.date ? (
-                  <p className={styles.meta}>
-                    <time dateTime={p.date}>{p.date}</time>
-                  </p>
-                ) : null}
+                  {p.date ? (
+                    <p className={styles.meta}>
+                      <time dateTime={p.date}>{p.date}</time>
+                    </p>
+                  ) : null}
 
-                {p.summary ? <p className={styles.summary}>{p.summary}</p> : null}
+                  {p.summary ? <p className={styles.summary}>{p.summary}</p> : null}
 
-                {p.tags.length ? (
-                  <div className={styles.tags} aria-label="Post tags">
-                    {p.tags.map((t) => (
-                      <span key={t} className={styles.tag}>
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
+                  {p.tags.length ? (
+                    <div className={styles.tags} aria-label="Post tags">
+                      {p.tags.map((t) => (
+                        <span key={t} className={styles.tag}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </Link>
               </li>
             ))}
           </ul>

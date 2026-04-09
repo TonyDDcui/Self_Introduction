@@ -22,7 +22,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AppleNav />
           <Reveal />
-          {children}
+          <div style={{ paddingTop: 56 }}>{children}</div>
         </ThemeProvider>
       </body>
     </html>

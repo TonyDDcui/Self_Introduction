@@ -1,22 +1,18 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
 
-<<<<<<< ours
-import GalleryGrid from "../../src/components/gallery/GalleryGrid";
-import { authOptions } from "../../src/lib/auth/options";
-import { isUploader } from "../../src/lib/auth/guards";
-=======
-import AlbumGrid from "../../src/components/gallery/AlbumGrid";
-import { authOptions } from "../../src/lib/auth/options";
-import { isUploader } from "../../src/lib/auth/guards";
-import { buildAlbumSummaries } from "../../src/lib/gallery/albums";
->>>>>>> theirs
-import { listPublicPhotos } from "../../src/lib/gallery/photos";
+import GalleryGrid from "../../../../src/components/gallery/GalleryGrid";
+import { authOptions } from "../../../../src/lib/auth/options";
+import { isUploader } from "../../../../src/lib/auth/guards";
+import { buildAlbumSummaries, filterPhotosByAlbumSlug } from "../../../../src/lib/gallery/albums";
+import { listPublicPhotos } from "../../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export default async function GalleryPage() {
+export default async function AlbumPage(props: { params: { slug: string } }) {
+  const slug = props.params.slug;
   const session = await getServerSession(authOptions);
 
   let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
@@ -25,22 +21,48 @@ export default async function GalleryPage() {
     photos = await listPublicPhotos();
   } catch (err) {
     photosError = true;
-    console.error("[gallery] failed to load photos:", err);
+    console.error("[gallery/albums] failed to load photos:", err);
   }
 
-  const loginLabel =
-    // `session.user.login` 是我们自己在 next-auth.d.ts 里扩展的字段
-    // 这里做兼容：优先 login，其次 name
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (session?.user && (session.user as any).login) || session?.user?.name || null;
+  if (photosError) {
+    // 延续 gallery 页的错误提示样式
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "var(--bg-page)",
+          color: "var(--text-primary)",
+        }}
+      >
+        <div style={{ maxWidth: 980, margin: "0 auto", padding: "24px 16px 56px" }}>
+          <div
+            style={{
+              padding: 16,
+              borderRadius: "var(--radius-12)",
+              border: "1px solid var(--ring)",
+              background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
+              boxShadow: "var(--shadow-whisper)",
+              color: "var(--text-secondary)",
+            }}
+          >
+            Gallery 数据源尚未配置完成（请确认 Vercel Postgres 已创建并执行
+            <code style={{ marginLeft: 6 }}>scripts/db/init.sql</code>）。
+          </div>
+        </div>
+      </main>
+    );
+  }
 
-  const avatarUrl = session?.user?.image || null;
-
-  const canUpload = isUploader(session);
-<<<<<<< ours
-=======
   const albums = buildAlbumSummaries(photos);
->>>>>>> theirs
+  const album = albums.find((a) => a.slug === slug);
+  if (!album) return notFound();
+
+  const albumPhotos = filterPhotosByAlbumSlug(photos, slug);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const loginLabel = (session?.user && (session.user as any).login) || session?.user?.name || null;
+  const avatarUrl = session?.user?.image || null;
+  const canUpload = isUploader(session);
 
   return (
     <main
@@ -74,14 +96,16 @@ export default async function GalleryPage() {
                 letterSpacing: "-0.4px",
               }}
             >
-              Gallery
+              {album.title}
             </h1>
             <p style={{ margin: "10px 0 0", color: "var(--text-secondary)" }}>
-              公开照片（Blob + Postgres）。
+              {album.count} 张照片
             </p>
 
             <nav style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <span style={{ color: "var(--text-primary)" }}>相册</span>
+              <Link href="/gallery" style={{ color: "var(--text-secondary)" }}>
+                ← 返回相册
+              </Link>
               <span style={{ color: "var(--text-tertiary)" }}>·</span>
               <Link href="/gallery/all" style={{ color: "var(--text-secondary)" }}>
                 全部照片
@@ -166,7 +190,7 @@ export default async function GalleryPage() {
                   </span>
 
                   <Link
-                    href="/api/auth/signout?callbackUrl=/gallery"
+                    href={`/api/auth/signout?callbackUrl=/gallery/albums/${encodeURIComponent(slug)}`}
                     style={{
                       fontSize: 13,
                       color: "var(--text-secondary)",
@@ -205,7 +229,7 @@ export default async function GalleryPage() {
               </>
             ) : (
               <Link
-                href="/api/auth/signin?callbackUrl=/gallery"
+                href={`/api/auth/signin?callbackUrl=/gallery/albums/${encodeURIComponent(slug)}`}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -230,7 +254,7 @@ export default async function GalleryPage() {
         </header>
 
         <div style={{ marginTop: 18 }}>
-          {photosError ? (
+          {albumPhotos.length === 0 ? (
             <div
               style={{
                 padding: 16,
@@ -241,27 +265,14 @@ export default async function GalleryPage() {
                 color: "var(--text-secondary)",
               }}
             >
-              Gallery 数据源尚未配置完成（请确认 Vercel Postgres 已创建并执行
-              <code style={{ marginLeft: 6 }}>scripts/db/init.sql</code>）。
-            </div>
-          ) : photos.length === 0 ? (
-            <div
-              style={{
-                padding: 16,
-                borderRadius: "var(--radius-12)",
-                border: "1px solid var(--ring)",
-                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
-                boxShadow: "var(--shadow-whisper)",
-                color: "var(--text-secondary)",
-              }}
-            >
-              暂无公开照片。
+              这个相册里还没有照片。
             </div>
           ) : (
-            <AlbumGrid albums={albums} />
+            <GalleryGrid photos={albumPhotos} />
           )}
         </div>
       </div>
     </main>
   );
 }
+

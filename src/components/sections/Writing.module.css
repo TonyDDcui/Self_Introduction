@@ -138,12 +138,16 @@
   line-height: 1.25;
 }
 
-.itemLink {
+.itemLinkWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
   color: inherit;
   text-decoration: none;
 }
 
-.itemLink:hover {
+.itemLinkWrap:hover {
   text-decoration: underline;
 }
 

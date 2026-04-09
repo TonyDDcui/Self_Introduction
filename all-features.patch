@@ -1,0 +1,1261 @@
+diff --git a/app/gallery/albums/[slug]/page.tsx b/app/gallery/albums/[slug]/page.tsx
+new file mode 100644
+index 0000000..2914d53
+--- /dev/null
++++ b/app/gallery/albums/[slug]/page.tsx
+@@ -0,0 +1,278 @@
++import Link from "next/link";
++import { getServerSession } from "next-auth";
++import { notFound } from "next/navigation";
++
++import GalleryGrid from "../../../../src/components/gallery/GalleryGrid";
++import { authOptions } from "../../../../src/lib/auth/options";
++import { isUploader } from "../../../../src/lib/auth/guards";
++import { buildAlbumSummaries, filterPhotosByAlbumSlug } from "../../../../src/lib/gallery/albums";
++import { listPublicPhotos } from "../../../../src/lib/gallery/photos";
++
++export const runtime = "nodejs";
++export const dynamic = "force-dynamic";
++
++export default async function AlbumPage(props: { params: { slug: string } }) {
++  const slug = props.params.slug;
++  const session = await getServerSession(authOptions);
++
++  let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
++  let photosError = false;
++  try {
++    photos = await listPublicPhotos();
++  } catch (err) {
++    photosError = true;
++    console.error("[gallery/albums] failed to load photos:", err);
++  }
++
++  if (photosError) {
++    // 延续 gallery 页的错误提示样式
++    return (
++      <main
++        style={{
++          minHeight: "100vh",
++          background: "var(--bg-page)",
++          color: "var(--text-primary)",
++        }}
++      >
++        <div style={{ maxWidth: 980, margin: "0 auto", padding: "24px 16px 56px" }}>
++          <div
++            style={{
++              padding: 16,
++              borderRadius: "var(--radius-12)",
++              border: "1px solid var(--ring)",
++              background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
++              boxShadow: "var(--shadow-whisper)",
++              color: "var(--text-secondary)",
++            }}
++          >
++            Gallery 数据源尚未配置完成（请确认 Vercel Postgres 已创建并执行
++            <code style={{ marginLeft: 6 }}>scripts/db/init.sql</code>）。
++          </div>
++        </div>
++      </main>
++    );
++  }
++
++  const albums = buildAlbumSummaries(photos);
++  const album = albums.find((a) => a.slug === slug);
++  if (!album) return notFound();
++
++  const albumPhotos = filterPhotosByAlbumSlug(photos, slug);
++
++  // eslint-disable-next-line @typescript-eslint/no-explicit-any
++  const loginLabel = (session?.user && (session.user as any).login) || session?.user?.name || null;
++  const avatarUrl = session?.user?.image || null;
++  const canUpload = isUploader(session);
++
++  return (
++    <main
++      style={{
++        minHeight: "100vh",
++        background: "var(--bg-page)",
++        color: "var(--text-primary)",
++      }}
++    >
++      <div
++        style={{
++          maxWidth: 980,
++          margin: "0 auto",
++          padding: "24px 16px 56px",
++        }}
++      >
++        <header
++          style={{
++            display: "flex",
++            alignItems: "flex-start",
++            justifyContent: "space-between",
++            gap: 16,
++          }}
++        >
++          <div>
++            <h1
++              style={{
++                margin: 0,
++                fontSize: 28,
++                lineHeight: 1.15,
++                letterSpacing: "-0.4px",
++              }}
++            >
++              {album.title}
++            </h1>
++            <p style={{ margin: "10px 0 0", color: "var(--text-secondary)" }}>
++              {album.count} 张照片
++            </p>
++
++            <nav style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
++              <Link href="/gallery" style={{ color: "var(--text-secondary)" }}>
++                ← 返回相册
++              </Link>
++              <span style={{ color: "var(--text-tertiary)" }}>·</span>
++              <Link href="/gallery/all" style={{ color: "var(--text-secondary)" }}>
++                全部照片
++              </Link>
++            </nav>
++          </div>
++
++          <div
++            style={{
++              flex: "0 0 auto",
++              display: "flex",
++              alignItems: "center",
++              justifyContent: "flex-end",
++              gap: 10,
++              flexWrap: "wrap",
++            }}
++          >
++            {session ? (
++              <>
++                <div
++                  style={{
++                    display: "inline-flex",
++                    alignItems: "center",
++                    gap: 10,
++                    borderRadius: "var(--radius-pill)",
++                    border: "1px solid var(--ring)",
++                    background:
++                      "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                    padding: "6px 10px",
++                    boxShadow: "var(--shadow-whisper)",
++                  }}
++                >
++                  {avatarUrl ? (
++                    // eslint-disable-next-line @next/next/no-img-element
++                    <img
++                      src={avatarUrl}
++                      alt="GitHub avatar"
++                      width={22}
++                      height={22}
++                      style={{
++                        width: 22,
++                        height: 22,
++                        borderRadius: 999,
++                        border: "1px solid var(--ring)",
++                        objectFit: "cover",
++                      }}
++                    />
++                  ) : (
++                    <span
++                      aria-hidden="true"
++                      style={{
++                        width: 22,
++                        height: 22,
++                        borderRadius: 999,
++                        border: "1px solid var(--ring)",
++                        background:
++                          "color-mix(in srgb, var(--surface-2, var(--surface-1)) 68%, transparent)",
++                        display: "inline-flex",
++                        alignItems: "center",
++                        justifyContent: "center",
++                        fontSize: 12,
++                        color: "var(--text-secondary)",
++                      }}
++                    >
++                      {loginLabel ? String(loginLabel).slice(0, 1).toUpperCase() : "U"}
++                    </span>
++                  )}
++
++                  <span
++                    style={{
++                      fontSize: 13,
++                      color: "var(--text-primary)",
++                      lineHeight: 1,
++                      maxWidth: 180,
++                      overflow: "hidden",
++                      textOverflow: "ellipsis",
++                      whiteSpace: "nowrap",
++                    }}
++                    title={loginLabel ? String(loginLabel) : undefined}
++                  >
++                    {loginLabel ? String(loginLabel) : "已登录"}
++                  </span>
++
++                  <Link
++                    href={`/api/auth/signout?callbackUrl=/gallery/albums/${encodeURIComponent(slug)}`}
++                    style={{
++                      fontSize: 13,
++                      color: "var(--text-secondary)",
++                      textDecoration: "none",
++                      padding: "4px 8px",
++                      borderRadius: 999,
++                    }}
++                  >
++                    退出
++                  </Link>
++                </div>
++
++                {canUpload ? (
++                  <Link
++                    href="/gallery/upload"
++                    style={{
++                      display: "inline-flex",
++                      alignItems: "center",
++                      justifyContent: "center",
++                      gap: 8,
++                      borderRadius: "var(--radius-pill)",
++                      border: "1px solid var(--ring)",
++                      background:
++                        "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                      color: "var(--text-primary)",
++                      padding: "8px 14px",
++                      fontSize: 14,
++                      lineHeight: 1,
++                      textDecoration: "none",
++                      boxShadow: "var(--shadow-whisper)",
++                    }}
++                  >
++                    添加照片
++                  </Link>
++                ) : null}
++              </>
++            ) : (
++              <Link
++                href={`/api/auth/signin?callbackUrl=/gallery/albums/${encodeURIComponent(slug)}`}
++                style={{
++                  display: "inline-flex",
++                  alignItems: "center",
++                  justifyContent: "center",
++                  gap: 8,
++                  borderRadius: "var(--radius-pill)",
++                  border: "1px solid var(--ring)",
++                  background:
++                    "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                  color: "var(--text-primary)",
++                  padding: "8px 14px",
++                  fontSize: 14,
++                  lineHeight: 1,
++                  textDecoration: "none",
++                  boxShadow: "var(--shadow-whisper)",
++                }}
++              >
++                使用 GitHub 登录
++              </Link>
++            )}
++          </div>
++        </header>
++
++        <div style={{ marginTop: 18 }}>
++          {albumPhotos.length === 0 ? (
++            <div
++              style={{
++                padding: 16,
++                borderRadius: "var(--radius-12)",
++                border: "1px solid var(--ring)",
++                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
++                boxShadow: "var(--shadow-whisper)",
++                color: "var(--text-secondary)",
++              }}
++            >
++              这个相册里还没有照片。
++            </div>
++          ) : (
++            <GalleryGrid photos={albumPhotos} />
++          )}
++        </div>
++      </div>
++    </main>
++  );
++}
++
+diff --git a/app/gallery/all/page.tsx b/app/gallery/all/page.tsx
+new file mode 100644
+index 0000000..b51bf22
+--- /dev/null
++++ b/app/gallery/all/page.tsx
+@@ -0,0 +1,253 @@
++import Link from "next/link";
++import { getServerSession } from "next-auth";
++
++import GalleryGrid from "../../../src/components/gallery/GalleryGrid";
++import { authOptions } from "../../../src/lib/auth/options";
++import { isUploader } from "../../../src/lib/auth/guards";
++import { listPublicPhotos } from "../../../src/lib/gallery/photos";
++
++export const runtime = "nodejs";
++export const dynamic = "force-dynamic";
++
++export default async function GalleryAllPage() {
++  const session = await getServerSession(authOptions);
++
++  let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
++  let photosError = false;
++  try {
++    photos = await listPublicPhotos();
++  } catch (err) {
++    photosError = true;
++    console.error("[gallery/all] failed to load photos:", err);
++  }
++
++  const loginLabel =
++    // eslint-disable-next-line @typescript-eslint/no-explicit-any
++    (session?.user && (session.user as any).login) || session?.user?.name || null;
++  const avatarUrl = session?.user?.image || null;
++  const canUpload = isUploader(session);
++
++  return (
++    <main
++      style={{
++        minHeight: "100vh",
++        background: "var(--bg-page)",
++        color: "var(--text-primary)",
++      }}
++    >
++      <div
++        style={{
++          maxWidth: 980,
++          margin: "0 auto",
++          padding: "24px 16px 56px",
++        }}
++      >
++        <header
++          style={{
++            display: "flex",
++            alignItems: "flex-start",
++            justifyContent: "space-between",
++            gap: 16,
++          }}
++        >
++          <div>
++            <h1
++              style={{
++                margin: 0,
++                fontSize: 28,
++                lineHeight: 1.15,
++                letterSpacing: "-0.4px",
++              }}
++            >
++              Gallery
++            </h1>
++            <p style={{ margin: "10px 0 0", color: "var(--text-secondary)" }}>
++              公开照片（Blob + Postgres）。
++            </p>
++
++            <nav style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
++              <Link href="/gallery" style={{ color: "var(--text-secondary)" }}>
++                相册
++              </Link>
++              <span style={{ color: "var(--text-tertiary)" }}>·</span>
++              <span style={{ color: "var(--text-primary)" }}>全部照片</span>
++            </nav>
++          </div>
++
++          <div
++            style={{
++              flex: "0 0 auto",
++              display: "flex",
++              alignItems: "center",
++              justifyContent: "flex-end",
++              gap: 10,
++              flexWrap: "wrap",
++            }}
++          >
++            {session ? (
++              <>
++                <div
++                  style={{
++                    display: "inline-flex",
++                    alignItems: "center",
++                    gap: 10,
++                    borderRadius: "var(--radius-pill)",
++                    border: "1px solid var(--ring)",
++                    background:
++                      "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                    padding: "6px 10px",
++                    boxShadow: "var(--shadow-whisper)",
++                  }}
++                >
++                  {avatarUrl ? (
++                    // eslint-disable-next-line @next/next/no-img-element
++                    <img
++                      src={avatarUrl}
++                      alt="GitHub avatar"
++                      width={22}
++                      height={22}
++                      style={{
++                        width: 22,
++                        height: 22,
++                        borderRadius: 999,
++                        border: "1px solid var(--ring)",
++                        objectFit: "cover",
++                      }}
++                    />
++                  ) : (
++                    <span
++                      aria-hidden="true"
++                      style={{
++                        width: 22,
++                        height: 22,
++                        borderRadius: 999,
++                        border: "1px solid var(--ring)",
++                        background:
++                          "color-mix(in srgb, var(--surface-2, var(--surface-1)) 68%, transparent)",
++                        display: "inline-flex",
++                        alignItems: "center",
++                        justifyContent: "center",
++                        fontSize: 12,
++                        color: "var(--text-secondary)",
++                      }}
++                    >
++                      {loginLabel ? String(loginLabel).slice(0, 1).toUpperCase() : "U"}
++                    </span>
++                  )}
++
++                  <span
++                    style={{
++                      fontSize: 13,
++                      color: "var(--text-primary)",
++                      lineHeight: 1,
++                      maxWidth: 180,
++                      overflow: "hidden",
++                      textOverflow: "ellipsis",
++                      whiteSpace: "nowrap",
++                    }}
++                    title={loginLabel ? String(loginLabel) : undefined}
++                  >
++                    {loginLabel ? String(loginLabel) : "已登录"}
++                  </span>
++
++                  <Link
++                    href="/api/auth/signout?callbackUrl=/gallery/all"
++                    style={{
++                      fontSize: 13,
++                      color: "var(--text-secondary)",
++                      textDecoration: "none",
++                      padding: "4px 8px",
++                      borderRadius: 999,
++                    }}
++                  >
++                    退出
++                  </Link>
++                </div>
++
++                {canUpload ? (
++                  <Link
++                    href="/gallery/upload"
++                    style={{
++                      display: "inline-flex",
++                      alignItems: "center",
++                      justifyContent: "center",
++                      gap: 8,
++                      borderRadius: "var(--radius-pill)",
++                      border: "1px solid var(--ring)",
++                      background:
++                        "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                      color: "var(--text-primary)",
++                      padding: "8px 14px",
++                      fontSize: 14,
++                      lineHeight: 1,
++                      textDecoration: "none",
++                      boxShadow: "var(--shadow-whisper)",
++                    }}
++                  >
++                    添加照片
++                  </Link>
++                ) : null}
++              </>
++            ) : (
++              <Link
++                href="/api/auth/signin?callbackUrl=/gallery/all"
++                style={{
++                  display: "inline-flex",
++                  alignItems: "center",
++                  justifyContent: "center",
++                  gap: 8,
++                  borderRadius: "var(--radius-pill)",
++                  border: "1px solid var(--ring)",
++                  background:
++                    "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                  color: "var(--text-primary)",
++                  padding: "8px 14px",
++                  fontSize: 14,
++                  lineHeight: 1,
++                  textDecoration: "none",
++                  boxShadow: "var(--shadow-whisper)",
++                }}
++              >
++                使用 GitHub 登录
++              </Link>
++            )}
++          </div>
++        </header>
++
++        <div style={{ marginTop: 18 }}>
++          {photosError ? (
++            <div
++              style={{
++                padding: 16,
++                borderRadius: "var(--radius-12)",
++                border: "1px solid var(--ring)",
++                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
++                boxShadow: "var(--shadow-whisper)",
++                color: "var(--text-secondary)",
++              }}
++            >
++              Gallery 数据源尚未配置完成（请确认 Vercel Postgres 已创建并执行
++              <code style={{ marginLeft: 6 }}>scripts/db/init.sql</code>）。
++            </div>
++          ) : photos.length === 0 ? (
++            <div
++              style={{
++                padding: 16,
++                borderRadius: "var(--radius-12)",
++                border: "1px solid var(--ring)",
++                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
++                boxShadow: "var(--shadow-whisper)",
++                color: "var(--text-secondary)",
++              }}
++            >
++              暂无公开照片。
++            </div>
++          ) : (
++            <GalleryGrid photos={photos} />
++          )}
++        </div>
++      </div>
++    </main>
++  );
++}
++
+diff --git a/app/gallery/page.tsx b/app/gallery/page.tsx
+index 8aeae6f..0f41429 100644
+--- a/app/gallery/page.tsx
++++ b/app/gallery/page.tsx
+@@ -1,12 +1,18 @@
+ import Link from "next/link";
++import { getServerSession } from "next-auth";
+ 
+-import GalleryGrid from "../../src/components/gallery/GalleryGrid";
++import AlbumGrid from "../../src/components/gallery/AlbumGrid";
++import { authOptions } from "../../src/lib/auth/options";
++import { isUploader } from "../../src/lib/auth/guards";
++import { buildAlbumSummaries } from "../../src/lib/gallery/albums";
+ import { listPublicPhotos } from "../../src/lib/gallery/photos";
+ 
+ export const runtime = "nodejs";
+ export const dynamic = "force-dynamic";
+ 
+ export default async function GalleryPage() {
++  const session = await getServerSession(authOptions);
++
+   let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
+   let photosError = false;
+   try {
+@@ -16,6 +22,17 @@ export default async function GalleryPage() {
+     console.error("[gallery] failed to load photos:", err);
+   }
+ 
++  const loginLabel =
++    // `session.user.login` 是我们自己在 next-auth.d.ts 里扩展的字段
++    // 这里做兼容：优先 login，其次 name
++    // eslint-disable-next-line @typescript-eslint/no-explicit-any
++    (session?.user && (session.user as any).login) || session?.user?.name || null;
++
++  const avatarUrl = session?.user?.image || null;
++
++  const canUpload = isUploader(session);
++  const albums = buildAlbumSummaries(photos);
++
+   return (
+     <main
+       style={{
+@@ -53,30 +70,154 @@ export default async function GalleryPage() {
+             <p style={{ margin: "10px 0 0", color: "var(--text-secondary)" }}>
+               公开照片（Blob + Postgres）。
+             </p>
++
++            <nav style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
++              <span style={{ color: "var(--text-primary)" }}>相册</span>
++              <span style={{ color: "var(--text-tertiary)" }}>·</span>
++              <Link href="/gallery/all" style={{ color: "var(--text-secondary)" }}>
++                全部照片
++              </Link>
++            </nav>
+           </div>
+ 
+-          <Link
+-            href="/gallery/upload"
++          <div
+             style={{
+               flex: "0 0 auto",
+-              display: "inline-flex",
++              display: "flex",
+               alignItems: "center",
+-              justifyContent: "center",
+-              gap: 8,
+-              borderRadius: "var(--radius-pill)",
+-              border: "1px solid var(--ring)",
+-              background:
+-                "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
+-              color: "var(--text-primary)",
+-              padding: "8px 14px",
+-              fontSize: 14,
+-              lineHeight: 1,
+-              textDecoration: "none",
+-              boxShadow: "var(--shadow-whisper)",
++              justifyContent: "flex-end",
++              gap: 10,
++              flexWrap: "wrap",
+             }}
+           >
+-            添加照片（需登录）
+-          </Link>
++            {session ? (
++              <>
++                <div
++                  style={{
++                    display: "inline-flex",
++                    alignItems: "center",
++                    gap: 10,
++                    borderRadius: "var(--radius-pill)",
++                    border: "1px solid var(--ring)",
++                    background:
++                      "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                    padding: "6px 10px",
++                    boxShadow: "var(--shadow-whisper)",
++                  }}
++                >
++                  {avatarUrl ? (
++                    // eslint-disable-next-line @next/next/no-img-element
++                    <img
++                      src={avatarUrl}
++                      alt="GitHub avatar"
++                      width={22}
++                      height={22}
++                      style={{
++                        width: 22,
++                        height: 22,
++                        borderRadius: 999,
++                        border: "1px solid var(--ring)",
++                        objectFit: "cover",
++                      }}
++                    />
++                  ) : (
++                    <span
++                      aria-hidden="true"
++                      style={{
++                        width: 22,
++                        height: 22,
++                        borderRadius: 999,
++                        border: "1px solid var(--ring)",
++                        background:
++                          "color-mix(in srgb, var(--surface-2, var(--surface-1)) 68%, transparent)",
++                        display: "inline-flex",
++                        alignItems: "center",
++                        justifyContent: "center",
++                        fontSize: 12,
++                        color: "var(--text-secondary)",
++                      }}
++                    >
++                      {loginLabel ? String(loginLabel).slice(0, 1).toUpperCase() : "U"}
++                    </span>
++                  )}
++
++                  <span
++                    style={{
++                      fontSize: 13,
++                      color: "var(--text-primary)",
++                      lineHeight: 1,
++                      maxWidth: 180,
++                      overflow: "hidden",
++                      textOverflow: "ellipsis",
++                      whiteSpace: "nowrap",
++                    }}
++                    title={loginLabel ? String(loginLabel) : undefined}
++                  >
++                    {loginLabel ? String(loginLabel) : "已登录"}
++                  </span>
++
++                  <Link
++                    href="/api/auth/signout?callbackUrl=/gallery"
++                    style={{
++                      fontSize: 13,
++                      color: "var(--text-secondary)",
++                      textDecoration: "none",
++                      padding: "4px 8px",
++                      borderRadius: 999,
++                    }}
++                  >
++                    退出
++                  </Link>
++                </div>
++
++                {canUpload ? (
++                  <Link
++                    href="/gallery/upload"
++                    style={{
++                      display: "inline-flex",
++                      alignItems: "center",
++                      justifyContent: "center",
++                      gap: 8,
++                      borderRadius: "var(--radius-pill)",
++                      border: "1px solid var(--ring)",
++                      background:
++                        "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                      color: "var(--text-primary)",
++                      padding: "8px 14px",
++                      fontSize: 14,
++                      lineHeight: 1,
++                      textDecoration: "none",
++                      boxShadow: "var(--shadow-whisper)",
++                    }}
++                  >
++                    添加照片
++                  </Link>
++                ) : null}
++              </>
++            ) : (
++              <Link
++                href="/api/auth/signin?callbackUrl=/gallery"
++                style={{
++                  display: "inline-flex",
++                  alignItems: "center",
++                  justifyContent: "center",
++                  gap: 8,
++                  borderRadius: "var(--radius-pill)",
++                  border: "1px solid var(--ring)",
++                  background:
++                    "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
++                  color: "var(--text-primary)",
++                  padding: "8px 14px",
++                  fontSize: 14,
++                  lineHeight: 1,
++                  textDecoration: "none",
++                  boxShadow: "var(--shadow-whisper)",
++                }}
++              >
++                使用 GitHub 登录
++              </Link>
++            )}
++          </div>
+         </header>
+ 
+         <div style={{ marginTop: 18 }}>
+@@ -108,7 +249,7 @@ export default async function GalleryPage() {
+               暂无公开照片。
+             </div>
+           ) : (
+-            <GalleryGrid photos={photos} />
++            <AlbumGrid albums={albums} />
+           )}
+         </div>
+       </div>
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 2918201..066aba9 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -22,7 +22,7 @@ export default function RootLayout({
+         <ThemeProvider>
+           <AppleNav />
+           <Reveal />
+-          {children}
++          <div style={{ paddingTop: 56 }}>{children}</div>
+         </ThemeProvider>
+       </body>
+     </html>
+diff --git a/src/components/gallery/AlbumGrid.module.css b/src/components/gallery/AlbumGrid.module.css
+new file mode 100644
+index 0000000..5b0b499
+--- /dev/null
++++ b/src/components/gallery/AlbumGrid.module.css
+@@ -0,0 +1,79 @@
++.grid {
++  display: grid;
++  grid-template-columns: repeat(12, 1fr);
++  gap: 14px;
++}
++
++.cardLink {
++  grid-column: span 6;
++  text-decoration: none;
++  color: inherit;
++}
++
++@media (max-width: 720px) {
++  .cardLink {
++    grid-column: span 12;
++  }
++}
++
++.card {
++  border-radius: var(--radius-14, 14px);
++  border: 1px solid var(--ring);
++  background: color-mix(in srgb, var(--surface-1) 86%, transparent);
++  box-shadow: var(--shadow-whisper);
++  overflow: hidden;
++  transition:
++    transform 160ms ease,
++    border-color 160ms ease,
++    background 160ms ease,
++    box-shadow 160ms ease;
++}
++
++.card:hover {
++  transform: translate3d(0, -3px, 0);
++  border-color: color-mix(in srgb, var(--ring) 72%, var(--text-tertiary));
++  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 82%, transparent);
++  box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
++}
++
++.media {
++  position: relative;
++  width: 100%;
++  aspect-ratio: 4 / 3;
++  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 72%, transparent);
++  border-bottom: 1px solid color-mix(in srgb, var(--ring) 70%, transparent);
++}
++
++.img {
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++  display: block;
++}
++
++.body {
++  padding: 12px 12px 14px;
++  display: flex;
++  align-items: baseline;
++  justify-content: space-between;
++  gap: 10px;
++}
++
++.title {
++  margin: 0;
++  font-size: 16px;
++  font-weight: 650;
++  letter-spacing: -0.01em;
++  line-height: 1.2;
++}
++
++.count {
++  flex: 0 0 auto;
++  font-size: 12px;
++  color: var(--text-secondary);
++  border: 1px solid var(--ring);
++  border-radius: 999px;
++  padding: 4px 8px;
++  background: color-mix(in srgb, var(--surface-1) 86%, transparent);
++}
++
+diff --git a/src/components/gallery/AlbumGrid.tsx b/src/components/gallery/AlbumGrid.tsx
+new file mode 100644
+index 0000000..a09e9e6
+--- /dev/null
++++ b/src/components/gallery/AlbumGrid.tsx
+@@ -0,0 +1,39 @@
++import Link from "next/link";
++
++import type { AlbumSummary } from "../../lib/gallery/albums";
++import GalleryImage from "./GalleryImage";
++import styles from "./AlbumGrid.module.css";
++
++export default function AlbumGrid(props: { albums: AlbumSummary[] }) {
++  const { albums } = props;
++
++  return (
++    <div className={styles.grid} role="list" aria-label="相册列表">
++      {albums.map((a) => (
++        <Link
++          key={a.slug}
++          href={`/gallery/albums/${a.slug}`}
++          className={styles.cardLink}
++        >
++          <article className={styles.card} role="listitem">
++            <div className={styles.media}>
++              {a.coverUrl ? (
++                <GalleryImage
++                  className={styles.img}
++                  src={a.coverUrl}
++                  alt={a.coverAlt}
++                  downloadHref={a.coverUrl}
++                />
++              ) : null}
++            </div>
++            <div className={styles.body}>
++              <h3 className={styles.title}>{a.title}</h3>
++              <span className={styles.count}>{a.count} 张</span>
++            </div>
++          </article>
++        </Link>
++      ))}
++    </div>
++  );
++}
++
+diff --git a/src/components/nav/AppleNav.module.css b/src/components/nav/AppleNav.module.css
+index da912a2..67105a1 100644
+--- a/src/components/nav/AppleNav.module.css
++++ b/src/components/nav/AppleNav.module.css
+@@ -1,6 +1,8 @@
+ .nav {
+-  position: sticky;
++  position: fixed;
+   top: 0;
++  left: 0;
++  right: 0;
+   z-index: 1000;
+ 
+   height: 56px;
+@@ -10,10 +12,25 @@
+   justify-content: center;
+ 
+   /* Claude: warm paper nav */
+-  background: color-mix(in srgb, var(--bg-page) 72%, var(--surface-1));
+-  border-bottom: 1px solid var(--ring);
+-  backdrop-filter: none;
+-  -webkit-backdrop-filter: none;
++  background: color-mix(in srgb, var(--bg-page) 70%, transparent);
++  border-bottom: 1px solid color-mix(in srgb, var(--ring) 70%, transparent);
++  backdrop-filter: blur(14px);
++  -webkit-backdrop-filter: blur(14px);
++}
++
++.nav::after {
++  content: "";
++  position: absolute;
++  left: 0;
++  right: 0;
++  bottom: -1px;
++  height: 10px;
++  pointer-events: none;
++  background: linear-gradient(
++    180deg,
++    color-mix(in srgb, var(--bg-page) 10%, transparent),
++    transparent
++  );
+ }
+ 
+ .inner {
+diff --git a/src/components/sections/Projects.tsx b/src/components/sections/Projects.tsx
+index 5859506..57cb01b 100644
+--- a/src/components/sections/Projects.tsx
++++ b/src/components/sections/Projects.tsx
+@@ -1,9 +1,8 @@
+ "use client";
+ 
+ import Link from "next/link";
+-import { useState } from "react";
++import { useRouter } from "next/navigation";
+ import styles from "./Projects.module.css";
+-import ProjectDrawer, { type ProjectDrawerProject } from "./ProjectDrawer";
+ 
+ type ProjectCard = {
+   title: string;
+@@ -37,7 +36,7 @@ const FEATURED_PROJECTS: ProjectCard[] = [
+ ];
+ 
+ export default function Projects() {
+-  const [active, setActive] = useState<ProjectDrawerProject | null>(null);
++  const router = useRouter();
+ 
+   return (
+     <section
+@@ -62,11 +61,11 @@ export default function Projects() {
+               className={styles.card}
+               role="button"
+               tabIndex={0}
+-              onClick={() => setActive(p)}
++              onClick={() => router.push(p.cta1.href)}
+               onKeyDown={(e) => {
+                 if (e.key === "Enter" || e.key === " ") {
+                   e.preventDefault();
+-                  setActive(p);
++                  router.push(p.cta1.href);
+                 }
+               }}
+             >
+@@ -96,7 +95,6 @@ export default function Projects() {
+         </div>
+       </div>
+ 
+-      <ProjectDrawer project={active} onClose={() => setActive(null)} />
+     </section>
+   );
+ }
+diff --git a/src/components/sections/Writing.module.css b/src/components/sections/Writing.module.css
+index 62d0509..489bb1c 100644
+--- a/src/components/sections/Writing.module.css
++++ b/src/components/sections/Writing.module.css
+@@ -111,19 +111,19 @@
+   --item-delay: 250ms;
+ }
+ 
+-.section:not(.is-visible) .item {
++.section:not(:global(.is-visible)) .item {
+   opacity: 0;
+   transform: translate3d(0, 10px, 0);
+   filter: blur(1px);
+ }
+ 
+-.section.is-visible .item {
++.section:global(.is-visible) .item {
+   opacity: 1;
+   transform: translate3d(0, 0, 0);
+   filter: blur(0);
+ }
+ 
+-.section.is-visible .item:hover {
++.section:global(.is-visible) .item:hover {
+   transform: translate3d(0, -3px, 0);
+   border-color: color-mix(in srgb, var(--ring) 70%, var(--text-tertiary));
+   background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 86%, transparent);
+@@ -138,12 +138,16 @@
+   line-height: 1.25;
+ }
+ 
+-.itemLink {
++.itemLinkWrap {
++  display: flex;
++  flex-direction: column;
++  gap: 8px;
++  height: 100%;
+   color: inherit;
+   text-decoration: none;
+ }
+ 
+-.itemLink:hover {
++.itemLinkWrap:hover {
+   text-decoration: underline;
+ }
+ 
+diff --git a/src/components/sections/Writing.tsx b/src/components/sections/Writing.tsx
+index 7f0f67b..1e6410a 100644
+--- a/src/components/sections/Writing.tsx
++++ b/src/components/sections/Writing.tsx
+@@ -33,29 +33,27 @@ export default async function Writing() {
+           <ul className={styles.list}>
+             {posts.map((p) => (
+               <li key={p.slug} className={styles.item}>
+-                <h3 className={styles.itemTitle}>
+-                  <Link className={styles.itemLink} href={`/blog/${p.slug}`}>
+-                    {p.title}
+-                  </Link>
+-                </h3>
++                <Link className={styles.itemLinkWrap} href={`/blog/${p.slug}`}>
++                  <h3 className={styles.itemTitle}>{p.title}</h3>
+ 
+-                {p.date ? (
+-                  <p className={styles.meta}>
+-                    <time dateTime={p.date}>{p.date}</time>
+-                  </p>
+-                ) : null}
++                  {p.date ? (
++                    <p className={styles.meta}>
++                      <time dateTime={p.date}>{p.date}</time>
++                    </p>
++                  ) : null}
+ 
+-                {p.summary ? <p className={styles.summary}>{p.summary}</p> : null}
++                  {p.summary ? <p className={styles.summary}>{p.summary}</p> : null}
+ 
+-                {p.tags.length ? (
+-                  <div className={styles.tags} aria-label="Post tags">
+-                    {p.tags.map((t) => (
+-                      <span key={t} className={styles.tag}>
+-                        {t}
+-                      </span>
+-                    ))}
+-                  </div>
+-                ) : null}
++                  {p.tags.length ? (
++                    <div className={styles.tags} aria-label="Post tags">
++                      {p.tags.map((t) => (
++                        <span key={t} className={styles.tag}>
++                          {t}
++                        </span>
++                      ))}
++                    </div>
++                  ) : null}
++                </Link>
+               </li>
+             ))}
+           </ul>
+diff --git a/src/lib/gallery/albumRules.ts b/src/lib/gallery/albumRules.ts
+new file mode 100644
+index 0000000..53ab403
+--- /dev/null
++++ b/src/lib/gallery/albumRules.ts
+@@ -0,0 +1,96 @@
++import type { PhotoRow } from "./photos";
++
++export type AlbumRule = {
++  slug: string;
++  title: string;
++  /**
++   * 归类关键词：命中任意一个即归入该相册。
++   * 建议使用中文关键词（可包含短语）。
++   */
++  keywords: string[];
++  /**
++   * 用于后续“图文页”选文的主题标签。
++   */
++  themeTags: string[];
++};
++
++export const DEFAULT_ALBUM = {
++  slug: "uncategorized",
++  title: "未分类",
++  themeTags: ["日常", "随记"],
++} as const;
++
++export const ALBUM_RULES: AlbumRule[] = [
++  {
++    slug: "tachun",
++    title: "踏春",
++    keywords: ["踏春", "春游", "春天", "樱花", "桃花", "油菜花", "花海", "春日"],
++    themeTags: ["春", "花", "风", "游"],
++  },
++  {
++    slug: "sunset",
++    title: "日落",
++    keywords: ["日落", "落日", "夕阳", "黄昏", "晚霞", "日暮"],
++    themeTags: ["日落", "光", "暮色", "温柔"],
++  },
++  {
++    slug: "night",
++    title: "夜色",
++    keywords: ["夜", "夜景", "霓虹", "路灯", "灯", "月", "星"],
++    themeTags: ["夜", "灯", "城", "静"],
++  },
++  {
++    slug: "street",
++    title: "街拍",
++    keywords: ["街", "街拍", "路人", "市集", "巷", "车流", "城市"],
++    themeTags: ["街", "城", "人间", "行走"],
++  },
++  {
++    slug: "mountain",
++    title: "山野",
++    keywords: ["山", "登山", "徒步", "森林", "原野", "野", "山野"],
++    themeTags: ["山", "野", "远方", "呼吸"],
++  },
++  {
++    slug: "sea",
++    title: "海边",
++    keywords: ["海", "海边", "海风", "浪", "沙滩", "礁石", "港口"],
++    themeTags: ["海", "风", "自由", "远"],
++  },
++  {
++    slug: "rain",
++    title: "雨天",
++    keywords: ["雨", "下雨", "雨天", "雨夜", "水滴", "伞"],
++    themeTags: ["雨", "清", "听", "慢"],
++  },
++];
++
++function normalizeText(v: string): string {
++  return v
++    .toLowerCase()
++    .replaceAll(/\s+/g, " ")
++    .replaceAll("，", ",")
++    .replaceAll("。", ".")
++    .trim();
++}
++
++export function classifyAlbumFromPhoto(
++  photo: Pick<PhotoRow, "title" | "caption" | "tags" | "category">,
++): { slug: string; title: string; themeTags: string[] } {
++  const text = normalizeText(
++    `${photo.title ?? ""} ${photo.caption ?? ""} ${photo.category ?? ""} ${(photo.tags ?? []).join(" ")}`,
++  );
++
++  for (const rule of ALBUM_RULES) {
++    if (rule.keywords.some((k) => text.includes(normalizeText(k)))) {
++      return { slug: rule.slug, title: rule.title, themeTags: rule.themeTags };
++    }
++  }
++
++  return {
++    slug: DEFAULT_ALBUM.slug,
++    title: DEFAULT_ALBUM.title,
++    themeTags: [...DEFAULT_ALBUM.themeTags],
++  };
++}
++
+diff --git a/src/lib/gallery/albums.ts b/src/lib/gallery/albums.ts
+new file mode 100644
+index 0000000..e5ce26e
+--- /dev/null
++++ b/src/lib/gallery/albums.ts
+@@ -0,0 +1,56 @@
++import type { PhotoRow } from "./photos";
++import { classifyAlbumFromPhoto } from "./albumRules";
++
++export type AlbumSummary = {
++  slug: string;
++  title: string;
++  count: number;
++  coverUrl: string | null;
++  coverAlt: string;
++};
++
++export function buildAlbumSummaries(photos: PhotoRow[]): AlbumSummary[] {
++  const map = new Map<
++    string,
++    { title: string; count: number; coverUrl: string | null; coverAlt: string }
++  >();
++
++  for (const p of photos) {
++    const a = classifyAlbumFromPhoto(p);
++    const existing = map.get(a.slug);
++    if (!existing) {
++      map.set(a.slug, {
++        title: a.title,
++        count: 1,
++        // listPublicPhotos() 已按 published_at desc 排序：第一个命中的就是“最新/封面”
++        coverUrl: p.blob_url ?? null,
++        coverAlt: p.title?.trim() || p.caption?.trim() || a.title,
++      });
++    } else {
++      existing.count += 1;
++    }
++  }
++
++  const albums: AlbumSummary[] = Array.from(map.entries()).map(([slug, v]) => ({
++    slug,
++    title: v.title,
++    count: v.count,
++    coverUrl: v.coverUrl,
++    coverAlt: v.coverAlt,
++  }));
++
++  // “未分类”固定置底，其余按数量 desc 再按标题
++  albums.sort((a, b) => {
++    if (a.slug === "uncategorized" && b.slug !== "uncategorized") return 1;
++    if (b.slug === "uncategorized" && a.slug !== "uncategorized") return -1;
++    if (b.count !== a.count) return b.count - a.count;
++    return a.title.localeCompare(b.title, "zh-Hans-CN");
++  });
++
++  return albums;
++}
++
++export function filterPhotosByAlbumSlug(photos: PhotoRow[], slug: string): PhotoRow[] {
++  return photos.filter((p) => classifyAlbumFromPhoto(p).slug === slug);
++}
++

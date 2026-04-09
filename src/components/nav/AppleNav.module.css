@@ -1,6 +1,8 @@
 .nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
 
   height: 56px;
@@ -10,10 +12,25 @@
   justify-content: center;
 
   /* Claude: warm paper nav */
-  background: color-mix(in srgb, var(--bg-page) 72%, var(--surface-1));
-  border-bottom: 1px solid var(--ring);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: color-mix(in srgb, var(--bg-page) 70%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--ring) 70%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 10px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-page) 10%, transparent),
+    transparent
+  );
 }
 
 .inner {

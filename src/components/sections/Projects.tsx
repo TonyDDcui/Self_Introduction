@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./Projects.module.css";
-import ProjectDrawer, { type ProjectDrawerProject } from "./ProjectDrawer";
 
 type ProjectCard = {
   title: string;
@@ -37,7 +36,7 @@ const FEATURED_PROJECTS: ProjectCard[] = [
 ];
 
 export default function Projects() {
-  const [active, setActive] = useState<ProjectDrawerProject | null>(null);
+  const router = useRouter();
 
   return (
     <section
@@ -62,11 +61,11 @@ export default function Projects() {
               className={styles.card}
               role="button"
               tabIndex={0}
-              onClick={() => setActive(p)}
+              onClick={() => router.push(p.cta1.href)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  setActive(p);
+                  router.push(p.cta1.href);
                 }
               }}
             >
@@ -96,7 +95,6 @@ export default function Projects() {
         </div>
       </div>
 
-      <ProjectDrawer project={active} onClose={() => setActive(null)} />
     </section>
   );
 }

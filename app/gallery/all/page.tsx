@@ -1,22 +1,15 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
-<<<<<<< ours
-import GalleryGrid from "../../src/components/gallery/GalleryGrid";
-import { authOptions } from "../../src/lib/auth/options";
-import { isUploader } from "../../src/lib/auth/guards";
-=======
-import AlbumGrid from "../../src/components/gallery/AlbumGrid";
-import { authOptions } from "../../src/lib/auth/options";
-import { isUploader } from "../../src/lib/auth/guards";
-import { buildAlbumSummaries } from "../../src/lib/gallery/albums";
->>>>>>> theirs
-import { listPublicPhotos } from "../../src/lib/gallery/photos";
+import GalleryGrid from "../../../src/components/gallery/GalleryGrid";
+import { authOptions } from "../../../src/lib/auth/options";
+import { isUploader } from "../../../src/lib/auth/guards";
+import { listPublicPhotos } from "../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export default async function GalleryPage() {
+export default async function GalleryAllPage() {
   const session = await getServerSession(authOptions);
 
   let photos: Awaited<ReturnType<typeof listPublicPhotos>> = [];
@@ -25,22 +18,14 @@ export default async function GalleryPage() {
     photos = await listPublicPhotos();
   } catch (err) {
     photosError = true;
-    console.error("[gallery] failed to load photos:", err);
+    console.error("[gallery/all] failed to load photos:", err);
   }
 
   const loginLabel =
-    // `session.user.login` 是我们自己在 next-auth.d.ts 里扩展的字段
-    // 这里做兼容：优先 login，其次 name
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (session?.user && (session.user as any).login) || session?.user?.name || null;
-
   const avatarUrl = session?.user?.image || null;
-
   const canUpload = isUploader(session);
-<<<<<<< ours
-=======
-  const albums = buildAlbumSummaries(photos);
->>>>>>> theirs
 
   return (
     <main
@@ -81,11 +66,11 @@ export default async function GalleryPage() {
             </p>
 
             <nav style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <span style={{ color: "var(--text-primary)" }}>相册</span>
-              <span style={{ color: "var(--text-tertiary)" }}>·</span>
-              <Link href="/gallery/all" style={{ color: "var(--text-secondary)" }}>
-                全部照片
+              <Link href="/gallery" style={{ color: "var(--text-secondary)" }}>
+                相册
               </Link>
+              <span style={{ color: "var(--text-tertiary)" }}>·</span>
+              <span style={{ color: "var(--text-primary)" }}>全部照片</span>
             </nav>
           </div>
 
@@ -166,7 +151,7 @@ export default async function GalleryPage() {
                   </span>
 
                   <Link
-                    href="/api/auth/signout?callbackUrl=/gallery"
+                    href="/api/auth/signout?callbackUrl=/gallery/all"
                     style={{
                       fontSize: 13,
                       color: "var(--text-secondary)",
@@ -205,7 +190,7 @@ export default async function GalleryPage() {
               </>
             ) : (
               <Link
-                href="/api/auth/signin?callbackUrl=/gallery"
+                href="/api/auth/signin?callbackUrl=/gallery/all"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -258,10 +243,11 @@ export default async function GalleryPage() {
               暂无公开照片。
             </div>
           ) : (
-            <AlbumGrid albums={albums} />
+            <GalleryGrid photos={photos} />
           )}
         </div>
       </div>
     </main>
   );
 }
+
