@@ -98,19 +98,19 @@
   grid-column: span 12;
 }
 
-.section:not(.is-visible) .card {
+.section:not(:global(.is-visible)) .card {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   filter: blur(1px);
 }
 
-.section.is-visible .card {
+.section:global(.is-visible) .card {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   filter: blur(0);
 }
 
-.section.is-visible .card:hover {
+.section:global(.is-visible) .card:hover {
   transform: translate3d(0, -3px, 0);
   border-color: color-mix(in srgb, var(--ring) 72%, var(--text-tertiary));
   background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 82%, transparent);

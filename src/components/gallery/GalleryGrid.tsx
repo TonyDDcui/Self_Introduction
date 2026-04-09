@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import type { PhotoRow } from "../../lib/gallery/photos";
 import styles from "./GalleryGrid.module.css";
+import GalleryImage from "./GalleryImage";
 
 export default function GalleryGrid(props: { photos: PhotoRow[] }) {
   const { photos } = props;
@@ -12,12 +12,11 @@ export default function GalleryGrid(props: { photos: PhotoRow[] }) {
         return (
           <article key={photo.id} className={styles.card} role="listitem">
             <div className={styles.media}>
-              <img
+              <GalleryImage
                 className={styles.img}
                 src={photo.blob_url}
                 alt={alt}
-                loading="lazy"
-                decoding="async"
+                downloadHref={photo.blob_url}
               />
             </div>
 
@@ -37,4 +36,3 @@ export default function GalleryGrid(props: { photos: PhotoRow[] }) {
     </div>
   );
 }
-

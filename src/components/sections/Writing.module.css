@@ -111,19 +111,19 @@
   --item-delay: 250ms;
 }
 
-.section:not(.is-visible) .item {
+.section:not(:global(.is-visible)) .item {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   filter: blur(1px);
 }
 
-.section.is-visible .item {
+.section:global(.is-visible) .item {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   filter: blur(0);
 }
 
-.section.is-visible .item:hover {
+.section:global(.is-visible) .item:hover {
   transform: translate3d(0, -3px, 0);
   border-color: color-mix(in srgb, var(--ring) 70%, var(--text-tertiary));
   background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 86%, transparent);
