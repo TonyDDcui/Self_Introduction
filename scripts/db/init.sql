@@ -29,3 +29,14 @@ create table if not exists album_narratives (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Photo narratives (AI-generated captions) for album story feed
+create table if not exists photo_narratives (
+  photo_id text primary key,
+  album_slug text,
+  narrative_md text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists idx_photo_narratives_album_slug on photo_narratives (album_slug);
