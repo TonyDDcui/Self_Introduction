@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./Projects.module.css";
+import SectionGlass from "./SectionGlass";
 
 type ProjectCard = {
   title: string;
@@ -46,54 +47,56 @@ export default function Projects() {
       data-reveal
       data-delay="80"
     >
-      <div className={styles.inner}>
-        <header className={styles.header}>
-          <h2 className={styles.title}>Featured Projects</h2>
-          <p className={styles.subtitle}>
-            一些真实项目与实践记录。后续可以补充“项目实际展示”（照片/视频/文档）到 Gallery。
-          </p>
-        </header>
+      <SectionGlass>
+        <div className={styles.inner}>
+          <header className={styles.header}>
+            <h2 className={styles.title}>Featured Projects</h2>
+            <p className={styles.subtitle}>
+              一些真实项目与实践记录。后续可以补充“项目实际展示”（照片/视频/文档）到 Gallery。
+            </p>
+          </header>
 
-        <div className={styles.grid}>
-          {FEATURED_PROJECTS.map((p) => (
-            <article
-              key={p.title}
-              className={styles.card}
-              role="button"
-              tabIndex={0}
-              onClick={() => router.push(p.cta1.href)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  router.push(p.cta1.href);
-                }
-              }}
-            >
-              <h3 className={styles.cardTitle}>{p.title}</h3>
-              <p className={styles.cardDesc}>{p.description}</p>
+          <div className={styles.grid}>
+            {FEATURED_PROJECTS.map((p) => (
+              <article
+                key={p.title}
+                className={styles.card}
+                role="button"
+                tabIndex={0}
+                onClick={() => router.push(p.cta1.href)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    router.push(p.cta1.href);
+                  }
+                }}
+              >
+                <h3 className={styles.cardTitle}>{p.title}</h3>
+                <p className={styles.cardDesc}>{p.description}</p>
 
-              <div className={styles.cardCtas}>
-                <Link
-                  className={styles.pillLink}
-                  href={p.cta1.href}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {p.cta1.label}
-                </Link>
-                {p.cta2 ? (
+                <div className={styles.cardCtas}>
                   <Link
-                    className={styles.pillLinkOutline}
-                    href={p.cta2.href}
+                    className={styles.pillLink}
+                    href={p.cta1.href}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {p.cta2.label}
+                    {p.cta1.label}
                   </Link>
-                ) : null}
-              </div>
-            </article>
-          ))}
+                  {p.cta2 ? (
+                    <Link
+                      className={styles.pillLinkOutline}
+                      href={p.cta2.href}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {p.cta2.label}
+                    </Link>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
+      </SectionGlass>
 
     </section>
   );

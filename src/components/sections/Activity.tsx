@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Activity.module.css";
+import SectionGlass from "./SectionGlass";
 
 type ContributionLevel =
   | "NONE"
@@ -107,82 +108,82 @@ export default function Activity() {
       className={styles.section}
       aria-label="Activity section"
     >
-      <div className={styles.inner}>
-        <header className={styles.header}>
-          <h2 className={styles.title}>Activity</h2>
-          <p className={styles.subtitle}>{meta}</p>
-        </header>
+      <SectionGlass>
+        <div className={styles.inner}>
+          <header className={styles.header}>
+            <h2 className={styles.title}>Activity</h2>
+            <p className={styles.subtitle}>{meta}</p>
+          </header>
 
-        {!result || !result.ok ? (
-          <div className={styles.fallback} role="status" aria-live="polite">
-            {meta}
-          </div>
-        ) : (
-          <div className={styles.calendarWrap}>
-            <div
-              className={styles.calendar}
-              ref={gridRef}
-              onMouseLeave={() => setHover(null)}
-            >
-              {result.calendar.weeks.map((w, wi) => (
-                <div className={styles.week} key={wi} aria-hidden="true">
-                  {w.contributionDays.map((d) => {
-                    const level = levelToInt(d.contributionLevel);
-                    return (
-                      <div
-                        key={d.date}
-                        className={styles.day}
-                        data-level={level}
-                        onMouseEnter={(e) => {
-                          const grid = gridRef.current;
-                          if (!grid) return;
-                          const r = grid.getBoundingClientRect();
-                          setHover({
-                            x: e.clientX - r.left,
-                            y: e.clientY - r.top,
-                            day: d,
-                          });
-                        }}
-                        title={`${d.date} · ${d.contributionCount} contributions`}
-                      />
-                    );
-                  })}
-                </div>
-              ))}
-
-              {hover ? (
-                <div
-                  className={styles.tooltip}
-                  style={{
-                    left: Math.min(hover.x + 12, 640),
-                    top: Math.max(hover.y - 34, 0),
-                  }}
-                  role="status"
-                >
-                  <span className={styles.tooltipLine}>
-                    {hover.day.date}
-                  </span>
-                  <span className={styles.tooltipLineMuted}>
-                    {hover.day.contributionCount} contributions
-                  </span>
-                </div>
-              ) : null}
+          {!result || !result.ok ? (
+            <div className={styles.fallback} role="status" aria-live="polite">
+              {meta}
             </div>
+          ) : (
+            <div className={styles.calendarWrap}>
+              <div
+                className={styles.calendar}
+                ref={gridRef}
+                onMouseLeave={() => setHover(null)}
+              >
+                {result.calendar.weeks.map((w, wi) => (
+                  <div className={styles.week} key={wi} aria-hidden="true">
+                    {w.contributionDays.map((d) => {
+                      const level = levelToInt(d.contributionLevel);
+                      return (
+                        <div
+                          key={d.date}
+                          className={styles.day}
+                          data-level={level}
+                          onMouseEnter={(e) => {
+                            const grid = gridRef.current;
+                            if (!grid) return;
+                            const r = grid.getBoundingClientRect();
+                            setHover({
+                              x: e.clientX - r.left,
+                              y: e.clientY - r.top,
+                              day: d,
+                            });
+                          }}
+                          title={`${d.date} · ${d.contributionCount} contributions`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
 
-            <div className={styles.legend} aria-label="Legend">
-              <span className={styles.legendLabel}>Less</span>
-              <span className={styles.legendDots} aria-hidden="true">
-                <span className={styles.legendDot} data-level="0" />
-                <span className={styles.legendDot} data-level="1" />
-                <span className={styles.legendDot} data-level="2" />
-                <span className={styles.legendDot} data-level="3" />
-                <span className={styles.legendDot} data-level="4" />
-              </span>
-              <span className={styles.legendLabel}>More</span>
+                {hover ? (
+                  <div
+                    className={styles.tooltip}
+                    style={{
+                      left: Math.min(hover.x + 12, 640),
+                      top: Math.max(hover.y - 34, 0),
+                    }}
+                    role="status"
+                  >
+                    <span className={styles.tooltipLine}>{hover.day.date}</span>
+                    <span className={styles.tooltipLineMuted}>
+                      {hover.day.contributionCount} contributions
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className={styles.legend} aria-label="Legend">
+                <span className={styles.legendLabel}>Less</span>
+                <span className={styles.legendDots} aria-hidden="true">
+                  <span className={styles.legendDot} data-level="0" />
+                  <span className={styles.legendDot} data-level="1" />
+                  <span className={styles.legendDot} data-level="2" />
+                  <span className={styles.legendDot} data-level="3" />
+                  <span className={styles.legendDot} data-level="4" />
+                </span>
+                <span className={styles.legendLabel}>More</span>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </SectionGlass>
     </section>
   );
 }

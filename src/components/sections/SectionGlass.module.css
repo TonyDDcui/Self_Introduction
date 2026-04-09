@@ -1,0 +1,54 @@
+.glass {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+
+  margin: 0 auto;
+  padding: 18px 0;
+
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  background: rgba(12, 18, 32, 0.42);
+
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-page) 28%, transparent),
+    0 18px 70px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+/* 纸质纹理：低频噪点 + 纤维方向纹理（克制） */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27220%27%20height%3D%27220%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27/%3E%3C/filter%3E%3Crect%20width%3D%27220%27%20height%3D%27220%27%20filter%3D%27url(%23n)%27%20opacity%3D%270.35%27/%3E%3C/svg%3E"),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045) 0 1px,
+      transparent 1px 7px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 45%);
+  background-size: 220px 220px, auto, auto;
+  opacity: 0.42;
+  mix-blend-mode: overlay;
+}
+
+/* 浅色模式下让玻璃更像“纸上覆膜” */
+:global(html[data-mode="light"]) .glass {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: color-mix(in srgb, var(--ring) 78%, rgba(0, 0, 0, 0.06));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 18px 70px rgba(0, 0, 0, 0.10);
+}
+
+:global(html[data-mode="light"]) .glass::before {
+  opacity: 0.22;
+}
+
