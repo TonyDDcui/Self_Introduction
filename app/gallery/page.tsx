@@ -1,157 +1,105 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
+import Link from "next/link";
+import { getServerSession } from "next-auth";
 
-import manifestJson from "../../src/generated/repo-images-manifest.json";
+import GalleryGrid from "../../src/components/gallery/GalleryGrid";
+import { authOptions } from "../../src/lib/auth/options";
+import { isUploader } from "../../src/lib/auth/guards";
+import { listPublicPhotos } from "../../src/lib/gallery/photos";
 
-type RepoImageManifestItem = {
-  originalPath: string;
-  publicPath: string;
-  name: string;
-  ext: string;
-};
+export const dynamic = "force-dynamic";
 
-const manifest = manifestJson as RepoImageManifestItem[];
+export default async function GalleryPage() {
+  const [photos, session] = await Promise.all([
+    listPublicPhotos(),
+    getServerSession(authOptions),
+  ]);
 
-export default function GalleryPage() {
-  const copySnippet = async (originalPath: string, name: string) => {
-    // IMPORTANT: MDX side should pass originalPath, and RepoImage will resolve via manifest.
-    const snippet = `<RepoImage src="${originalPath}" alt="${name}" />`;
-
-    try {
-      await navigator.clipboard.writeText(snippet);
-      // Minimal feedback; avoid complex UI
-      alert("已复制到剪贴板");
-    } catch {
-      // Fallback: select text for manual copy (and try execCommand when available).
-      const ta = document.createElement("textarea");
-      ta.value = snippet;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.left = "0";
-      ta.style.top = "0";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-
-      let copied = false;
-      try {
-        copied = document.execCommand("copy");
-      } catch {
-        copied = false;
-      }
-
-      if (copied) {
-        alert("已复制到剪贴板");
-      } else {
-        alert("无法自动复制：已选中文本，请手动复制（Ctrl/Cmd + C）。");
-      }
-
-      // Remove after user closes alert (alert is blocking; this runs afterwards).
-      setTimeout(() => document.body.removeChild(ta), 0);
-    }
-  };
+  const canUpload = isUploader(session);
 
   return (
     <main
       style={{
-        padding: 24,
-        background: "var(--bg-light)",
-        color: "var(--text-on-light)",
         minHeight: "100vh",
+        background: "var(--bg-page)",
+        color: "var(--text-primary)",
       }}
     >
-      <h1 style={{ margin: 0, fontSize: 28 }}>Gallery</h1>
-      <p style={{ marginTop: 8, color: "var(--text-secondary-on-light)" }}>
-        仓库图片预览（由 repo-images manifest 驱动）。
-      </p>
-
-      {manifest.length === 0 ? (
-        <div
+      <div
+        style={{
+          maxWidth: 980,
+          margin: "0 auto",
+          padding: "24px 16px 56px",
+        }}
+      >
+        <header
           style={{
-            marginTop: 24,
-            padding: 16,
-            borderRadius: "var(--radius-12)",
-            background: "#ffffff",
-            color: "var(--text-tertiary-on-light)",
-          }}
-        >
-          当前仓库未检测到可用图片（png/jpg/jpeg/webp/gif/svg）。
-        </div>
-      ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
             gap: 16,
-            marginTop: 24,
           }}
         >
-          {manifest.map((item) => (
-            <div
-              key={item.originalPath}
+          <div>
+            <h1
               style={{
-                background: "#ffffff",
-                borderRadius: "var(--radius-12)",
-                padding: 12,
-                boxShadow: "var(--shadow-card)",
+                margin: 0,
+                fontSize: 28,
+                lineHeight: 1.15,
+                letterSpacing: "-0.4px",
               }}
             >
-              <div
-                style={{
-                  width: "100%",
-                  aspectRatio: "4 / 3",
-                  borderRadius: "var(--radius-11)",
-                  overflow: "hidden",
-                  background: "var(--bg-light)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                  src={item.publicPath}
-                  alt={item.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  loading="lazy"
-                />
-              </div>
+              Gallery
+            </h1>
+            <p style={{ margin: "10px 0 0", color: "var(--text-secondary)" }}>
+              公开照片（Blob + Postgres）。
+            </p>
+          </div>
 
-              <div style={{ marginTop: 10 }}>
-                <div
-                  style={{
-                    fontSize: 13,
-                    color: "var(--text-secondary-on-light)",
-                    wordBreak: "break-all",
-                    lineHeight: 1.35,
-                  }}
-                  title={item.originalPath}
-                >
-                  {item.originalPath}
-                </div>
+          {canUpload ? (
+            <Link
+              href="/gallery/upload"
+              style={{
+                flex: "0 0 auto",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                borderRadius: "var(--radius-pill)",
+                border: "1px solid var(--ring)",
+                background:
+                  "linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2, var(--surface-1)) 100%)",
+                color: "var(--text-primary)",
+                padding: "8px 14px",
+                fontSize: 14,
+                lineHeight: 1,
+                textDecoration: "none",
+                boxShadow: "var(--shadow-whisper)",
+              }}
+            >
+              添加照片
+            </Link>
+          ) : null}
+        </header>
 
-                <button
-                  type="button"
-                  onClick={() => copySnippet(item.originalPath, item.name)}
-                  style={{
-                    marginTop: 10,
-                    width: "100%",
-                    borderRadius: "var(--radius-pill)",
-                    border: "1px solid rgba(0,0,0,0.12)",
-                    background: "var(--bg-light)",
-                    color: "var(--text-on-light)",
-                    padding: "10px 12px",
-                    cursor: "pointer",
-                    fontSize: 13,
-                  }}
-                >
-                  复制 MDX 片段
-                </button>
-              </div>
+        <div style={{ marginTop: 18 }}>
+          {photos.length === 0 ? (
+            <div
+              style={{
+                padding: 16,
+                borderRadius: "var(--radius-12)",
+                border: "1px solid var(--ring)",
+                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
+                boxShadow: "var(--shadow-whisper)",
+                color: "var(--text-secondary)",
+              }}
+            >
+              暂无公开照片。
             </div>
-          ))}
+          ) : (
+            <GalleryGrid photos={photos} />
+          )}
         </div>
-      )}
+      </div>
     </main>
   );
 }

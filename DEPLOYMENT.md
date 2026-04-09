@@ -54,20 +54,53 @@ git push -u origin main
 2. 找到 "Domain management"
 3. 添加自定義域名
 
-### 3. Vercel
+### 3. Vercel（推薦：Next.js）
+
+本專案目前以 **Next.js App Router** 為主（含 API Route、MDX Blog、Gallery 等），最推薦使用 Vercel 部署。
 
 #### 步驟 1: 導入項目
 1. 訪問 [vercel.com](https://vercel.com)
 2. 點擊 "New Project"
-3. 導入 GitHub 倉庫
+3. 導入 GitHub 倉庫（Self_Introduction）
 
-#### 步驟 2: 配置
-- **Framework Preset**: Other
-- **Build Command**: 留空
-- **Output Directory**: `.`
+#### 步驟 2: 構建配置（一般可自動識別）
+- **Framework Preset**: Next.js
+- **Build Command**: `npm run build`
+- **Install Command**: `npm ci`（可選）
 
-#### 步驟 3: 部署
-點擊 "Deploy"
+#### 步驟 3: 環境變量（必填清單）
+
+> 建議：同時配置到 **Production** 與 **Preview**。
+
+**A) Activity（GitHub 贡献日历）**
+- `GITHUB_USERNAME=TonyDDcui`
+- `GITHUB_TOKEN=...`（GitHub GraphQL token；若 token 失效/撤銷，Activity 會顯示更明確的錯誤原因）
+
+**B) GitHub OAuth（僅本人可上傳照片）**
+- `GITHUB_CLIENT_ID=...`
+- `GITHUB_CLIENT_SECRET=...`
+- `NEXTAUTH_SECRET=...`（隨機長字串）
+- `NEXTAUTH_URL=https://cuizhexiao.xyz`
+
+**C) Vercel Blob（存圖片）**
+- `BLOB_READ_WRITE_TOKEN=...`（可由 Vercel Storage / Blob 取得或由整合自動注入）
+
+**D) Vercel Postgres（存元数据）**
+- 透過 Vercel Postgres 整合建立 DB 後，Vercel 會自動注入連線相關 env（通常無需手動填）
+
+#### 步驟 4: Storage（Blob + Postgres）初始化
+
+**1) 啟用 Vercel Blob**
+- 在 Vercel Dashboard：Storage → Blob → Create
+- 確認專案可讀取 `BLOB_READ_WRITE_TOKEN`
+
+**2) 啟用 Vercel Postgres**
+- 在 Vercel Dashboard：Storage → Postgres → Create
+- 建表：在 Postgres 的 Query/Console 中執行以下初始化 SQL（專案內檔案）：
+  - `scripts/db/init.sql`
+
+#### 步驟 5: 部署
+點擊 "Deploy"（或 push 到 `main` 觸發自動部署）。
 
 ### 4. 傳統虛擬主機
 

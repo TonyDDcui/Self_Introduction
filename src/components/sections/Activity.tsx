@@ -19,9 +19,36 @@ type ApiDay = {
 type ApiWeek = { contributionDays: ApiDay[] };
 type ApiCalendar = { totalContributions: number; weeks: ApiWeek[] };
 
+type ApiErrorReason =
+  | "missing_env"
+  | "github_401"
+  | "github_403"
+  | "github_rate_limit"
+  | "github_error"
+  | "unknown_error";
+
 type ApiResult =
   | { ok: true; calendar: ApiCalendar }
-  | { ok: false; reason: string };
+  | { ok: false; reason: ApiErrorReason };
+
+function explain(reason: ApiErrorReason) {
+  switch (reason) {
+    case "missing_env":
+      return "未配置 GitHub 环境变量（GITHUB_USERNAME / GITHUB_TOKEN）。";
+    case "github_401":
+      return "GitHub Token 已失效（401）。请在 Vercel 更新 GITHUB_TOKEN。";
+    case "github_403":
+      return "GitHub Token 权限不足（403）。请检查 token 权限或仓库访问范围。";
+    case "github_rate_limit":
+      return "GitHub 接口触发限流（rate limit）。稍后再试。";
+    case "github_error":
+      return "GitHub 接口返回错误，暂时无法获取贡献数据。";
+    case "unknown_error":
+      return "发生未知错误，暂时无法获取贡献数据。";
+    default:
+      return "暂时无法获取 GitHub 贡献数据。";
+  }
+}
 
 function levelToInt(level: ContributionLevel): 0 | 1 | 2 | 3 | 4 {
   switch (level) {
@@ -57,7 +84,7 @@ export default function Activity() {
       })
       .catch(() => {
         if (!alive) return;
-        setResult({ ok: false, reason: "network_error" });
+        setResult({ ok: false, reason: "unknown_error" });
       });
     return () => {
       alive = false;
@@ -67,8 +94,7 @@ export default function Activity() {
   const meta = useMemo(() => {
     if (!result) return "正在加载贡献日历…";
     if (!result.ok) {
-      if (result.reason === "missing_env") return "未配置 GitHub 环境变量。";
-      return "暂时无法获取 GitHub 贡献数据。";
+      return explain(result.reason);
     }
     return `过去一年 · ${result.calendar.totalContributions} contributions`;
   }, [result]);
@@ -160,4 +186,3 @@ export default function Activity() {
     </section>
   );
 }
-
