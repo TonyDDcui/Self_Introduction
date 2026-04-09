@@ -17,6 +17,8 @@ const ALLOWED_IMAGE_TYPES = new Set([
   "image/webp",
   "image/gif",
   "image/avif",
+  "image/heic",
+  "image/heif",
 ]);
 
 function asNonEmptyString(v: unknown): string | null {
@@ -53,6 +55,10 @@ function mimeToExt(mime: string): string | null {
       return "gif";
     case "image/avif":
       return "avif";
+    case "image/heic":
+      return "heic";
+    case "image/heif":
+      return "heif";
     default:
       return null;
   }
