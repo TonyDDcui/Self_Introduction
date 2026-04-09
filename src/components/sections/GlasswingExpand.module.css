@@ -1,0 +1,74 @@
+.wrap {
+  --gw-p: 0;
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.backdrop {
+  /* 让背景像“变成该段背景”一样跟随滚动 */
+  position: sticky;
+  top: calc(var(--nav-height) + 10px);
+  height: min(86vh, 860px);
+
+  border-radius: calc(18px - 18px * var(--gw-p));
+  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  background: rgba(12, 18, 32, 0.42);
+
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+
+  /* 初始像“蒙版卡片”（移动端约 92%）→ 逐步扩展为满宽背景 */
+  transform: scaleX(calc(0.92 + 0.08 * var(--gw-p))) scaleY(calc(0.96 + 0.04 * var(--gw-p)));
+  transform-origin: center center;
+
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-page) 28%, transparent),
+    0 18px 70px rgba(0, 0, 0, 0.42);
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 纸质纹理：轻量 noise + 纤维方向纹理（克制） */
+.backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27220%27%20height%3D%27220%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27/%3E%3C/filter%3E%3Crect%20width%3D%27220%27%20height%3D%27220%27%20filter%3D%27url(%23n)%27%20opacity%3D%270.35%27/%3E%3C/svg%3E"),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 7px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 45%);
+  background-size: 220px 220px, auto, auto;
+  opacity: calc(0.22 + 0.20 * var(--gw-p));
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* 让内容“坐在”sticky 背景上 */
+.content {
+  position: relative;
+  margin-top: calc(-1 * min(86vh, 860px));
+  padding: 18px 0;
+}
+
+@media (max-width: 640px) {
+  .backdrop {
+    top: calc(var(--nav-height) + 8px);
+    height: 78vh;
+    border-radius: calc(16px - 16px * var(--gw-p));
+  }
+
+  .content {
+    margin-top: -78vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    transform: scaleX(0.92) scaleY(0.96);
+    border-radius: 18px;
+  }
+}
+
