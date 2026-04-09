@@ -20,7 +20,16 @@ export type ContributionCalendar = {
 
 export type ContributionsResponse =
   | { ok: true; calendar: ContributionCalendar }
-  | { ok: false; reason: "missing_env" | "github_error" | "unknown_error" };
+  | {
+      ok: false;
+      reason:
+        | "missing_env"
+        | "github_401"
+        | "github_403"
+        | "github_rate_limit"
+        | "github_error"
+        | "unknown_error";
+    };
 
 type GraphQLResponse = {
   data?: {
@@ -30,7 +39,7 @@ type GraphQLResponse = {
       };
     };
   };
-  errors?: Array<{ message?: string }>;
+  errors?: Array<{ message?: string; [key: string]: unknown }>;
 };
 
 const CONTRIBUTIONS_QUERY = /* GraphQL */ `
@@ -71,10 +80,26 @@ export async function getGithubContributionCalendar(params: {
       next: { revalidate: 86400 },
     });
 
+    if (!res.ok) console.error("[github] contributions graphql status:", res.status);
+
+    if (res.status === 401) return { ok: false, reason: "github_401" };
+    if (res.status === 403) {
+      const rl = res.headers.get("x-ratelimit-remaining");
+      if (rl === "0") return { ok: false, reason: "github_rate_limit" };
+      return { ok: false, reason: "github_403" };
+    }
     if (!res.ok) return { ok: false, reason: "github_error" };
+
     const json = (await res.json()) as GraphQLResponse;
+    if (json.errors?.length) {
+      console.error("[github] contributions graphql errors:", json.errors);
+      return { ok: false, reason: "github_error" };
+    }
     const cal = json.data?.user?.contributionsCollection?.contributionCalendar;
-    if (!cal) return { ok: false, reason: "github_error" };
+    if (!cal) {
+      console.error("[github] contributions graphql missing contributionCalendar");
+      return { ok: false, reason: "github_error" };
+    }
     return { ok: true, calendar: cal as ContributionCalendar };
   } catch {
     return { ok: false, reason: "unknown_error" };
