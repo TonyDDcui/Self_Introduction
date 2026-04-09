@@ -9,9 +9,9 @@ import styles from "./AlbumStoryFeed.module.css";
 
 export default function AlbumStoryFeed(props: {
   photos: PhotoRow[];
-  narratives: Map<string, string>;
+  narratives: Record<string, string>;
   canDelete?: boolean;
-  debugByPhotoId?: Map<string, string>;
+  debugByPhotoId?: Record<string, string>;
 }) {
   const { photos, narratives, canDelete = false, debugByPhotoId } = props;
   const router = useRouter();
@@ -26,9 +26,9 @@ export default function AlbumStoryFeed(props: {
   return (
     <section className={styles.wrap} aria-label="相册图文">
       {items.map((photo, idx) => {
-        const narrative = narratives.get(photo.id) || "";
+        const narrative = narratives[photo.id] || "";
         const alt = "照片";
-        const debug = debugByPhotoId?.get(photo.id);
+        const debug = debugByPhotoId?.[photo.id];
 
         return (
           <div key={photo.id}>
@@ -95,4 +95,3 @@ export default function AlbumStoryFeed(props: {
     </section>
   );
 }
-

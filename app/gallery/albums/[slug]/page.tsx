@@ -2,13 +2,12 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
-import AlbumNarrative from "../../../../src/components/gallery/AlbumNarrative";
-import GalleryGrid from "../../../../src/components/gallery/GalleryGrid";
+import AlbumStoryFeed from "../../../../src/components/gallery/AlbumStoryFeed";
 import GalleryAuthActions from "../../../../src/components/gallery/GalleryAuthActions";
 import { authOptions } from "../../../../src/lib/auth/options";
 import { isUploader } from "../../../../src/lib/auth/guards";
 import { buildAlbumSummaries, filterPhotosByAlbumSlug } from "../../../../src/lib/gallery/albums";
-import { getOrCreateAlbumNarrative } from "../../../../src/lib/gallery/albumNarratives";
+import { getOrCreatePhotoNarratives } from "../../../../src/lib/gallery/photoNarratives";
 import { listPublicPhotos } from "../../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
@@ -63,14 +62,15 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
   const albumPhotos = filterPhotosByAlbumSlug(photos, slug);
 
   const canUpload = isUploader(session);
-  const narrativeResult = await getOrCreateAlbumNarrative({
-    slug,
-    title: album.title,
+  const photoNarratives = await getOrCreatePhotoNarratives({
     photos: albumPhotos,
+    albumSlug: slug,
     debug: canUpload,
   });
-  const narrative = narrativeResult.narrative;
-  const narrativeDebug = narrativeResult.debug;
+  const narratives = Object.fromEntries(photoNarratives.narratives.entries());
+  const debugByPhotoId = photoNarratives.debugByPhotoId
+    ? Object.fromEntries(photoNarratives.debugByPhotoId.entries())
+    : undefined;
 
   return (
     <main
@@ -130,46 +130,28 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
           />
         </header>
 
-        {narrative ? (
-          <AlbumNarrative narrative={narrative} />
-        ) : canUpload && narrativeDebug ? (
-          <section
+        {albumPhotos.length === 0 ? (
+          <div
             style={{
-              marginTop: 14,
-              padding: "14px 14px 16px",
+              marginTop: 18,
+              padding: 16,
               borderRadius: "var(--radius-12)",
               border: "1px solid var(--ring)",
               background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
               boxShadow: "var(--shadow-whisper)",
+              color: "var(--text-secondary)",
             }}
           >
-            <div style={{ fontWeight: 600, letterSpacing: "-0.02em" }}>
-              AI 配文未生成（仅管理员可见）
-            </div>
-            <div style={{ marginTop: 8, color: "var(--text-secondary)", fontSize: 13 }}>
-              <code style={{ fontFamily: "var(--font-mono)" }}>{narrativeDebug}</code>
-            </div>
-          </section>
-        ) : null}
-
-        <div style={{ marginTop: 18 }}>
-          {albumPhotos.length === 0 ? (
-            <div
-              style={{
-                padding: 16,
-                borderRadius: "var(--radius-12)",
-                border: "1px solid var(--ring)",
-                background: "color-mix(in srgb, var(--surface-1) 84%, transparent)",
-                boxShadow: "var(--shadow-whisper)",
-                color: "var(--text-secondary)",
-              }}
-            >
-              这个相册里还没有照片。
-            </div>
-          ) : (
-            <GalleryGrid photos={albumPhotos} canDelete={canUpload} />
-          )}
-        </div>
+            这个相册里还没有照片。
+          </div>
+        ) : (
+          <AlbumStoryFeed
+            photos={albumPhotos}
+            narratives={narratives}
+            canDelete={canUpload}
+            debugByPhotoId={debugByPhotoId}
+          />
+        )}
       </div>
     </main>
   );
