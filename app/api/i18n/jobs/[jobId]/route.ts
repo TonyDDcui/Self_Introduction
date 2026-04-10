@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getJob } from "../../../../../src/lib/i18n/jobs";
+import { getPhotoTranslation } from "../../../../../src/lib/i18n/photoTranslations";
 import { assertSameOrigin, getClientIp, json429 } from "../../../../../src/lib/security/requestGuards";
 import { enforceRateLimit } from "../../../../../src/lib/security/rateLimit";
 
@@ -31,6 +32,12 @@ export async function GET(request: Request, context: { params: { jobId: string }
   if (!job) {
     return NextResponse.json({ ok: false, reason: "not_found" }, { status: 404 });
   }
+
+  // 如果是 photo_en 且已完成：顺便返回翻译缓存，减少前端额外请求
+  if (job.kind === "photo_en" && job.state === "done") {
+    const translation = await getPhotoTranslation(job.target_id, "en");
+    return NextResponse.json({ ok: true, job, translation });
+  }
+
   return NextResponse.json({ ok: true, job });
 }
-

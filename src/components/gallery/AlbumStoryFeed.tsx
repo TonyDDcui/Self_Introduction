@@ -6,6 +6,17 @@ import { useRouter } from "next/navigation";
 import type { PhotoRow } from "../../lib/gallery/photos";
 import GalleryImage from "./GalleryImage";
 import styles from "./AlbumStoryFeed.module.css";
+import { readClientLang } from "../../lib/i18n/client";
+import TranslationProgress from "../i18n/TranslationProgress";
+
+type JobState = {
+  jobId: string;
+  state: "queued" | "running" | "done" | "failed";
+  progress: number;
+  message: string;
+  error?: string;
+  translation?: { title?: string | null; tags?: unknown; narrative_md?: string | null };
+};
 
 export default function AlbumStoryFeed(props: {
   photos: PhotoRow[];
@@ -21,6 +32,8 @@ export default function AlbumStoryFeed(props: {
   const [items, setItems] = useState<PhotoRow[]>(photos);
   const [localNarratives, setLocalNarratives] = useState<Record<string, string>>(narratives);
   const [localDebug, setLocalDebug] = useState<Record<string, string> | undefined>(debugByPhotoId);
+  const [jobsByPhotoId, setJobsByPhotoId] = useState<Record<string, JobState>>({});
+  const lang = readClientLang();
 
   useEffect(() => {
     setItems(photos);
@@ -34,12 +47,94 @@ export default function AlbumStoryFeed(props: {
     setLocalDebug(debugByPhotoId);
   }, [debugByPhotoId]);
 
+  useEffect(() => {
+    if (lang !== "en") return;
+    // 英文模式：不展示中文配文，等待翻译任务完成
+    setLocalNarratives({});
+  }, [lang]);
+
+  useEffect(() => {
+    if (lang !== "en") return;
+    let cancelled = false;
+
+    async function ensureJobs() {
+      const next: Record<string, JobState> = {};
+      const targets = items.slice(0, 60);
+      for (const p of targets) {
+        try {
+          const res = await fetch(`/api/i18n/gallery/photos/${p.id}/en/ensure`, { method: "POST" });
+          const data = (await res.json().catch(() => null)) as { ok?: boolean; jobId?: string } | null;
+          if (!res.ok || !data?.ok || !data.jobId) continue;
+          next[p.id] = { jobId: data.jobId, state: "queued", progress: 0, message: "排队中…" };
+        } catch {
+          // ignore
+        }
+      }
+      if (!cancelled) setJobsByPhotoId((prev) => ({ ...next, ...prev }));
+    }
+
+    void ensureJobs();
+    return () => {
+      cancelled = true;
+    };
+  }, [items, lang]);
+
+  useEffect(() => {
+    if (lang !== "en") return;
+    const timer = setInterval(() => {
+      const entries = Object.entries(jobsByPhotoId).filter(
+        ([, v]) => v && v.jobId && v.state !== "done" && v.state !== "failed",
+      );
+      if (!entries.length) return;
+
+      void Promise.all(
+        entries.map(async ([photoId, st]) => {
+          try {
+            const res = await fetch(`/api/i18n/jobs/${st.jobId}`, { method: "GET" });
+            const data = (await res.json().catch(() => null)) as
+              | {
+                  ok?: boolean;
+                  job?: { state?: string; progress?: number; message?: string; error?: string | null };
+                  translation?: { title?: string | null; tags?: unknown; narrative_md?: string | null };
+                }
+              | null;
+            if (!res.ok || !data?.ok || !data.job) return;
+
+            const j = data.job;
+            const nextState = (j.state as JobState["state"]) || st.state;
+            const next: JobState = {
+              ...st,
+              state: nextState,
+              progress: typeof j.progress === "number" ? j.progress : st.progress,
+              message: typeof j.message === "string" && j.message.trim() ? j.message : st.message,
+              error: typeof j.error === "string" ? j.error : st.error,
+              translation: data.translation ?? st.translation,
+            };
+            setJobsByPhotoId((prev) => ({ ...prev, [photoId]: next }));
+
+            if (nextState === "done" && next.translation?.narrative_md) {
+              setLocalNarratives((prev) => ({ ...prev, [photoId]: String(next.translation!.narrative_md) }));
+            }
+          } catch {
+            // ignore
+          }
+        }),
+      );
+    }, 900);
+
+    return () => clearInterval(timer);
+  }, [jobsByPhotoId, lang]);
+
   return (
     <section className={styles.wrap} aria-label="相册图文">
       {items.map((photo, idx) => {
         const narrative = localNarratives[photo.id] || "";
         const alt = "照片";
         const debug = localDebug?.[photo.id];
+        const job = jobsByPhotoId[photo.id];
+        const tTitle = job?.translation?.title?.trim();
+        const tags = job?.translation?.tags;
+        const tagList = Array.isArray(tags) ? tags.map((x) => String(x)).filter(Boolean) : [];
 
         return (
           <div key={photo.id}>
@@ -98,7 +193,23 @@ export default function AlbumStoryFeed(props: {
                 ) : null}
               </div>
 
-              {narrative ? <p className={styles.narrative}>{narrative}</p> : null}
+              {lang === "en" ? (
+                narrative ? (
+                  <>
+                    {tTitle ? <p className={styles.narrative} style={{ fontWeight: 650 }}>{tTitle}</p> : null}
+                    <p className={styles.narrative}>{narrative}</p>
+                    {tagList.length ? (
+                      <p className={styles.narrative} style={{ color: "var(--text-tertiary)" }}>
+                        {tagList.map((t) => `#${t}`).join(" ")}
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <TranslationProgress progress={job?.progress ?? 0} message={job?.message} />
+                )
+              ) : narrative ? (
+                <p className={styles.narrative}>{narrative}</p>
+              ) : null}
 
               {canDelete ? (
                 <div className={styles.actionsRow}>
