@@ -48,3 +48,36 @@ create table if not exists rate_limits (
   reset_at timestamptz not null,
   updated_at timestamptz not null default now()
 );
+
+-- Photo translations (zh/en cache) for Gallery
+create table if not exists photo_translations (
+  photo_id text not null,
+  lang text not null,
+  title text,
+  tags jsonb,
+  narrative_md text,
+  source_hash text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (photo_id, lang)
+);
+
+create index if not exists idx_photo_translations_lang_updated_at
+  on photo_translations (lang, updated_at desc);
+
+-- i18n job queue (progress polling for translation tasks)
+create table if not exists i18n_jobs (
+  job_id text primary key,
+  kind text not null,
+  target_id text not null,
+  lang text not null,
+  state text not null,
+  progress int not null default 0,
+  message text not null default '',
+  error text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists idx_i18n_jobs_kind_target_lang
+  on i18n_jobs (kind, target_id, lang);
