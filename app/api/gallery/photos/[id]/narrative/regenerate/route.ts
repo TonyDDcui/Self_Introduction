@@ -32,7 +32,7 @@ function buildPrompt(photo: PhotoRow) {
 }
 
 function getCaptionModel() {
-  return process.env.EDGEFN_CAPTION_MODEL || "DeepSeek-V3.2";
+  return "DeepSeek-V3.2";
 }
 
 async function ensureTable() {

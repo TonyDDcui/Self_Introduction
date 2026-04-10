@@ -88,8 +88,8 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
 }
 
 function getCaptionModel() {
-  // 配文固定用更“直出”的模型，避免推理模型输出过程文
-  return process.env.EDGEFN_CAPTION_MODEL || "DeepSeek-V3.2";
+  // 配文强制使用 DeepSeek-V3.2（避免环境变量误配导致仍走其它模型）
+  return "DeepSeek-V3.2";
 }
 
 async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string }) {
