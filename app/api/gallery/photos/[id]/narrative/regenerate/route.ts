@@ -10,7 +10,7 @@ import { classifyAlbumFromPhoto } from "../../../../../../../src/lib/gallery/alb
 import {
   edgefnChatComplete,
 } from "../../../../../../../src/lib/ai/edgefn";
-import { tryExtractCaption } from "../../../../../../../src/lib/ai/captionGuard";
+import { buildCaptionPromptV2, sanitizeCaptionV2 } from "../../../../../../../src/lib/ai/captionV2";
 import {
   getClientIp,
   assertSameOrigin,
@@ -25,25 +25,10 @@ type ApiOk = { ok: true; narrative: string };
 type ApiErr = { ok: false; reason: string };
 
 function buildPrompt(photo: PhotoRow) {
-  const album = classifyAlbumFromPhoto(photo);
   const tags = (photo.tags || []).map((t) => String(t).trim()).filter(Boolean);
-  const tagLine = tags.length ? `标签：${tags.join("，")}` : "标签：无";
-  const titleLine = photo.title?.trim() ? `标题：${photo.title.trim()}` : "标题：无";
-  const captionLine = photo.caption?.trim() ? `描述：${photo.caption.trim()}` : "描述：无";
-  const isEmptyMeta =
-    tagLine === "标签：无" && titleLine === "标题：无" && captionLine === "描述：无";
-
-  const user = `请为一张照片生成配文，用于网页相册中图片下方的纯文字展示。\n\n相册主题：${album.title}\n主题词：${album.themeTags.join("，")}\n${tagLine}\n${titleLine}\n${captionLine}\n\n要求：\n1) 用中文\n2) 1 段为主，1～4 句，总字数不超过 200 字\n3) 语言：现代中文为主，尽量在每句中自然融入 4～8 字的古文/化用（如果不好生成，就用纯现代文，优先保证自然流畅）\n4) 不要 emoji，不要标题，不要列清单\n5) 不要解释你在推测/想象，直接给结果\n\n${
-    isEmptyMeta
-      ? "补充：如果标题/描述/标签都为空，请结合相册主题词合理想象一个常见场景来写配文。"
-      : ""
-  }`;
-
-  return {
-    system:
-      "你是一个为摄影作品撰写中文配文的编辑。不要输出思考过程或 <think> 标签；不要输出“用户让我/我将/分析”等过程文；只输出最终配文正文。",
-    user,
-  };
+  const desc = photo.caption?.trim() || "";
+  if (!desc) throw new Error("MISSING_DESCRIPTION");
+  return buildCaptionPromptV2({ tags, description: desc });
 }
 
 function getCaptionModel() {
@@ -85,13 +70,12 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
         { role: "system", content: prompt.system },
         { role: "user", content: prompt.user },
       ],
-      temperature: 0.5,
+      temperature: 0.35,
       maxTokens: 220,
       model: getCaptionModel(),
-      allowReasoningFallback: false,
     });
-    const extracted = tryExtractCaption(out);
-    if (extracted) return extracted;
+    const clean = sanitizeCaptionV2(out);
+    if (clean) return clean;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
@@ -105,16 +89,15 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
             "\n\n再次强调：只输出最终配文正文，不要出现“第一句/第二句/最后/思路/计划/加入/化用”等过程说明。",
         },
       ],
-      temperature: 0.35,
+      temperature: 0.25,
       maxTokens: 220,
       model: getCaptionModel(),
-      allowReasoningFallback: false,
     });
-    const extracted2 = tryExtractCaption(out);
-    if (extracted2) return extracted2;
+    const clean2 = sanitizeCaptionV2(out);
+    if (clean2) return clean2;
   }
 
-  throw new Error("AI_CAPTION_INVALID_OUTPUT");
+  throw new Error("AI_CAPTION_FAILED");
 }
 
 export async function POST(request: Request, context: { params: { id: string } }) {

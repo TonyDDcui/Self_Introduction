@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import type { PhotoRow } from "../../lib/gallery/photos";
 import GalleryImage from "./GalleryImage";
 import styles from "./AlbumStoryFeed.module.css";
-import { tryExtractCaption } from "../../lib/ai/captionGuard";
 
 export default function AlbumStoryFeed(props: {
   photos: PhotoRow[];
@@ -38,8 +37,7 @@ export default function AlbumStoryFeed(props: {
   return (
     <section className={styles.wrap} aria-label="相册图文">
       {items.map((photo, idx) => {
-        const narrativeRaw = localNarratives[photo.id] || "";
-        const narrative = narrativeRaw ? tryExtractCaption(narrativeRaw) ?? "" : "";
+        const narrative = localNarratives[photo.id] || "";
         const alt = "照片";
         const debug = localDebug?.[photo.id];
 
@@ -151,14 +149,6 @@ export default function AlbumStoryFeed(props: {
                   AI 配文未生成（仅管理员可见）：
                   <br />
                   <code>{debug}</code>
-                </div>
-              ) : null}
-
-              {canDelete && narrativeRaw && !narrative ? (
-                <div className={styles.debug}>
-                  AI 配文疑似包含过程文，已自动隐藏（仅管理员可见）。
-                  <br />
-                  <code>请点击「重新生成配文」</code>
                 </div>
               ) : null}
             </article>

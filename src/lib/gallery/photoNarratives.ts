@@ -1,8 +1,7 @@
 import { sql } from "../db";
 import { edgefnChatComplete } from "../ai/edgefn";
 import type { PhotoRow } from "./photos";
-import { classifyAlbumFromPhoto } from "./albumRules";
-import { tryExtractCaption } from "../ai/captionGuard";
+import { buildCaptionPromptV2, sanitizeCaptionV2 } from "../ai/captionV2";
 
 type PhotoNarrativeRow = {
   photo_id: string;
@@ -49,34 +48,29 @@ async function getPhotoNarratives(photoIds: string[]) {
 
   const map = new Map<string, string>();
   for (const r of rows) {
-    const extracted = tryExtractCaption(r.narrative_md);
-    if (!extracted) {
-      // 已污染（过程文/空输出）：删掉，让后续流程重新生成
+    // 旧缓存如果包含过程文/脏数据：直接删掉，走新逻辑重新生成
+    const clean = sanitizeCaptionV2(r.narrative_md);
+    if (!clean) {
       try {
-        await sql`
-          delete from photo_narratives
-          where photo_id = ${r.photo_id}
-        `;
+        await sql`delete from photo_narratives where photo_id = ${r.photo_id}`;
       } catch {
         // ignore
       }
       continue;
     }
-
-    // 旧数据如果包含过程文：清洗后回写，避免用户看到
-    if (extracted !== r.narrative_md) {
+    // 若能清洗出更干净的版本，回写一次
+    if (clean !== r.narrative_md) {
       try {
         await sql`
           update photo_narratives
-          set narrative_md = ${extracted}, updated_at = now()
+          set narrative_md = ${clean}, updated_at = now()
           where photo_id = ${r.photo_id}
         `;
       } catch {
         // ignore
       }
     }
-
-    map.set(r.photo_id, extracted);
+    map.set(r.photo_id, clean);
   }
   return map;
 }
@@ -93,28 +87,6 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
   `;
 }
 
-function buildPrompt(photo: PhotoRow) {
-  const album = classifyAlbumFromPhoto(photo);
-  const tags = (photo.tags || []).map((t) => String(t).trim()).filter(Boolean);
-  const tagLine = tags.length ? `标签：${tags.join("，")}` : "标签：无";
-  const titleLine = photo.title?.trim() ? `标题：${photo.title.trim()}` : "标题：无";
-  const captionLine = photo.caption?.trim() ? `描述：${photo.caption.trim()}` : "描述：无";
-  const isEmptyMeta =
-    tagLine === "标签：无" && titleLine === "标题：无" && captionLine === "描述：无";
-
-  const user = `请为一张照片生成配文，用于网页相册中图片下方的纯文字展示。\n\n相册主题：${album.title}\n主题词：${album.themeTags.join("，")}\n${tagLine}\n${titleLine}\n${captionLine}\n\n要求：\n1) 用中文\n2) 1 段为主，1～4 句，总字数不超过 200 字\n3) 语言：现代中文为主，尽量在每句中自然融入 4～8 字的古文/化用（如果不好生成，就用纯现代文，优先保证自然流畅）\n4) 不要 emoji，不要标题，不要列清单\n5) 不要解释你在推测/想象，直接给结果\n\n${
-    isEmptyMeta
-      ? "补充：如果标题/描述/标签都为空，请结合相册主题词合理想象一个常见场景来写配文。"
-      : ""
-  }`;
-
-  return {
-    system:
-      "你是一个为摄影作品撰写中文配文的编辑。不要输出思考过程或 <think> 标签；不要输出“用户让我/我将/分析”等过程文；只输出最终配文正文。",
-    user,
-  };
-}
-
 function getCaptionModel() {
   // 配文单独用更“直出”的模型（例如 GLM-5），避免推理模型输出过程文
   return process.env.EDGEFN_CAPTION_MODEL || process.env.EDGEFN_MODEL;
@@ -122,7 +94,10 @@ function getCaptionModel() {
 
 async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string }) {
   const { photo } = input;
-  const prompt = buildPrompt(photo);
+  const tags = (photo.tags || []).map((t) => String(t).trim()).filter(Boolean);
+  const desc = photo.caption?.trim() || "";
+  if (!desc) throw new Error("MISSING_DESCRIPTION");
+  const prompt = buildCaptionPromptV2({ tags, description: desc });
 
   let out1 = "";
   try {
@@ -131,11 +106,9 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
         { role: "system", content: prompt.system },
         { role: "user", content: prompt.user },
       ],
-      temperature: 0.5,
-      maxTokens: 260,
+      temperature: 0.35,
+      maxTokens: 220,
       model: getCaptionModel(),
-      // 配文禁止从 reasoning 兜底，避免把 thinking 当正文
-      allowReasoningFallback: false,
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -143,30 +116,25 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
     if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
   }
 
-  if (out1) {
-    const extracted = tryExtractCaption(out1);
-    if (extracted) return extracted;
-  }
+  const clean1 = sanitizeCaptionV2(out1);
+  if (clean1) return clean1;
 
   const out2 = await edgefnChatComplete({
     messages: [
       { role: "system", content: prompt.system },
       {
         role: "user",
-        content:
-          prompt.user +
-          "\n\n再次强调：只输出最终配文正文。严禁输出写作计划/步骤/分析，例如“第一句/第二句/最后/思路/计划/加入/化用/典故”等。",
+        content: `${prompt.user}\n\n再次强调：只输出配文正文，不要输出任何解释或过程。`,
       },
     ],
-    temperature: 0.35,
-    maxTokens: 260,
+    temperature: 0.25,
+    maxTokens: 220,
     model: getCaptionModel(),
-    allowReasoningFallback: false,
   });
 
-  const extracted2 = tryExtractCaption(out2);
-  if (extracted2) return extracted2;
-  throw new Error("AI_CAPTION_INVALID_OUTPUT");
+  const clean2 = sanitizeCaptionV2(out2);
+  if (clean2) return clean2;
+  throw new Error("AI_CAPTION_FAILED");
 }
 
 export async function getOrCreatePhotoNarratives(input: {
