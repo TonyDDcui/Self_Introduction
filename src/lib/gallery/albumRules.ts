@@ -74,9 +74,32 @@ function normalizeText(v: string): string {
     .trim();
 }
 
+function titlePrefixFromTitle(title?: string | null): string | null {
+  const t = (title ?? "").trim();
+  if (!t) return null;
+  // 规则：遇到分隔符（- / — / _ / 空格）取前缀
+  const parts = t.split(/[\s\-—_\/]+/g).map((s) => s.trim()).filter(Boolean);
+  if (!parts.length) return null;
+  return parts[0] || null;
+}
+
 export function classifyAlbumFromPhoto(
   photo: Pick<PhotoRow, "title" | "caption" | "tags" | "category">,
 ): { slug: string; title: string; themeTags: string[] } {
+  // 优先：按标题前缀归类（用户需求）
+  const prefix = titlePrefixFromTitle(photo.title);
+  if (prefix) {
+    const pNorm = normalizeText(prefix);
+    const matched = ALBUM_RULES.find(
+      (r) =>
+        normalizeText(r.title) === pNorm || r.keywords.some((k) => normalizeText(k) === pNorm),
+    );
+    if (matched) return { slug: matched.slug, title: matched.title, themeTags: matched.themeTags };
+
+    // 兜底：slug 直接用前缀（允许中文 slug；Next 路由会自动 URL encode/decode）
+    return { slug: prefix, title: prefix, themeTags: [prefix] };
+  }
+
   const text = normalizeText(
     `${photo.title ?? ""} ${photo.caption ?? ""} ${photo.category ?? ""} ${(photo.tags ?? []).join(" ")}`,
   );
@@ -93,4 +116,3 @@ export function classifyAlbumFromPhoto(
     themeTags: [...DEFAULT_ALBUM.themeTags],
   };
 }
-

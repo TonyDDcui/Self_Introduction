@@ -216,6 +216,17 @@
   text-decoration: none;
 }
 
+/* 亮色模式：按钮强调色 */
+:global(html[data-mode="light"]) .pillLink {
+  background: var(--button-left, #c96442);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+:global(html[data-mode="light"]) .pillLink:hover {
+  filter: brightness(1.04);
+}
+
 @media (max-width: 900px) {
   .item {
     grid-column: span 6;
