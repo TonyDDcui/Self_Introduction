@@ -56,7 +56,7 @@ function extractTextFromUnknownContent(content: unknown): string {
     .join("");
 }
 
-function extractChatContent(data: EdgeFnChatResponse): string {
+function extractChatContent(data: EdgeFnChatResponse, allowReasoningFallback: boolean): string {
   const c0 = data.choices?.[0];
   const msgObj = c0?.message;
   if (msgObj && typeof msgObj === "object") {
@@ -70,12 +70,14 @@ function extractChatContent(data: EdgeFnChatResponse): string {
     const msgTextField = extractTextFromUnknownContent(msgObj.text);
     if (msgTextField) return msgTextField;
 
-    // 部分推理模型会把最终输出混在 reasoning 字段里；这里兜底取出，
-    // 后续会在 stripReasoningArtifacts 里剥离过程文，只留下可展示内容。
-    for (const [k, v] of Object.entries(msgObj)) {
-      if (!k.toLowerCase().startsWith("reasoning")) continue;
-      const r = extractTextFromUnknownContent(v);
-      if (r) return r;
+    if (allowReasoningFallback) {
+      // 部分推理模型会把最终输出混在 reasoning 字段里；这里兜底取出，
+      // 后续会在 stripReasoningArtifacts 里剥离过程文，只留下可展示内容。
+      for (const [k, v] of Object.entries(msgObj)) {
+        if (!k.toLowerCase().startsWith("reasoning")) continue;
+        const r = extractTextFromUnknownContent(v);
+        if (r) return r;
+      }
     }
   }
 
@@ -146,6 +148,7 @@ export async function edgefnChatComplete(input: {
   temperature?: number;
   maxTokens?: number;
   model?: string;
+  allowReasoningFallback?: boolean;
 }): Promise<string> {
   const baseUrl = getEdgeFnBaseUrl();
   const apiKey = getEdgeFnApiKey();
@@ -183,7 +186,9 @@ export async function edgefnChatComplete(input: {
     throw new Error(`EDGEFN_INVALID_JSON${raw ? `:${raw.slice(0, 200)}` : ""}`);
   }
 
-  const content = stripReasoningArtifacts(extractChatContent(data)).trim();
+  const content = stripReasoningArtifacts(
+    extractChatContent(data, input.allowReasoningFallback !== false),
+  ).trim();
   if (!content) {
     // 把响应体打出来一小段，方便定位“返回结构不兼容/网关无输出”
     throw new Error(`EDGEFN_EMPTY_RESPONSE${raw ? `:${raw.slice(0, 200)}` : ""}`);

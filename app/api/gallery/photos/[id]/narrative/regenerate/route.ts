@@ -85,9 +85,10 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
         { role: "system", content: prompt.system },
         { role: "user", content: prompt.user },
       ],
-      temperature: 0.7,
+      temperature: 0.5,
       maxTokens: 220,
       model: getCaptionModel(),
+      allowReasoningFallback: false,
     });
     const extracted = tryExtractCaption(out);
     if (extracted) return extracted;
@@ -104,9 +105,10 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
             "\n\n再次强调：只输出最终配文正文，不要出现“第一句/第二句/最后/思路/计划/加入/化用”等过程说明。",
         },
       ],
-      temperature: 0.55,
+      temperature: 0.35,
       maxTokens: 220,
       model: getCaptionModel(),
+      allowReasoningFallback: false,
     });
     const extracted2 = tryExtractCaption(out);
     if (extracted2) return extracted2;

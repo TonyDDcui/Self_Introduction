@@ -131,9 +131,11 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
         { role: "system", content: prompt.system },
         { role: "user", content: prompt.user },
       ],
-      temperature: 0.7,
+      temperature: 0.5,
       maxTokens: 260,
       model: getCaptionModel(),
+      // 配文禁止从 reasoning 兜底，避免把 thinking 当正文
+      allowReasoningFallback: false,
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -156,9 +158,10 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
           "\n\n再次强调：只输出最终配文正文。严禁输出写作计划/步骤/分析，例如“第一句/第二句/最后/思路/计划/加入/化用/典故”等。",
       },
     ],
-    temperature: 0.55,
+    temperature: 0.35,
     maxTokens: 260,
     model: getCaptionModel(),
+    allowReasoningFallback: false,
   });
 
   const extracted2 = tryExtractCaption(out2);
