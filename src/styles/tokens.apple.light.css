@@ -1,12 +1,18 @@
 html[data-theme="apple"][data-mode="light"] {
-  --bg-page: #f5f5f7;
+  /* 通用配色（按你的指定） */
+  --bg-page: #e8e6dc;
   --bg-dark: #000000;
-  --surface-1: #ffffff;
+  --surface-1: #faf9f5;
+  --surface-2: #f0ede3;
   --text-primary: #1d1d1f;
   --text-secondary: rgba(0, 0, 0, 0.8);
   --text-tertiary: rgba(0, 0, 0, 0.48);
   --link: #0066cc;
-  --accent: #0071e3;
+  /* 左侧按键（通用主按钮色） */
+  --accent: #c96442;
+  --button-left: #c96442;
+  /* 模块蒙版底色 */
+  --module-mask: #d97757;
   --focus: #0071e3;
   --ring: rgba(0, 0, 0, 0.08);
 }

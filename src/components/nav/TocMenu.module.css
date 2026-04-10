@@ -13,8 +13,9 @@
 
   border-radius: var(--radius-12);
   border: 1px solid var(--ring);
-  background: var(--surface-1);
-  color: var(--text-primary);
+  /* 左侧按键：通用指定色 */
+  background: var(--button-left, var(--accent));
+  color: #fff;
 
   transition: transform var(--motion-fast) var(--motion-ease-out),
     box-shadow var(--motion-fast) var(--motion-ease-out);
@@ -22,7 +23,8 @@
 
 .button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 0 0 1px var(--ring), var(--shadow-whisper);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--button-left, var(--accent)) 35%, var(--ring)),
+    var(--shadow-whisper);
 }
 
 .icon {

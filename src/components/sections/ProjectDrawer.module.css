@@ -12,11 +12,12 @@
   border: 0;
   padding: 0;
   margin: 0;
-  background: rgba(20, 20, 19, 0.35);
+  /* 模块蒙版：用主题变量控制底色 */
+  background: color-mix(in srgb, var(--module-mask, #000) 36%, transparent);
 }
 
 html[data-mode="light"] .scrim {
-  background: rgba(20, 20, 19, 0.18);
+  background: color-mix(in srgb, var(--module-mask, #000) 22%, transparent);
 }
 
 .panel {
@@ -125,7 +126,8 @@ html[data-mode="light"] .scrim {
 }
 
 .primary {
-  background: #0071e3;
+  /* 左侧按键（主按钮） */
+  background: var(--button-left, var(--accent));
   color: #fff;
   border: 1px solid transparent;
 }
@@ -165,4 +167,3 @@ html[data-mode="light"] .scrim {
     animation: none !important;
   }
 }
-

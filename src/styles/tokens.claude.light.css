@@ -1,16 +1,21 @@
 html[data-theme="claude"][data-mode="light"] {
-  /* 参考 claude.com：更干净的奶白底 + 更柔和的中性色 */
-  --bg-page: #faf7f2;
-  --surface-1: #fdfbf7;
-  --surface-2: #f0ece4;
+  /* 通用配色（按你的指定） */
+  --bg-page: #e8e6dc;
+  --surface-1: #faf9f5;
+  --surface-2: #f0ede3;
 
   --text-primary: #111111;
   --text-secondary: #5a5650;
   --text-tertiary: #8b847c;
 
-  /* claude.com 按钮与链接更偏“墨色”，accent 主要用于强调色 */
+  /* 左侧按键（通用主按钮色） */
+  --accent: #c96442;
+  --button-left: #c96442;
+
+  /* 模块蒙版底色（会在 CSS 中与透明混合使用） */
+  --module-mask: #d97757;
+
   --link: #151515;
-  --accent: #151515;
   --focus: #3898ec;
-  --ring: #e3ddd4;
+  --ring: #d1cfc5;
 }

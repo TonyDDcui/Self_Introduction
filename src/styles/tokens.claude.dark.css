@@ -7,6 +7,8 @@ html[data-theme="claude"][data-mode="dark"] {
   --text-tertiary: #87867f;
   --link: #d97757;
   --accent: #c96442;
+  --button-left: #c96442;
+  --module-mask: #d97757;
   --focus: #3898ec;
   --ring: #30302e;
 }
