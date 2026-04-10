@@ -85,9 +85,10 @@
   width: 45px;
   height: 45px;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  /* 用户要求：不要头像外圈黑框/描边 */
+  border: 0;
   object-fit: cover;
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bg-page) 30%, transparent);
+  box-shadow: none;
 }
 
 .list {
