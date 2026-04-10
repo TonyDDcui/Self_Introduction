@@ -10,7 +10,7 @@ import { classifyAlbumFromPhoto } from "../../../../../../../src/lib/gallery/alb
 import {
   edgefnChatComplete,
 } from "../../../../../../../src/lib/ai/edgefn";
-import { looksLikeProcessText } from "../../../../../../../src/lib/ai/captionGuard";
+import { tryExtractCaption } from "../../../../../../../src/lib/ai/captionGuard";
 import {
   getClientIp,
   assertSameOrigin,
@@ -89,7 +89,8 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
       maxTokens: 220,
       model: getCaptionModel(),
     });
-    if (!looksLikeProcessText(out)) return out;
+    const extracted = tryExtractCaption(out);
+    if (extracted) return extracted;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
@@ -103,11 +104,12 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
             "\n\n再次强调：只输出最终配文正文，不要出现“第一句/第二句/最后/思路/计划/加入/化用”等过程说明。",
         },
       ],
-      temperature: 0.7,
+      temperature: 0.55,
       maxTokens: 220,
       model: getCaptionModel(),
     });
-    if (!looksLikeProcessText(out)) return out;
+    const extracted2 = tryExtractCaption(out);
+    if (extracted2) return extracted2;
   }
 
   throw new Error("AI_CAPTION_INVALID_OUTPUT");

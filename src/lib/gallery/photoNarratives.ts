@@ -2,7 +2,7 @@ import { sql } from "../db";
 import { edgefnChatComplete } from "../ai/edgefn";
 import type { PhotoRow } from "./photos";
 import { classifyAlbumFromPhoto } from "./albumRules";
-import { looksLikeProcessText } from "../ai/captionGuard";
+import { tryExtractCaption } from "../ai/captionGuard";
 
 type PhotoNarrativeRow = {
   photo_id: string;
@@ -112,7 +112,10 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
     if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
   }
 
-  if (out1 && !looksLikeProcessText(out1)) return out1;
+  if (out1) {
+    const extracted = tryExtractCaption(out1);
+    if (extracted) return extracted;
+  }
 
   const out2 = await edgefnChatComplete({
     messages: [
@@ -124,12 +127,13 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
           "\n\n再次强调：只输出最终配文正文。严禁输出写作计划/步骤/分析，例如“第一句/第二句/最后/思路/计划/加入/化用/典故”等。",
       },
     ],
-    temperature: 0.7,
+    temperature: 0.55,
     maxTokens: 260,
     model: getCaptionModel(),
   });
 
-  if (!looksLikeProcessText(out2)) return out2;
+  const extracted2 = tryExtractCaption(out2);
+  if (extracted2) return extracted2;
   throw new Error("AI_CAPTION_INVALID_OUTPUT");
 }
 
@@ -169,4 +173,3 @@ export async function getOrCreatePhotoNarratives(input: {
 
   return { narratives: existing, debugByPhotoId };
 }
-

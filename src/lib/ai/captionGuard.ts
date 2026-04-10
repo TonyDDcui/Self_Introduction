@@ -14,3 +14,55 @@ export function looksLikeProcessText(text: string): boolean {
   return PROCESS_PATTERNS.some((re) => re.test(s));
 }
 
+function stripProcessLines(text: string): string {
+  const lines = text
+    .split(/\n+/g)
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+  const kept: string[] = [];
+  for (const line of lines) {
+    const normalized = line.replace(/^[-*•]\s*/g, "").trim();
+    if (!normalized) continue;
+    if (PROCESS_PATTERNS.some((re) => re.test(normalized))) continue;
+    if (normalized.includes("<think") || normalized.includes("</think>")) continue;
+    kept.push(normalized);
+  }
+
+  return kept.join("\n").trim();
+}
+
+/**
+ * 当模型把“写作计划 + 最终配文”混在一起时，尽量从中剥离出可展示的配文正文。
+ * 目标：提高成功率，同时保证不展示过程文。
+ */
+export function tryExtractCaption(text: string): string | null {
+  const raw = text.trim();
+  if (!raw) return null;
+
+  // 1) 优先去掉过程行后保留剩余
+  const stripped = stripProcessLines(raw);
+  const candidate = stripped || raw;
+
+  // 2) 如果仍包含过程模式，尝试取最后一句/最后段
+  let s = candidate;
+  if (looksLikeProcessText(s)) {
+    const segs = s
+      .split(/[。！？；\n]/g)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    for (let i = segs.length - 1; i >= 0; i -= 1) {
+      const part = segs[i];
+      if (part.length < 2) continue;
+      if (!looksLikeProcessText(part)) return part;
+    }
+    return null;
+  }
+
+  // 3) 合并为单段并做轻量长度控制
+  s = s.replace(/\s*\n+\s*/g, " ").trim();
+  if (s.length < 2) return null;
+  if (s.length > 220) s = s.slice(0, 220).trim();
+
+  return s;
+}
