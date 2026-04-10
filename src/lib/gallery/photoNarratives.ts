@@ -2,6 +2,7 @@ import { sql } from "../db";
 import { edgefnChatComplete } from "../ai/edgefn";
 import type { PhotoRow } from "./photos";
 import { classifyAlbumFromPhoto } from "./albumRules";
+import { looksLikeProcessText } from "../ai/captionGuard";
 
 type PhotoNarrativeRow = {
   photo_id: string;
@@ -77,6 +78,7 @@ function buildPrompt(photo: PhotoRow) {
       ? "补充：如果标题/描述/标签都为空，请结合相册主题词合理想象一个常见场景来写配文。"
       : ""
   }`;
+
   return {
     system:
       "你是一个为摄影作品撰写中文配文的编辑。不要输出思考过程或 <think> 标签；不要输出“用户让我/我将/分析”等过程文；只输出最终配文正文。",
@@ -84,32 +86,51 @@ function buildPrompt(photo: PhotoRow) {
   };
 }
 
+function getCaptionModel() {
+  // 配文单独用更“直出”的模型（例如 GLM-5），避免推理模型输出过程文
+  return process.env.EDGEFN_CAPTION_MODEL || process.env.EDGEFN_MODEL;
+}
 
 async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string }) {
   const { photo } = input;
   const prompt = buildPrompt(photo);
+
+  let out1 = "";
   try {
-    return await edgefnChatComplete({
+    out1 = await edgefnChatComplete({
       messages: [
         { role: "system", content: prompt.system },
         { role: "user", content: prompt.user },
       ],
       temperature: 0.7,
-      maxTokens: 220,
+      maxTokens: 260,
+      model: getCaptionModel(),
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    // 少量网关偶发空响应：重试一次（仍保持纯文本最终输出）
+    // 少量网关偶发空响应：允许继续走一次重试
     if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
-    return await edgefnChatComplete({
-      messages: [
-        { role: "system", content: prompt.system },
-        { role: "user", content: prompt.user },
-      ],
-      temperature: 0.7,
-      maxTokens: 220,
-    });
   }
+
+  if (out1 && !looksLikeProcessText(out1)) return out1;
+
+  const out2 = await edgefnChatComplete({
+    messages: [
+      { role: "system", content: prompt.system },
+      {
+        role: "user",
+        content:
+          prompt.user +
+          "\n\n再次强调：只输出最终配文正文。严禁输出写作计划/步骤/分析，例如“第一句/第二句/最后/思路/计划/加入/化用/典故”等。",
+      },
+    ],
+    temperature: 0.7,
+    maxTokens: 260,
+    model: getCaptionModel(),
+  });
+
+  if (!looksLikeProcessText(out2)) return out2;
+  throw new Error("AI_CAPTION_INVALID_OUTPUT");
 }
 
 export async function getOrCreatePhotoNarratives(input: {
@@ -148,3 +169,4 @@ export async function getOrCreatePhotoNarratives(input: {
 
   return { narratives: existing, debugByPhotoId };
 }
+

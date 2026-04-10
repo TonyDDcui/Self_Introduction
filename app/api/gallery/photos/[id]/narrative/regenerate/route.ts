@@ -10,6 +10,7 @@ import { classifyAlbumFromPhoto } from "../../../../../../../src/lib/gallery/alb
 import {
   edgefnChatComplete,
 } from "../../../../../../../src/lib/ai/edgefn";
+import { looksLikeProcessText } from "../../../../../../../src/lib/ai/captionGuard";
 import {
   getClientIp,
   assertSameOrigin,
@@ -45,6 +46,10 @@ function buildPrompt(photo: PhotoRow) {
   };
 }
 
+function getCaptionModel() {
+  return process.env.EDGEFN_CAPTION_MODEL || process.env.EDGEFN_MODEL;
+}
+
 async function ensureTable() {
   await sql`
     create table if not exists photo_narratives (
@@ -75,26 +80,37 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
 async function createNarrative(photo: PhotoRow): Promise<string> {
   const prompt = buildPrompt(photo);
   try {
-    return await edgefnChatComplete({
+    const out = await edgefnChatComplete({
       messages: [
         { role: "system", content: prompt.system },
         { role: "user", content: prompt.user },
       ],
       temperature: 0.7,
       maxTokens: 220,
+      model: getCaptionModel(),
     });
+    if (!looksLikeProcessText(out)) return out;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
-    return await edgefnChatComplete({
+    const out = await edgefnChatComplete({
       messages: [
         { role: "system", content: prompt.system },
-        { role: "user", content: prompt.user },
+        {
+          role: "user",
+          content:
+            prompt.user +
+            "\n\n再次强调：只输出最终配文正文，不要出现“第一句/第二句/最后/思路/计划/加入/化用”等过程说明。",
+        },
       ],
       temperature: 0.7,
       maxTokens: 220,
+      model: getCaptionModel(),
     });
+    if (!looksLikeProcessText(out)) return out;
   }
+
+  throw new Error("AI_CAPTION_INVALID_OUTPUT");
 }
 
 export async function POST(request: Request, context: { params: { id: string } }) {

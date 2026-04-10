@@ -145,6 +145,7 @@ export async function edgefnChatComplete(input: {
   messages: EdgeFnChatMessage[];
   temperature?: number;
   maxTokens?: number;
+  model?: string;
 }): Promise<string> {
   const baseUrl = getEdgeFnBaseUrl();
   const apiKey = getEdgeFnApiKey();
@@ -153,7 +154,7 @@ export async function edgefnChatComplete(input: {
   }
 
   // EdgeFn 网关要求必填 model：优先使用环境变量，否则使用默认模型名
-  const model = process.env.EDGEFN_MODEL || "DeepSeek-R1-Distill-Qwen-14B";
+  const model = input.model || process.env.EDGEFN_MODEL || "DeepSeek-R1-Distill-Qwen-14B";
 
   const res = await fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
