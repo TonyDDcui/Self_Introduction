@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isHeicLike, toJpegFilename } from "../imageFormats";
+import { isHeicLike, isHeicUrl, toJpegFilename } from "../imageFormats";
 
 describe("imageFormats", () => {
   it("detects heic/heif by mime", () => {
@@ -21,5 +21,10 @@ describe("imageFormats", () => {
     expect(toJpegFilename("c.png")).toBe("c.jpg");
     expect(toJpegFilename("noext")).toBe("noext.jpg");
   });
-});
 
+  it("detects heic/heif by url", () => {
+    expect(isHeicUrl("https://x.test/a.heic")).toBe(true);
+    expect(isHeicUrl("https://x.test/a.HEIF")).toBe(true);
+    expect(isHeicUrl("https://x.test/a.jpg")).toBe(false);
+  });
+});
