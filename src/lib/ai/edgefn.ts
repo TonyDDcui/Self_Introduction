@@ -69,6 +69,14 @@ function extractChatContent(data: EdgeFnChatResponse): string {
     if (msgFinal) return msgFinal;
     const msgTextField = extractTextFromUnknownContent(msgObj.text);
     if (msgTextField) return msgTextField;
+
+    // 某些推理模型（例如 DeepSeek R1）会把输出放在 reasoning* 字段里。
+    // 我们会在 stripReasoningArtifacts 里剥离思考过程，仅保留最终可展示内容。
+    for (const [k, v] of Object.entries(msgObj)) {
+      if (!k.toLowerCase().startsWith("reasoning")) continue;
+      const r = extractTextFromUnknownContent(v);
+      if (r) return r;
+    }
   }
 
   const choiceText = c0?.text;
@@ -80,7 +88,6 @@ function extractChatContent(data: EdgeFnChatResponse): string {
 }
 
 function stripReasoningArtifacts(text: string): string {
-  const original = text;
   let s = text;
 
   // DeepSeek R1 系列经常用 <think>...</think> 包裹思考过程
@@ -93,8 +100,25 @@ function stripReasoningArtifacts(text: string): string {
   // 常见前缀
   s = s.replace(/^\s*(最终答案|final answer|答案)\s*[:：]\s*/i, "");
 
-  const cleaned = s.trim();
-  return cleaned ? cleaned : original.trim();
+  let cleaned = s.trim();
+  if (!cleaned) return "";
+
+  // 兜底：如果仍包含大段推理，把“最后一段/最后一行”当作最终输出尝试提取
+  if (cleaned.length > 120 && cleaned.includes("\n")) {
+    const parts = cleaned
+      .split(/\n+/g)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const last = parts[parts.length - 1] ?? "";
+    if (last.length >= 2 && last.length <= 120) cleaned = last;
+  }
+
+  return cleaned;
+}
+
+export function edgefnSupportsImages(): boolean {
+  // 默认关闭：只有明确配置才启用图片识别（避免多模态导致空响应/失败）
+  return process.env.EDGEFN_SUPPORTS_IMAGES === "1";
 }
 
 export async function edgefnChatComplete(input: {

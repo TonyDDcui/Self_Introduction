@@ -7,7 +7,10 @@ import { isUploader } from "../../../../../../../src/lib/auth/guards";
 import { sql } from "../../../../../../../src/lib/db";
 import type { PhotoRow } from "../../../../../../../src/lib/gallery/photos";
 import { classifyAlbumFromPhoto } from "../../../../../../../src/lib/gallery/albumRules";
-import { edgefnChatComplete } from "../../../../../../../src/lib/ai/edgefn";
+import {
+  edgefnChatComplete,
+  edgefnSupportsImages,
+} from "../../../../../../../src/lib/ai/edgefn";
 import {
   getClientIp,
   assertSameOrigin,
@@ -30,7 +33,8 @@ function buildPrompt(photo: PhotoRow) {
   const user = `请为一张照片生成一段简短配文，用于网页相册中图片下方的纯文字展示。\n\n${tagLine}\n${titleLine}\n${captionLine}\n\n要求：\n1) 用中文\n2) 1 段，1～3 句，总字数不超过 60 字\n3) 风格：克制、干净、有画面感，偏 Apple 文案气质\n4) 不要 emoji，不要标题，不要列清单\n5) 只输出配文正文`;
 
   return {
-    system: "你是一个为摄影作品撰写极简中文配文的编辑。",
+    system:
+      "你是一个为摄影作品撰写极简中文配文的编辑。请不要输出思考过程或 <think> 标签，只输出最终配文正文。",
     user,
   };
 }
@@ -75,8 +79,18 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
 async function createNarrative(photo: PhotoRow): Promise<string> {
   const prompt = buildPrompt(photo);
 
-  // 先尝试多模态（如果网关支持）
-  if (photo.blob_url) {
+  const runTextOnly = async (extra?: string) =>
+    edgefnChatComplete({
+      messages: [
+        { role: "system", content: prompt.system },
+        { role: "user", content: `${prompt.user}${extra ? `\n\n${extra}` : ""}` },
+      ],
+      temperature: 0.7,
+      maxTokens: 220,
+    });
+
+  // 默认不启用图片识别；只有显式配置 EDGEFN_SUPPORTS_IMAGES=1 才尝试多模态
+  if (edgefnSupportsImages() && photo.blob_url) {
     try {
       return await edgefnChatComplete({
         messages: [
@@ -94,19 +108,19 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      // 多模态不支持 or 返回空响应 -> 回退纯文本
       if (!looksLikeUnsupportedMultimodal(msg) && !msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
+      // 回退文本
     }
   }
 
-  return await edgefnChatComplete({
-    messages: [
-      { role: "system", content: prompt.system },
-      { role: "user", content: prompt.user },
-    ],
-    temperature: 0.7,
-    maxTokens: 220,
-  });
+  // 文本模式：若空响应，再强约束重试一次
+  try {
+    return await runTextOnly();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
+    return await runTextOnly("再次强调：不要输出思考过程，只输出配文正文。");
+  }
 }
 
 export async function POST(request: Request, context: { params: { id: string } }) {
@@ -190,4 +204,3 @@ export async function POST(request: Request, context: { params: { id: string } }
     return NextResponse.json({ ok: false, reason: msg } satisfies ApiErr, { status: 500 });
   }
 }
-

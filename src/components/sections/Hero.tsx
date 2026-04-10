@@ -25,7 +25,7 @@ export default function Hero() {
 
         <div className={styles.ctaRow}>
           <Button
-            variant="appleBlue"
+            variant="applePill"
             className={styles.cta}
             onClick={() => router.push("/blog")}
           >
