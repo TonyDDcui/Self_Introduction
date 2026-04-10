@@ -1,0 +1,24 @@
+---
+title: "Hello MDX"
+date: "2026-04-08"
+summary: "A first MDX article to validate the blog pipeline (frontmatter + compilation and rendering)."
+tags: ["nextjs", "mdx", "demo"]
+lang: "en"
+source_lang: "zh"
+source_slug: "hello"
+source_hash: "0c5206d3f85ed83943db34a58dff0d46bcc821c6f2a5bcce4ddb9c4f6c739621"
+---
+
+# Hello MDX
+
+This is a sample article to verify that:
+
+- `content/blog/*.mdx` files can be read
+- `frontmatter` can be parsed into meta (title/date/summary/tags)
+- Content can be compiled and rendered under the App Router
+
+Below is a piece of **Markdown**, along with a code block:
+
+```ts
+export const hello = (name: string) => `Hello, ${name}!`;
+```

@@ -1,0 +1,36 @@
+---
+title: "Logistics Truck: Low-Cost Path Learning and Transport Vehicle"
+date: "2026-04-08"
+summary: "A 1200 RMB logistics truck project: organizing the engineering structure around embedded control and driver layers, turning 'can it run' into 'can it be reproduced'."
+tags: ["embedded", "c", "robotics", "vehicle"]
+lang: "en"
+source_lang: "zh"
+source_slug: "logistics-truck"
+source_hash: "a422418878720daf732a98d1e84b0f26b2587e0e5ad73deadc0e8d92448d231c"
+---
+
+This is not a 'luxury solution,' but an engineering exercise that puts budget, feasibility, and maintainability on the same table for discussion.
+
+## Project Positioning
+
+- Goal: Build a **low-cost** logistics vehicle capable of basic transport and path learning
+- Language: C
+- Repository: [github.com/TonyDDcui/Logistics-truck](https://github.com/TonyDDcui/Logistics-truck)
+
+## What I Did (Brief Version)
+
+- Split directories according to embedded engineering practices (BSP / DRIVERS / User, etc.)
+- Advanced from 'functionally runs' to 'structurally readable and portable'
+- Reserved space for future iterations: sensors, control strategies, path logic
+
+## Demo and Images
+
+If you submit images to the repository (any directory is fine), I will automatically integrate them into the article using the site's `RepoImage` component, for example:
+
+```mdx
+<RepoImage src="path/to/your/image.jpg" alt="Logistics truck demo" />
+```
+
+---
+
+"Engineering isn't about sprinting to the finish line in one go, but about being able to return to the starting point and run the course again every time."

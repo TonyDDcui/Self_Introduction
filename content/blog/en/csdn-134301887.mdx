@@ -1,0 +1,14 @@
+---
+title: "Blue Bridge Cup - Microcontroller (Matrix Keypad)"
+date: "2023-11-16"
+summary: "Following this theory, we can complete matrix keypad detection by emulating the example of the (1,1) key. Careful observation reveals that we don't actually need to use a for or while loop to scan all 16 keys. From the schematic, we can see each column intersects with four rows at four points. We simply need to set one column (or row) to 0V and the remaining columns (or rows) to 5V, then sequentially check the voltage changes on the four rows (or columns). This allows us to determine which key in the first column is pressed. By subsequently changing the voltage on the remaining three columns, we can achieve full key detection for the matrix keypad. The same approach is applied in matrix keypad handling. 1. Matrix Keypad Circuit Schematic."
+tags: ["csdn"]
+lang: "en"
+source_lang: "zh"
+source_slug: "csdn-134301887"
+source_hash: "c57b3c04615ab76ffbada5e376efbfa83b84ad41e793828fda5299befa93b250"
+---
+
+Following this theory, we can complete matrix keypad detection by emulating the example of the (1,1) key. Careful observation reveals that we don't actually need to use a for or while loop to scan all 16 keys. From the schematic, we can see each column intersects with four rows at four points. We simply need to set one column (or row) to 0V and the remaining columns (or rows) to 5V, then sequentially check the voltage changes on the four rows (or columns). This allows us to determine which key in the first column is pressed. By subsequently changing the voltage on the remaining three columns, we can achieve full key detection for the matrix keypad. The same approach is applied in matrix keypad handling. 1. Matrix Keypad Circuit Schematic.
+
+Original link: https://blog.csdn.net/DDTony03/article/details/134301887
