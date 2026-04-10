@@ -69,6 +69,14 @@ function extractChatContent(data: EdgeFnChatResponse): string {
     if (msgFinal) return msgFinal;
     const msgTextField = extractTextFromUnknownContent(msgObj.text);
     if (msgTextField) return msgTextField;
+
+    // 部分推理模型会把最终输出混在 reasoning 字段里；这里兜底取出，
+    // 后续会在 stripReasoningArtifacts 里剥离过程文，只留下可展示内容。
+    for (const [k, v] of Object.entries(msgObj)) {
+      if (!k.toLowerCase().startsWith("reasoning")) continue;
+      const r = extractTextFromUnknownContent(v);
+      if (r) return r;
+    }
   }
 
   const choiceText = c0?.text;
@@ -95,14 +103,34 @@ function stripReasoningArtifacts(text: string): string {
   let cleaned = s.trim();
   if (!cleaned) return "";
 
-  // 兜底：如果仍包含大段推理，把“最后一段/最后一行”当作最终输出尝试提取
-  if (cleaned.length > 120 && cleaned.includes("\n")) {
+  // 如果包含“最终答案/输出/配文”等显式标记，优先取其后（避免展示过程文）
+  for (const marker of ["最终答案", "最终输出", "配文", "输出"]) {
+    const idx = cleaned.lastIndexOf(marker);
+    if (idx !== -1) {
+      const after = cleaned.slice(idx + marker.length).replace(/^[:：\s]+/, "").trim();
+      if (after.length >= 2) {
+        cleaned = after;
+        break;
+      }
+    }
+  }
+
+  // 兜底：如果仍包含多段内容，从后往前取最后一段/最后一句
+  if (cleaned.includes("\n")) {
     const parts = cleaned
       .split(/\n+/g)
       .map((x) => x.trim())
       .filter(Boolean);
     const last = parts[parts.length - 1] ?? "";
-    if (last.length >= 2 && last.length <= 120) cleaned = last;
+    if (last.length >= 2) cleaned = last;
+  }
+  if (cleaned.length > 220) {
+    const segs = cleaned
+      .split(/[。！？；]/g)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const last = segs[segs.length - 1] ?? "";
+    if (last.length >= 2) cleaned = last;
   }
 
   return cleaned;

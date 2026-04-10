@@ -1,6 +1,7 @@
 import { sql } from "../db";
 import { edgefnChatComplete } from "../ai/edgefn";
 import type { PhotoRow } from "./photos";
+import { classifyAlbumFromPhoto } from "./albumRules";
 
 type PhotoNarrativeRow = {
   photo_id: string;
@@ -63,17 +64,26 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
 }
 
 function buildPrompt(photo: PhotoRow) {
+  const album = classifyAlbumFromPhoto(photo);
   const tags = (photo.tags || []).map((t) => String(t).trim()).filter(Boolean);
   const tagLine = tags.length ? `标签：${tags.join("，")}` : "标签：无";
   const titleLine = photo.title?.trim() ? `标题：${photo.title.trim()}` : "标题：无";
   const captionLine = photo.caption?.trim() ? `描述：${photo.caption.trim()}` : "描述：无";
-  const user = `请为一张照片生成一段简短配文，用于网页相册中图片下方的纯文字展示。\n\n${tagLine}\n${titleLine}\n${captionLine}\n\n要求：\n1) 用中文\n2) 1 段，1～3 句，总字数不超过 60 字\n3) 风格：克制、干净、有画面感，偏 Apple 文案气质\n4) 不要 emoji，不要标题，不要列清单\n5) 只输出配文正文`;
+  const isEmptyMeta =
+    tagLine === "标签：无" && titleLine === "标题：无" && captionLine === "描述：无";
 
+  const user = `请为一张照片生成配文，用于网页相册中图片下方的纯文字展示。\n\n相册主题：${album.title}\n主题词：${album.themeTags.join("，")}\n${tagLine}\n${titleLine}\n${captionLine}\n\n要求：\n1) 用中文\n2) 1 段为主，1～4 句，总字数不超过 200 字\n3) 语言：现代中文为主，尽量在每句中自然融入 4～8 字的古文/化用（如果不好生成，就用纯现代文，优先保证自然流畅）\n4) 不要 emoji，不要标题，不要列清单\n5) 不要解释你在推测/想象，直接给结果\n\n${
+    isEmptyMeta
+      ? "补充：如果标题/描述/标签都为空，请结合相册主题词合理想象一个常见场景来写配文。"
+      : ""
+  }`;
   return {
-    system: "你是一个为摄影作品撰写极简中文配文的编辑。请不要输出思考过程或 <think> 标签，只输出最终配文正文。",
+    system:
+      "你是一个为摄影作品撰写中文配文的编辑。不要输出思考过程或 <think> 标签；不要输出“用户让我/我将/分析”等过程文；只输出最终配文正文。",
     user,
   };
 }
+
 
 async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string }) {
   const { photo } = input;
