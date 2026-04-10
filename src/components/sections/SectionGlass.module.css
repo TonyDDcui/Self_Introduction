@@ -7,8 +7,9 @@
   padding: 18px 0;
 
   border-radius: 18px;
-  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
-  background: rgba(12, 18, 32, 0.42);
+  border: 1px solid color-mix(in srgb, var(--ring) 92%, transparent);
+  /* 默认（暗色）提高可见性：避免“看起来像没蒙版” */
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 82%, transparent);
 
   backdrop-filter: blur(22px) saturate(1.4);
   -webkit-backdrop-filter: blur(22px) saturate(1.4);
@@ -17,6 +18,20 @@
     0 0 0 1px color-mix(in srgb, var(--bg-page) 28%, transparent),
     0 18px 70px rgba(0, 0, 0, 0.42);
   overflow: hidden;
+}
+
+/* 暗色模式再加一层轻微高光，让模块边界更“立起来” */
+:global(html[data-mode="dark"]) .glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08),
+    transparent 52%
+  );
+  opacity: 0.55;
 }
 
 @media (max-width: 640px) {
@@ -59,4 +74,10 @@
 
 :global(html[data-mode="light"]) .glass::before {
   opacity: 0.22;
+}
+
+:global(html[data-mode="dark"]) .glass::before {
+  /* 暗色下 overlay 不明显：降低对比并改成 soft-light 更像纸纤维 */
+  opacity: 0.26;
+  mix-blend-mode: soft-light;
 }
