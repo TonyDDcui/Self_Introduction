@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { randomUUID } from "crypto";
+import { revalidateTag } from "next/cache";
 
 import { authOptions } from "../../../../src/lib/auth/options";
 import { isUploader } from "../../../../src/lib/auth/guards";
@@ -166,6 +167,7 @@ export async function POST(req: Request) {
     `;
 
     const id = rows[0]?.id;
+    revalidateTag("gallery:publicPhotos");
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (err) {
     console.error("[api/gallery/upload][POST] failed:", err);

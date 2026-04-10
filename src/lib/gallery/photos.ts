@@ -52,5 +52,5 @@ export async function listPublicPhotos(): Promise<PhotoRow[]> {
 export const listPublicPhotosCached = unstable_cache(
   async () => listPublicPhotos(),
   ["gallery:publicPhotos:v1"],
-  { revalidate: 60 },
+  { revalidate: 60, tags: ["gallery:publicPhotos"] },
 );

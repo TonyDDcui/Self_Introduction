@@ -1,6 +1,7 @@
 import { del } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
 
 import { authOptions } from "../../../../../src/lib/auth/options";
 import { isUploader } from "../../../../../src/lib/auth/guards";
@@ -58,10 +59,19 @@ export async function DELETE(
     // del 支持 url 或 pathname；我们优先用 url（更直观）
     await del(row.blob_url);
 
+    // 同步清理配文缓存表（避免孤儿记录）
+    await sql`
+      delete from photo_narratives
+      where photo_id = ${id}
+    `;
+
     await sql`
       delete from photos
       where id = ${id}
     `;
+
+    // 清理 SSR 缓存：尽快让 /gallery /albums 生效
+    revalidateTag("gallery:publicPhotos");
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {

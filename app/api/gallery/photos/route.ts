@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
 import { authOptions } from "../../../../src/lib/auth/options";
 import { isUploader } from "../../../../src/lib/auth/guards";
 import { sql } from "../../../../src/lib/db";
@@ -142,6 +143,7 @@ export async function POST(request: Request) {
     `;
 
     const id = rows[0]?.id;
+    revalidateTag("gallery:publicPhotos");
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (err) {
     console.error("[api/gallery/photos][POST] failed:", err);

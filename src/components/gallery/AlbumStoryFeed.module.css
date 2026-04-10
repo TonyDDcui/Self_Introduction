@@ -68,6 +68,36 @@
   white-space: pre-wrap;
 }
 
+.actionsRow {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.regenButton {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ring) 78%, transparent);
+  background: color-mix(in srgb, var(--bg-page) 52%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: color-mix(in srgb, var(--text-primary) 92%, transparent);
+  font-size: 12px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+}
+
+.regenButton:hover {
+  border-color: color-mix(in srgb, var(--ring) 90%, transparent);
+  background: color-mix(in srgb, var(--bg-page) 62%, transparent);
+}
+
+.regenButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .debug {
   margin-top: 10px;
   padding: 10px 12px;
@@ -84,4 +114,3 @@
   margin: 0 14px;
   background: color-mix(in srgb, var(--ring) 70%, transparent);
 }
-
