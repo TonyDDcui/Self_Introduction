@@ -4,6 +4,7 @@ import { updateJob } from "./jobs";
 import { sha256 } from "./hash";
 import { getPhotoTranslation, upsertPhotoTranslation } from "./photoTranslations";
 import { translateGalleryToEn } from "./galleryTranslate";
+import { withGlobalTranslationLock } from "./locks";
 
 import type { PhotoRow } from "../gallery/photos";
 
@@ -49,7 +50,11 @@ export async function runPhotoEnJob(jobId: string, photoId: string) {
     return;
   }
 
-  await updateJob(jobId, { state: "running", progress: 10, message: "读取照片信息…" });
+  // 先保持 queued：避免并发时页面出现“同时 running”的错觉
+  await updateJob(jobId, { state: "queued", progress: 5, message: "排队中…" });
+
+  // 读取照片信息这一步不需要锁
+  await updateJob(jobId, { progress: 10, message: "读取照片信息…" });
   const photo = await getPhotoById(photoId);
   if (!photo) throw new Error("PHOTO_NOT_FOUND");
 
@@ -70,21 +75,25 @@ export async function runPhotoEnJob(jobId: string, photoId: string) {
     return;
   }
 
-  await updateJob(jobId, { progress: 35, message: "翻译标题与标签…" });
-  await updateJob(jobId, { progress: 55, message: "翻译配文…" });
+  // 全站全局串行：同一时刻最多 1 个翻译任务在跑
+  await updateJob(jobId, { state: "queued", progress: 12, message: "等待翻译队列…" });
 
-  const out = await translateGalleryToEn({ titleZh, tagsZh, narrativeZh });
+  await withGlobalTranslationLock(async () => {
+    await updateJob(jobId, { state: "running", progress: 30, message: "翻译标题与标签…" });
+    await updateJob(jobId, { progress: 55, message: "翻译配文…" });
 
-  await updateJob(jobId, { progress: 90, message: "写入缓存…" });
-  await upsertPhotoTranslation({
-    photoId,
-    lang: "en",
-    title: out.title,
-    tags: out.tags,
-    narrativeMd: out.narrative_md,
-    sourceHash,
+    const out = await translateGalleryToEn({ titleZh, tagsZh, narrativeZh });
+
+    await updateJob(jobId, { progress: 90, message: "写入缓存…" });
+    await upsertPhotoTranslation({
+      photoId,
+      lang: "en",
+      title: out.title,
+      tags: out.tags,
+      narrativeMd: out.narrative_md,
+      sourceHash,
+    });
+
+    await updateJob(jobId, { state: "done", progress: 100, message: "完成" });
   });
-
-  await updateJob(jobId, { state: "done", progress: 100, message: "完成" });
 }
-
