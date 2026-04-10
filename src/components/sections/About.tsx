@@ -50,16 +50,28 @@ export default function About() {
 
             <div className={styles.highlights} aria-label="Highlights">
               <div className={styles.highlightItem}>
-                <div className={styles.highlightLabel}>竞赛奖项</div>
-                <div className={styles.highlightValue}>（待补充）</div>
+                <div className={styles.highlightLabel}>
+                  {t(lang, "section.about.stats.awards.label")}
+                </div>
+                <div className={styles.highlightValue}>
+                  {t(lang, "section.about.stats.awards.value")}
+                </div>
               </div>
               <div className={styles.highlightItem}>
-                <div className={styles.highlightLabel}>公开项目</div>
-                <div className={styles.highlightValue}>3</div>
+                <div className={styles.highlightLabel}>
+                  {t(lang, "section.about.stats.projects.label")}
+                </div>
+                <div className={styles.highlightValue}>
+                  {t(lang, "section.about.stats.projects.value")}
+                </div>
               </div>
               <div className={styles.highlightItem}>
-                <div className={styles.highlightLabel}>兴趣</div>
-                <div className={styles.highlightValue}>科技 / 摄影 / 文学 / 日落</div>
+                <div className={styles.highlightLabel}>
+                  {t(lang, "section.about.stats.interests.label")}
+                </div>
+                <div className={styles.highlightValue}>
+                  {t(lang, "section.about.stats.interests.value")}
+                </div>
               </div>
             </div>
           </div>

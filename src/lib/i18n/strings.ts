@@ -21,6 +21,22 @@ type Key =
   | "section.about.p2.mid"
   | "section.about.p2.gallery"
   | "section.about.p2.post"
+  | "section.about.stats.awards.label"
+  | "section.about.stats.awards.value"
+  | "section.about.stats.projects.label"
+  | "section.about.stats.projects.value"
+  | "section.about.stats.interests.label"
+  | "section.about.stats.interests.value"
+  | "section.projects.title"
+  | "section.projects.subtitle"
+  | "section.projects.cta.learnMore"
+  | "section.projects.cta.viewCode"
+  | "section.projects.items.selfintro.title"
+  | "section.projects.items.selfintro.desc"
+  | "section.projects.items.logistics.title"
+  | "section.projects.items.logistics.desc"
+  | "section.projects.items.firecar.title"
+  | "section.projects.items.firecar.desc"
   | "section.writing.title"
   | "section.writing.subtitle"
   | "section.writing.empty.pre"
@@ -58,6 +74,25 @@ const ZH: Record<Key, string> = {
   "section.about.p2.mid": " 的项目记录与随笔，或去 ",
   "section.about.p2.gallery": "Gallery",
   "section.about.p2.post": " 找找我留下的素材与片段（如果仓库里有图片，它会自动出现）。",
+  "section.about.stats.awards.label": "竞赛奖项",
+  "section.about.stats.awards.value": "9+",
+  "section.about.stats.projects.label": "公开项目",
+  "section.about.stats.projects.value": "3",
+  "section.about.stats.interests.label": "兴趣",
+  "section.about.stats.interests.value": "科技 / 摄影 / 文学 / 日落",
+  "section.projects.title": "Featured Projects",
+  "section.projects.subtitle": "一些真实项目与实践记录。",
+  "section.projects.cta.learnMore": "Learn more",
+  "section.projects.cta.viewCode": "View code",
+  "section.projects.items.selfintro.title": "Self_Introduction（个人主页 + 博客）",
+  "section.projects.items.selfintro.desc":
+    "以 Apple 风格为灵感的个人站点：Home 分镜、MDX 博客、仓库图片自动接入与图库页。",
+  "section.projects.items.logistics.title": "Logistics-truck（路径学习搬运物流车）",
+  "section.projects.items.logistics.desc":
+    "低成本物流车项目（预算 1200 元）：围绕嵌入式控制与驱动层搭建，聚焦可实现与可维护。",
+  "section.projects.items.firecar.title": "Fire_Car-ERCC（ERCC 消防车项目）",
+  "section.projects.items.firecar.desc":
+    "面向 ERCC 竞赛的消防车项目：以 C 语言为主，包含运动控制、传感器与工程文件。",
   "section.writing.title": "Writing",
   "section.writing.subtitle": "从 Blog 元信息读取最新 3 篇（不足则展示现有）。保持卡片化排版与轻量标签。",
   "section.writing.empty.pre": "暂无文章。你可以先访问 ",
@@ -97,6 +132,25 @@ const EN: Record<Key, string> = {
   "section.about.p2.mid": " for project notes and essays, or head to ",
   "section.about.p2.gallery": "Gallery",
   "section.about.p2.post": " for fragments and materials I’ve captured (repo images, if any, will show up automatically).",
+  "section.about.stats.awards.label": "Awards",
+  "section.about.stats.awards.value": "9+",
+  "section.about.stats.projects.label": "Public projects",
+  "section.about.stats.projects.value": "3",
+  "section.about.stats.interests.label": "Interests",
+  "section.about.stats.interests.value": "Tech / Photography / Literature / Sunsets",
+  "section.projects.title": "Featured Projects",
+  "section.projects.subtitle": "A few real projects and hands-on notes.",
+  "section.projects.cta.learnMore": "Learn more",
+  "section.projects.cta.viewCode": "View code",
+  "section.projects.items.selfintro.title": "Self_Introduction (site + blog)",
+  "section.projects.items.selfintro.desc":
+    "An Apple-inspired personal site with a storyboarded Home, MDX blog, repo-image integration, and a gallery.",
+  "section.projects.items.logistics.title": "Logistics-truck (low-cost AGV)",
+  "section.projects.items.logistics.desc":
+    "A budget-friendly logistics vehicle (≈ ¥1200): embedded control + drivers organized for maintainability and reproducibility.",
+  "section.projects.items.firecar.title": "Fire_Car-ERCC (ERCC competition)",
+  "section.projects.items.firecar.desc":
+    "An ERCC-oriented fire truck project in C, covering motion control, sensors, and engineering assets.",
   "section.writing.title": "Writing",
   "section.writing.subtitle":
     "Latest 3 posts from Blog metadata (or fewer if there aren’t enough). A light, card-based layout with compact tags.",
