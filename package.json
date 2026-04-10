@@ -34,6 +34,7 @@
     "@vercel/blob": "^2.3.3",
     "@vercel/postgres": "^0.10.0",
     "gray-matter": "^4.0.3",
+    "heic2any": "^0.0.4",
     "next": "^14.2.0",
     "next-auth": "^4.24.13",
     "next-mdx-remote": "^6.0.0",
