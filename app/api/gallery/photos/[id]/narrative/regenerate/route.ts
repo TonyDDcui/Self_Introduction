@@ -11,6 +11,7 @@ import {
   edgefnChatComplete,
   edgefnSupportsImages,
 } from "../../../../../../../src/lib/ai/edgefn";
+import { extractUserVisibleCaption, isCaptionLikelyValid } from "../../../../../../../src/lib/ai/caption";
 import {
   getClientIp,
   assertSameOrigin,
@@ -114,13 +115,23 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
   }
 
   // 文本模式：若空响应，再强约束重试一次
-  try {
-    return await runTextOnly();
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    if (!msg.includes("EDGEFN_EMPTY_RESPONSE")) throw e;
-    return await runTextOnly("再次强调：不要输出思考过程，只输出配文正文。");
-  }
+  const attempt1 = await runTextOnly();
+  const c1 = extractUserVisibleCaption(attempt1);
+  if (isCaptionLikelyValid(c1)) return c1;
+
+  const attempt2 = await runTextOnly(
+    "请只输出严格 JSON：{\"caption\":\"...\"}，不要输出任何其它文字。",
+  );
+  const c2 = extractUserVisibleCaption(attempt2);
+  if (isCaptionLikelyValid(c2)) return c2;
+
+  const attempt3 = await runTextOnly(
+    "如果你刚才输出了任何解释/推理/过程，请丢弃它们。现在只输出 1 段配文正文（<=60字）。",
+  );
+  const c3 = extractUserVisibleCaption(attempt3);
+  if (isCaptionLikelyValid(c3)) return c3;
+
+  throw new Error("AI_CAPTION_INVALID_OUTPUT");
 }
 
 export async function POST(request: Request, context: { params: { id: string } }) {
