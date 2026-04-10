@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function GalleryImage(props: {
   src: string;
   alt: string;
   downloadHref: string;
   className?: string;
+  sizes?: string;
+  priority?: boolean;
 }) {
-  const { src, alt, downloadHref, className } = props;
+  const { src, alt, downloadHref, className, sizes, priority } = props;
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -50,16 +53,15 @@ export default function GalleryImage(props: {
     );
   }
 
-  // eslint-disable-next-line @next/next/no-img-element
   return (
-    <img
+    <Image
       className={className}
       src={src}
       alt={alt}
-      loading="lazy"
-      decoding="async"
+      fill
+      sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 920px) 50vw, 25vw"}
+      priority={priority}
       onError={() => setFailed(true)}
     />
   );
 }
-

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
 import ReadingProgress from "../../../src/components/blog/ReadingProgress";
+import PostImage from "../../../src/components/blog/PostImage";
 import RepoImage from "../../../src/components/media/RepoImage";
 import { getAllPostsMeta, getPostBySlug } from "../../../src/lib/blog/fs";
 import styles from "../../../src/styles/blog.module.css";
@@ -9,7 +10,7 @@ import { getServerLang } from "../../../src/lib/i18n/server";
 import { t } from "../../../src/lib/i18n/strings";
 
 // 默认组件映射：先保持为空，后续可在此处扩展（例如自定义 Image / Callout 等）
-const mdxComponents = { RepoImage };
+const mdxComponents = { RepoImage, img: PostImage };
 
 export async function generateStaticParams() {
   const zh = await getAllPostsMeta("zh");

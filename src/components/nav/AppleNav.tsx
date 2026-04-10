@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./AppleNav.module.css";
 
 import ModeToggle from "../theme/ModeToggle";
@@ -27,8 +28,7 @@ export default function AppleNav() {
             aria-label={t(lang, "nav.openGithub")}
             title={t(lang, "nav.openGithub")}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               className={styles.avatar}
               src="https://github.com/TonyDDcui.png"
               alt="GitHub avatar"

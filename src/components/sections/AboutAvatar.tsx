@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 import styles from "./AboutAvatar.module.css";
 
@@ -17,15 +18,12 @@ export default function AboutAvatar() {
           {FALLBACK_LETTER}
         </div>
       ) : (
-        // Use <img> instead of next/image to avoid remotePatterns config.
-        <img
+        <Image
           className={styles.image}
           src={AVATAR_URL}
           alt="GitHub avatar"
           width={72}
           height={72}
-          loading="lazy"
-          decoding="async"
           referrerPolicy="no-referrer"
           onError={() => setFailed(true)}
         />
@@ -33,4 +31,3 @@ export default function AboutAvatar() {
     </div>
   );
 }
-
