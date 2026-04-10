@@ -1,7 +1,8 @@
 import { sql } from "../db";
 import { edgefnChatComplete, edgefnSupportsImages } from "../ai/edgefn";
-import { extractUserVisibleCaption, isCaptionLikelyValid } from "../ai/caption";
 import type { PhotoRow } from "./photos";
+import { classifyAlbumFromPhoto } from "./albumRules";
+import { parseCaptionJson } from "../ai/captionJson";
 
 type PhotoNarrativeRow = {
   photo_id: string;
@@ -64,16 +65,24 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
 }
 
 function buildPrompt(photo: PhotoRow) {
+  const album = classifyAlbumFromPhoto(photo);
   const tags = (photo.tags || []).map((t) => String(t).trim()).filter(Boolean);
   const tagLine = tags.length ? `标签：${tags.join("，")}` : "标签：无";
   const titleLine = photo.title?.trim() ? `标题：${photo.title.trim()}` : "标题：无";
   const captionLine = photo.caption?.trim() ? `描述：${photo.caption.trim()}` : "描述：无";
 
-  const user = `请为一张照片生成一段简短配文，用于网页相册中图片下方的纯文字展示。\n\n${tagLine}\n${titleLine}\n${captionLine}\n\n要求：\n1) 用中文\n2) 1 段，1～3 句，总字数不超过 60 字\n3) 风格：克制、干净、有画面感，偏 Apple 文案气质\n4) 不要 emoji，不要标题，不要列清单\n5) 只输出配文正文`;
+  const isEmptyMeta =
+    tagLine === "标签：无" && titleLine === "标题：无" && captionLine === "描述：无";
+
+  const user = `你将为网页相册中的一张照片生成“配文”（纯文字，显示在图片下方）。\n\n相册主题：${album.title}\n主题词：${album.themeTags.join("，")}\n${tagLine}\n${titleLine}\n${captionLine}\n\n写作要求：\n- 用中文\n- 1 段，1～3 句，总字数不超过 60 字\n- 语言：流畅、克制、偏文学感（但不要矫饰）\n- 不要 emoji，不要标题，不要列清单\n- 不要解释你在推测/想象\n\n输出格式要求（必须严格遵守）：\n只输出严格 JSON：{\"caption\":\"...\"}\n不要输出任何其它文字。\n\n${
+    isEmptyMeta
+      ? "补充：如果标题/描述/标签都为空，请根据相册主题词，合理想象一个该主题常见场景，写出具有画面感的配文。"
+      : ""
+  }`;
 
   return {
     system:
-      "你是一个为摄影作品撰写极简中文配文的编辑。请不要输出思考过程或 <think> 标签，只输出最终配文正文。",
+      "你是一个为摄影作品撰写中文配文的编辑。不要输出思考过程或解释，只按要求输出 JSON。",
     user,
   };
 }
@@ -127,25 +136,16 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
   }
 
   // 文本模式：若空响应，再强约束重试一次
-  const attempt1 = await runTextOnly();
-  const c1 = extractUserVisibleCaption(attempt1);
-  if (isCaptionLikelyValid(c1)) return c1;
-
-  // 第二次：强制 JSON 输出（便于稳定抽取最终结果）
-  const attempt2 = await runTextOnly(
-    "请只输出严格 JSON：{\"caption\":\"...\"}，不要输出任何其它文字。",
-  );
-  const c2 = extractUserVisibleCaption(attempt2);
-  if (isCaptionLikelyValid(c2)) return c2;
-
-  // 最后一次：再强调一次“只输出正文”
-  const attempt3 = await runTextOnly(
-    "如果你刚才输出了任何解释/推理/过程，请丢弃它们。现在只输出 1 段配文正文（<=60字）。",
-  );
-  const c3 = extractUserVisibleCaption(attempt3);
-  if (isCaptionLikelyValid(c3)) return c3;
-
-  throw new Error("AI_CAPTION_INVALID_OUTPUT");
+  // 仅接受严格 JSON（避免 thinking/过程文污染）
+  try {
+    const raw1 = await runTextOnly();
+    return parseCaptionJson(raw1);
+  } catch {
+    const raw2 = await runTextOnly(
+      "再次强调：只输出 JSON，例如：{\"caption\":\"窗外的风把光轻轻推到树影上。\"}",
+    );
+    return parseCaptionJson(raw2);
+  }
 }
 
 export async function getOrCreatePhotoNarratives(input: {
