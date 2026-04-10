@@ -88,8 +88,8 @@ async function upsertPhotoNarrative(input: { photoId: string; albumSlug: string;
 }
 
 function getCaptionModel() {
-  // 配文单独用更“直出”的模型（例如 GLM-5），避免推理模型输出过程文
-  return process.env.EDGEFN_CAPTION_MODEL || process.env.EDGEFN_MODEL;
+  // 配文固定用更“直出”的模型，避免推理模型输出过程文
+  return process.env.EDGEFN_CAPTION_MODEL || "DeepSeek-V3.2";
 }
 
 async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string }) {
@@ -109,6 +109,7 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
       temperature: 0.35,
       maxTokens: 220,
       model: getCaptionModel(),
+      allowReasoningFallback: false,
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -130,6 +131,8 @@ async function createPhotoNarrative(input: { photo: PhotoRow; albumSlug: string 
     temperature: 0.25,
     maxTokens: 220,
     model: getCaptionModel(),
+    // 第二次允许从 reasoning 兜底（仅用于 content 为空的网关情况），但最终仍要过清洗
+    allowReasoningFallback: true,
   });
 
   const clean2 = sanitizeCaptionV2(out2);

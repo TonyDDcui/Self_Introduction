@@ -20,12 +20,10 @@
     linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06));
   background-size: 3px 3px, 5px 5px, 100% 100%;
   background-position: 0 0, 1px 2px, 0 0;
-  /* 透明度降低（更不透明），保证能看出 #d97757 的底色 */
-  opacity: 0.1;
 }
 
 html[data-mode="light"] .scrim {
-  opacity: 0.1;
+  /* 保持一致：不使用 opacity（避免颜色被稀释） */
 }
 
 .panel {

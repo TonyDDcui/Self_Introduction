@@ -32,7 +32,7 @@ function buildPrompt(photo: PhotoRow) {
 }
 
 function getCaptionModel() {
-  return process.env.EDGEFN_CAPTION_MODEL || process.env.EDGEFN_MODEL;
+  return process.env.EDGEFN_CAPTION_MODEL || "DeepSeek-V3.2";
 }
 
 async function ensureTable() {
@@ -73,6 +73,7 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
       temperature: 0.35,
       maxTokens: 220,
       model: getCaptionModel(),
+      allowReasoningFallback: false,
     });
     const clean = sanitizeCaptionV2(out);
     if (clean) return clean;
@@ -92,6 +93,7 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
       temperature: 0.25,
       maxTokens: 220,
       model: getCaptionModel(),
+      allowReasoningFallback: true,
     });
     const clean2 = sanitizeCaptionV2(out);
     if (clean2) return clean2;
