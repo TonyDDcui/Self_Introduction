@@ -5,13 +5,17 @@ import ReadingProgress from "../../../src/components/blog/ReadingProgress";
 import RepoImage from "../../../src/components/media/RepoImage";
 import { getAllPostsMeta, getPostBySlug } from "../../../src/lib/blog/fs";
 import styles from "../../../src/styles/blog.module.css";
+import { getServerLang } from "../../../src/lib/i18n/server";
+import { t } from "../../../src/lib/i18n/strings";
 
 // 默认组件映射：先保持为空，后续可在此处扩展（例如自定义 Image / Callout 等）
 const mdxComponents = { RepoImage };
 
 export async function generateStaticParams() {
-  const posts = await getAllPostsMeta();
-  return posts.map((p) => ({ slug: p.slug }));
+  const zh = await getAllPostsMeta("zh");
+  const en = await getAllPostsMeta("en");
+  const set = new Set([...zh, ...en].map((p) => p.slug));
+  return Array.from(set).map((slug) => ({ slug }));
 }
 
 export default async function BlogPostPage({
@@ -20,10 +24,11 @@ export default async function BlogPostPage({
   params: { slug: string };
 }) {
   const slug = params.slug;
+  const lang = getServerLang();
 
   let post: Awaited<ReturnType<typeof getPostBySlug>>;
   try {
-    post = await getPostBySlug(slug);
+    post = await getPostBySlug(slug, lang);
   } catch {
     notFound();
   }
@@ -38,7 +43,7 @@ export default async function BlogPostPage({
     <main className={styles.main}>
       <ReadingProgress targetSelector={`.${styles.prose}`} />
       <p className={styles.backLink}>
-        <Link href="/blog">← 返回列表</Link>
+        <Link href="/blog">{t(lang, "blog.back")}</Link>
       </p>
 
       <header className={styles.postHeader}>

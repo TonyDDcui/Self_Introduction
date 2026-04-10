@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import type { SiteMode } from "../../lib/theme/types";
 import { applyThemeToHtml, systemPrefersDark } from "../../lib/theme/dom";
 import { readMode, writeMode } from "../../lib/theme/storage";
+import { readClientLang } from "../../lib/i18n/client";
+import { t } from "../../lib/i18n/strings";
 
 import styles from "./ModeToggle.module.css";
 
@@ -57,6 +59,7 @@ function MoonIcon() {
 
 export default function ModeToggle() {
   const [mode, setMode] = useState<SiteMode>(() => readMode() ?? (systemPrefersDark() ? "dark" : "light"));
+  const lang = readClientLang();
 
   useEffect(() => {
     const v = document.documentElement.dataset.mode;
@@ -71,7 +74,7 @@ export default function ModeToggle() {
   }
 
   const label =
-    mode === "light" ? "浅色模式（切换到深色）" : "深色模式（切换到浅色）";
+    mode === "light" ? t(lang, "mode.lightToDark") : t(lang, "mode.darkToLight");
 
   return (
     <button

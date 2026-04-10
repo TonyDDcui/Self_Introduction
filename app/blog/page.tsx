@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { getAllPostsMeta } from "../../src/lib/blog/fs";
 import styles from "../../src/styles/blog.module.css";
+import { getServerLang } from "../../src/lib/i18n/server";
+import { t } from "../../src/lib/i18n/strings";
 
 export default async function BlogIndexPage() {
-  const posts = await getAllPostsMeta();
+  const lang = getServerLang();
+  const posts = await getAllPostsMeta(lang);
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.pageTitle}>Blog</h1>
+      <h1 className={styles.pageTitle}>{t(lang, "blog.title")}</h1>
       {posts.length === 0 ? (
-        <p>暂无文章。</p>
+        <p>{t(lang, "blog.empty")}</p>
       ) : (
         <ul className={styles.list}>
           {posts.map((post) => (

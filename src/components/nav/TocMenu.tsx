@@ -2,13 +2,15 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./TocMenu.module.css";
+import { readClientLang } from "../../lib/i18n/client";
+import { t } from "../../lib/i18n/strings";
 
 const SECTIONS = [
-  { id: "activity", label: "Activity" },
-  { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
-  { id: "writing", label: "Writing" },
-  { id: "contact", label: "Contact" },
+  { id: "activity", zh: "Activity", en: "Activity" },
+  { id: "about", zh: "About", en: "About" },
+  { id: "projects", zh: "Projects", en: "Projects" },
+  { id: "writing", zh: "Writing", en: "Writing" },
+  { id: "contact", zh: "Contact", en: "Contact" },
 ] as const;
 
 function MenuIcon() {
@@ -37,6 +39,7 @@ export default function TocMenu() {
   const [open, setOpen] = useState(false);
   const popoverId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const lang = readClientLang();
 
   useEffect(() => {
     if (!open) return;
@@ -76,7 +79,7 @@ export default function TocMenu() {
       <button
         className={styles.button}
         type="button"
-        aria-label="目录"
+        aria-label={t(lang, "nav.toc")}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={popoverId}
@@ -100,7 +103,7 @@ export default function TocMenu() {
                 jump(s.id);
               }}
             >
-              {s.label}
+              {lang === "en" ? s.en : s.zh}
             </button>
           ))}
         </div>

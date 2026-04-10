@@ -1,8 +1,11 @@
 import Link from "next/link";
 import styles from "./Contact.module.css";
 import SectionGlass from "./SectionGlass";
+import { getServerLang } from "../../lib/i18n/server";
+import { t } from "../../lib/i18n/strings";
 
 export default function Contact() {
+  const lang = getServerLang();
   return (
     <section
       id="contact"
@@ -14,9 +17,9 @@ export default function Contact() {
       <SectionGlass>
         <div className={styles.inner}>
           <header className={styles.header}>
-            <h2 className={styles.title}>Contact</h2>
+            <h2 className={styles.title}>{t(lang, "section.contact.title")}</h2>
             <p className={styles.subtitle}>
-              如果你也在做硬件、软件，或只是想聊聊日落与相机，都欢迎来信。
+              {t(lang, "section.contact.subtitle")}
             </p>
           </header>
 
@@ -28,17 +31,17 @@ export default function Contact() {
               </a>
             </p>
             <p className={styles.paragraph}>
-              也可以从{" "}
+              {t(lang, "section.contact.p2.pre")}
               <Link className={styles.link} href="/blog">
-                Blog
+                {t(lang, "section.contact.p2.blog")}
               </Link>{" "}
-              了解更多内容更新。
+              {t(lang, "section.contact.p2.post")}
             </p>
           </div>
 
           <div className={styles.footer}>
             <a className={styles.pillLink} href="mailto:someometony@outlook.com">
-              Send email
+              {t(lang, "section.contact.sendEmail")}
             </a>
           </div>
         </div>

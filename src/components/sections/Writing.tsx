@@ -2,9 +2,12 @@ import Link from "next/link";
 import styles from "./Writing.module.css";
 import { getAllPostsMeta } from "../../lib/blog/fs";
 import SectionGlass from "./SectionGlass";
+import { getServerLang } from "../../lib/i18n/server";
+import { t } from "../../lib/i18n/strings";
 
 export default async function Writing() {
-  const posts = (await getAllPostsMeta()).slice(0, 3);
+  const lang = getServerLang();
+  const posts = (await getAllPostsMeta(lang)).slice(0, 3);
 
   return (
     <section
@@ -17,19 +20,19 @@ export default async function Writing() {
       <SectionGlass>
         <div className={styles.inner}>
           <header className={styles.header}>
-            <h2 className={styles.title}>Writing</h2>
+            <h2 className={styles.title}>{t(lang, "section.writing.title")}</h2>
             <p className={styles.subtitle}>
-              从 Blog 元信息读取最新 3 篇（不足则展示现有）。保持卡片化排版与轻量标签。
+              {t(lang, "section.writing.subtitle")}
             </p>
           </header>
 
           {posts.length === 0 ? (
             <p className={styles.empty}>
-              暂无文章。你可以先访问{" "}
+              {t(lang, "section.writing.empty.pre")}
               <Link className={styles.link} href="/blog">
                 /blog
               </Link>{" "}
-              查看占位页面。
+              {t(lang, "section.writing.empty.post")}
             </p>
           ) : (
             <ul className={styles.list}>
@@ -63,7 +66,7 @@ export default async function Writing() {
 
           <div className={styles.footer}>
             <Link className={styles.pillLink} href="/blog">
-              View all writing
+              {t(lang, "section.writing.viewAll")}
             </Link>
           </div>
         </div>

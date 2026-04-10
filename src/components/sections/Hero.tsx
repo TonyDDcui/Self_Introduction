@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Hero.module.css";
 import Button from "../ui/Button";
+import { readClientLang } from "../../lib/i18n/client";
+import { t } from "../../lib/i18n/strings";
 
 export default function Hero() {
   const router = useRouter();
   const [entered, setEntered] = useState(false);
+  const lang = readClientLang();
 
   useEffect(() => {
     // Trigger entrance animation after mount (respects prefers-reduced-motion via CSS).
@@ -19,8 +22,12 @@ export default function Hero() {
       <div className={`${styles.inner} ${entered ? styles.entered : ""}`}>
         <h1 className={styles.title}>箫</h1>
         <p className={styles.subtitle}>
-          嵌入式 / 硬件 / 软件开发工程师。<br />
-          科技与摄影是日常，文学与日落是背景音乐。
+          {t(lang, "hero.subtitle").split("\n").map((line, idx) => (
+            <span key={idx}>
+              {line}
+              {idx === 0 ? <br /> : null}
+            </span>
+          ))}
         </p>
 
         <div className={styles.ctaRow}>
@@ -29,7 +36,7 @@ export default function Hero() {
             className={styles.cta}
             onClick={() => router.push("/blog")}
           >
-            Blog
+            {t(lang, "hero.blog")}
           </Button>
           <Button
             variant="applePill"
@@ -40,7 +47,7 @@ export default function Hero() {
               window.location.hash = "about";
             }}
           >
-            Learn more
+            {t(lang, "hero.learnMore")}
           </Button>
         </div>
       </div>

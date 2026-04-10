@@ -10,7 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "sync:csdn": "node scripts/import-csdn.mjs",
+    "sync:en": "node scripts/sync-en.mjs"
   },
   "keywords": [
     "portfolio",

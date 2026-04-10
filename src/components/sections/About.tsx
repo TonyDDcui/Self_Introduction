@@ -2,8 +2,11 @@ import Link from "next/link";
 import styles from "./About.module.css";
 import AboutAvatar from "./AboutAvatar";
 import SectionGlass from "./SectionGlass";
+import { getServerLang } from "../../lib/i18n/server";
+import { t } from "../../lib/i18n/strings";
 
 export default function About() {
+  const lang = getServerLang();
   return (
     <section
       id="about"
@@ -16,9 +19,9 @@ export default function About() {
         <div className={styles.inner}>
           <header className={styles.header}>
             <div className={styles.headerText}>
-              <h2 className={styles.title}>About</h2>
+              <h2 className={styles.title}>{t(lang, "section.about.title")}</h2>
               <p className={styles.subtitle}>
-                一点自我介绍与日常兴趣。
+                {t(lang, "section.about.subtitle")}
               </p>
             </div>
             <AboutAvatar />
@@ -26,22 +29,23 @@ export default function About() {
 
           <div className={styles.body}>
             <p className={styles.paragraph}>
-              我是崔喆箫，做嵌入式 / 硬件 / 软件开发。性格偏 ENTP：好奇心有点“骨折眉”——
-              总想把世界拆开看看，再认真装回去。
-              <br />
-              白天和电路、日志打交道；傍晚追一段日落；夜里翻几页苏轼或李白，
-              让脑子在诗里散个步。
+              {t(lang, "section.about.p1").split("\n").map((line, idx) => (
+                <span key={idx}>
+                  {line}
+                  {idx === 0 ? <br /> : null}
+                </span>
+              ))}
             </p>
             <p className={styles.paragraph}>
-              你可以先看看{" "}
+              {t(lang, "section.about.p2.pre")}
               <Link className={styles.link} href="/blog">
-                Blog
+                {t(lang, "section.about.p2.blog")}
               </Link>{" "}
-              的项目记录与随笔，或去{" "}
+              {t(lang, "section.about.p2.mid")}
               <Link className={styles.link} href="/gallery">
-                Gallery
+                {t(lang, "section.about.p2.gallery")}
               </Link>{" "}
-              找找我留下的素材与片段（如果仓库里有图片，它会自动出现）。
+              {t(lang, "section.about.p2.post")}
             </p>
 
             <div className={styles.highlights} aria-label="Highlights">

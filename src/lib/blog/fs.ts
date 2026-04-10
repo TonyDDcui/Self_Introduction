@@ -2,8 +2,10 @@ import fs from "node:fs/promises";
 import type { Dirent } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import type { SiteLang } from "../i18n/types";
 
-const BLOG_DIR = path.join(process.cwd(), "content", "blog");
+const BLOG_DIR_ZH = path.join(process.cwd(), "content", "blog");
+const BLOG_DIR_EN = path.join(process.cwd(), "content", "blog", "en");
 
 export type PostMeta = {
   slug: string;
@@ -37,7 +39,12 @@ function toMeta(slug: string, data: Frontmatter): PostMeta {
   };
 }
 
-export async function getAllPostsMeta(): Promise<PostMeta[]> {
+function getBlogDir(lang: SiteLang) {
+  return lang === "en" ? BLOG_DIR_EN : BLOG_DIR_ZH;
+}
+
+export async function getAllPostsMetaByLang(lang: SiteLang): Promise<PostMeta[]> {
+  const BLOG_DIR = getBlogDir(lang);
   let entries: Dirent[];
   try {
     entries = await fs.readdir(BLOG_DIR, { withFileTypes: true });
@@ -68,15 +75,31 @@ export async function getAllPostsMeta(): Promise<PostMeta[]> {
   return metas;
 }
 
-export async function getPostBySlug(slug: string): Promise<{
+export async function getAllPostsMeta(): Promise<PostMeta[]>;
+export async function getAllPostsMeta(lang: SiteLang): Promise<PostMeta[]>;
+export async function getAllPostsMeta(lang: SiteLang = "zh"): Promise<PostMeta[]> {
+  const metas = await getAllPostsMetaByLang(lang);
+  if (lang === "en" && metas.length === 0) return getAllPostsMetaByLang("zh");
+  return metas;
+}
+
+export async function getPostBySlug(slug: string, lang: SiteLang = "zh"): Promise<{
   meta: PostMeta;
   /** 原始文件内容（含 frontmatter） */
   raw: string;
   /** 去掉 frontmatter 后的 MDX body */
   content: string;
 }> {
-  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
-  const raw = await fs.readFile(filePath, "utf8");
+  const primaryDir = getBlogDir(lang);
+  const primaryPath = path.join(primaryDir, `${slug}.mdx`);
+  let raw = "";
+  try {
+    raw = await fs.readFile(primaryPath, "utf8");
+  } catch {
+    // en 缺失时兜底回中文
+    const fallbackPath = path.join(BLOG_DIR_ZH, `${slug}.mdx`);
+    raw = await fs.readFile(fallbackPath, "utf8");
+  }
   const parsed = matter(raw);
   const meta = toMeta(slug, parsed.data as Frontmatter);
 

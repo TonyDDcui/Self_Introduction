@@ -5,6 +5,7 @@ import "../src/styles/globals.css";
 import AppleNav from "../src/components/nav/AppleNav";
 import Reveal from "../src/components/motion/Reveal";
 import ThemeProvider from "../src/components/theme/ThemeProvider";
+import { getServerLang } from "../src/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Self Introduction",
@@ -16,8 +17,9 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const lang = getServerLang();
   return (
-    <html lang="zh-HK">
+    <html lang={lang === "en" ? "en" : "zh-HK"} data-lang={lang}>
       <body>
         <ThemeProvider>
           <AppleNav />
