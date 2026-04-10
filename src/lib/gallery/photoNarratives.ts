@@ -48,7 +48,36 @@ async function getPhotoNarratives(photoIds: string[]) {
   );
 
   const map = new Map<string, string>();
-  for (const r of rows) map.set(r.photo_id, r.narrative_md);
+  for (const r of rows) {
+    const extracted = tryExtractCaption(r.narrative_md);
+    if (!extracted) {
+      // 已污染（过程文/空输出）：删掉，让后续流程重新生成
+      try {
+        await sql`
+          delete from photo_narratives
+          where photo_id = ${r.photo_id}
+        `;
+      } catch {
+        // ignore
+      }
+      continue;
+    }
+
+    // 旧数据如果包含过程文：清洗后回写，避免用户看到
+    if (extracted !== r.narrative_md) {
+      try {
+        await sql`
+          update photo_narratives
+          set narrative_md = ${extracted}, updated_at = now()
+          where photo_id = ${r.photo_id}
+        `;
+      } catch {
+        // ignore
+      }
+    }
+
+    map.set(r.photo_id, extracted);
+  }
   return map;
 }
 
