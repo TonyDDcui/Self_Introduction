@@ -94,8 +94,9 @@ async function createNarrative(photo: PhotoRow): Promise<string> {
         { role: "system", content: prompt.system },
         { role: "user", content: `${prompt.user}${extra ? `\n\n${extra}` : ""}` },
       ],
-      temperature: 0.7,
-      maxTokens: 220,
+      temperature: 0.55,
+      maxTokens: 180,
+      responseFormat: "json_object",
     });
 
   // 默认不启用图片识别；只有显式配置 EDGEFN_SUPPORTS_IMAGES=1 才尝试多模态

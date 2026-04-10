@@ -1,40 +1,57 @@
-const BAD_SUBSTRINGS = [
-  "<think",
-  "用户",
-  "要求",
-  "分析",
-  "思考",
-  "推理",
-  "首先",
-  "接下来",
-  "最后",
-];
+function sanitizeCaption(input: string): string {
+  let s = input.trim();
+  if (!s) return "";
 
-export function parseCaptionJson(raw: string): string {
-  const s = raw.trim();
-  const m = s.match(/\{[\s\S]*\}/);
-  if (!m) throw new Error("AI_CAPTION_INVALID_OUTPUT");
+  // 去掉模型可能夹带的 think 标签（即使出现在 caption 字段里）
+  s = s.replace(/<think>[\s\S]*?<\/think>/gi, "");
 
-  let obj: unknown;
-  try {
-    obj = JSON.parse(m[0]);
-  } catch {
-    throw new Error("AI_CAPTION_INVALID_OUTPUT");
+  // 统一成单行（避免 parse 失败）
+  s = s.replace(/\s*\n+\s*/g, " ").trim();
+
+  // 去掉常见前缀（尽量“修复”而不是判死刑，提高成功率）
+  s = s.replace(/^\s*(caption|配文|最终答案|final answer)\s*[:：]\s*/i, "").trim();
+
+  // 如果模型仍输出过程文，尽量把它剥掉：取最后一句
+  if (s.length > 120) {
+    const segs = s
+      .split(/[。！？；]/g)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const last = segs[segs.length - 1] ?? "";
+    if (last.length >= 2) s = last;
   }
 
-  if (!obj || typeof obj !== "object") throw new Error("AI_CAPTION_INVALID_OUTPUT");
-  const caption = (obj as Record<string, unknown>).caption;
-  if (typeof caption !== "string") throw new Error("AI_CAPTION_INVALID_OUTPUT");
+  // 长度控制（目标 60 字内，留一点余量给标点）
+  if (s.length > 70) s = s.slice(0, 70).trim();
 
-  const text = caption.trim();
-  if (!text) throw new Error("AI_CAPTION_INVALID_OUTPUT");
-  if (text.includes("\n")) throw new Error("AI_CAPTION_INVALID_OUTPUT");
-  if (text.length < 2 || text.length > 80) throw new Error("AI_CAPTION_INVALID_OUTPUT");
-  const lower = text.toLowerCase();
-  if (BAD_SUBSTRINGS.some((w) => lower.includes(w.toLowerCase()))) {
-    throw new Error("AI_CAPTION_INVALID_OUTPUT");
-  }
-
-  return text;
+  return s;
 }
 
+function findJsonCandidates(raw: string): string[] {
+  const s = raw.trim();
+  // 非贪婪匹配：避免把“前面的 { + 后面的 }”整个吞掉导致 JSON.parse 失败
+  const matches = s.match(/\{[\s\S]*?\}/g);
+  return matches ? matches.map((x) => x.trim()) : [];
+}
+
+export function parseCaptionJson(raw: string): string {
+  const candidates = findJsonCandidates(raw);
+  if (candidates.length === 0) throw new Error("AI_CAPTION_INVALID_OUTPUT");
+
+  // 从后往前尝试：很多模型会在末尾才给最终 JSON
+  for (let i = candidates.length - 1; i >= 0; i -= 1) {
+    const c = candidates[i];
+    try {
+      const obj = JSON.parse(c) as unknown;
+      if (!obj || typeof obj !== "object") continue;
+      const caption = (obj as Record<string, unknown>).caption;
+      if (typeof caption !== "string") continue;
+      const cleaned = sanitizeCaption(caption);
+      if (cleaned.length >= 2) return cleaned;
+    } catch {
+      // ignore and try the next candidate
+    }
+  }
+
+  throw new Error("AI_CAPTION_INVALID_OUTPUT");
+}

@@ -125,6 +125,7 @@ export async function edgefnChatComplete(input: {
   messages: EdgeFnChatMessage[];
   temperature?: number;
   maxTokens?: number;
+  responseFormat?: "json_object";
 }): Promise<string> {
   const baseUrl = getEdgeFnBaseUrl();
   const apiKey = getEdgeFnApiKey();
@@ -147,6 +148,7 @@ export async function edgefnChatComplete(input: {
       temperature: input.temperature ?? 0.7,
       max_tokens: input.maxTokens ?? 600,
       stream: false,
+      ...(input.responseFormat ? { response_format: { type: input.responseFormat } } : {}),
     }),
   });
 
