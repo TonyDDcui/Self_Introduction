@@ -4,6 +4,8 @@ import styles from "../../src/styles/blog.module.css";
 import { getServerLang } from "../../src/lib/i18n/server";
 import { t } from "../../src/lib/i18n/strings";
 
+export const preferredRegion = ["hkg1"];
+
 export default async function BlogIndexPage() {
   const lang = getServerLang();
   const posts = await getAllPostsMeta(lang);

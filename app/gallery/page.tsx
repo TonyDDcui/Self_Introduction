@@ -10,6 +10,7 @@ import { listPublicPhotosCached } from "../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const preferredRegion = ["hkg1"];
 
 export default async function GalleryPage() {
   const session = await getServerSession(authOptions);

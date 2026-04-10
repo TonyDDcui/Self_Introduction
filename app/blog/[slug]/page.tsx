@@ -12,6 +12,8 @@ import { t } from "../../../src/lib/i18n/strings";
 // 默认组件映射：先保持为空，后续可在此处扩展（例如自定义 Image / Callout 等）
 const mdxComponents = { RepoImage, img: PostImage };
 
+export const preferredRegion = ["hkg1"];
+
 export async function generateStaticParams() {
   const zh = await getAllPostsMeta("zh");
   const en = await getAllPostsMeta("en");

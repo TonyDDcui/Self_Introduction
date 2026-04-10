@@ -6,6 +6,7 @@ import { isUploader } from "../../../src/lib/auth/guards";
 import { authOptions } from "../../../src/lib/auth/options";
 
 export const dynamic = "force-dynamic";
+export const preferredRegion = ["hkg1"];
 
 export default async function GalleryUploadPage() {
   const session = await getServerSession(authOptions);
@@ -112,4 +113,3 @@ export default async function GalleryUploadPage() {
     </main>
   );
 }
-

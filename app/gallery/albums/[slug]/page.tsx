@@ -12,6 +12,7 @@ import { listPublicPhotosCached } from "../../../../src/lib/gallery/photos";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const preferredRegion = ["hkg1"];
 
 export default async function AlbumPage(props: { params: { slug: string } }) {
   let slug = props.params.slug;

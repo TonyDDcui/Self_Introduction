@@ -10,6 +10,7 @@ import { enforceRateLimit } from "../../../../src/lib/security/rateLimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const preferredRegion = ["hkg1"];
 
 function asNonEmptyString(v: unknown): string | null {
   if (typeof v !== "string") return null;

@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // 国内访问优化：
+    // - 禁用 Next 图片优化（/_next/image），避免 Vercel 侧二次转发导致高延迟
+    // - 直接使用图片源站（Vercel Blob / GitHub 等）的 CDN
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
