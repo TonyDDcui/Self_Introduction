@@ -17,8 +17,8 @@ export async function POST(request: Request, context: { params: { id: string } }
 
   const ip = getClientIp(request);
   const rl = await enforceRateLimit({
-    key: `api:i18n:ensure_photo_en:ip=${ip}`,
-    limit: 30,
+    key: `api:i18n:ensure_photo_en:ip=${ip}:photo=${context.params.id ?? "unknown"}`,
+    limit: 20,
     windowSeconds: 60,
   });
   if (!rl.ok) return json429({ resetAt: rl.resetAt, retryAfterSeconds: rl.retryAfterSeconds });
@@ -44,4 +44,3 @@ export async function POST(request: Request, context: { params: { id: string } }
 
   return NextResponse.json({ ok: true, jobId });
 }
-

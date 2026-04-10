@@ -17,8 +17,8 @@ export async function GET(request: Request, context: { params: { jobId: string }
   // 轻量限流：防止恶意轮询
   const ip = getClientIp(request);
   const rl = await enforceRateLimit({
-    key: `api:i18n:job_status:ip=${ip}`,
-    limit: 180,
+    key: `api:i18n:job_status:ip=${ip}:job=${context.params.jobId ?? "unknown"}`,
+    limit: 120,
     windowSeconds: 60,
   });
   if (!rl.ok) return json429({ resetAt: rl.resetAt, retryAfterSeconds: rl.retryAfterSeconds });
