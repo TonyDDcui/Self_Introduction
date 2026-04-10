@@ -69,14 +69,6 @@ function extractChatContent(data: EdgeFnChatResponse): string {
     if (msgFinal) return msgFinal;
     const msgTextField = extractTextFromUnknownContent(msgObj.text);
     if (msgTextField) return msgTextField;
-
-    // 某些推理模型（例如 DeepSeek R1）会把输出放在 reasoning* 字段里。
-    // 我们会在 stripReasoningArtifacts 里剥离思考过程，仅保留最终可展示内容。
-    for (const [k, v] of Object.entries(msgObj)) {
-      if (!k.toLowerCase().startsWith("reasoning")) continue;
-      const r = extractTextFromUnknownContent(v);
-      if (r) return r;
-    }
   }
 
   const choiceText = c0?.text;
@@ -125,7 +117,6 @@ export async function edgefnChatComplete(input: {
   messages: EdgeFnChatMessage[];
   temperature?: number;
   maxTokens?: number;
-  responseFormat?: "json_object";
 }): Promise<string> {
   const baseUrl = getEdgeFnBaseUrl();
   const apiKey = getEdgeFnApiKey();
@@ -148,7 +139,6 @@ export async function edgefnChatComplete(input: {
       temperature: input.temperature ?? 0.7,
       max_tokens: input.maxTokens ?? 600,
       stream: false,
-      ...(input.responseFormat ? { response_format: { type: input.responseFormat } } : {}),
     }),
   });
 
