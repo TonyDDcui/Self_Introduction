@@ -9,7 +9,6 @@ import { sql } from "../../../../src/lib/db";
 import { getClientIp, assertSameOrigin, json429 } from "../../../../src/lib/security/requestGuards";
 import { enforceRateLimit } from "../../../../src/lib/security/rateLimit";
 import { vercelBlobProvider } from "../../../../src/lib/storage/vercelBlobProvider";
-import sharp from "sharp";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,8 +20,6 @@ const ALLOWED_IMAGE_TYPES = new Set([
   "image/webp",
   "image/gif",
   "image/avif",
-  "image/heic",
-  "image/heif",
 ]);
 
 function asNonEmptyString(v: unknown): string | null {
@@ -59,10 +56,6 @@ function mimeToExt(mime: string): string | null {
       return "gif";
     case "image/avif":
       return "avif";
-    case "image/heic":
-      return "heic";
-    case "image/heif":
-      return "heif";
     default:
       return null;
   }
@@ -112,7 +105,7 @@ export async function POST(req: Request) {
   const contentType = file.type || "";
   if (!contentType.startsWith("image/") || !ALLOWED_IMAGE_TYPES.has(contentType)) {
     return NextResponse.json(
-      { ok: false, reason: "invalid_mime", message: "仅支持常见图片格式（JPG/PNG/WEBP/GIF/AVIF/HEIC）" },
+      { ok: false, reason: "invalid_mime", message: "仅支持常见图片格式（JPG/PNG/WEBP/GIF/AVIF）" },
       { status: 400 },
     );
   }
@@ -134,25 +127,9 @@ export async function POST(req: Request) {
   const tags = normalizeTags(formData.get("tags"));
   const tagsCsv = tags.length > 0 ? tags.join(",") : null;
 
-  let uploadFile: File | Blob | Buffer = file;
-  let uploadContentType = contentType;
-  let ext = mimeToExt(contentType) ?? "img";
-
-  // 上传时转码：HEIC/HEIF → webp（优先），失败则兜底原文件
-  if (contentType === "image/heic" || contentType === "image/heif") {
-    try {
-      const inputBuf = Buffer.from(await file.arrayBuffer());
-      const outBuf = await sharp(inputBuf).rotate().webp({ quality: 82 }).toBuffer();
-      uploadContentType = "image/webp";
-      ext = "webp";
-      uploadFile = new Blob([new Uint8Array(outBuf)], { type: uploadContentType });
-    } catch (err) {
-      console.warn("[api/gallery/upload][POST] heic transcode failed, fallback to original:", err);
-      uploadFile = file;
-      uploadContentType = contentType;
-      ext = mimeToExt(contentType) ?? ext;
-    }
-  }
+  const uploadFile: File | Blob | Buffer = file;
+  const uploadContentType = contentType;
+  const ext = mimeToExt(contentType) ?? "img";
 
   const uploadId = randomUUID();
   const filename = `gallery/${uploadId}.${ext}`;

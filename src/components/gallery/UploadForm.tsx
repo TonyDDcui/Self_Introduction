@@ -3,10 +3,8 @@
 import { upload } from "@vercel/blob/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import heic2any from "heic2any";
 
 import styles from "./UploadForm.module.css";
-import { isHeicLike, toJpegFilename } from "../../lib/gallery/imageFormats";
 
 type UploadResponse =
   | { ok: true; id: string }
@@ -48,35 +46,19 @@ export default function UploadForm() {
     }
 
     try {
-      // HEIC/HEIF 浏览器兼容性较差：在客户端先转为 JPG 再上传到 Blob
-      let uploadFile: File = file;
-      if (isHeicLike({ name: file.name, type: file.type })) {
-        try {
-          const converted = await heic2any({
-            blob: file,
-            toType: "image/jpeg",
-            quality: 0.9,
-          });
-          const blob = Array.isArray(converted) ? converted[0] : converted;
-          uploadFile = new File([blob], toJpegFilename(file.name), {
-            type: "image/jpeg",
-          });
-        } catch {
-          throw new Error("HEIC/HEIF 转换失败：请先在本地转换为 JPG/PNG/WEBP 后再上传");
-        }
-      }
+      // 不再支持 HEIC/HEIF 转码：请用户在本地先转换为常见格式后再上传
 
       // 关键修复：
       // - Vercel 服务端上传受限于 4.5MB request body，容易触发 413
       // - 采用 Vercel Blob Client Upload，让文件从浏览器直传到 Blob
       const ext =
-        (uploadFile.name.split(".").pop() || "")
+        (file.name.split(".").pop() || "")
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "") ||
         "img";
       const filename = `gallery/${randomId()}.${ext}`;
 
-      const blob = await upload(filename, uploadFile, {
+      const blob = await upload(filename, file, {
         access: "public",
         handleUploadUrl: "/api/gallery/blob",
       });
@@ -125,7 +107,7 @@ export default function UploadForm() {
               id="file"
               name="file"
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
               required
               className={styles.input}
             />

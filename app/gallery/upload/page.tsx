@@ -68,7 +68,7 @@ export default async function GalleryUploadPage() {
             }}
           >
             <div style={{ color: "var(--text-secondary)" }}>
-              你尚未登录。请登录后继续。
+              你尚未登录。请使用 GitHub 登录后继续。
             </div>
             <Link
               href={`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}
@@ -89,7 +89,7 @@ export default async function GalleryUploadPage() {
                 boxShadow: "var(--shadow-whisper)",
               }}
             >
-              去登录
+              使用 GitHub 登录
             </Link>
           </div>
         ) : !isUploader(session) ? (
