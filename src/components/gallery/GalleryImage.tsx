@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 export default function GalleryImage(props: {
   src: string;
@@ -11,7 +11,7 @@ export default function GalleryImage(props: {
   sizes?: string;
   priority?: boolean;
 }) {
-  const { src, alt, downloadHref, className, sizes, priority } = props;
+  const { src, alt, downloadHref, className, priority } = props;
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -54,13 +54,17 @@ export default function GalleryImage(props: {
   }
 
   return (
-    <Image
+    // 关键优化（国内访问显著改善）：
+    // - next/image 默认会走 /_next/image 在 Vercel 侧做图片优化
+    // - 国内访问时，这一跳会导致非常高的延迟（用户反馈可达 10-20s）
+    // - 这里直接使用原图 URL（Blob/CDN）以避免额外的优化跳转
+    <img
       className={className}
       src={src}
       alt={alt}
-      fill
-      sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 920px) 50vw, 25vw"}
-      priority={priority}
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
       onError={() => setFailed(true)}
     />
   );
