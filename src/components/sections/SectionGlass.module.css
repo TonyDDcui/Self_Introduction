@@ -65,7 +65,8 @@
 
 /* 浅色模式下让玻璃更像“纸上覆膜” */
 :global(html[data-mode="light"]) .glass {
-  background: rgba(255, 255, 255, 0.62);
+  /* 你截图红框的“模块蒙版”：SectionGlass 组件的底色 */
+  background: var(--module-mask, #d97757);
   border-color: color-mix(in srgb, var(--ring) 78%, rgba(0, 0, 0, 0.06));
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.55),
@@ -73,7 +74,8 @@
 }
 
 :global(html[data-mode="light"]) .glass::before {
-  opacity: 0.22;
+  /* 深色底上纸纹更明显：稍微降一点避免脏 */
+  opacity: 0.16;
 }
 
 :global(html[data-mode="dark"]) .glass::before {
