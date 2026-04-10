@@ -58,9 +58,9 @@ export default function GalleryAuthActions(props: {
           href={`/api/auth/signin?callbackUrl=${encodeURIComponent(signInCallbackUrl)}`}
           className={styles.button}
         >
-          <span className={styles.labelLong}>使用 GitHub 登录</span>
+          <span className={styles.labelLong}>登录</span>
           <span className={styles.labelShort} aria-hidden="true">
-            GitHub 登录
+            登录
           </span>
         </Link>
       )}
