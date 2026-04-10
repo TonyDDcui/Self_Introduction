@@ -14,7 +14,12 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export default async function AlbumPage(props: { params: { slug: string } }) {
-  const slug = props.params.slug;
+  let slug = props.params.slug;
+  try {
+    slug = decodeURIComponent(slug);
+  } catch {
+    // keep as-is
+  }
   const session = await getServerSession(authOptions);
 
   let photos: Awaited<ReturnType<typeof listPublicPhotosCached>> = [];

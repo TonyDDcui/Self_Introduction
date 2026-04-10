@@ -12,7 +12,7 @@ export default function AlbumGrid(props: { albums: AlbumSummary[] }) {
       {albums.map((a) => (
         <Link
           key={a.slug}
-          href={`/gallery/albums/${a.slug}`}
+          href={`/gallery/albums/${encodeURIComponent(a.slug)}`}
           className={styles.cardLink}
         >
           <article className={styles.card} role="listitem">
@@ -36,4 +36,3 @@ export default function AlbumGrid(props: { albums: AlbumSummary[] }) {
     </div>
   );
 }
-
