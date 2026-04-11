@@ -2,6 +2,10 @@ import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
+  pages: {
+    // 默认登录页改为自动跳转 GitHub OAuth（避免 /api/auth/signin 按钮无法提交的问题）
+    signIn: "/login",
+  },
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID ?? "",

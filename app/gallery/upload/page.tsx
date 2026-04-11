@@ -71,7 +71,7 @@ export default async function GalleryUploadPage() {
               你尚未登录。请使用 GitHub 登录后继续。
             </div>
             <Link
-              href={`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+              href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
               style={{
                 justifySelf: "start",
                 display: "inline-flex",

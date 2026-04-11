@@ -55,7 +55,7 @@ export default function GalleryAuthActions(props: {
         </>
       ) : (
         <Link
-          href={`/api/auth/signin?callbackUrl=${encodeURIComponent(signInCallbackUrl)}`}
+          href={`/login?callbackUrl=${encodeURIComponent(signInCallbackUrl)}`}
           className={styles.button}
         >
           <span className={styles.labelLong}>登录</span>
