@@ -4,10 +4,12 @@ import { getAllPostsMeta } from "../../lib/blog/fs";
 import SectionGlass from "./SectionGlass";
 import { getServerLang } from "../../lib/i18n/server";
 import { t } from "../../lib/i18n/strings";
+import WritingClient from "./WritingClient";
 
 export default async function Writing() {
   const lang = getServerLang();
   const posts = (await getAllPostsMeta(lang)).slice(0, 3);
+  const readLabel = lang === "en" ? "Read" : "阅读";
 
   return (
     <section
@@ -35,33 +37,7 @@ export default async function Writing() {
               {t(lang, "section.writing.empty.post")}
             </p>
           ) : (
-            <ul className={styles.list}>
-              {posts.map((p) => (
-                <li key={p.slug} className={styles.item}>
-                  <Link className={styles.itemLinkWrap} href={`/blog/${p.slug}`}>
-                    <h3 className={styles.itemTitle}>{p.title}</h3>
-
-                    {p.date ? (
-                      <p className={styles.meta}>
-                        <time dateTime={p.date}>{p.date}</time>
-                      </p>
-                    ) : null}
-
-                    {p.summary ? <p className={styles.summary}>{p.summary}</p> : null}
-
-                    {p.tags.length ? (
-                      <div className={styles.tags} aria-label="Post tags">
-                        {p.tags.map((t) => (
-                          <span key={t} className={styles.tag}>
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <WritingClient posts={posts} readLabel={readLabel} />
           )}
 
           <div className={styles.footer}>

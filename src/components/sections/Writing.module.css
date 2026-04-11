@@ -76,10 +76,14 @@
   gap: 16px;
 }
 
-.item {
+.itemWrap {
   --item-delay: 0ms;
 
   grid-column: span 4;
+}
+
+.item {
+  height: 100%;
   border: 1px solid var(--ring);
   border-radius: var(--radius-12);
   background: color-mix(in srgb, var(--surface-1) 86%, transparent);
@@ -89,6 +93,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  cursor: pointer;
 
   transition-property: opacity, transform, filter, box-shadow, border-color, background-color;
   transition-duration: 520ms;
@@ -97,23 +102,23 @@
   will-change: opacity, transform, filter;
 }
 
-.item:nth-child(2) {
+.itemWrap:nth-child(2) {
   --item-delay: 50ms;
 }
 
-.item:nth-child(3) {
+.itemWrap:nth-child(3) {
   --item-delay: 100ms;
 }
 
-.item:nth-child(4) {
+.itemWrap:nth-child(4) {
   --item-delay: 150ms;
 }
 
-.item:nth-child(5) {
+.itemWrap:nth-child(5) {
   --item-delay: 200ms;
 }
 
-.item:nth-child(6) {
+.itemWrap:nth-child(6) {
   --item-delay: 250ms;
 }
 
@@ -142,19 +147,6 @@
   font-weight: 600;
   letter-spacing: -0.012em;
   line-height: 1.25;
-}
-
-.itemLinkWrap {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: 100%;
-  color: inherit;
-  text-decoration: none;
-}
-
-.itemLinkWrap:hover {
-  text-decoration: underline;
 }
 
 .meta {
@@ -188,6 +180,34 @@
   font-size: 12px;
   letter-spacing: -0.01em;
   background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+}
+
+.cardCtas {
+  margin-top: auto;
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pillLinkOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ring);
+  color: var(--link);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  background: color-mix(in srgb, var(--surface-1) 80%, transparent);
+}
+
+.pillLinkOutline:hover {
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 90%, transparent);
+  text-decoration: none;
 }
 
 .footer {
@@ -239,13 +259,13 @@
 }
 
 @media (max-width: 900px) {
-  .item {
+  .itemWrap {
     grid-column: span 6;
   }
 }
 
 @media (max-width: 640px) {
-  .item {
+  .itemWrap {
     grid-column: span 12;
   }
 }
