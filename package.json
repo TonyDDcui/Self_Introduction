@@ -33,6 +33,7 @@
   "dependencies": {
     "@vercel/blob": "^2.3.3",
     "@vercel/postgres": "^0.10.0",
+    "fuse.js": "^7.3.0",
     "gray-matter": "^4.0.3",
     "heic2any": "^0.0.4",
     "next": "^14.2.0",
