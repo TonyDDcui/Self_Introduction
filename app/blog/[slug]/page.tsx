@@ -68,6 +68,19 @@ export default async function BlogPostPage({
 
       <div className={styles.postBody}>
         <article className={styles.prose}>{content}</article>
+        {post.meta.source_url ? (
+          <div className={styles.sourceBlock}>
+            阅读原文（CSDN）：{" "}
+            <a
+              className={styles.sourceLink}
+              href={post.meta.source_url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {post.meta.source_url}
+            </a>
+          </div>
+        ) : null}
       </div>
     </main>
   );

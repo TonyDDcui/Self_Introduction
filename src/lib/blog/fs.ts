@@ -13,9 +13,12 @@ export type PostMeta = {
   date: string;
   summary: string;
   tags: string[];
+  source_url?: string;
 };
 
-type Frontmatter = Partial<Pick<PostMeta, "title" | "date" | "summary" | "tags">>;
+type Frontmatter = Partial<
+  Pick<PostMeta, "title" | "date" | "summary" | "tags" | "source_url">
+>;
 
 function normalizeTags(tags: unknown): string[] {
   if (!tags) return [];
@@ -36,6 +39,7 @@ function toMeta(slug: string, data: Frontmatter): PostMeta {
     date: data.date ? String(data.date) : "",
     summary: data.summary ? String(data.summary) : "",
     tags: normalizeTags(data.tags),
+    source_url: data.source_url ? String(data.source_url) : undefined,
   };
 }
 

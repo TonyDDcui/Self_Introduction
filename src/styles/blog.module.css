@@ -205,3 +205,24 @@
   border-top: 1px solid color-mix(in srgb, var(--ring) 78%, transparent);
   margin: 28px 0;
 }
+
+.sourceBlock {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--ring);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.sourceLink {
+  color: var(--link);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.sourceLink:hover {
+  text-decoration: underline;
+}
