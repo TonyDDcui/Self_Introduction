@@ -119,21 +119,20 @@
 }
 
 .highlightIcon {
-  /* 对齐 uiverse slimy-chicken-73：直接展示大图标（约 4rem），不额外套“按钮框” */
-  width: 64px;
-  height: 64px;
+  width: 42px;
+  height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0;
-  border: 0;
-  background: transparent;
-  color: color-mix(in srgb, var(--link) 78%, var(--text-primary));
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--ring) 82%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  color: color-mix(in srgb, var(--link) 70%, var(--text-primary));
 }
 
 .highlightIcon svg {
-  width: 64px;
-  height: 64px;
+  width: 22px;
+  height: 22px;
 }
 
 .highlightCard::before {
@@ -199,8 +198,7 @@
   border: 0.25px solid #c5c5c5;
   border-radius: 20px;
   background-color: navy;
-  /* 用户反馈：站点上看起来会出现一圈蓝色光晕，这里去掉强 blur */
-  backdrop-filter: none;
+  backdrop-filter: blur(800px);
   /* 用户要求：去掉底部光圈/发光效果 */
   box-shadow: none;
   width: min(560px, 100%);
