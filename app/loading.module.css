@@ -23,8 +23,11 @@
 }
 
 .loader {
-  color: color-mix(in srgb, var(--link) 78%, var(--text-primary));
-  filter: drop-shadow(0 10px 20px color-mix(in srgb, var(--link) 22%, transparent));
+  /* 统一颜色：与首屏 boot-loader 保持一致（品牌强调色） */
+  color: var(--button-left, #c96442);
+  filter: drop-shadow(
+    0 10px 20px color-mix(in srgb, var(--button-left, #c96442) 22%, transparent)
+  );
 }
 
 .label {

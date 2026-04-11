@@ -199,7 +199,8 @@
   border-radius: 20px;
   background-color: navy;
   backdrop-filter: blur(800px);
-  box-shadow: 0 0 40px 15px blue;
+  /* 用户要求：去掉底部光圈/发光效果 */
+  box-shadow: none;
   width: min(560px, 100%);
 }
 
@@ -253,7 +254,7 @@
   background-color: #202425;
   color: #8e8e8e;
   cursor: pointer;
-  box-shadow: 0 0 15px deepskyblue;
+  box-shadow: none;
 }
 
 .copy_toggle > svg {

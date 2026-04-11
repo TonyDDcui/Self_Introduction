@@ -34,7 +34,8 @@ export default function RootLayout({
               @media (prefers-color-scheme: light){#boot-loader .p{border-color:rgba(0,0,0,.10);background:rgba(255,255,255,.72)}}
               #boot-loader .t{margin-top:8px;font-size:13px;color:rgba(255,255,255,.70);text-align:center}
               @media (prefers-color-scheme: light){#boot-loader .t{color:rgba(0,0,0,.55)}}
-              #boot-loader svg{display:block;margin:0 auto;color:rgba(99,102,241,.85)}
+              /* 统一颜色：与 app/loading.tsx 的 loader 一致 */
+              #boot-loader svg{display:block;margin:0 auto;color:#c96442}
               @keyframes bl_bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
               #boot-loader #line-v1,#boot-loader #line-v2,#boot-loader #node-server,#boot-loader #particles{transform-origin:center;animation:bl_bounce 3s ease-in-out infinite alternate}
               #boot-loader #line-v2{animation-delay:.2s}
