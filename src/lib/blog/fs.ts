@@ -57,8 +57,27 @@ function normalizeForDedup(s: string): string {
   return String(s || "")
     .replace(/\s+/g, " ")
     .replace(/[，。！？、“”‘’（）()【】\[\]{}<>《》]/g, "")
+    .replace(/https?:\/\/\S+/g, "")
     .trim()
     .toLowerCase();
+}
+
+function trigramSet(s: string): Set<string> {
+  const text = normalizeForDedup(s);
+  const set = new Set<string>();
+  if (text.length <= 3) return set;
+  for (let i = 0; i < text.length - 2; i++) set.add(text.slice(i, i + 3));
+  return set;
+}
+
+function jaccard(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 || b.size === 0) return 0;
+  let inter = 0;
+  a.forEach((x) => {
+    if (b.has(x)) inter++;
+  });
+  const union = a.size + b.size - inter;
+  return union === 0 ? 0 : inter / union;
 }
 
 export async function getAllPostsMetaByLang(lang: SiteLang): Promise<PostMeta[]> {
@@ -92,19 +111,35 @@ export async function getAllPostsMetaByLang(lang: SiteLang): Promise<PostMeta[]>
 
   // CSDN 同步文章：RSS 摘要经常重复。这里做一个轻量去重，
   // 避免 Blog 列表“多篇看起来一模一样”（不抓取正文、不用外部 AI）。
-  const csdn = metas.filter((m) => m.tags.includes("csdn") && m.summary);
-  const countByKey = new Map<string, number>();
-  for (const m of csdn) {
-    const k = normalizeForDedup(m.summary);
-    countByKey.set(k, (countByKey.get(k) ?? 0) + 1);
-  }
+  const csdnByYear = new Map<string, PostMeta[]>();
   for (const m of metas) {
-    if (!m.tags.includes("csdn")) continue;
-    const k = normalizeForDedup(m.summary);
-    if (!k || (countByKey.get(k) ?? 0) <= 1) continue;
-    const titleHint = truncateByChars(m.title, 18);
-    m.summary = `${truncateByChars(m.summary, 72)}（主题：${titleHint}）`;
+    if (!m.tags.includes("csdn") || !m.summary) continue;
+    const year = String(m.date || "").slice(0, 4) || "未知";
+    const arr = csdnByYear.get(year) ?? [];
+    arr.push(m);
+    csdnByYear.set(year, arr);
   }
+
+  csdnByYear.forEach((posts) => {
+    const reps: Array<{ grams: Set<string>; text: string }> = [];
+    for (const m of posts) {
+      const grams = trigramSet(m.summary);
+      let isDup = false;
+      for (const r of reps) {
+        if (jaccard(grams, r.grams) >= 0.92) {
+          isDup = true;
+          break;
+        }
+      }
+      if (!isDup) {
+        reps.push({ grams, text: m.summary });
+        continue;
+      }
+      const titleHint = truncateByChars(m.title, 24);
+      // 即使原摘要开头重复，也强制加标题前缀保证每条在列表里看起来不同
+      m.summary = `【${titleHint}】${truncateByChars(m.summary, 68)}`;
+    }
+  });
 
   return metas;
 }

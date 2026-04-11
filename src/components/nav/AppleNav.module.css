@@ -82,8 +82,8 @@
 }
 
 .avatar {
-  width: 45px;
-  height: 45px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   /* 用户要求：不要头像外圈黑框/描边 */
   border: 0;
@@ -113,7 +113,7 @@
 .link {
   /* Apple-ish type */
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 650;
   letter-spacing: -0.016em;
   text-decoration: none;

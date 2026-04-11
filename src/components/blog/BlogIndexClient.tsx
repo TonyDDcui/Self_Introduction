@@ -76,6 +76,7 @@ export default function BlogIndexClient(props: {
         scrollY: typeof window !== "undefined" ? window.scrollY : 0,
         openYear,
         query,
+        returnToIndex: true,
       };
       sessionStorage.setItem(storageKey, JSON.stringify(payload));
     } catch {
@@ -108,19 +109,8 @@ export default function BlogIndexClient(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  // 仅在“浏览器后退/前进”时恢复位置，避免用户每次打开 /blog 都被强制跳到旧位置
+  // 返回 /blog 时恢复位置（跨移动端兼容，避免依赖 performance navigation type）
   useEffect(() => {
-    let navType: string | null = null;
-    try {
-      const nav = performance.getEntriesByType("navigation")?.[0] as
-        | PerformanceNavigationTiming
-        | undefined;
-      navType = nav?.type ?? null;
-    } catch {
-      navType = null;
-    }
-    if (navType !== "back_forward") return;
-
     try {
       const raw = sessionStorage.getItem(storageKey);
       if (!raw) return;
@@ -129,9 +119,12 @@ export default function BlogIndexClient(props: {
         scrollY?: number;
         openYear?: string;
         query?: string;
+        returnToIndex?: boolean;
       };
       // 只保留 2 小时内的状态
       if (!parsed.ts || Date.now() - parsed.ts > 2 * 60 * 60 * 1000) return;
+      if (!parsed.returnToIndex) return;
+
       if (typeof parsed.openYear === "string" && parsed.openYear) {
         setOpenYear(parsed.openYear);
       }
@@ -148,6 +141,16 @@ export default function BlogIndexClient(props: {
           });
         });
       }, 0);
+
+      // 只恢复一次，避免后续进入 /blog 也被强制跳回旧位置
+      try {
+        sessionStorage.setItem(
+          storageKey,
+          JSON.stringify({ ...parsed, returnToIndex: false }),
+        );
+      } catch {
+        // ignore
+      }
     } catch {
       // ignore
     }
@@ -257,6 +260,7 @@ export default function BlogIndexClient(props: {
                           scrollY: typeof window !== "undefined" ? window.scrollY : 0,
                           openYear: next,
                           query,
+                          returnToIndex: false,
                         }),
                       );
                     } catch {
