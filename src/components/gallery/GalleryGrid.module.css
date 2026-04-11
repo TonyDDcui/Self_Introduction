@@ -27,11 +27,37 @@
   transition:
     transform var(--motion-fast) var(--motion-ease-out),
     box-shadow var(--motion-fast) var(--motion-ease-out);
+  position: relative;
 }
 
 .card:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-card), var(--shadow-whisper);
+}
+
+/* A2 玻璃点缀：轻微光晕 */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 25% 10%,
+      color-mix(in srgb, var(--link) 14%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(255, 255, 255, 0.08),
+      transparent 62%
+    );
+  opacity: 0.52;
+  transition: opacity 220ms ease;
+}
+
+.card:hover::before {
+  opacity: 0.82;
 }
 
 .media {

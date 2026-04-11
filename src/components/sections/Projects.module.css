@@ -72,12 +72,39 @@
   flex-direction: column;
   gap: 10px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 
   transition-property: opacity, transform, filter, box-shadow, border-color, background-color;
   transition-duration: 520ms;
   transition-timing-function: var(--motion-ease-out);
   transition-delay: calc(var(--reveal-delay, 0ms) + var(--card-delay, 0ms));
   will-change: opacity, transform, filter;
+}
+
+/* A2 玻璃点缀：轻微光晕（静态可见） */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 20% 15%,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 70% 55%,
+      rgba(255, 255, 255, 0.10),
+      transparent 60%
+    );
+  opacity: 0.55;
+  transition: opacity 220ms ease;
+}
+
+.card:hover::before {
+  opacity: 0.85;
 }
 
 .card:nth-child(2) {

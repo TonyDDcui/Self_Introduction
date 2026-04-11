@@ -5,6 +5,43 @@
   font-size: 17px;
   line-height: 1;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease,
+    background-color 160ms ease, border-color 160ms ease;
+}
+
+.base::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(255, 255, 255, 0.26),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 80% 60%,
+      color-mix(in srgb, var(--link) 18%, transparent),
+      transparent 60%
+    );
+  opacity: 0.35;
+  transition: opacity 220ms ease;
+  mix-blend-mode: overlay;
+}
+
+.base:hover::before {
+  opacity: 0.6;
+}
+
+.base:hover {
+  transform: translateY(-0.5px);
+}
+
+.base:active {
+  transform: translateY(0);
 }
 
 .primary {

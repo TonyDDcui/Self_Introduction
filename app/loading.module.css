@@ -1,0 +1,113 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--bg-page) 68%, transparent);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+}
+
+.panel {
+  width: min(460px, 92vw);
+  padding: 20px 18px 16px;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--ring) 82%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 78%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bg-page) 32%, transparent),
+    0 24px 90px rgba(0, 0, 0, 0.28);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.loader {
+  color: color-mix(in srgb, var(--link) 78%, var(--text-primary));
+  filter: drop-shadow(0 10px 20px color-mix(in srgb, var(--link) 22%, transparent));
+}
+
+.label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
+}
+
+/* --- uiverse.io/Juanes200122/fresh-yak-92 (CSS adapted) --- */
+
+.loader :global(#svg-global) {
+  zoom: 1.08;
+  overflow: visible;
+}
+
+@keyframes fade-particles {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+}
+
+.loader :global(#particles) {
+  animation: fade-particles 5s infinite alternate;
+}
+
+.loader :global(.particle) {
+  animation: floatUp linear infinite;
+}
+
+.loader :global(.p1) {
+  animation-duration: 2.2s;
+  animation-delay: 0s;
+}
+.loader :global(.p2) {
+  animation-duration: 2.5s;
+  animation-delay: 0.3s;
+}
+.loader :global(.p3) {
+  animation-duration: 2s;
+  animation-delay: 0.6s;
+}
+
+@keyframes bounce-lines {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.loader :global(#line-v1),
+.loader :global(#line-v2),
+.loader :global(#node-server),
+.loader :global(#particles) {
+  transform-origin: center;
+  animation: bounce-lines 3s ease-in-out infinite alternate;
+}
+
+.loader :global(#line-v2) {
+  animation-delay: 0.2s;
+}
+
+.loader :global(#node-server),
+.loader :global(#particles) {
+  animation-delay: 0.4s;
+}
