@@ -227,6 +227,17 @@
   filter: brightness(1.04);
 }
 
+/* 暗色模式：按钮强调色（修复对比度不足导致“像消失”） */
+:global(html[data-mode="dark"]) .pillLink {
+  background: var(--button-left, #c96442);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+:global(html[data-mode="dark"]) .pillLink:hover {
+  filter: brightness(1.04);
+}
+
 @media (max-width: 900px) {
   .item {
     grid-column: span 6;
