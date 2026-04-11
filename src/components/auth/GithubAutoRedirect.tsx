@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-type CsrfResponse = { csrfToken?: string };
+import { signIn } from "next-auth/react";
 
 export default function GithubAutoRedirect(props: { callbackUrl: string }) {
   const { callbackUrl } = props;
@@ -14,29 +13,12 @@ export default function GithubAutoRedirect(props: { callbackUrl: string }) {
     setError(null);
 
     try {
-      const res = await fetch("/api/auth/csrf", { credentials: "same-origin" });
-      if (!res.ok) throw new Error(`csrf_http_${res.status}`);
-      const data = (await res.json().catch(() => ({}))) as CsrfResponse;
-      const csrfToken = typeof data.csrfToken === "string" ? data.csrfToken : "";
-      if (!csrfToken) throw new Error("missing_csrf_token");
-
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = "/api/auth/signin/github";
-
-      const add = (name: string, value: string) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
-      };
-
-      add("csrfToken", csrfToken);
-      add("callbackUrl", callbackUrl);
-
-      document.body.appendChild(form);
-      form.submit();
+      // 使用 next-auth/react 的 signIn：
+      // - 内部会处理 csrf、cookie、provider url 生成等细节
+      // - 避免某些环境下 form.submit() 被浏览器/扩展/策略拦截导致“无跳转”
+      const res = await signIn("github", { callbackUrl, redirect: false });
+      if (!res?.url) throw new Error(res?.error || "missing_redirect_url");
+      window.location.href = res.url;
     } catch (e) {
       setStatus("failed");
       setError(e instanceof Error ? e.message : "unknown_error");
@@ -90,10 +72,17 @@ export default function GithubAutoRedirect(props: { callbackUrl: string }) {
         >
           继续使用 GitHub 登录
         </button>
+
+        <div style={{ color: "var(--text-tertiary)", fontSize: 12, lineHeight: 1.5 }}>
+          诊断：你也可以手动打开{" "}
+          <a href={`/api/auth/signin/github?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
+            /api/auth/signin/github
+          </a>{" "}
+          看是否会 302 跳到 github.com。
+        </div>
       </div>
     );
   }
 
   return <div style={{ color: "var(--text-secondary)" }}>如果没有自动跳转，请稍等或刷新页面。</div>;
 }
-
