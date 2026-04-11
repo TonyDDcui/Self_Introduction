@@ -24,22 +24,61 @@
   margin: 4px 0 4px;
 }
 
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .searchInput {
   height: 44px;
-  border-radius: 14px;
-  border: 1px solid var(--ring);
-  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ring) 88%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 88%, transparent);
   color: var(--text-primary);
-  padding: 0 14px;
+  padding: 0 16px;
   font-size: 14px;
   outline: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 10px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 10px 26px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease,
+    transform 180ms ease;
 }
 
 .searchInput:focus {
-  border-color: color-mix(in srgb, var(--focus) 70%, var(--ring));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 28%, transparent),
-    0 10px 24px rgba(0, 0, 0, 0.06);
+  border-color: color-mix(in srgb, var(--link) 62%, var(--ring));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--link) 26%, transparent),
+    0 14px 34px rgba(0, 0, 0, 0.10);
+  background: color-mix(in srgb, var(--surface-1) 82%, transparent);
+  transform: translateY(-0.5px);
+}
+
+.searchIconButton {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ring) 88%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+  color: color-mix(in srgb, var(--link) 80%, var(--text-primary));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 10px 26px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease,
+    background-color 180ms ease, color 180ms ease;
+}
+
+.searchIconButton:hover {
+  transform: translateY(-0.5px);
+  border-color: color-mix(in srgb, var(--ring) 65%, var(--text-tertiary));
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 86%, transparent);
+}
+
+.searchIconButton:active {
+  transform: translateY(0);
 }
 
 .searchHint {
@@ -127,11 +166,39 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 30px rgba(0, 0, 0, 0.06);
   transition: transform 160ms ease, box-shadow 160ms ease;
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .card:hover {
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* A2 玻璃点缀：轻微光晕（静态可见，hover 更明显） */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 30% 10%,
+      color-mix(in srgb, var(--link) 18%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 70% 40%,
+      color-mix(in srgb, var(--text-primary) 10%, transparent),
+      transparent 60%
+    );
+  opacity: 0.55;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 220ms ease;
+}
+
+.card:hover::before {
+  opacity: 0.85;
 }
 
 .cardLink {

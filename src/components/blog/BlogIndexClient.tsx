@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 
 import styles from "../../styles/blog.module.css";
@@ -46,6 +46,7 @@ export default function BlogIndexClient(props: {
   initialPosts: PostMetaClient[];
 }) {
   const { lang, initialPosts } = props;
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [query, setQuery] = useState("");
   const [loadingIndex, setLoadingIndex] = useState(false);
   const [indexError, setIndexError] = useState<string | null>(null);
@@ -53,6 +54,9 @@ export default function BlogIndexClient(props: {
 
   const { years, map } = useMemo(() => groupByYear(initialPosts), [initialPosts]);
   const defaultOpenYear = years[0] ?? "未知";
+  const [openYear, setOpenYear] = useState<string>(defaultOpenYear);
+
+  const storageKey = useMemo(() => `blog:index:state:${lang}`, [lang]);
 
   const fuse = useMemo(() => {
     if (!indexItems) return null;
@@ -64,6 +68,20 @@ export default function BlogIndexClient(props: {
       keys: ["title", "summary", "tags", "contentText"],
     });
   }, [indexItems]);
+
+  function rememberListState() {
+    try {
+      const payload = {
+        ts: Date.now(),
+        scrollY: typeof window !== "undefined" ? window.scrollY : 0,
+        openYear,
+        query,
+      };
+      sessionStorage.setItem(storageKey, JSON.stringify(payload));
+    } catch {
+      // ignore
+    }
+  }
 
   async function ensureIndexLoaded() {
     if (indexItems || loadingIndex) return;
@@ -90,6 +108,52 @@ export default function BlogIndexClient(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  // 仅在“浏览器后退/前进”时恢复位置，避免用户每次打开 /blog 都被强制跳到旧位置
+  useEffect(() => {
+    let navType: string | null = null;
+    try {
+      const nav = performance.getEntriesByType("navigation")?.[0] as
+        | PerformanceNavigationTiming
+        | undefined;
+      navType = nav?.type ?? null;
+    } catch {
+      navType = null;
+    }
+    if (navType !== "back_forward") return;
+
+    try {
+      const raw = sessionStorage.getItem(storageKey);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as {
+        ts?: number;
+        scrollY?: number;
+        openYear?: string;
+        query?: string;
+      };
+      // 只保留 2 小时内的状态
+      if (!parsed.ts || Date.now() - parsed.ts > 2 * 60 * 60 * 1000) return;
+      if (typeof parsed.openYear === "string" && parsed.openYear) {
+        setOpenYear(parsed.openYear);
+      }
+      if (typeof parsed.query === "string") {
+        setQuery(parsed.query);
+      }
+
+      const y = typeof parsed.scrollY === "number" ? parsed.scrollY : 0;
+      // 等 DOM/折叠面板渲染后再滚动
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: y, behavior: "instant" as ScrollBehavior });
+          });
+        });
+      }, 0);
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storageKey]);
+
   const searching = query.trim().length > 0;
 
   const searchResults = useMemo(() => {
@@ -101,14 +165,45 @@ export default function BlogIndexClient(props: {
   return (
     <section className={styles.blogIndex}>
       <div className={styles.toolbar} role="search">
-        <input
-          className={styles.searchInput}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="搜索文章（支持全文模糊匹配）…"
-          aria-label="搜索文章"
-          onFocus={() => void ensureIndexLoaded()}
-        />
+        {/* 搜索框样式参考：uiverse.io/Anasmalik57/great-grasshopper-29（已转为 CSS Modules + 主题适配） */}
+        <div className={styles.searchBar}>
+          <input
+            ref={inputRef}
+            className={styles.searchInput}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="搜索文章（支持全文模糊匹配）…"
+            aria-label="搜索文章"
+            onFocus={() => void ensureIndexLoaded()}
+          />
+          <button
+            type="button"
+            className={styles.searchIconButton}
+            aria-label="聚焦搜索框"
+            onClick={() => inputRef.current?.focus()}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <path
+                d="M16.2 16.2 21 21"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
         {loadingIndex ? <div className={styles.searchHint}>加载索引中…</div> : null}
         {indexError ? (
           <div className={styles.searchHint}>索引加载失败：{indexError}</div>
@@ -122,7 +217,11 @@ export default function BlogIndexClient(props: {
         <ul className={styles.grid} aria-label="搜索结果">
           {searchResults.map((post) => (
             <li key={post.slug} className={styles.card}>
-              <Link className={styles.cardLink} href={`/blog/${post.slug}`}>
+              <Link
+                className={styles.cardLink}
+                href={`/blog/${post.slug}`}
+                onClick={() => rememberListState()}
+              >
                 <h2 className={styles.cardTitle}>{post.title}</h2>
                 {post.date ? (
                   <p className={styles.meta}>
@@ -142,15 +241,40 @@ export default function BlogIndexClient(props: {
           {years.map((y) => {
             const posts = map.get(y) ?? [];
             return (
-              <details key={y} className={styles.yearGroup} open={y === defaultOpenYear}>
-                <summary className={styles.yearSummary}>
+              <details key={y} className={styles.yearGroup} open={openYear === y}>
+                <summary
+                  className={styles.yearSummary}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const next = openYear === y ? "" : y;
+                    setOpenYear(next);
+                    // 只记住折叠状态即可（避免滚动干扰）
+                    try {
+                      sessionStorage.setItem(
+                        storageKey,
+                        JSON.stringify({
+                          ts: Date.now(),
+                          scrollY: typeof window !== "undefined" ? window.scrollY : 0,
+                          openYear: next,
+                          query,
+                        }),
+                      );
+                    } catch {
+                      // ignore
+                    }
+                  }}
+                >
                   <span className={styles.yearLabel}>{y}</span>
                   <span className={styles.yearCount}>{posts.length}</span>
                 </summary>
                 <ul className={styles.grid}>
                   {posts.map((post) => (
                     <li key={post.slug} className={styles.card}>
-                      <Link className={styles.cardLink} href={`/blog/${post.slug}`}>
+                      <Link
+                        className={styles.cardLink}
+                        href={`/blog/${post.slug}`}
+                        onClick={() => rememberListState()}
+                      >
                         <h2 className={styles.cardTitle}>{post.title}</h2>
                         {post.date ? (
                           <p className={styles.meta}>
@@ -175,4 +299,3 @@ export default function BlogIndexClient(props: {
     </section>
   );
 }
-
