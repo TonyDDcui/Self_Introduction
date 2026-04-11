@@ -58,12 +58,18 @@ function MoonIcon() {
 }
 
 export default function ModeToggle() {
-  const [mode, setMode] = useState<SiteMode>(() => readMode() ?? (systemPrefersDark() ? "dark" : "light"));
+  // IMPORTANT: 这里不要在初始化阶段读取 localStorage / matchMedia，
+  // 否则 SSR 输出与客户端首帧可能不一致，导致 hydration 失败并影响整页渲染。
+  const [mode, setMode] = useState<SiteMode>("light");
   const lang = readClientLang();
 
   useEffect(() => {
     const v = document.documentElement.dataset.mode;
-    if (v === "light" || v === "dark") setMode(v);
+    const next =
+      v === "light" || v === "dark"
+        ? v
+        : readMode() ?? (systemPrefersDark() ? "dark" : "light");
+    setMode(next);
   }, []);
 
   function onToggle() {

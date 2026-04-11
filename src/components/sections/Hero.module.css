@@ -91,7 +91,7 @@
 }
 
 .ctaRow {
-  margin-top: 26px;
+  margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -116,6 +116,23 @@
   position: relative;
   overflow: hidden;
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.highlightIcon {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--ring) 82%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  color: color-mix(in srgb, var(--link) 70%, var(--text-primary));
+}
+
+.highlightIcon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .highlightCard::before {
@@ -167,78 +184,112 @@
   margin: 0;
 }
 
-/* --- uiverse polite-termite-5 → terminal card (toned down) --- */
+/* --- uiverse polite-termite-5 → terminal card (keep original look) --- */
 .terminalCard {
   width: 100%;
   margin-top: 22px;
   display: grid;
+  justify-items: start;
 }
 
-.terminalWrap {
-  width: min(560px, 100%);
-  border-radius: 18px;
-  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
-  background: color-mix(in srgb, var(--surface-1) 84%, transparent);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 18px 52px rgba(0, 0, 0, 0.10);
+.termWrap {
+  padding: 0.75rem;
   overflow: hidden;
+  border: 0.25px solid #c5c5c5;
+  border-radius: 20px;
+  background-color: navy;
+  backdrop-filter: blur(800px);
+  box-shadow: 0 0 40px 15px blue;
+  width: min(560px, 100%);
 }
 
-.terminalHead {
+.terminal {
+  display: flex;
+  flex-direction: column;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+.head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 38px;
-  padding: 0 12px;
-  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 88%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  overflow: hidden;
+  min-height: 40px;
+  padding-inline: 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #202425;
 }
 
-.terminalTitle {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-tertiary);
-  letter-spacing: -0.01em;
-}
-
-.terminalDots {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.terminalDots span {
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--text-tertiary) 60%, transparent);
-}
-
-.terminalBody {
-  padding: 14px 14px 16px;
-  background: color-mix(in srgb, var(--bg-page) 72%, black);
-  color: color-mix(in srgb, var(--text-primary) 92%, white);
-  font-family: var(--font-mono);
-}
-
-.pre {
-  display: inline-flex;
+.termTitle {
+  display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  height: 2.5rem;
+  user-select: none;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #8e8e8e;
+}
+
+.termTitle > svg {
+  height: 18px;
+  width: 18px;
+  margin-top: 2px;
+  color: #006adc;
+}
+
+.copy_toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border: 0.65px solid darkgrey;
+  margin-left: auto;
+  border-radius: 6px;
+  background-color: #202425;
+  color: #8e8e8e;
+  cursor: pointer;
+  box-shadow: 0 0 15px deepskyblue;
+}
+
+.copy_toggle > svg {
+  width: 15px;
+  height: 15px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  overflow-x: auto;
+  padding: 1rem;
+  line-height: 20px;
+  color: white;
+  background-color: black;
   white-space: nowrap;
 }
 
-.pre code:nth-child(1) {
-  color: color-mix(in srgb, var(--text-tertiary) 88%, transparent);
-}
-
-.pre code:nth-child(2) {
-  color: color-mix(in srgb, var(--link) 86%, white);
+.pre {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-wrap: nowrap;
+  white-space: pre;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
 .cursor {
   width: 10px;
   height: 16px;
-  border-right: 2px solid color-mix(in srgb, var(--link) 86%, white);
+  border-right: 0.15em solid #e34ba9;
   animation: blinkCursor 0.65s step-end infinite alternate;
 }
 
