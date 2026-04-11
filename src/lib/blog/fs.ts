@@ -47,6 +47,20 @@ function getBlogDir(lang: SiteLang) {
   return lang === "en" ? BLOG_DIR_EN : BLOG_DIR_ZH;
 }
 
+function truncateByChars(input: string, maxChars: number): string {
+  const s = String(input || "").trim();
+  if (s.length <= maxChars) return s;
+  return `${s.slice(0, maxChars)}…`;
+}
+
+function normalizeForDedup(s: string): string {
+  return String(s || "")
+    .replace(/\s+/g, " ")
+    .replace(/[，。！？、“”‘’（）()【】\[\]{}<>《》]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
 export async function getAllPostsMetaByLang(lang: SiteLang): Promise<PostMeta[]> {
   const BLOG_DIR = getBlogDir(lang);
   let entries: Dirent[];
@@ -75,6 +89,22 @@ export async function getAllPostsMetaByLang(lang: SiteLang): Promise<PostMeta[]>
     const db = b.date ? Date.parse(b.date) : Number.NEGATIVE_INFINITY;
     return db - da;
   });
+
+  // CSDN 同步文章：RSS 摘要经常重复。这里做一个轻量去重，
+  // 避免 Blog 列表“多篇看起来一模一样”（不抓取正文、不用外部 AI）。
+  const csdn = metas.filter((m) => m.tags.includes("csdn") && m.summary);
+  const countByKey = new Map<string, number>();
+  for (const m of csdn) {
+    const k = normalizeForDedup(m.summary);
+    countByKey.set(k, (countByKey.get(k) ?? 0) + 1);
+  }
+  for (const m of metas) {
+    if (!m.tags.includes("csdn")) continue;
+    const k = normalizeForDedup(m.summary);
+    if (!k || (countByKey.get(k) ?? 0) <= 1) continue;
+    const titleHint = truncateByChars(m.title, 18);
+    m.summary = `${truncateByChars(m.summary, 72)}（主题：${titleHint}）`;
+  }
 
   return metas;
 }
@@ -107,5 +137,12 @@ export async function getPostBySlug(slug: string, lang: SiteLang = "zh"): Promis
   const parsed = matter(raw);
   const meta = toMeta(slug, parsed.data as Frontmatter);
 
-  return { meta, raw, content: parsed.content };
+  // 兼容历史 CSDN 导入文章：正文末尾会被写入 “原文链接：https://...”
+  // 统一去掉，避免重复（详情页已有 source_url 外链块）。
+  const cleaned = parsed.content
+    .replace(/^\s*原文链接：\s*https?:\/\/\S+\s*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trimEnd();
+
+  return { meta, raw, content: cleaned };
 }

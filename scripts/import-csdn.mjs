@@ -155,7 +155,7 @@ async function main() {
       source_hash: sourceHash,
     });
 
-    const body = `${it.description || ""}\n\n原文链接：${url}\n`;
+    const body = `${it.description || ""}\n`;
 
     await writePost({ slug, frontmatter: fm, body });
     written += 1;
