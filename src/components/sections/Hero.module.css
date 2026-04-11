@@ -27,6 +27,18 @@
   text-align: left;
 }
 
+.heroTop {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: start;
+}
+
+.heroCopy {
+  min-width: 0;
+}
+
 .title,
 .subtitle,
 .ctaRow {
@@ -90,6 +102,161 @@
   min-height: 44px;
 }
 
+/* --- uiverse slimy-chicken-73 → A2 glass highlight card --- */
+.highlightCard {
+  width: min(320px, 86vw);
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 82%, transparent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 18px 52px rgba(0, 0, 0, 0.10);
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.highlightCard::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 28% 18%,
+      color-mix(in srgb, var(--link) 16%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 75% 60%,
+      rgba(255, 255, 255, 0.10),
+      transparent 62%
+    );
+  opacity: 0.55;
+  transition: opacity 220ms ease;
+}
+
+.highlightCard:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--ring) 70%, var(--text-tertiary));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 26px 70px rgba(0, 0, 0, 0.14);
+}
+
+.highlightCard:hover::before {
+  opacity: 0.85;
+}
+
+.highlightTitle {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.highlightBody {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+
+.highlightLine {
+  margin: 0;
+}
+
+/* --- uiverse polite-termite-5 → terminal card (toned down) --- */
+.terminalCard {
+  width: 100%;
+  margin-top: 22px;
+  display: grid;
+}
+
+.terminalWrap {
+  width: min(560px, 100%);
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 84%, transparent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 18px 52px rgba(0, 0, 0, 0.10);
+  overflow: hidden;
+}
+
+.terminalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
+  padding: 0 12px;
+  background: color-mix(in srgb, var(--surface-2, var(--surface-1)) 88%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--ring) 86%, transparent);
+}
+
+.terminalTitle {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: -0.01em;
+}
+
+.terminalDots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.terminalDots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-tertiary) 60%, transparent);
+}
+
+.terminalBody {
+  padding: 14px 14px 16px;
+  background: color-mix(in srgb, var(--bg-page) 72%, black);
+  color: color-mix(in srgb, var(--text-primary) 92%, white);
+  font-family: var(--font-mono);
+}
+
+.pre {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.pre code:nth-child(1) {
+  color: color-mix(in srgb, var(--text-tertiary) 88%, transparent);
+}
+
+.pre code:nth-child(2) {
+  color: color-mix(in srgb, var(--link) 86%, white);
+}
+
+.cursor {
+  width: 10px;
+  height: 16px;
+  border-right: 2px solid color-mix(in srgb, var(--link) 86%, white);
+  animation: blinkCursor 0.65s step-end infinite alternate;
+}
+
+@keyframes blinkCursor {
+  50% {
+    opacity: 0.1;
+  }
+}
+
+@media (max-width: 860px) {
+  .heroTop {
+    grid-template-columns: 1fr;
+  }
+  .highlightCard {
+    width: min(560px, 100%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .title,
   .subtitle,
@@ -99,5 +266,9 @@
     filter: none !important;
     transition: none !important;
     will-change: auto;
+  }
+
+  .cursor {
+    animation: none !important;
   }
 }
