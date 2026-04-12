@@ -111,6 +111,8 @@ export default function BlogIndexClient(props: {
 
   // 返回 /blog 时恢复位置（跨移动端兼容，避免依赖 performance navigation type）
   useEffect(() => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
     try {
       const raw = sessionStorage.getItem(storageKey);
       if (!raw) return;
@@ -134,9 +136,12 @@ export default function BlogIndexClient(props: {
 
       const y = typeof parsed.scrollY === "number" ? parsed.scrollY : 0;
       // 等 DOM/折叠面板渲染后再滚动
-      setTimeout(() => {
+      timer = setTimeout(() => {
+        if (cancelled) return;
         requestAnimationFrame(() => {
+          if (cancelled) return;
           requestAnimationFrame(() => {
+            if (cancelled) return;
             window.scrollTo({ top: y, behavior: "instant" as ScrollBehavior });
           });
         });
@@ -154,6 +159,10 @@ export default function BlogIndexClient(props: {
     } catch {
       // ignore
     }
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
 

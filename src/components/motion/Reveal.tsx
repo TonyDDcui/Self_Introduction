@@ -99,15 +99,23 @@ export default function Reveal() {
     const onVisibilityChange = () => {
       if (document.visibilityState === "visible") scheduleRun();
     };
+    // One-time scroll hook: programmatic scroll restores (e.g., /blog -> /) can happen
+    // after the initial scheduleRun. A single scroll pass ensures we don't leave sections hidden.
+    const onScrollOnce = () => {
+      window.removeEventListener("scroll", onScrollOnce);
+      scheduleRun();
+    };
 
     window.addEventListener("pageshow", onPageShow);
     document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("scroll", onScrollOnce, { passive: true });
 
     scheduleRun();
 
     return () => {
       window.removeEventListener("pageshow", onPageShow);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("scroll", onScrollOnce);
       if (raf1) cancelAnimationFrame(raf1);
       if (raf2) cancelAnimationFrame(raf2);
       observer?.disconnect();
