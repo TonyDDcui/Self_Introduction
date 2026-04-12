@@ -7,6 +7,8 @@ create table if not exists photos (
   id uuid primary key default uuid_generate_v4(),
   blob_url text not null,
   blob_pathname text not null,
+  thumb_url text,
+  thumb_pathname text,
   title text,
   caption text,
   category text,

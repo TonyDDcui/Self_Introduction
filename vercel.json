@@ -1,0 +1,9 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/gallery/thumbs/backfill",
+      "schedule": "0 */12 * * *"
+    }
+  ]
+}
+
