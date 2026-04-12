@@ -23,7 +23,7 @@ export function buildAlbumSummaries(photos: PhotoRow[]): AlbumSummary[] {
         title: a.title,
         count: 1,
         // listPublicPhotos() 已按 published_at desc 排序：第一个命中的就是“最新/封面”
-        coverUrl: p.blob_url ?? null,
+        coverUrl: p.thumb_url ?? p.blob_url ?? null,
         coverAlt: p.title?.trim() || p.caption?.trim() || a.title,
       });
     } else {
@@ -53,4 +53,3 @@ export function buildAlbumSummaries(photos: PhotoRow[]): AlbumSummary[] {
 export function filterPhotosByAlbumSlug(photos: PhotoRow[], slug: string): PhotoRow[] {
   return photos.filter((p) => classifyAlbumFromPhoto(p).slug === slug);
 }
-

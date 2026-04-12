@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { readClientLang } from "../../lib/i18n/client";
 import TranslationProgress from "../i18n/TranslationProgress";
+import { pickPhotoSrc } from "../../lib/gallery/thumbnails";
 
 type JobState = {
   jobId: string;
@@ -117,7 +118,7 @@ export default function GalleryGrid(props: { photos: PhotoRow[]; canDelete?: boo
             <div className={styles.media}>
               <GalleryImage
                 className={styles.img}
-                src={photo.blob_url}
+                src={pickPhotoSrc(photo)}
                 alt={alt}
                 downloadHref={photo.blob_url}
               />

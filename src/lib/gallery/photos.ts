@@ -5,6 +5,8 @@ export type PhotoRow = {
   id: string;
   blob_url: string;
   blob_pathname: string;
+  thumb_url: string | null;
+  thumb_pathname: string | null;
   title: string | null;
   caption: string | null;
   category: string | null;
@@ -28,6 +30,8 @@ export async function listPublicPhotos(): Promise<PhotoRow[]> {
       id,
       blob_url,
       blob_pathname,
+      thumb_url,
+      thumb_pathname,
       title,
       caption,
       category,
