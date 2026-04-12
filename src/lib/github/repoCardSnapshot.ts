@@ -1,29 +1,31 @@
 import { getSiteKvRecord, setSiteKv } from "../profile/siteKv";
-import { formatCommitItems, formatIssueItems, formatPullItems, RepoCardItem } from "./repoCard";
+import { formatCommitItems, RepoCardItem } from "./repoCard";
 
-const OWNER = "TonyDDcui";
-const REPO = "Self_Introduction";
-const REPO_FULL = `${OWNER}/${REPO}`;
-const REPO_URL = `https://github.com/${REPO_FULL}`;
+const DEFAULT_OWNER = "TonyDDcui";
+const DEFAULT_REPO = "Self_Introduction";
+const DEFAULT_FULL = `${DEFAULT_OWNER}/${DEFAULT_REPO}`;
+const DEFAULT_URL = `https://github.com/${DEFAULT_FULL}`;
 
-const SNAPSHOT_KEY = "repo_card_snapshot_v1";
+const MENU_KEY = "repo_card_menu_recent_v1";
+const COMMITS_KEY_PREFIX = "repo_card_commits_v1:";
 const MAX_AGE_MS = 1000 * 60 * 60 * 12; // 12h
+const MENU_LIMIT = 5;
 
-export type RepoCardSnapshot = {
-  repo: {
+export type RepoMenuItem = {
+  fullName: string; // owner/name
+  url: string;
+  pushedAt: string;
+};
+
+export type RepoCardData = {
+  menu: RepoMenuItem[];
+  activeRepo: {
     owner: string;
     name: string;
     fullName: string;
     url: string;
-    stars: number;
-    forks: number;
-    openIssues: number;
   };
-  tabs: {
-    code: RepoCardItem[];
-    issues: RepoCardItem[];
-    pulls: RepoCardItem[];
-  };
+  items: RepoCardItem[];
 };
 
 function safeJsonParse<T>(s: string): T | null {
@@ -45,77 +47,126 @@ async function fetchGithubJson<T>(url: string, token?: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-async function refreshSnapshot(token?: string): Promise<RepoCardSnapshot> {
-  // repo
-  const repo = await fetchGithubJson<{
-    stargazers_count: number;
-    forks_count: number;
-    open_issues_count: number;
-  }>(`https://api.github.com/repos/${REPO_FULL}`, token);
-
-  // tabs
-  const [commitsRaw, pullsRaw, issuesRaw] = await Promise.all([
-    fetchGithubJson<unknown[]>(
-      `https://api.github.com/repos/${REPO_FULL}/commits?per_page=7`,
-      token,
-    ),
-    fetchGithubJson<unknown[]>(
-      `https://api.github.com/repos/${REPO_FULL}/pulls?state=open&per_page=7`,
-      token,
-    ),
-    fetchGithubJson<unknown[]>(
-      `https://api.github.com/repos/${REPO_FULL}/issues?state=open&per_page=15`,
-      token,
-    ),
-  ]);
-
-  return {
-    repo: {
-      owner: OWNER,
-      name: REPO,
-      fullName: REPO_FULL,
-      url: REPO_URL,
-      stars: Number(repo.stargazers_count || 0),
-      forks: Number(repo.forks_count || 0),
-      openIssues: Number(repo.open_issues_count || 0),
-    },
-    tabs: {
-      code: formatCommitItems(commitsRaw as never),
-      pulls: formatPullItems(pullsRaw as never),
-      // issues endpoint includes PRs; helper will filter. We fetch a bit more to keep 7 real issues.
-      issues: formatIssueItems(issuesRaw as never),
-    },
-  };
+function splitFullName(fullName: string): { owner: string; name: string } | null {
+  const [owner, name] = String(fullName || "").split("/");
+  if (!owner || !name) return null;
+  return { owner, name };
 }
 
-export async function getRepoCardSnapshot(opts?: {
-  token?: string;
-}): Promise<{ snapshot: RepoCardSnapshot; updatedAt: Date; fromCache: boolean }> {
-  const record = await getSiteKvRecord(SNAPSHOT_KEY);
+function commitsKey(fullName: string): string {
+  // site_kv key: keep it stable & safe
+  return `${COMMITS_KEY_PREFIX}${String(fullName).replaceAll("/", "__")}`;
+}
+
+async function refreshMenu(owner: string, token?: string): Promise<RepoMenuItem[]> {
+  const repos = await fetchGithubJson<
+    Array<{ full_name: string; html_url: string; pushed_at: string; fork?: boolean }>
+  >(
+    `https://api.github.com/users/${owner}/repos?per_page=${MENU_LIMIT}&sort=pushed&direction=desc&type=owner`,
+    token,
+  );
+
+  return (repos || [])
+    .filter((r) => !r.fork)
+    .slice(0, MENU_LIMIT)
+    .map((r) => ({
+      fullName: String(r.full_name),
+      url: String(r.html_url),
+      pushedAt: String(r.pushed_at),
+    }));
+}
+
+async function getMenu(owner: string, token?: string): Promise<{ menu: RepoMenuItem[]; updatedAt: Date }> {
+  const record = await getSiteKvRecord(MENU_KEY);
   const now = Date.now();
 
   if (record) {
-    const parsed = safeJsonParse<RepoCardSnapshot>(record.value);
+    const parsed = safeJsonParse<RepoMenuItem[]>(record.value);
     if (parsed && now - record.updatedAt.getTime() <= MAX_AGE_MS) {
-      return { snapshot: parsed, updatedAt: record.updatedAt, fromCache: true };
+      return { menu: parsed, updatedAt: record.updatedAt };
     }
   }
 
-  // stale/missing: refresh, but if refresh fails, fallback to last known snapshot.
   try {
-    const snapshot = await refreshSnapshot(opts?.token);
-    await setSiteKv(SNAPSHOT_KEY, JSON.stringify(snapshot));
-    return { snapshot, updatedAt: new Date(), fromCache: false };
+    const menu = await refreshMenu(owner, token);
+    await setSiteKv(MENU_KEY, JSON.stringify(menu));
+    return { menu, updatedAt: new Date() };
   } catch {
-    const parsed = record ? safeJsonParse<RepoCardSnapshot>(record.value) : null;
-    if (parsed && record) return { snapshot: parsed, updatedAt: record.updatedAt, fromCache: true };
-
-    // absolute fallback: keep UI alive
-    const fallback: RepoCardSnapshot = {
-      repo: { owner: OWNER, name: REPO, fullName: REPO_FULL, url: REPO_URL, stars: 0, forks: 0, openIssues: 0 },
-      tabs: { code: [], issues: [], pulls: [] },
+    const parsed = record ? safeJsonParse<RepoMenuItem[]>(record.value) : null;
+    if (parsed && record) return { menu: parsed, updatedAt: record.updatedAt };
+    return {
+      menu: [{ fullName: DEFAULT_FULL, url: DEFAULT_URL, pushedAt: new Date(0).toISOString() }],
+      updatedAt: new Date(0),
     };
-    return { snapshot: fallback, updatedAt: new Date(0), fromCache: true };
   }
 }
 
+async function refreshCommits(fullName: string, token?: string): Promise<RepoCardItem[]> {
+  const commitsRaw = await fetchGithubJson<unknown[]>(
+    `https://api.github.com/repos/${fullName}/commits?per_page=7`,
+    token,
+  );
+  return formatCommitItems(commitsRaw as never);
+}
+
+async function getCommits(fullName: string, token?: string): Promise<{ items: RepoCardItem[]; updatedAt: Date }> {
+  const key = commitsKey(fullName);
+  const record = await getSiteKvRecord(key);
+  const now = Date.now();
+
+  if (record) {
+    const parsed = safeJsonParse<RepoCardItem[]>(record.value);
+    if (parsed && now - record.updatedAt.getTime() <= MAX_AGE_MS) {
+      return { items: parsed, updatedAt: record.updatedAt };
+    }
+  }
+
+  try {
+    const items = await refreshCommits(fullName, token);
+    await setSiteKv(key, JSON.stringify(items));
+    return { items, updatedAt: new Date() };
+  } catch {
+    const parsed = record ? safeJsonParse<RepoCardItem[]>(record.value) : null;
+    if (parsed && record) return { items: parsed, updatedAt: record.updatedAt };
+    return { items: [], updatedAt: new Date(0) };
+  }
+}
+
+export async function getRepoCardData(opts?: {
+  owner?: string;
+  repoFullName?: string | null;
+  token?: string;
+}): Promise<RepoCardData> {
+  const owner = opts?.owner || DEFAULT_OWNER;
+  const token = opts?.token;
+
+  const { menu } = await getMenu(owner, token);
+
+  const preferred = opts?.repoFullName ? splitFullName(opts.repoFullName) : null;
+  const menuHasPreferred = opts?.repoFullName
+    ? menu.some((m) => m.fullName === opts.repoFullName)
+    : false;
+
+  const activeFullName =
+    (menuHasPreferred && opts?.repoFullName) || menu[0]?.fullName || DEFAULT_FULL;
+
+  const activeParsed = splitFullName(activeFullName) ?? { owner: DEFAULT_OWNER, name: DEFAULT_REPO };
+
+  // If user passed an explicit repoFullName that is not in menu, still allow it (manual deep link)
+  const finalFullName = preferred && !menuHasPreferred ? opts?.repoFullName || activeFullName : activeFullName;
+
+  const { items } = await getCommits(finalFullName, token);
+
+  const finalParsed = splitFullName(finalFullName) ?? activeParsed;
+
+  return {
+    menu: menu.slice(0, MENU_LIMIT),
+    activeRepo: {
+      owner: finalParsed.owner,
+      name: finalParsed.name,
+      fullName: finalFullName,
+      url: `https://github.com/${finalFullName}`,
+    },
+    items,
+  };
+}

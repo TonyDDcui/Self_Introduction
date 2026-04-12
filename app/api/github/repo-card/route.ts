@@ -2,18 +2,14 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-import { getRepoCardSnapshot } from "../../../../src/lib/github/repoCardSnapshot";
+import { getRepoCardData } from "../../../../src/lib/github/repoCardSnapshot";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const VALID_TABS = new Set(["code", "issues", "pulls"]);
-
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const tab = VALID_TABS.has(url.searchParams.get("tab") || "")
-    ? (url.searchParams.get("tab") as "code" | "issues" | "pulls")
-    : "pulls";
+  const repo = url.searchParams.get("repo"); // owner/name
 
   const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const accessToken =
@@ -21,19 +17,19 @@ export async function GET(req: NextRequest) {
       ? (jwt as { githubAccessToken: string }).githubAccessToken
       : undefined;
 
-  const { snapshot, updatedAt } = await getRepoCardSnapshot({
+  const data = await getRepoCardData({
+    owner: "TonyDDcui",
+    repoFullName: repo,
     token: accessToken || process.env.GITHUB_TOKEN,
   });
 
   return NextResponse.json(
     {
       ok: true,
-      tab,
-      updatedAt: updatedAt.toISOString(),
-      repo: snapshot.repo,
-      items: snapshot.tabs[tab],
+      menu: data.menu,
+      activeRepo: data.activeRepo,
+      items: data.items,
     },
     { status: 200 },
   );
 }
-

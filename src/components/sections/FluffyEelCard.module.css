@@ -4,6 +4,59 @@
   justify-content: flex-start;
 }
 
+.menuWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 280px;
+  max-width: calc(100vw - 48px);
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #303236;
+  background: #0b0d10;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+}
+
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.menuItem:hover {
+  background: hsl(0 0 100 / 7%);
+}
+
+.menuItem[data-active="true"] {
+  outline: 1px solid #3a3d44;
+  background: hsl(0 0 100 / 5%);
+}
+
+.menuItemMuted {
+  padding: 10px;
+  color: #797d86;
+  font-size: 12px;
+}
+
+.menuRepo {
+  font-size: 13px;
+  font-weight: 600;
+}
+
 /* fluffy-eel-29: keep card content & structure; remove outer glow/spin layers */
 .scope :global(.card-container) {
   position: relative;
@@ -47,6 +100,12 @@
   gap: 8px;
   padding: 0 12px;
   padding-top: 10px;
+}
+
+.scope :global(button.icon) {
+  background: transparent;
+  border: 0;
+  color: inherit;
 }
 
 .scope :global(:where(.repo > a, .repo > span)) {
