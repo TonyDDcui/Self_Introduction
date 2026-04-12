@@ -25,28 +25,58 @@ export type PhotoRow = {
  * 2) published_at desc
  */
 export async function listPublicPhotos(): Promise<PhotoRow[]> {
-  const { rows } = await sql<PhotoRow>`
-    select
-      id,
-      blob_url,
-      blob_pathname,
-      thumb_url,
-      thumb_pathname,
-      title,
-      caption,
-      category,
-      tags,
-      visibility,
-      sort_order,
-      created_at,
-      published_at
-    from photos
-    where visibility = 'public'
-    order by coalesce(sort_order, 2147483647), published_at desc
-    limit 200
-  `;
+  // Backward compatible query:
+  // - Older databases may not have thumb_url/thumb_pathname columns yet.
+  // - We try the new schema first, and fallback to the legacy schema with null thumbs.
+  try {
+    const { rows } = await sql<PhotoRow>`
+      select
+        id,
+        blob_url,
+        blob_pathname,
+        thumb_url,
+        thumb_pathname,
+        title,
+        caption,
+        category,
+        tags,
+        visibility,
+        sort_order,
+        created_at,
+        published_at
+      from photos
+      where visibility = 'public'
+      order by coalesce(sort_order, 2147483647), published_at desc
+      limit 200
+    `;
+    return rows;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Postgres error: column "thumb_url" does not exist
+    if (!/thumb_(url|pathname)/i.test(msg)) throw err;
 
-  return rows;
+    const { rows } = await sql<PhotoRow>`
+      select
+        id,
+        blob_url,
+        blob_pathname,
+        null::text as thumb_url,
+        null::text as thumb_pathname,
+        title,
+        caption,
+        category,
+        tags,
+        visibility,
+        sort_order,
+        created_at,
+        published_at
+      from photos
+      where visibility = 'public'
+      order by coalesce(sort_order, 2147483647), published_at desc
+      limit 200
+    `;
+    return rows;
+  }
 }
 
 /**
