@@ -9,7 +9,7 @@ export default function GalleryAuthActions(props: {
   signInCallbackUrl: string;
   signOutCallbackUrl: string;
 }) {
-  const { session, canUpload, signInCallbackUrl, signOutCallbackUrl } = props;
+  const { session, signInCallbackUrl, signOutCallbackUrl } = props;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const loginLabel = (session?.user && (session.user as any).login) || session?.user?.name || null;
@@ -43,15 +43,6 @@ export default function GalleryAuthActions(props: {
               退出
             </Link>
           </div>
-
-          {canUpload ? (
-            <Link href="/gallery/upload" className={styles.button}>
-              <span className={styles.labelLong}>添加照片</span>
-              <span className={styles.labelShort} aria-hidden="true">
-                上传
-              </span>
-            </Link>
-          ) : null}
         </>
       ) : (
         <Link

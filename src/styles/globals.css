@@ -1,6 +1,5 @@
 @import "./tokens.base.css";
 @import "./tokens.claude.light.css";
-@import "./tokens.claude.dark.css";
 @import "../components/motion/reveal.css";
 
 /* Minimal CSS reset */

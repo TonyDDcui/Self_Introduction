@@ -1,6 +1,8 @@
 import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
 
+import { syncAvatarOnSignIn } from "../profile/avatar";
+
 export const authOptions: NextAuthOptions = {
   pages: {
     // 默认登录页改为自动跳转 GitHub OAuth（避免 /api/auth/signin 按钮无法提交的问题）
@@ -13,6 +15,13 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
+  events: {
+    async signIn(message) {
+      // 登录时同步一次头像并固化为站点静态资源（对所有访客生效）。
+      // 注意：不阻塞登录流程；失败也不会影响登录。
+      await syncAvatarOnSignIn(message as never);
+    },
+  },
   callbacks: {
     async jwt({ token, profile }) {
       // GitHub OAuth profile includes `login` (username). Persist it in JWT so

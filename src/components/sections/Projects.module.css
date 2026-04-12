@@ -155,6 +155,56 @@
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.012em;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.githubMark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.githubMark svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+.githubMark:hover svg {
+  transform: scale(1.18);
+  color: color-mix(in srgb, var(--link) 80%, var(--text-primary));
+}
+
+.githubTip {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  transform-origin: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--ring);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+  box-shadow: var(--shadow-whisper);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+  transition: transform 220ms ease;
+  pointer-events: none;
+}
+
+.githubMark:hover .githubTip {
+  transform: translateX(-50%) scale(1);
 }
 
 .cardDesc {

@@ -81,6 +81,19 @@ export default async function BlogPostPage({
             </a>
           </div>
         ) : null}
+        {post.meta.repo_url ? (
+          <div className={styles.repoBlock}>
+            GitHub 仓库：{" "}
+            <a
+              className={styles.sourceLink}
+              href={post.meta.repo_url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {post.meta.repo_url}
+            </a>
+          </div>
+        ) : null}
       </div>
     </main>
   );

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 
 import AlbumGrid from "../../src/components/gallery/AlbumGrid";
 import GalleryAuthActions from "../../src/components/gallery/GalleryAuthActions";
+import GalleryUploadCard from "../../src/components/gallery/GalleryUploadCard";
 import { authOptions } from "../../src/lib/auth/options";
 import { isUploader } from "../../src/lib/auth/guards";
 import { buildAlbumSummaries } from "../../src/lib/gallery/albums";
@@ -114,6 +115,11 @@ export default async function GalleryPage() {
           ) : (
             <AlbumGrid albums={albums} />
           )}
+        </div>
+
+        {/* 上传入口放在相册/图片列表底部（对所有人可见） */}
+        <div style={{ marginTop: 22, maxWidth: 420 }}>
+          <GalleryUploadCard />
         </div>
       </div>
     </main>

@@ -2,11 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./AppleNav.module.css";
 
-import ModeToggle from "../theme/ModeToggle";
 import TocMenu from "./TocMenu";
 import LanguageToggle from "../i18n/LanguageToggle";
 import { getServerLang } from "../../lib/i18n/server";
 import { t } from "../../lib/i18n/strings";
+import { getSiteAvatarUrl } from "../../lib/profile/avatar";
 
 const navItems = [
   { href: "/", labelKey: "nav.home" },
@@ -14,8 +14,9 @@ const navItems = [
   { href: "/gallery", labelKey: "nav.gallery" },
 ] as const;
 
-export default function AppleNav() {
+export default async function AppleNav() {
   const lang = getServerLang();
+  // NOTE: Server component — 可以直接 await DB/Blob 缓存。
   return (
     <nav aria-label="Primary" className={styles.nav}>
       <div className={styles.inner}>
@@ -30,7 +31,8 @@ export default function AppleNav() {
           >
             <Image
               className={styles.avatar}
-              src="https://github.com/TonyDDcui.png"
+              // 优先使用“登录时同步并固化”的站点静态头像；否则回退到本地 SVG 占位。
+              src={(await getSiteAvatarUrl()) ?? "/avatar.svg"}
               alt="GitHub avatar"
               width={45}
               height={45}
@@ -53,7 +55,6 @@ export default function AppleNav() {
             labelToEn={t(lang, "nav.langToEn")}
             labelToZh={t(lang, "nav.langToZh")}
           />
-          <ModeToggle />
         </div>
       </div>
     </nav>

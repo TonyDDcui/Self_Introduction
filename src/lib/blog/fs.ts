@@ -14,10 +14,11 @@ export type PostMeta = {
   summary: string;
   tags: string[];
   source_url?: string;
+  repo_url?: string;
 };
 
 type Frontmatter = Partial<
-  Pick<PostMeta, "title" | "date" | "summary" | "tags" | "source_url">
+  Pick<PostMeta, "title" | "date" | "summary" | "tags" | "source_url" | "repo_url">
 >;
 
 function normalizeTags(tags: unknown): string[] {
@@ -33,6 +34,13 @@ function normalizeTags(tags: unknown): string[] {
 }
 
 function toMeta(slug: string, data: Frontmatter): PostMeta {
+  // 兼容两种写法：repo_url / repoUrl
+  const repoUrlRaw =
+    (data.repo_url ? String(data.repo_url) : "") ||
+    (typeof (data as unknown as { repoUrl?: unknown }).repoUrl === "string"
+      ? String((data as unknown as { repoUrl: string }).repoUrl)
+      : "");
+
   return {
     slug,
     title: data.title ? String(data.title) : slug,
@@ -40,6 +48,7 @@ function toMeta(slug: string, data: Frontmatter): PostMeta {
     summary: data.summary ? String(data.summary) : "",
     tags: normalizeTags(data.tags),
     source_url: data.source_url ? String(data.source_url) : undefined,
+    repo_url: repoUrlRaw ? repoUrlRaw : undefined,
   };
 }
 

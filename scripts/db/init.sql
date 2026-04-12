@@ -81,3 +81,10 @@ create table if not exists i18n_jobs (
 
 create index if not exists idx_i18n_jobs_kind_target_lang
   on i18n_jobs (kind, target_id, lang);
+
+-- Site key-value settings (used for "login once → solidify avatar as static")
+create table if not exists site_kv (
+  key text primary key,
+  value text not null,
+  updated_at timestamptz not null default now()
+);

@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import "../src/styles/globals.css";
 import AppleNav from "../src/components/nav/AppleNav";
 import Reveal from "../src/components/motion/Reveal";
-import ThemeProvider from "../src/components/theme/ThemeProvider";
 import { getServerLang } from "../src/lib/i18n/server";
 import Script from "next/script";
 
@@ -20,7 +19,12 @@ export default function RootLayout({
 }>) {
   const lang = getServerLang();
   return (
-    <html lang={lang === "en" ? "en" : "zh-HK"} data-lang={lang}>
+    <html
+      lang={lang === "en" ? "en" : "zh-HK"}
+      data-lang={lang}
+      data-theme="claude"
+      data-mode="light"
+    >
       <body>
         {/* 首屏“空白时间”兜底：在 CSS 还未完全加载/水合前，先用极简内联样式显示 loader */}
         <style
@@ -109,11 +113,9 @@ export default function RootLayout({
         <Script id="boot-loader-hide" strategy="afterInteractive">
           {`document.documentElement.setAttribute('data-boot','done');`}
         </Script>
-        <ThemeProvider>
-          <AppleNav />
-          <Reveal />
-          <div style={{ paddingTop: "var(--nav-height)" }}>{children}</div>
-        </ThemeProvider>
+        <AppleNav />
+        <Reveal />
+        <div style={{ paddingTop: "var(--nav-height)" }}>{children}</div>
       </body>
     </html>
   );
