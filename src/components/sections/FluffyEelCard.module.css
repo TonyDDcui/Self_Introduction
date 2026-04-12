@@ -62,7 +62,7 @@
   position: relative;
   width: min(420px, 100%);
   height: 300px;
-  border-radius: 1em;
+  border-radius: calc(1em - (0.62em * var(--expand-p, 0)));
   margin: 0;
 }
 
@@ -76,7 +76,7 @@
 .scope :global(.card) {
   position: absolute;
   inset: 0.125em;
-  border-radius: 0.875em;
+  border-radius: calc(0.875em - (0.56em * var(--expand-p, 0)));
   background: #111215;
   display: flex;
   flex-direction: column;
@@ -312,6 +312,12 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  color: #ffffff;
+}
+
+.scope :global(a.pr-title) {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 .scope :global(.pr-title:hover) {

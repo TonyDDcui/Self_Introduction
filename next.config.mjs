@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Allow dev server assets to be loaded when the site is accessed through
+  // a remote preview/proxy origin (e.g., automated browser tools).
+  allowedDevOrigins: ["*.remote-agent.svc.cluster.local"],
   images: {
     // 国内访问优化：
     // - 禁用 Next 图片优化（/_next/image），避免 Vercel 侧二次转发导致高延迟
