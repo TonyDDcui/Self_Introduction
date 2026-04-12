@@ -94,9 +94,9 @@ const ZH: Record<Key, string> = {
   "section.projects.items.firecar.desc":
     "面向 ERCC 竞赛的消防车项目：以 C 语言为主，包含运动控制、传感器与工程文件。",
   "section.writing.title": "Writing",
-  "section.writing.subtitle": "从 Blog 元信息读取最新 3 篇（不足则展示现有）。保持卡片化排版与轻量标签。",
+  "section.writing.subtitle": "最新文章与项目记录。",
   "section.writing.empty.pre": "暂无文章。你可以先访问 ",
-  "section.writing.empty.post": " 查看占位页面。",
+  "section.writing.empty.post": " 查看全部文章。",
   "section.writing.viewAll": "View all writing",
   "section.contact.title": "Contact",
   "section.contact.subtitle": "如果你也在做硬件、软件，或只是想聊聊日落与相机，都欢迎来信。",
@@ -155,7 +155,7 @@ const EN: Record<Key, string> = {
   "section.writing.subtitle":
     "Latest 3 posts from Blog metadata (or fewer if there aren’t enough). A light, card-based layout with compact tags.",
   "section.writing.empty.pre": "No posts yet. Visit ",
-  "section.writing.empty.post": " to see the placeholder page.",
+  "section.writing.empty.post": " to browse all posts.",
   "section.writing.viewAll": "View all writing",
   "section.contact.title": "Contact",
   "section.contact.subtitle":
