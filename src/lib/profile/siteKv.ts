@@ -1,6 +1,7 @@
 import { sql } from "../db";
 
 type Row = { value: string };
+type RowWithMeta = { value: string; updated_at: string };
 
 async function ensureTable() {
   // 兼容未执行 init.sql 的环境：首次写入时尝试创建表。
@@ -23,6 +24,20 @@ export async function getSiteKv(key: string): Promise<string | null> {
   }
 }
 
+export async function getSiteKvRecord(
+  key: string,
+): Promise<{ value: string; updatedAt: Date } | null> {
+  try {
+    const { rows } =
+      await sql<RowWithMeta>`select value, updated_at from site_kv where key = ${key} limit 1`;
+    const r = rows[0];
+    if (!r?.value) return null;
+    return { value: r.value, updatedAt: new Date(r.updated_at) };
+  } catch {
+    return null;
+  }
+}
+
 export async function setSiteKv(key: string, value: string): Promise<void> {
   try {
     await ensureTable();
@@ -37,4 +52,3 @@ export async function setSiteKv(key: string, value: string): Promise<void> {
     // ignore
   }
 }
-

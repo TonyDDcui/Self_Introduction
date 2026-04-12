@@ -2,6 +2,7 @@ import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
 
 import { syncAvatarOnSignIn } from "../profile/avatar";
+import { attachGithubToJwt } from "./githubJwt";
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -23,16 +24,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    async jwt({ token, profile }) {
-      // GitHub OAuth profile includes `login` (username). Persist it in JWT so
-      // server components / API routes can do stable authorization checks.
-      const githubLogin =
-        profile && typeof (profile as { login?: unknown }).login === "string"
-          ? (profile as { login: string }).login
-          : undefined;
-
-      if (githubLogin) token.githubLogin = githubLogin;
-      return token;
+    async jwt({ token, profile, account }) {
+      return attachGithubToJwt(token, { profile, account });
     },
     async session({ session, token }) {
       const githubLogin =
