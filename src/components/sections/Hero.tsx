@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Hero.module.css";
 import Button from "../ui/Button";
+import FluffyEelCard from "./FluffyEelCard";
 import { readClientLang } from "../../lib/i18n/client";
 import { t } from "../../lib/i18n/strings";
 
@@ -49,6 +50,10 @@ export default function Hero() {
           >
             {t(lang, "hero.learnMore")}
           </Button>
+        </div>
+
+        <div className={styles.heroCardRow}>
+          <FluffyEelCard />
         </div>
       </div>
     </section>

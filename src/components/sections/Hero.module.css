@@ -29,7 +29,8 @@
 
 .title,
 .subtitle,
-.ctaRow {
+.ctaRow,
+.heroCardRow {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   filter: blur(2px);
@@ -52,9 +53,14 @@
   --hero-delay: 160ms;
 }
 
+.heroCardRow {
+  --hero-delay: 240ms;
+}
+
 .entered .title,
 .entered .subtitle,
-.entered .ctaRow {
+.entered .ctaRow,
+.entered .heroCardRow {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   filter: blur(0);
@@ -86,6 +92,13 @@
   gap: 12px;
 }
 
+.heroCardRow {
+  width: 100%;
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .cta {
   min-height: 44px;
 }
@@ -93,7 +106,8 @@
 @media (prefers-reduced-motion: reduce) {
   .title,
   .subtitle,
-  .ctaRow {
+  .ctaRow,
+  .heroCardRow {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;

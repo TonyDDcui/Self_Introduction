@@ -117,9 +117,9 @@ export default async function GalleryPage() {
           )}
         </div>
 
-        {/* 上传入口放在相册/图片列表底部（对所有人可见） */}
+        {/* 上传入口放在相册/图片列表底部（登录入口融合在这里） */}
         <div style={{ marginTop: 22, maxWidth: 420 }}>
-          <GalleryUploadCard />
+          <GalleryUploadCard session={session} />
         </div>
       </div>
     </main>

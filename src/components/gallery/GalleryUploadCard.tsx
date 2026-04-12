@@ -1,8 +1,14 @@
 import Link from "next/link";
+import type { Session } from "next-auth";
 
 import styles from "./GalleryUploadCard.module.css";
 
-export default function GalleryUploadCard() {
+export default function GalleryUploadCard(props: { session: Session | null }) {
+  const { session } = props;
+  const loggedIn = Boolean(session);
+  const href = loggedIn
+    ? "/gallery/upload"
+    : `/login?callbackUrl=${encodeURIComponent("/gallery/upload")}`;
   return (
     <section className={styles.container} aria-label="上传照片">
       <div className={styles.inner}>
@@ -25,13 +31,12 @@ export default function GalleryUploadCard() {
         </div>
         <div className={styles.title}>上传照片</div>
         <div className={styles.text}>
-          登录后可上传；若当前账号没有权限，会在上传页提示。
+          {loggedIn ? "打开上传页开始上传。" : "登录后可上传（登录入口已融合在这里）。"}
         </div>
-        <Link className={styles.button} href="/gallery/upload">
-          打开上传页
+        <Link className={styles.button} href={href}>
+          {loggedIn ? "打开上传页" : "登录后上传"}
         </Link>
       </div>
     </section>
   );
 }
-

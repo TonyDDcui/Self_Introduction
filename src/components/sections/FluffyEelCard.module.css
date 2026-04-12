@@ -1,0 +1,282 @@
+.scope {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* fluffy-eel-29: keep card content & structure; remove outer glow/spin layers */
+.scope :global(.card-container) {
+  position: relative;
+  width: min(420px, 100%);
+  height: 300px;
+  border-radius: 1em;
+  margin: 0;
+}
+
+.scope :global(.card-border) {
+  position: absolute;
+  inset: 0;
+  background: #0005;
+  border-radius: inherit;
+}
+
+.scope :global(.card) {
+  position: absolute;
+  inset: 0.125em;
+  border-radius: 0.875em;
+  background: #111215;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  overflow: hidden;
+}
+
+.scope :global(.header) {
+  background: #0b0d10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid #1d1f23;
+}
+
+.scope :global(.top-header) {
+  background: #0b0d10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  padding-top: 10px;
+}
+
+.scope :global(:where(.repo > a, .repo > span)) {
+  text-decoration: none;
+  color: #bebebe;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.scope :global(.repo) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.scope :global(.repo-slash) {
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.scope :global(.repo-name) {
+  color: #fff;
+  font-weight: 400;
+}
+
+.scope :global(.repo > a) {
+  position: relative;
+}
+
+.scope :global(.repo > a::before) {
+  content: "";
+  position: absolute;
+  inset: -2px -4px;
+  border-radius: 6px;
+  background: hsl(0 0 100 / 7%);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.scope :global(.repo > a:hover::before) {
+  opacity: 1;
+}
+
+.scope :global(.gh-icon),
+.scope :global(.gh-icon svg) {
+  height: 2em;
+  fill: #fff;
+}
+
+.scope :global(.space) {
+  flex-grow: 1;
+}
+
+.scope :global(.icon) {
+  cursor: pointer;
+  display: flex;
+  height: 1.5em;
+  width: 1.5em;
+  padding: 0.25em;
+  border-radius: 0.25em;
+  fill: #797d86;
+  outline: 1px solid #303236;
+  transition: 0.3s;
+}
+
+.scope :global(.icon:hover) {
+  background: hsl(0 0 100 / 7%);
+}
+
+.scope :global(.icon svg) {
+  width: 1em;
+  height: 1em;
+}
+
+.scope :global(.btm-header) {
+  display: flex;
+  flex-direction: row;
+  padding: 0px 10px;
+  gap: 8px;
+  color: #fff;
+  fill: #fff;
+}
+
+.scope :global(.tab) {
+  position: relative;
+  padding: 4px 4px;
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.scope :global(.tab-icon) {
+  width: 1em;
+  height: 1.25em;
+  fill: #797d86;
+}
+
+.scope :global(.tab.active) {
+  border-bottom: 2px solid #e98463;
+}
+
+.scope :global(.tab::before) {
+  content: "";
+  position: absolute;
+  background: #fff;
+  border-radius: 8px;
+  opacity: 0;
+  inset: 0;
+  bottom: 8px;
+  z-index: -1;
+  transition: 0.3s;
+}
+
+.scope :global(.tab:hover::before) {
+  opacity: 0.07;
+}
+
+.scope :global(.content) {
+  height: 100%;
+  overflow: hidden;
+}
+
+.scope :global(.prs::-webkit-scrollbar) {
+  width: 0;
+}
+
+.scope :global(.prs) {
+  margin: 12px;
+  height: calc(100% - 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border: 1px solid #343539;
+  border-radius: 6px;
+  overflow: auto;
+}
+
+.scope :global(.pr) {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  outline: 1px solid #343539;
+  padding: 8px;
+}
+
+.scope :global(.checkbox) {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  border-radius: 2px;
+  outline: 1px solid #343539;
+  transition: 0.3s;
+}
+
+.scope :global(.checkbox:hover) {
+  background: hsl(0 0 100 / 5%);
+}
+
+.scope :global(.checkbox:active) {
+  outline-color: #2a2c2f;
+  background: hsl(0 0 100 / 0%);
+}
+
+.scope :global(.card input:checked ~ .checkbox) {
+  outline-color: #797d86;
+}
+
+.scope :global(.card input:checked ~ .checkbox:active) {
+  outline-color: #56585c;
+}
+
+.scope :global(.card input:checked ~ .checkbox::before) {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 4px;
+  height: 8px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+  border-color: #fff;
+  transform: translate(5.5px, 2.5px) rotate(45deg);
+}
+
+.scope :global(.pr-icon) {
+  display: flex;
+  width: 1em;
+  height: 1em;
+  fill: #63d188;
+}
+
+.scope :global(.pr-text) {
+  display: flex;
+  flex-direction: column;
+}
+
+.scope :global(.pr-title) {
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scope :global(.pr-title:hover) {
+  color: #4493f8;
+}
+
+.scope :global(.pr-desc) {
+  padding-left: 2px;
+  font-size: 10px;
+  color: #797d86;
+}
+
+.scope :global(.card input) {
+  display: none;
+}
+
+.scope :global(.pfp) {
+  cursor: pointer;
+  display: flex;
+  width: 1.75em;
+  height: 1.75em;
+  border-radius: 100%;
+  background-color: #fff1;
+  background-size: cover;
+  /* From original uiverse code */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA0GVYSWZJSSoACAAAAAoAAAEEAAEAAAAgAAAAAQEEAAEAAAAgAAAAAgEDAAMAAACGAAAAEgEDAAEAAAABAAAAGgEFAAEAAACMAAAAGwEFAAEAAACUAAAAKAEDAAEAAAADAAAAMQECAA0AAACcAAAAMgECABQAAACqAAAAaYcEAAEAAAC+AAAAAAAAAAgACAAIADcCAAAUAAAANwIAABQAAABHSU1QIDIuMTAuMzgAADIwMjQ6MTI6MTMgMTI6NTg6NTYAAQABoAMAAQAAAAEAAAAAAAAAJQVvNQAAAYRpQ0NQSUNDIHByb2ZpbGUAAHicfZE9SMNAHMVfU6UiLSJ2EHEIWF20i4o41ioUoUKoFVp1MLn0C5o0JC0ujoJrwcGPxaqDi7OuDq6CIPgB4uzgpOgiJf4vKbSI8eC4H+/uPe7eAUKjzDSrKwZoetVMJeJiJrsqBl4RRAj9GMG4zCxjTpKS8Bxf9/Dx9S7Ks7zP/TlCas5igE8kjjHDrBJvEM9sVg3O+8RhVpRV4nPiCZMuSPzIdcXlN84FhwWeGTbTqXniMLFY6GClg1nR1IiniSOqplO+kHFZ5bzFWSvXWOue/IXBnL6yzHWaw0hgEUuQIEJBDSWUUUWUVp0UCynaj3v4hxy/RC6FXCUwciygAg2y4wf/g9/dWvmpSTcpGAe6X2z7YxQI7ALNum1/H9t28wTwPwNXettfaQCzn6TX21rkCOjbBi6u25qyB1zuAINPhmzKjuSnKeTzwPsZfVMWGLgFetfc3lr7OH0A0tRV8gY4OATGCpS97vHuns7e/j3T6u8HyXtyycBnEAsAAA5baVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/Pgo8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA0LjQuMC1FeGl2MiI+CiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIKICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICB4bWxuczp4bGM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxyZGY6RGVzY3JpcHRpb24+PC9yZGY6RGVzY3JpcHRpb24+PC9yZGY6UmRmPjwveDp4bXBtZXRhPjwvPj0=");
+}
