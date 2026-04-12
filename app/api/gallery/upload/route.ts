@@ -13,7 +13,6 @@ import { vercelBlobProvider } from "../../../../src/lib/storage/vercelBlobProvid
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
   "image/png",
@@ -110,12 +109,12 @@ export async function POST(req: Request) {
     );
   }
 
-  if (file.size <= 0 || file.size > MAX_IMAGE_BYTES) {
+  if (file.size <= 0) {
     return NextResponse.json(
       {
         ok: false,
         reason: "invalid_size",
-        message: `图片大小需在 1B ~ ${Math.floor(MAX_IMAGE_BYTES / (1024 * 1024))}MB 之间`,
+        message: "图片大小需大于 0B",
       },
       { status: 400 },
     );

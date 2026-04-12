@@ -30,22 +30,8 @@
 .heroCardRow {
   width: 100%;
   margin-top: 18px;
-  /* Scroll-driven "expand" track (Anthropic-ish): card stays sticky while page scrolls */
-  height: 180vh;
-}
-
-.heroCardSticky {
-  position: sticky;
-  top: calc(var(--nav-height) + 16px);
-  width: 100%;
   display: flex;
   justify-content: flex-start;
-
-  transform-origin: top left;
-  transform: translate3d(0, calc(-10px * var(--expand-p, 0)), 0)
-    scale(calc(1 + (0.95 * var(--expand-p, 0))));
-  transition: transform 80ms linear;
-  will-change: transform;
 }
 
 .title,
@@ -125,9 +111,8 @@
   .ctaRow {
     justify-content: center;
   }
-  .heroCardSticky {
+  .heroCardRow {
     justify-content: center;
-    transform-origin: top center;
   }
 }
 
@@ -139,13 +124,6 @@
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
-    transition: none !important;
-    will-change: auto;
-  }
-
-  .heroCardSticky {
-    position: static;
-    transform: none !important;
     transition: none !important;
     will-change: auto;
   }

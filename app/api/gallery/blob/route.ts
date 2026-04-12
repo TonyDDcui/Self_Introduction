@@ -10,7 +10,6 @@ import { enforceRateLimit } from "../../../../src/lib/security/rateLimit";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
   "image/png",
@@ -64,7 +63,6 @@ export async function POST(request: Request): Promise<NextResponse> {
         return {
           pathname: finalPathname,
           allowedContentTypes: ALLOWED_IMAGE_TYPES,
-          maximumSizeInBytes: MAX_IMAGE_BYTES,
           addRandomSuffix: true,
         };
       },
