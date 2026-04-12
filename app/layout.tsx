@@ -6,6 +6,7 @@ import AppleNav from "../src/components/nav/AppleNav";
 import Reveal from "../src/components/motion/Reveal";
 import { getServerLang } from "../src/lib/i18n/server";
 import Script from "next/script";
+import GalleryWarmCache from "../src/components/gallery/GalleryWarmCache";
 
 export const metadata: Metadata = {
   title: "Self Introduction",
@@ -115,6 +116,7 @@ export default function RootLayout({
         </Script>
         <AppleNav />
         <Reveal />
+        <GalleryWarmCache count={12} />
         <div style={{ paddingTop: "var(--nav-height)" }}>{children}</div>
       </body>
     </html>
