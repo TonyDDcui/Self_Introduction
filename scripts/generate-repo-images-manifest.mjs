@@ -22,6 +22,8 @@ function shouldIgnore(relPosixPath) {
     "coverage",
     // Prevent recursion / duplicate ingestion of generated assets
     "public/repo-images",
+    // Site static assets that should not be treated as "repo images"
+    "public/avatar.svg",
   ];
 
   return ignorePrefixes.some((prefix) => rel === prefix || rel.startsWith(prefix + "/"));
@@ -114,4 +116,3 @@ main().catch((err) => {
   console.error("[gen:images] failed:", err);
   process.exitCode = 1;
 });
-
