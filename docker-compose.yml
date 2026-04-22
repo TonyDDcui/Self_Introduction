@@ -56,7 +56,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   wordpress:
-    image: wordpress:php8.2-apache
+    image: wordpress:latest
     container_name: czx-wordpress
     depends_on:
       - mysql
