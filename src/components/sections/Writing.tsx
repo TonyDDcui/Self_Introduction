@@ -5,10 +5,23 @@ import SectionGlass from "./SectionGlass";
 import { getServerLang } from "../../lib/i18n/server";
 import { t } from "../../lib/i18n/strings";
 import WritingClient from "./WritingClient";
+import { fetchLatestBlogsFromBackend } from "../../lib/backendApi";
 
 export default async function Writing() {
   const lang = getServerLang();
-  const posts = (await getAllPostsMeta(lang)).slice(0, 3);
+  const fallbackPosts = (await getAllPostsMeta(lang)).slice(0, 5);
+  const wpPosts = await fetchLatestBlogsFromBackend(5);
+  const posts =
+    wpPosts.length > 0
+      ? wpPosts.map((item) => ({
+          slug: `wp-${item.id}`,
+          title: item.title,
+          date: item.date,
+          summary: lang === "en" ? "Synced from WordPress" : "来自 WordPress 最新文章",
+          tags: ["wordpress"],
+          source_url: item.url,
+        }))
+      : fallbackPosts;
   const readLabel = lang === "en" ? "Read" : "阅读";
 
   return (

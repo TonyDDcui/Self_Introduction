@@ -50,7 +50,10 @@ type Key =
   | "section.contact.sendEmail"
   | "blog.title"
   | "blog.empty"
-  | "blog.back";
+  | "blog.back"
+  | "admin.title"
+  | "admin.subtitle"
+  | "admin.loginHint";
 
 const ZH: Record<Key, string> = {
   "nav.home": "Home",
@@ -107,6 +110,9 @@ const ZH: Record<Key, string> = {
   "blog.title": "Blog",
   "blog.empty": "暂无文章。",
   "blog.back": "← 返回列表",
+  "admin.title": "管理后台",
+  "admin.subtitle": "用户、订阅与用量（MVP 极简版）",
+  "admin.loginHint": "请先通过 GitHub 登录；仅管理员可访问此页面。",
 };
 
 const EN: Record<Key, string> = {
@@ -167,6 +173,9 @@ const EN: Record<Key, string> = {
   "blog.title": "Blog",
   "blog.empty": "No posts yet.",
   "blog.back": "← Back",
+  "admin.title": "Admin Console",
+  "admin.subtitle": "Users, subscriptions, and usage (MVP)",
+  "admin.loginHint": "Please sign in with GitHub first; admin role is required.",
 };
 
 export function t(lang: SiteLang, key: Key): string {
