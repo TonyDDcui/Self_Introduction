@@ -1,0 +1,85 @@
+.page {
+  width: 100%;
+  min-height: calc(100vh - var(--nav-height));
+  padding: 32px 16px 48px;
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid var(--ring);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+  box-shadow: var(--shadow-whisper);
+  padding: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+}
+
+.sub {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn {
+  border: 1px solid var(--ring);
+  background: color-mix(in srgb, var(--surface-1) 85%, transparent);
+  color: var(--text-primary);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ring);
+  font-size: 12px;
+}
+
+.tableWrap {
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid var(--ring);
+  text-align: left;
+  padding: 10px 8px;
+  font-size: 14px;
+}
+
+.hint {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
